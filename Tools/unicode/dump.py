@@ -24,14 +24,14 @@ class Dims:
 cell_dots = Dims(2, 4)
 
 # Display choices we make: shape/size of each level of block.
-block0_cells = Dims(2, 1); assert(block0_cells.h == 1)
-block1_block0 = Dims(4, 4)
-block2_block1 = Dims(4, 4)
-block3_block2 = Dims(4, 4)
+block0_cells = Dims(1, 1); assert(block0_cells.h == 1)
+block1_block0 = Dims(1, 4)
+block2_block1 = Dims(8, 1)
+block3_block2 = Dims(16, 16)
 
 predicate = lambda ch: ch.isalnum()
 
-base_codepoint = 0x0000
+base_codepoint = 0x10000
 
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
@@ -93,16 +93,16 @@ def show_block10(base: int) -> str:
 
 
 def assemble_x2(base: int, each: Callable[[int], str]) -> str:
-    return ' '.join(each(inner_base) for inner_base in block2_grid.iterx(base))
+    return ''.join(each(inner_base) for inner_base in block2_grid.iterx(base))
 
 
 def assemble_x3(base: int, each: Callable[[int], str]) -> str:
     return ' {}\n'.format(
-        '   '.join(each(inner_base) for inner_base in block3_grid.iterx(base)))
+        ' '.join(each(inner_base) for inner_base in block3_grid.iterx(base)))
 
 
 def header_block1(base: int) -> str:
-    return '{:{}}'.format(u_plus(base), block1_cells.w)
+    return '{:{}}'.format('', block1_cells.w)
 
 
 def assemble_y1(base: int, each: Callable[[int], str]) -> str:
@@ -112,15 +112,16 @@ def assemble_y1(base: int, each: Callable[[int], str]) -> str:
 
 def show_block31(base: int) -> str:
     return (
-        assemble_x3(base, lambda base: assemble_x2(base, header_block1))
+        '' # assemble_x3(base, lambda base: assemble_x2(base, header_block1))
         + assemble_y1(base, lambda base:
             assemble_x3(base, lambda base: assemble_x2(base, show_block10)))
     )
 
 
 def header_block2(base: int) -> str:
-    width = block2_cells.w + (block2_block1.w - 1)
+    width = block2_cells.w # + (block2_block1.w - 1)
     last = base + block2_dots.len - 1
+    return '{:^{}}'.format(u_plus(base), width)
     # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width)
     return '{:^{}}'.format(
         ' {} .. {}'.format(u_plus(base), u_plus(last)), width)
@@ -137,7 +138,7 @@ def show_block32(base: int) -> str:
 
 
 def assemble_y3(base: int, each: Callable[[int], str]) -> str:
-    return '\n\n'.join(each(inner_base) for inner_base in block3_grid.itery(base))
+    return '\n'.join(each(inner_base) for inner_base in block3_grid.itery(base))
 
 
 def show_block3(base: int) -> str:
