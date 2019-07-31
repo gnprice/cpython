@@ -92,13 +92,16 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
         result = h.hexdigest()
         self.assertEqual(result, self.expectedchecksum)
 
-    def test_isspace_invariant(self):
+    def test_invariants(self):
         for char in all_chars():
             bidirectional = self.db.bidirectional(char)
             category = self.db.category(char)
             self.assertEqual(char.isspace(),
                              (bidirectional in ('WS', 'B', 'S')
                               or category == 'Zs'))
+            self.assertEqual(char.isprintable(),
+                             category[0] not in ('CZ')
+                             or char == ' ')
 
     def test_digit(self):
         self.assertEqual(self.db.digit('A', None), None)

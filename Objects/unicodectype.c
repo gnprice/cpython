@@ -146,16 +146,14 @@ int _PyUnicode_IsNumeric(Py_UCS4 ch)
 
 /* Returns 1 for Unicode characters to be hex-escaped when repr()ed,
    0 otherwise.
-   All characters except those characters defined in the Unicode character
-   database as following categories are considered printable.
-      * Cc (Other, Control)
-      * Cf (Other, Format)
-      * Cs (Other, Surrogate)
-      * Co (Other, Private Use)
-      * Cn (Other, Not Assigned)
-      * Zl Separator, Line ('\u2028', LINE SEPARATOR)
-      * Zp Separator, Paragraph ('\u2029', PARAGRAPH SEPARATOR)
-      * Zs (Separator, Space) other than ASCII space('\x20').
+
+   Characters whose Unicode "general category" is in any of the groups
+   Letter, Mark, Number, Punctuation, and Symbol (L, M, N, P, and S)
+   are printable.
+
+   Characters whose Unicode general category is in any of the
+   remaining groups Separator and Other (Z, C) are not printable,
+   except ASCII space '\x20', which is printable.
 */
 int _PyUnicode_IsPrintable(Py_UCS4 ch)
 {
