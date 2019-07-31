@@ -70,22 +70,37 @@ def show_block20(base: int) -> str:
         for block10_base in block20_block10_bases(base))
 
 
+def block21_block20_bases(base: int) -> Iterable[int]:
+    return range(base, base + block1_dots.len, block1_cells.w * cell_dots.len)
+
+
 def show_block21(base: int) -> str:
     heading = ' {}\n'.format(
         ' '.join('{:{}}'.format(u_plus(block10_base),
                                 block1_cells.w)
                  for block10_base in block20_block10_bases(base)))
     return heading \
-        + ''.join(
-            ' {}\n'.format(show_block20(base + y * cell_dots.h * block1_dots.w))
-            for y in range(block1_cells.h))
+        + ''.join(' {}\n'.format(show_block20(block20_base))
+                  for block20_base in block21_block20_bases(base))
+
+
+def block2_block21_bases(base: int) -> Iterable[int]:
+    return range(base, base + block2_dots.len, block2_block1.w * block1_dots.len)
 
 
 def show_block2(base: int) -> str:
-    return '\n'.join(show_block21(base + i * block1_dots.h * block2_dots.w)
-                     for i in range(block2_block1.h)) \
+    return '\n'.join(show_block21(block21_base)
+                     for block21_base in block2_block21_bases(base)) \
         + '\n'
 
 
-for i_block2 in range(num_block2):
-    print(show_block2(i_block2 * block2_dots.len))
+def all_block2_bases(base: int) -> Iterable[int]:
+    return range(base, base + num_block2 * block2_dots.len, block2_dots.len)
+
+
+def show_all(base: int) -> str:
+    return '\n'.join(show_block2(block2_base)
+                     for block2_base in all_block2_bases(base)) \
+
+
+print(show_all(0))
