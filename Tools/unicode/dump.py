@@ -110,27 +110,8 @@ def assemble_line(lvl: int, base: int, each: Callable[[int], str]) -> str:
             each(inner_base) for inner_base in grid[lvl].iterx(base)))
 
 
-def assemble_y0(base: int, each: Callable[[int], str]) -> str:
-    return sepy[0].join(each(inner_base) for inner_base in grid[0].itery(base))
-
-
-def show_block30(base: int) -> str:
-    return assemble_y0(base, lambda base: assemble_line(1, base, show_block0))
-
-
 def header_block1(base: int) -> str:
     return '{:{}}'.format(u_plus(base), width[1])
-
-
-def assemble_y1(base: int, each: Callable[[int], str]) -> str:
-    return sepy[1].join(each(inner_base) for inner_base in grid[1].itery(base))
-
-
-def show_block31(base: int) -> str:
-    return (
-        assemble_line(2, base, header_block1)
-        + assemble_y1(base, show_block30)
-    )
 
 
 def header_block2(base: int) -> str:
@@ -143,20 +124,24 @@ def header_block2(base: int) -> str:
     #    '....{}'.format(u_plus(last)), width[2])
 
 
-def assemble_y2(base: int, each: Callable[[int], str]) -> str:
-    return sepy[2].join(each(inner_base) for inner_base in grid[2].itery(base))
+def assemble_y(lvl: int, base: int, each: Callable[[int], str]) -> str:
+    return sepy[lvl].join(each(inner_base) for inner_base in grid[lvl].itery(base))
+
+
+def show_block30(base: int) -> str:
+    return assemble_y(0, base, lambda base: assemble_line(1, base, show_block0))
+
+
+def show_block31(base: int) -> str:
+    return assemble_line(2, base, header_block1) + assemble_y(1, base, show_block30)
 
 
 def show_block32(base: int) -> str:
-    return (assemble_line(3, base, header_block2) + assemble_y2(base, show_block31))
-
-
-def assemble_y3(base: int, each: Callable[[int], str]) -> str:
-    return sepy[3].join(each(inner_base) for inner_base in grid[3].itery(base))
+    return assemble_line(3, base, header_block2) + assemble_y(2, base, show_block31)
 
 
 def show_block3(base: int) -> str:
-    return assemble_y3(base, show_block32)
+    return assemble_y(3, base, show_block32)
 
 
 print(show_block3(base_codepoint))
