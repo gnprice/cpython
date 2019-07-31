@@ -24,10 +24,10 @@ class Dims:
 cell_dots = Dims(2, 4)
 
 # Display choices we make: shape/size of each level of block.
-block0_cells = Dims(1, 4)
-block1_block0 = Dims(8, 1)
-block2_block1 = Dims(16, 16)
-block3_block2 = Dims(1, 1)
+block0_cells = Dims(2, 2)
+block1_block0 = Dims(4, 2)
+block2_block1 = Dims(4, 4)
+block3_block2 = Dims(4, 4)
 
 sepx = ['', '', ' ', '   ']
 sepy = ['', '', '\n', '\n\n']
@@ -35,7 +35,7 @@ sepy = ['', '', '\n', '\n\n']
 
 predicate = lambda ch: ch.isalnum()
 
-base_codepoint = 0x10000
+base_codepoint = 0x0000
 
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
@@ -101,17 +101,13 @@ def show_block0(base: int) -> str:
                         for cell_base in range(base, base + block0_dots.w, cell_dots.w))
 
 
-def assemble_x1(base: int, each: Callable[[int], str]) -> str:
-    return sepx[1].join(each(inner_base) for inner_base in grid[1].iterx(base))
-
-
-def assemble_x2(base: int, each: Callable[[int], str]) -> str:
-    return sepx[2].join(each(inner_base) for inner_base in grid[2].iterx(base))
-
-
-def assemble_x3(base: int, each: Callable[[int], str]) -> str:
-    return ' {}\n'.format(
-        sepx[3].join(each(inner_base) for inner_base in grid[3].iterx(base)))
+def assemble_line(lvl: int, base: int, each: Callable[[int], str]) -> str:
+    if lvl > 3:
+        return ' {}\n'.format(each(base))
+    assert(1 <= lvl <= 3)
+    return assemble_line(lvl + 1, base,
+        lambda base: sepx[lvl].join(
+            each(inner_base) for inner_base in grid[lvl].iterx(base)))
 
 
 def assemble_y0(base: int, each: Callable[[int], str]) -> str:
@@ -119,9 +115,7 @@ def assemble_y0(base: int, each: Callable[[int], str]) -> str:
 
 
 def show_block30(base: int) -> str:
-    return assemble_y0(base, lambda base:
-        assemble_x3(base, lambda base:
-            assemble_x2(base, lambda base: assemble_x1(base, show_block0))))
+    return assemble_y0(base, lambda base: assemble_line(1, base, show_block0))
 
 
 def header_block1(base: int) -> str:
@@ -134,7 +128,7 @@ def assemble_y1(base: int, each: Callable[[int], str]) -> str:
 
 def show_block31(base: int) -> str:
     return (
-        assemble_x3(base, lambda base: assemble_x2(base, header_block1))
+        assemble_line(2, base, header_block1)
         + assemble_y1(base, show_block30)
     )
 
@@ -154,7 +148,7 @@ def assemble_y2(base: int, each: Callable[[int], str]) -> str:
 
 
 def show_block32(base: int) -> str:
-    return (assemble_x3(base, header_block2) + assemble_y2(base, show_block31))
+    return (assemble_line(3, base, header_block2) + assemble_y2(base, show_block31))
 
 
 def assemble_y3(base: int, each: Callable[[int], str]) -> str:
