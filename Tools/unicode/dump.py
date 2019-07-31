@@ -20,10 +20,12 @@ class Dims:
         return f'Dims({self.w}, {self.h})'
 
 
-# Display choice we make: shape/size of a block.  Powers of 2.
-block1_dots = Dims(0x20, 0x20)  # min 2, 4
-block2_block1 = Dims(2, 2)
-block3_block2 = Dims(2, 2)
+# Display choice we make: shape/size of a block.
+block1_dots = Dims(0x10, 0x10)  # must be multiples of 2, 4
+block2_block1 = Dims(4, 4)
+block3_block2 = Dims(4, 4)
+
+predicate = lambda ch: ch.isalnum()
 
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
@@ -69,7 +71,7 @@ def u_plus(codepoint: int) -> str:
 
 def show_cell(base: int) -> str:
     cell_codepoints = (base + offset for offset in cell_offsets)
-    cell_bits = sum(chr(c).isprintable() << i
+    cell_bits = sum(predicate(chr(c)) << i
                     for i, c in enumerate(cell_codepoints))
     return chr(braille_base + cell_bits)
 
@@ -107,11 +109,12 @@ def show_block31(base: int) -> str:
 
 def header_block2(base: int) -> str:
     width = block2_cells.w + (block2_block1.w - 1)
+    last = base + block2_dots.len - 1
     # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width)
     return '{:^{}}'.format(
-        ' {} .. {}'.format(u_plus(base), u_plus(base + block2_dots.len)), width)
+        ' {} .. {}'.format(u_plus(base), u_plus(last)), width)
     #return '{:>{}}'.format(
-    #    '....{}'.format(u_plus(base + block2_dots.len)), width)
+    #    '....{}'.format(u_plus(last)), width)
 
 
 def assemble_y2(base: int, each: Callable[[int], str]) -> str:
