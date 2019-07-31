@@ -106,7 +106,12 @@ def show_block31(base: int) -> str:
 
 
 def header_block2(base: int) -> str:
-    return '{:8}{:{}}'.format('', u_plus(base), block2_cells.w - 8)
+    width = block2_cells.w + (block2_block1.w - 1)
+    # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width)
+    return '{:^{}}'.format(
+        ' {} .. {}'.format(u_plus(base), u_plus(base + block2_dots.len)), width)
+    #return '{:>{}}'.format(
+    #    '....{}'.format(u_plus(base + block2_dots.len)), width)
 
 
 def assemble_y2(base: int, each: Callable[[int], str]) -> str:
