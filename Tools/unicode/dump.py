@@ -23,7 +23,7 @@ class Dims:
 # Display choice we make: shape/size of a block.  Powers of 2.
 block1_dots = Dims(0x20, 0x20)  # min 2, 4
 block2_block1 = Dims(2, 2)
-num_block2 = 0x2
+block3_block2 = Dims(2, 2)
 
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
@@ -60,7 +60,7 @@ block2_dots = block2_block1 * block1_dots
 
 block1_grid = Grid(block1_cells, cell_dots)
 block2_grid = Grid(block2_block1, block1_dots)
-whole_grid = Grid(Dims(1, num_block2), block2_dots)
+block3_grid = Grid(block3_block2, block2_dots)
 
 
 def u_plus(codepoint: int) -> str:
@@ -81,32 +81,48 @@ def show_block10(base: int) -> str:
 
 
 def assemble_x2(base: int, each: Callable[[int], str]) -> str:
+    return ' '.join(each(inner_base) for inner_base in block2_grid.iterx(base))
+
+
+def assemble_x3(base: int, each: Callable[[int], str]) -> str:
     return ' {}\n'.format(
-        ' '.join(each(inner_base) for inner_base in block2_grid.iterx(base)))
+        '   '.join(each(inner_base) for inner_base in block3_grid.iterx(base)))
+
+
+def header_block1(base: int) -> str:
+    return '{:{}}'.format(u_plus(base), block1_cells.w)
 
 
 def assemble_y1(base: int, each: Callable[[int], str]) -> str:
     return ''.join(each(inner_base) for inner_base in block1_grid.itery(base))
 
 
-def show_block21(base: int) -> str:
+def show_block31(base: int) -> str:
     return (
-        assemble_x2(base,
-                    lambda base: '{:{}}'.format(u_plus(base), block1_cells.w)) 
-        + assemble_y1(base, lambda base: assemble_x2(base, show_block10))
+        assemble_x3(base, lambda base: assemble_x2(base, header_block1))
+        + assemble_y1(base, lambda base:
+            assemble_x3(base, lambda base: assemble_x2(base, show_block10)))
     )
+
+
+def header_block2(base: int) -> str:
+    return '{:8}{:{}}'.format('', u_plus(base), block2_cells.w - 8)
 
 
 def assemble_y2(base: int, each: Callable[[int], str]) -> str:
     return '\n'.join(each(inner_base) for inner_base in block2_grid.itery(base))
 
 
-def assemble_all(base: int, each: Callable[[int], str]) -> str:
-    return '\n\n'.join(each(inner_base) for inner_base in whole_grid.itery(base))
+def show_block32(base: int) -> str:
+    return (assemble_x3(base, header_block2) + assemble_y2(base, show_block31))
 
 
-def show_all(base: int) -> str:
-    return assemble_all(base, lambda base: assemble_y2(base, show_block21))
+def assemble_y3(base: int, each: Callable[[int], str]) -> str:
+    return '\n\n'.join(each(inner_base) for inner_base in block3_grid.itery(base))
 
 
-print(show_all(0))
+def show_block3(base: int) -> str:
+    return assemble_y3(base, show_block32)
+
+
+print(show_block3(0))
