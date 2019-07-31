@@ -20,8 +20,12 @@ class Dims:
         return f'Dims({self.w}, {self.h})'
 
 
-# Display choice we make: shape/size of a block.
-block1_dots = Dims(0x10, 0x10)  # must be multiples of 2, 4
+# Size of grid in one Braille character.
+cell_dots = Dims(2, 4)
+
+# Display choices we make: shape/size of each level of block.
+block0_cells = Dims(2, 1); assert(block0_cells.h == 1)
+block1_block0 = Dims(4, 4)
 block2_block1 = Dims(4, 4)
 block3_block2 = Dims(4, 4)
 
@@ -30,15 +34,10 @@ predicate = lambda ch: ch.isalnum()
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
 
-# Size of grid in one Braille character.
-cell_dots = Dims(2, 4)
-
 # More facts about Braille in Unicode: the display coordinates
 # of the single dot in the glyph for `chr(braille_base + (1 << i))`.
 cell_offsets_yx = [(0,0), (1,0), (2,0), (0,1), (1,1), (2,1), (3,0), (3,1)]
 
-
-cell_offsets = [y*block1_dots.w + x for y, x in cell_offsets_yx]
 
 
 class Grid:
@@ -56,11 +55,16 @@ class Grid:
         return range(base, base + self.whole.len, self.row_len)
 
 
-block1_cells = block1_dots // cell_dots
-block2_cells = block2_block1 * block1_cells
+block0_dots = block0_cells * cell_dots
+block1_dots = block1_block0 * block0_dots
 block2_dots = block2_block1 * block1_dots
 
-block1_grid = Grid(block1_cells, cell_dots)
+block1_cells = block1_block0 * block0_cells
+block2_cells = block2_block1 * block1_cells
+
+cell_offsets = [y*block0_dots.w + x for y, x in cell_offsets_yx]
+
+block1_grid = Grid(block1_block0, block0_dots)
 block2_grid = Grid(block2_block1, block1_dots)
 block3_grid = Grid(block3_block2, block2_dots)
 
@@ -76,10 +80,14 @@ def show_cell(base: int) -> str:
     return chr(braille_base + cell_bits)
 
 
+def show_block0(base: int) -> str:
+    assert(block0_cells.h == 1)
+    return ''.join(show_cell(cell_base)
+                   for cell_base in range(base, base + block0_dots.w, cell_dots.w))
+
+
 def show_block10(base: int) -> str:
-    return ''.join(
-        show_cell(cell_base)
-        for cell_base in range(base, base + block1_dots.w, cell_dots.w))
+    return ''.join(show_block0(inner_base) for inner_base in block1_grid.iterx(base))
 
 
 def assemble_x2(base: int, each: Callable[[int], str]) -> str:
@@ -96,6 +104,7 @@ def header_block1(base: int) -> str:
 
 
 def assemble_y1(base: int, each: Callable[[int], str]) -> str:
+    assert(block0_cells.h == 1)
     return ''.join(each(inner_base) for inner_base in block1_grid.itery(base))
 
 
