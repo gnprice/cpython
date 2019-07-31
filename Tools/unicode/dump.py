@@ -1,4 +1,6 @@
 
+from typing import *
+
 
 class Grid:
     def __init__(self, w: int, h: int) -> None:
@@ -58,18 +60,25 @@ def show_block10(base: int) -> str:
         for cell_base in range(base, base + block1_dots.w, cell_dots.w))
 
 
+def block20_block10_bases(base: int) -> Iterable[int]:
+    return range(base, base + block2_block1.w * block1_dots.len, block1_dots.len)
+
+
+def show_block20(base: int) -> str:
+    return ' '.join(
+        show_block10(block10_base)
+        for block10_base in block20_block10_bases(base))
+
+
 def show_block21(base: int) -> str:
     heading = ' {}\n'.format(
-        ' '.join('{:{}}'.format(u_plus(base + x * block1_dots.len),
+        ' '.join('{:{}}'.format(u_plus(block10_base),
                                 block1_cells.w)
-                 for x in range(block2_block1.w)))
+                 for block10_base in block20_block10_bases(base)))
     return heading \
-        + ''.join(' {}\n'.format(
-            ' '.join(show_block10(base
-                                  + x * block1_dots.len
-                                  + y * cell_dots.h * block1_dots.w)
-                     for x in range(block2_block1.w)))
-                  for y in range(block1_cells.h))
+        + ''.join(
+            ' {}\n'.format(show_block20(base + y * cell_dots.h * block1_dots.w))
+            for y in range(block1_cells.h))
 
 
 def show_block2(base: int) -> str:
