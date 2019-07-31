@@ -24,13 +24,18 @@ class Dims:
 cell_dots = Dims(2, 4)
 
 # Display choices we make: shape/size of each level of block.
-block0_cells = Dims(2, 1)
-block1_block0 = Dims(4, 4)
-block2_block1 = Dims(4, 4)
-block3_block2 = Dims(4, 4)
+block_rel = [
+    Dims(2, 1),
+    Dims(4, 4),
+    Dims(2, 2),
+    Dims(2, 2),
+    Dims(2, 2),
+    Dims(2, 2),
+]
+num_levels = len(block_rel)
 
-sepx = ['', '', ' ', '   ']
-sepy = ['', '', '\n', '\n\n']
+sepx = ['', '', ' ', '   ', '     ', '       ']
+sepy = ['', '', '\n', '\n\n', '\n\n\n', '\n\n\n\n\n']
 
 
 predicate = lambda ch: ch.isalnum()
@@ -61,28 +66,19 @@ class Grid:
         return range(base, base + self.whole.len, self.row_len)
 
 
-block0_dots = block0_cells * cell_dots
-block1_dots = block1_block0 * block0_dots
-block2_dots = block2_block1 * block1_dots
+block_dots = [cell_dots]
+for i in range(num_levels - 1):
+    block_dots.append(block_dots[-1] * block_rel[i])
 
-block1_cells = block1_block0 * block0_cells
-block2_cells = block2_block1 * block1_cells
-block3_cells = block3_block2 * block2_cells
+cell_offsets = [y*block_dots[1].w + x for y, x in cell_offsets_yx]
 
-cell_offsets = [y*block0_dots.w + x for y, x in cell_offsets_yx]
+grid = [Grid(block_rel[i], block_dots[i])
+        for i in range(num_levels)]
 
-grid = [
-    Grid(block0_cells, cell_dots),
-    Grid(block1_block0, block0_dots),
-    Grid(block2_block1, block1_dots),
-    Grid(block3_block2, block2_dots),
-]
-
-width = []
-width.append((1 + len(sepx[0])) * block0_cells.w - len(sepx[0]))
-width.append((width[-1] + len(sepx[1])) * block1_block0.w - len(sepx[1]))
-width.append((width[-1] + len(sepx[2])) * block2_block1.w - len(sepx[2]))
-width.append((width[-1] + len(sepx[3])) * block3_block2.w - len(sepx[3]))
+width = []; last_width = 1
+for i in range(num_levels):
+    width.append((last_width + len(sepx[i])) * block_rel[i].w - len(sepx[i]))
+    last_width = width[-1]
 
 
 def u_plus(codepoint: int) -> str:
@@ -98,13 +94,13 @@ def show_cell(base: int) -> str:
 
 def show_block0(base: int) -> str:
     return sepx[0].join(show_cell(cell_base)
-                        for cell_base in range(base, base + block0_dots.w, cell_dots.w))
+                        for cell_base in range(base, base + block_dots[1].w, block_dots[0].w))
 
 
 def assemble_line(lvl: int, base: int, each: Callable[[int], str]) -> str:
-    if lvl > 3:
+    if lvl >= num_levels:
         return ' {}\n'.format(each(base))
-    assert(1 <= lvl <= 3)
+    assert(1 <= lvl < num_levels)
     return assemble_line(lvl + 1, base,
         lambda base: sepx[lvl].join(
             each(inner_base) for inner_base in grid[lvl].iterx(base)))
@@ -115,7 +111,7 @@ def header_block1(base: int) -> str:
 
 
 def header_block2(base: int) -> str:
-    last = base + block2_dots.len - 1
+    last = base + block_dots[3].len - 1
     # return '{:^{}}'.format(u_plus(base), width[2])
     # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width[2])
     return '{:^{}}'.format(
@@ -144,4 +140,4 @@ def show_block3l(lvl: int, base: int) -> str:
                                           lambda base: show_block3l(lvl - 1, base))
 
 
-print(show_block3l(3, base_codepoint))
+print(show_block3l(num_levels - 1, base_codepoint))
