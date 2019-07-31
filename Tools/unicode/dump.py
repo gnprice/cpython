@@ -45,35 +45,35 @@ def u_plus(codepoint: int) -> str:
     return 'U+{:04x}'.format(codepoint)
 
 
-def one_cell(base: int) -> str:
+def show_cell(base: int) -> str:
     cell_codepoints = (base + offset for offset in cell_offsets)
     cell_bits = sum(chr(c).isprintable() << i
                     for i, c in enumerate(cell_codepoints))
     return chr(braille_base + cell_bits)
 
 
-def block1_row(base: int) -> str:
+def show_block10(base: int) -> str:
     return ''.join(
-        one_cell(cell_base)
+        show_cell(cell_base)
         for cell_base in range(base, base + block1_dots.w, cell_dots.w))
 
 
-def block2_row(base: int) -> str:
+def show_block21(base: int) -> str:
     heading = ' {}\n'.format(
         ' '.join('{:{}}'.format(u_plus(base + x * block1_dots.len),
                                 block1_cells.w)
                  for x in range(block2_block1.w)))
     return heading \
         + ''.join(' {}\n'.format(
-            ' '.join(block1_row(base
-                                + x * block1_dots.len
-                                + y * cell_dots.h * block1_dots.w)
+            ' '.join(show_block10(base
+                                  + x * block1_dots.len
+                                  + y * cell_dots.h * block1_dots.w)
                      for x in range(block2_block1.w)))
                   for y in range(block1_cells.h))
 
 
 def show_block2(base: int) -> str:
-    return '\n'.join(block2_row(base + i * block1_dots.h * block2_dots.w)
+    return '\n'.join(show_block21(base + i * block1_dots.h * block2_dots.w)
                      for i in range(block2_block1.h)) \
         + '\n'
 
