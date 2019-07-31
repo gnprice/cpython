@@ -24,8 +24,8 @@ class Dims:
 cell_dots = Dims(2, 4)
 
 # Display choices we make: shape/size of each level of block.
-block0_cells = Dims(2, 2)
-block1_block0 = Dims(4, 2)
+block0_cells = Dims(2, 1)
+block1_block0 = Dims(4, 4)
 block2_block1 = Dims(4, 4)
 block3_block2 = Dims(4, 4)
 
@@ -124,24 +124,24 @@ def header_block2(base: int) -> str:
     #    '....{}'.format(u_plus(last)), width[2])
 
 
+def header(lvl: int, base: int) -> str:
+    if lvl == 2:
+        return assemble_line(lvl + 1, base, header_block2)
+    elif lvl == 1:
+        return assemble_line(lvl + 1, base, header_block1)
+    else:
+        return ''
+
+
 def assemble_y(lvl: int, base: int, each: Callable[[int], str]) -> str:
     return sepy[lvl].join(each(inner_base) for inner_base in grid[lvl].itery(base))
 
 
-def show_block30(base: int) -> str:
-    return assemble_y(0, base, lambda base: assemble_line(1, base, show_block0))
+def show_block3l(lvl: int, base: int) -> str:
+    if lvl < 0:
+        return assemble_line(1, base, show_block0)
+    return header(lvl, base) + assemble_y(lvl, base,
+                                          lambda base: show_block3l(lvl - 1, base))
 
 
-def show_block31(base: int) -> str:
-    return assemble_line(2, base, header_block1) + assemble_y(1, base, show_block30)
-
-
-def show_block32(base: int) -> str:
-    return assemble_line(3, base, header_block2) + assemble_y(2, base, show_block31)
-
-
-def show_block3(base: int) -> str:
-    return assemble_y(3, base, show_block32)
-
-
-print(show_block3(base_codepoint))
+print(show_block3l(3, base_codepoint))
