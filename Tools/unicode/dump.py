@@ -26,7 +26,8 @@ cell_dots = Dims(2, 4)
 # Display choices we make: shape/size of each level of block.
 block_rel = [
     Dims(2, 1),
-    Dims(4, 4),
+    Dims(2, 2),
+    Dims(2, 2),
     Dims(2, 2),
     Dims(2, 2),
     Dims(2, 2),
@@ -34,8 +35,8 @@ block_rel = [
 ]
 num_levels = len(block_rel)
 
-sepx = ['', '', ' ', '   ', '     ', '       ']
-sepy = ['', '', '\n', '\n\n', '\n\n\n', '\n\n\n\n\n']
+sepx = ['', '', ' ', '  ', '    ', '      ', '       ']
+sepy = ['', '', '\n', '\n\n', '\n\n', '\n\n\n', '\n\n\n\n']
 
 
 predicate = lambda ch: ch.isalnum()
@@ -121,8 +122,8 @@ def header_big(lvl: int, base: int) -> str:
 
 
 header_type = {
-    3: header_big,
-    1: header_small,
+    4: header_big,
+    2: header_small,
 }
 
 
