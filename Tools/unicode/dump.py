@@ -106,27 +106,31 @@ def assemble_line(lvl: int, base: int, each: Callable[[int], str]) -> str:
             each(inner_base) for inner_base in grid[lvl].iterx(base)))
 
 
-def header_block1(base: int) -> str:
-    return '{:{}}'.format(u_plus(base), width[1])
+def header_small(lvl: int, base: int) -> str:
+    return '{:{}}'.format(u_plus(base), width[lvl])
 
 
-def header_block2(base: int) -> str:
-    last = base + block_dots[3].len - 1
-    # return '{:^{}}'.format(u_plus(base), width[2])
-    # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width[2])
+def header_big(lvl: int, base: int) -> str:
+    last = base + block_dots[lvl + 1].len - 1
+    # return '{:^{}}'.format(u_plus(base), width[lvl])
+    # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width[lvl])
     return '{:^{}}'.format(
-        ' {} .. {}'.format(u_plus(base), u_plus(last)), width[2])
+        ' {} .. {}'.format(u_plus(base), u_plus(last)), width[lvl])
     #return '{:>{}}'.format(
-    #    '....{}'.format(u_plus(last)), width[2])
+    #    '....{}'.format(u_plus(last)), width[lvl])
+
+
+header_type = {
+    3: header_big,
+    1: header_small,
+}
 
 
 def header(lvl: int, base: int) -> str:
-    if lvl == 2:
-        return assemble_line(lvl + 1, base, header_block2)
-    elif lvl == 1:
-        return assemble_line(lvl + 1, base, header_block1)
-    else:
+    tp = header_type.get(lvl)
+    if tp is None:
         return ''
+    return assemble_line(lvl + 1, base, lambda base: tp(lvl, base))
 
 
 def assemble_y(lvl: int, base: int, each: Callable[[int], str]) -> str:
