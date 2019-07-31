@@ -31,6 +31,8 @@ block3_block2 = Dims(4, 4)
 
 predicate = lambda ch: ch.isalnum()
 
+base_codepoint = 0x0000
+
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
 
@@ -142,4 +144,4 @@ def show_block3(base: int) -> str:
     return assemble_y3(base, show_block32)
 
 
-print(show_block3(0))
+print(show_block3(base_codepoint))
