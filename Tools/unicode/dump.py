@@ -80,31 +80,34 @@ def show_block10(base: int) -> str:
         for cell_base in range(base, base + block1_dots.w, cell_dots.w))
 
 
-def show_block20(base: int) -> str:
-    return ' '.join(
-        show_block10(inner_base)
-        for inner_base in block2_grid.iterx(base))
+def assemble_x2(base: int, each: Callable[[int], str]) -> str:
+    return ' '.join(each(inner_base)
+                    for inner_base in block2_grid.iterx(base))
+
+
+def assemble_y1(base: int, each: Callable[[int], str]) -> str:
+    return ''.join(' {}\n'.format(each(inner_base))
+                   for inner_base in block1_grid.itery(base))
 
 
 def show_block21(base: int) -> str:
     heading = ' {}\n'.format(
-        ' '.join('{:{}}'.format(u_plus(inner_base),
-                                block1_cells.w)
-                 for inner_base in block2_grid.iterx(base)))
-    return heading \
-        + ''.join(' {}\n'.format(show_block20(inner_base))
-                  for inner_base in block1_grid.itery(base))
+        assemble_x2(base,
+                    lambda base: '{:{}}'.format(u_plus(base), block1_cells.w)))
+    return heading + assemble_y1(base,
+                                 lambda base: assemble_x2(base, show_block10))
 
 
-def show_block2(base: int) -> str:
-    return '\n'.join(show_block21(inner_base)
-                     for inner_base in block2_grid.itery(base)) \
-        + '\n'
+def assemble_y2(base: int, each: Callable[[int], str]) -> str:
+    return '\n'.join(each(inner_base) for inner_base in block2_grid.itery(base))
+
+
+def assemble_all(base: int, each: Callable[[int], str]) -> str:
+    return '\n\n'.join(each(inner_base) for inner_base in whole_grid.itery(base))
 
 
 def show_all(base: int) -> str:
-    return '\n'.join(show_block2(inner_base)
-                     for inner_base in whole_grid.itery(base))
+    return assemble_all(base, lambda base: assemble_y2(base, show_block21))
 
 
 print(show_all(0))
