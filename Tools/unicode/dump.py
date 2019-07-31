@@ -24,10 +24,10 @@ class Dims:
 cell_dots = Dims(2, 4)
 
 # Display choices we make: shape/size of each level of block.
-block0_cells = Dims(1, 1); assert(block0_cells.h == 1)
-block1_block0 = Dims(1, 4)
-block2_block1 = Dims(8, 1)
-block3_block2 = Dims(16, 16)
+block0_cells = Dims(1, 4)
+block1_block0 = Dims(8, 1)
+block2_block1 = Dims(16, 16)
+block3_block2 = Dims(1, 1)
 
 predicate = lambda ch: ch.isalnum()
 
@@ -66,6 +66,7 @@ block2_cells = block2_block1 * block1_cells
 
 cell_offsets = [y*block0_dots.w + x for y, x in cell_offsets_yx]
 
+block0_grid = Grid(block0_cells, cell_dots)
 block1_grid = Grid(block1_block0, block0_dots)
 block2_grid = Grid(block2_block1, block1_dots)
 block3_grid = Grid(block3_block2, block2_dots)
@@ -83,7 +84,6 @@ def show_cell(base: int) -> str:
 
 
 def show_block0(base: int) -> str:
-    assert(block0_cells.h == 1)
     return ''.join(show_cell(cell_base)
                    for cell_base in range(base, base + block0_dots.w, cell_dots.w))
 
@@ -93,35 +93,42 @@ def show_block10(base: int) -> str:
 
 
 def assemble_x2(base: int, each: Callable[[int], str]) -> str:
-    return ''.join(each(inner_base) for inner_base in block2_grid.iterx(base))
+    return ' '.join(each(inner_base) for inner_base in block2_grid.iterx(base))
 
 
 def assemble_x3(base: int, each: Callable[[int], str]) -> str:
     return ' {}\n'.format(
-        ' '.join(each(inner_base) for inner_base in block3_grid.iterx(base)))
+        '   '.join(each(inner_base) for inner_base in block3_grid.iterx(base)))
+
+
+def assemble_y0(base: int, each: Callable[[int], str]) -> str:
+    return ''.join(each(inner_base) for inner_base in block0_grid.itery(base))
+
+
+def show_block30(base: int) -> str:
+    return assemble_y0(base, lambda base:
+        assemble_x3(base, lambda base: assemble_x2(base, show_block10)))
 
 
 def header_block1(base: int) -> str:
-    return '{:{}}'.format('', block1_cells.w)
+    return '{:{}}'.format(u_plus(base), block1_cells.w)
 
 
 def assemble_y1(base: int, each: Callable[[int], str]) -> str:
-    assert(block0_cells.h == 1)
     return ''.join(each(inner_base) for inner_base in block1_grid.itery(base))
 
 
 def show_block31(base: int) -> str:
     return (
-        '' # assemble_x3(base, lambda base: assemble_x2(base, header_block1))
-        + assemble_y1(base, lambda base:
-            assemble_x3(base, lambda base: assemble_x2(base, show_block10)))
+        assemble_x3(base, lambda base: assemble_x2(base, header_block1))
+        + assemble_y1(base, show_block30)
     )
 
 
 def header_block2(base: int) -> str:
-    width = block2_cells.w # + (block2_block1.w - 1)
+    width = block2_cells.w + (block2_block1.w - 1)
     last = base + block2_dots.len - 1
-    return '{:^{}}'.format(u_plus(base), width)
+    # return '{:^{}}'.format(u_plus(base), width)
     # return '{:^{}}'.format(' /== {} ==\\'.format(u_plus(base)), width)
     return '{:^{}}'.format(
         ' {} .. {}'.format(u_plus(base), u_plus(last)), width)
@@ -138,7 +145,7 @@ def show_block32(base: int) -> str:
 
 
 def assemble_y3(base: int, each: Callable[[int], str]) -> str:
-    return '\n'.join(each(inner_base) for inner_base in block3_grid.itery(base))
+    return '\n\n'.join(each(inner_base) for inner_base in block3_grid.itery(base))
 
 
 def show_block3(base: int) -> str:
