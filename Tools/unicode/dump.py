@@ -4,8 +4,8 @@
 # Call size 0x100... a "line"?
 
 # Display choice we make: shape/size of a block.  Powers of 2.
-block_width_codepoints = 0x10  # min 2
-block_height_codepoints = 0x10  # min 4
+block_width_codepoints = 0x20  # min 2
+block_height_codepoints = 0x20  # min 4
 
 grid_width_blocks = 0x4
 grid_height_blocks = 0x4
@@ -40,6 +40,10 @@ assert(gridrow_size_codepoints == block_height_cells * gridline_size_codepoints)
 grid_size_codepoints = grid_height_blocks * gridrow_size_codepoints
 
 
+def u_plus(codepoint: int) -> str:
+    return 'U+{:04x}'.format(codepoint)
+
+
 def braille_cell(base: int) -> str:
     cell_codepoints = (base + offset for offset in cell_offsets)
     cell_bits = sum(chr(c).isprintable() << i
@@ -55,8 +59,10 @@ def braille_row(base: int) -> str:
 
 
 def grid_row(base: int) -> str:
-    heading = 'U+{:04x}..U+{:04x}:\n'.format(
-        base, base + gridrow_size_codepoints - 1)
+    heading = ' {}\n'.format(
+        ' '.join('{:{}}'.format(u_plus(base + i * block_size_codepoints),
+                                block_width_cells)
+                 for i in range(grid_width_blocks)))
     return heading \
         + ''.join(' {}\n'.format(
             ' '.join(braille_row(base
