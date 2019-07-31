@@ -81,21 +81,20 @@ def show_block10(base: int) -> str:
 
 
 def assemble_x2(base: int, each: Callable[[int], str]) -> str:
-    return ' '.join(each(inner_base)
-                    for inner_base in block2_grid.iterx(base))
+    return ' {}\n'.format(
+        ' '.join(each(inner_base) for inner_base in block2_grid.iterx(base)))
 
 
 def assemble_y1(base: int, each: Callable[[int], str]) -> str:
-    return ''.join(' {}\n'.format(each(inner_base))
-                   for inner_base in block1_grid.itery(base))
+    return ''.join(each(inner_base) for inner_base in block1_grid.itery(base))
 
 
 def show_block21(base: int) -> str:
-    heading = ' {}\n'.format(
+    return (
         assemble_x2(base,
-                    lambda base: '{:{}}'.format(u_plus(base), block1_cells.w)))
-    return heading + assemble_y1(base,
-                                 lambda base: assemble_x2(base, show_block10))
+                    lambda base: '{:{}}'.format(u_plus(base), block1_cells.w)) 
+        + assemble_y1(base, lambda base: assemble_x2(base, show_block10))
+    )
 
 
 def assemble_y2(base: int, each: Callable[[int], str]) -> str:
