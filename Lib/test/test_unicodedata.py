@@ -24,12 +24,11 @@ def all_chars():
 class UnicodeMethodsTest(unittest.TestCase):
 
     # update this, if the database changes
-    expectedchecksum = '9129d6f2bdf008a81c2476e5b5127014a62130c1'
+    expectedchecksum = 'e728278035eb76cf92d86f07852266b0433f16a5'
 
     def test_method_checksum(self):
         h = hashlib.sha1()
-        for i in range(0x10000):
-            char = chr(i)
+        for char in all_chars():
             data = [
                 # Predicates (single char)
                 "01"[char.isalnum()],
@@ -84,13 +83,12 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
 
     # Update this if the database changes. Make sure to do a full rebuild
     # (e.g. 'make distclean && make') to get the correct checksum.
-    expectedchecksum = 'c44a49ca7c5cb6441640fe174ede604b45028652'
+    expectedchecksum = '4bcbf9df344114b1ebc95b904f4352dd250dff7e'
     def test_function_checksum(self):
         data = []
         h = hashlib.sha1()
 
-        for i in range(0x10000):
-            char = chr(i)
+        for char in all_chars():
             data = [
                 # Properties
                 format(self.db.digit(char, -1), '.12g'),
