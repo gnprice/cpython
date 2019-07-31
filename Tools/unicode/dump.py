@@ -4,10 +4,13 @@
 # Call size 0x100... a "line"?
 
 # Display choice we make: shape/size of a block.  Powers of 2.
-block_width_codepoints = 0x20  # min 2
-block_height_codepoints = 0x20  # min 4
+block_width_codepoints = 0x10  # min 2
+block_height_codepoints = 0x10  # min 4
 
-num_blocks = 0x10
+grid_width_blocks = 0x4
+grid_height_blocks = 0x4
+
+num_grids = 0x1
 
 
 braille_base = ord('\u2800')  # BRAILLE PATTERN BLANK
@@ -21,14 +24,20 @@ braille_height = 4
 cell_offsets_yx = [(0,0), (1,0), (2,0), (0,1), (1,1), (2,1), (3,0), (3,1)]
 
 
+cell_offsets = [y*block_width_codepoints + x for y, x in cell_offsets_yx]
+
 block_width_cells = block_width_codepoints // braille_width
 block_height_cells = block_height_codepoints // braille_height
-
-cell_offsets = [y*block_width_codepoints + x for y, x in cell_offsets_yx]
 
 row_size_codepoints = braille_height * block_width_codepoints
 block_size_codepoints = block_height_codepoints * block_width_codepoints
 assert(block_size_codepoints == block_height_cells * row_size_codepoints)
+
+
+gridline_size_codepoints = grid_width_blocks * row_size_codepoints
+gridrow_size_codepoints = grid_width_blocks * block_size_codepoints
+assert(gridrow_size_codepoints == block_height_cells * gridline_size_codepoints)
+grid_size_codepoints = grid_height_blocks * gridrow_size_codepoints
 
 
 def braille_cell(base: int) -> str:
@@ -45,11 +54,23 @@ def braille_row(base: int) -> str:
                                braille_width))
 
 
-for block in range(num_blocks):
-    block_base = block * block_size_codepoints
-    print('U+{:04x}..U+{:04x}:'.format(
-        block_base, block_base + block_size_codepoints - 1))
-    print(''.join(
-        ' {}\n'.format(
-            braille_row(block_base + row_size_codepoints * row))
-        for row in range(block_height_cells)))
+def grid_row(base: int) -> str:
+    heading = 'U+{:04x}..U+{:04x}:\n'.format(
+        base, base + gridrow_size_codepoints - 1)
+    return heading \
+        + ''.join(' {}\n'.format(
+            ' '.join(braille_row(base
+                                 + y * row_size_codepoints
+                                 + x * gridline_size_codepoints)
+                     for x in range(grid_width_blocks)))
+                  for y in range(block_height_cells))
+
+
+def grid(base: int) -> str:
+    return '\n'.join(grid_row(base + i * gridrow_size_codepoints)
+                     for i in range(grid_height_blocks)) \
+        + '\n'
+
+
+for i_grid in range(num_grids):
+    print(grid(i_grid * grid_size_codepoints))
