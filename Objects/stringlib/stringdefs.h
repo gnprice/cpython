@@ -23,6 +23,7 @@
 #define STRINGLIB_NEW            PyBytes_FromStringAndSize
 #define STRINGLIB_CHECK          PyBytes_Check
 #define STRINGLIB_CHECK_EXACT    PyBytes_CheckExact
+#define STRINGLIB_MUTABLE 0
 #define STRINGLIB_TOSTR          PyObject_Str
 #define STRINGLIB_TOASCII        PyObject_Repr
 #endif /* !STRINGLIB_STRINGDEFS_H */
