@@ -2055,12 +2055,7 @@ static int
 _mpd_basecmp(mpd_uint_t *big, mpd_uint_t *small, mpd_size_t n, mpd_size_t m,
              mpd_size_t shift)
 {
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
-    /* spurious uninitialized warnings */
-    mpd_uint_t l=l, lprev=lprev, h=h;
-#else
     mpd_uint_t l, lprev, h;
-#endif
     mpd_uint_t q, r;
     mpd_uint_t ph, x;
 

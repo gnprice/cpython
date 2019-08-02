@@ -426,12 +426,7 @@ void
 _mpd_baseshiftl(mpd_uint_t *dest, mpd_uint_t *src, mpd_size_t n, mpd_size_t m,
                 mpd_size_t shift)
 {
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
-    /* spurious uninitialized warnings */
-    mpd_uint_t l=l, lprev=lprev, h=h;
-#else
     mpd_uint_t l, lprev, h;
-#endif
     mpd_uint_t q, r;
     mpd_uint_t ph;
 
@@ -495,12 +490,7 @@ mpd_uint_t
 _mpd_baseshiftr(mpd_uint_t *dest, mpd_uint_t *src, mpd_size_t slen,
                 mpd_size_t shift)
 {
-#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && !defined(__clang__)
-    /* spurious uninitialized warnings */
-    mpd_uint_t l=l, h=h, hprev=hprev; /* low, high, previous high */
-#else
     mpd_uint_t l, h, hprev; /* low, high, previous high */
-#endif
     mpd_uint_t rnd, rest;   /* rounding digit, rest */
     mpd_uint_t q, r;
     mpd_size_t i, j;
