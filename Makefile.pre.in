@@ -96,6 +96,7 @@ CONFIGURE_LDFLAGS=	@LDFLAGS@
 # values.
 PY_CFLAGS=	$(BASECFLAGS) $(OPT) $(CONFIGURE_CFLAGS) $(CFLAGS) $(EXTRA_CFLAGS)
 PY_CFLAGS_NODIST=$(CONFIGURE_CFLAGS_NODIST) $(CFLAGS_NODIST) -I$(srcdir)/Include/internal
+PY_WARNING_CFLAGS=-Wcast-qual
 # Both CPPFLAGS and LDFLAGS need to contain the shell's value for setup.py to
 # be able to build extension modules using the directories specified in the
 # environment variables
@@ -506,6 +507,14 @@ profile-opt: profile-run-stamp
 	@echo "Rebuilding with profile guided optimizations:"
 	-rm -f profile-clean-stamp
 	$(MAKE) @DEF_MAKE_RULE@ CFLAGS_NODIST="$(CFLAGS_NODIST) $(PGO_PROF_USE_FLAG)" LDFLAGS_NODIST="$(LDFLAGS_NODIST)"
+
+warnings-clean-stamp:
+	$(MAKE) clean
+	touch $@
+
+warnings:
+	$(MAKE) warnings-clean-stamp
+	$(MAKE) @DEF_MAKE_RULE@ CFLAGS_NODIST="$(CFLAGS_NODIST) $(PY_WARNING_CFLAGS)"
 
 # Compile and run with gcov
 .PHONY=coverage coverage-lcov coverage-report
