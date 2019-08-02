@@ -107,6 +107,7 @@ EXPORT(int)testfunc_iii(int a, int b)
     return result;
 }
 
+Py_GCC_ATTRIBUTE((format(printf, 1, 2)))
 EXPORT(int)myprintf(char *fmt, ...)
 {
     int result;

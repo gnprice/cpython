@@ -3168,6 +3168,7 @@ sys_pyfile_write(const char *text, PyObject *file)
 
  */
 
+Py_GCC_ATTRIBUTE((format(printf, 3, 0)))
 static void
 sys_write(_Py_Identifier *key, FILE *fp, const char *format, va_list va)
 {

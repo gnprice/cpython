@@ -76,6 +76,7 @@ PyTypeObject PyCThunk_Type = {
 
 /**************************************************************/
 
+Py_GCC_ATTRIBUTE((format(printf, 1, 2)))
 static void
 PrintError(const char *msg, ...)
 {
