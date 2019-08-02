@@ -418,10 +418,12 @@ _PyObject_DebugTypeStats(FILE *out);
    will attempt to print to stderr, after the object dump. */
 #ifdef NDEBUG
    /* No debugging: compile away the assertions: */
+#  define _PyObject_ASSERTIONS 0
 #  define _PyObject_ASSERT_FROM(obj, expr, msg, filename, lineno, func) \
     ((void)0)
 #else
    /* With debugging: generate checks: */
+#  define _PyObject_ASSERTIONS 1
 #  define _PyObject_ASSERT_FROM(obj, expr, msg, filename, lineno, func) \
     ((expr) \
       ? (void)(0) \

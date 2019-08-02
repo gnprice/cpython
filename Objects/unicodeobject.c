@@ -489,6 +489,10 @@ _PyUnicode_CheckConsistency(PyObject *op, int check_content)
     PyASCIIObject *ascii;
     unsigned int kind;
 
+    if (!_PyObject_ASSERTIONS) {
+        return 1;
+    }
+
     _PyObject_ASSERT(op, PyUnicode_Check(op));
 
     ascii = (PyASCIIObject *)op;
