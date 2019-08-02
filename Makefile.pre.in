@@ -95,8 +95,9 @@ CONFIGURE_LDFLAGS=	@LDFLAGS@
 # command line to append to these values without stomping the pre-set
 # values.
 PY_CFLAGS=	$(BASECFLAGS) $(OPT) $(CONFIGURE_CFLAGS) $(CFLAGS) $(EXTRA_CFLAGS)
-PY_CFLAGS_NODIST=$(CONFIGURE_CFLAGS_NODIST) $(CFLAGS_NODIST) -I$(srcdir)/Include/internal
-PY_WARNING_CFLAGS=-Wcast-qual
+PY_CFLAGS_NODIST=$(CONFIGURE_CFLAGS_NODIST) $(CFLAGS_NODIST) -I$(srcdir)/Include/internal $(PY_WARNING_CFLAGS)
+PY_WARNING_CFLAGS=-Wpointer-arith
+PY_EXTRA_WARNING_CFLAGS=-Wcast-qual
 # Both CPPFLAGS and LDFLAGS need to contain the shell's value for setup.py to
 # be able to build extension modules using the directories specified in the
 # environment variables
@@ -514,7 +515,7 @@ warnings-clean-stamp:
 
 warnings:
 	$(MAKE) warnings-clean-stamp
-	$(MAKE) @DEF_MAKE_RULE@ CFLAGS_NODIST="$(CFLAGS_NODIST) $(PY_WARNING_CFLAGS)"
+	$(MAKE) @DEF_MAKE_RULE@ CFLAGS_NODIST="$(CFLAGS_NODIST) $(PY_EXTRA_WARNING_CFLAGS)"
 
 # Compile and run with gcov
 .PHONY=coverage coverage-lcov coverage-report
