@@ -419,17 +419,16 @@ _PyObject_DebugTypeStats(FILE *out);
 #ifdef NDEBUG
    /* No debugging: compile away the assertions: */
 #  define _PyObject_ASSERTIONS 0
-#  define _PyObject_ASSERT_FROM(obj, expr, msg, filename, lineno, func) \
-    ((void)0)
 #else
    /* With debugging: generate checks: */
 #  define _PyObject_ASSERTIONS 1
+#endif
+
 #  define _PyObject_ASSERT_FROM(obj, expr, msg, filename, lineno, func) \
-    ((expr) \
+    (((expr) || !_PyObject_ASSERTIONS) \
       ? (void)(0) \
       : _PyObject_AssertFailed((obj), Py_STRINGIFY(expr), \
                                (msg), (filename), (lineno), (func)))
-#endif
 
 #define _PyObject_ASSERT_WITH_MSG(obj, expr, msg) \
     _PyObject_ASSERT_FROM(obj, expr, msg, __FILE__, __LINE__, __func__)
