@@ -318,7 +318,7 @@ decode_ascii(const char *arg, wchar_t **wstr, size_t *wlen,
              const char **reason, _Py_error_handler errors)
 {
     wchar_t *res;
-    unsigned char *in;
+    const unsigned char *in;
     wchar_t *out;
     size_t argsize = strlen(arg) + 1;
 
@@ -336,7 +336,7 @@ decode_ascii(const char *arg, wchar_t **wstr, size_t *wlen,
     }
 
     out = res;
-    for (in = (unsigned char*)arg; *in; in++) {
+    for (in = (const unsigned char*)arg; *in; in++) {
         unsigned char ch = *in;
         if (ch < 128) {
             *out++ = ch;
@@ -345,7 +345,7 @@ decode_ascii(const char *arg, wchar_t **wstr, size_t *wlen,
             if (!surrogateescape) {
                 PyMem_RawFree(res);
                 if (wlen) {
-                    *wlen = in - (unsigned char*)arg;
+                    *wlen = in - (const unsigned char*)arg;
                 }
                 if (reason) {
                     *reason = "decoding error";
@@ -373,7 +373,7 @@ decode_current_locale(const char* arg, wchar_t **wstr, size_t *wlen,
     size_t argsize;
     size_t count;
 #ifdef HAVE_MBRTOWC
-    unsigned char *in;
+    const unsigned char *in;
     wchar_t *out;
     mbstate_t mbs;
 #endif
@@ -435,11 +435,11 @@ decode_current_locale(const char* arg, wchar_t **wstr, size_t *wlen,
         return -1;
     }
 
-    in = (unsigned char*)arg;
+    in = (const unsigned char*)arg;
     out = res;
     memset(&mbs, 0, sizeof mbs);
     while (argsize) {
-        size_t converted = mbrtowc(out, (char*)in, argsize, &mbs);
+        size_t converted = mbrtowc(out, (const char*)in, argsize, &mbs);
         if (converted == 0) {
             /* Reached end of string; null char stored. */
             break;
@@ -493,7 +493,7 @@ decode_current_locale(const char* arg, wchar_t **wstr, size_t *wlen,
 decode_error:
     PyMem_RawFree(res);
     if (wlen) {
-        *wlen = in - (unsigned char*)arg;
+        *wlen = in - (const unsigned char*)arg;
     }
     if (reason) {
         *reason = "decoding error";
