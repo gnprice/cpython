@@ -25,7 +25,7 @@ static struct PyModuleDef warningsmodule;
 
 /* Given a module object, get its per-module state. */
 static WarningsState *
-_Warnings_GetState()
+_Warnings_GetState(void)
 {
     PyThreadState *tstate = PyThreadState_GET();
     if (tstate == NULL) {
