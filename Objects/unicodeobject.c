@@ -8229,7 +8229,6 @@ PyUnicode_BuildEncodingMap(PyObject* string)
     int kind;
     void *data;
     Py_ssize_t length;
-    Py_UCS4 ch;
 
     if (!PyUnicode_Check(string) || !PyUnicode_GET_LENGTH(string)) {
         PyErr_BadArgument();
@@ -8249,7 +8248,7 @@ PyUnicode_BuildEncodingMap(PyObject* string)
         need_dict = 1;
     for (i = 1; i < length; i++) {
         int l1, l2;
-        ch = PyUnicode_READ(kind, data, i);
+        Py_UCS4 ch = PyUnicode_READ(kind, data, i);
         if (ch == 0 || ch > 0xFFFF) {
             need_dict = 1;
             break;
@@ -8269,7 +8268,7 @@ PyUnicode_BuildEncodingMap(PyObject* string)
         need_dict = 1;
 
     if (need_dict) {
-        PyObject *result = PyDict_New();
+        result = PyDict_New();
         PyObject *key, *value;
         if (!result)
             return NULL;
@@ -8881,10 +8880,10 @@ charmaptranslate_output(Py_UCS4 ch, PyObject *mapping,
     }
 
     if (PyLong_Check(item)) {
-        long ch = (Py_UCS4)PyLong_AS_LONG(item);
+        long ch_out = (Py_UCS4)PyLong_AS_LONG(item);
         /* PyLong_AS_LONG() cannot fail, charmaptranslate_lookup() already
            used it */
-        if (_PyUnicodeWriter_WriteCharInline(writer, ch) < 0) {
+        if (_PyUnicodeWriter_WriteCharInline(writer, ch_out) < 0) {
             Py_DECREF(item);
             return -1;
         }
@@ -9225,9 +9224,9 @@ PyUnicode_TransformDecimalToASCII(Py_UNICODE *s,
     for (i = 0; i < length; i++) {
         Py_UCS4 ch = s[i];
         if (ch > 127) {
-            int decimal = Py_UNICODE_TODECIMAL(ch);
-            if (decimal >= 0)
-                ch = '0' + decimal;
+            int value = Py_UNICODE_TODECIMAL(ch);
+            if (value >= 0)
+                ch = '0' + value;
             maxchar = Py_MAX(maxchar, ch);
         }
     }
@@ -9242,9 +9241,9 @@ PyUnicode_TransformDecimalToASCII(Py_UNICODE *s,
     for (i = 0; i < length; i++) {
         Py_UCS4 ch = s[i];
         if (ch > 127) {
-            int decimal = Py_UNICODE_TODECIMAL(ch);
-            if (decimal >= 0)
-                ch = '0' + decimal;
+            int value = Py_UNICODE_TODECIMAL(ch);
+            if (value >= 0)
+                ch = '0' + value;
         }
         PyUnicode_WRITE(kind, data, i, ch);
     }
@@ -14071,7 +14070,7 @@ unicode_subscript(PyObject* self, PyObject* item)
         PyObject *result;
         void *src_data, *dest_data;
         int src_kind, dest_kind;
-        Py_UCS4 ch, max_char, kind_limit;
+        Py_UCS4 max_char, kind_limit;
 
         if (PySlice_Unpack(item, &start, &stop, &step) < 0) {
             return NULL;
@@ -14095,7 +14094,7 @@ unicode_subscript(PyObject* self, PyObject* item)
             kind_limit = kind_maxchar_limit(src_kind);
             max_char = 0;
             for (cur = start, i = 0; i < slicelength; cur += step, i++) {
-                ch = PyUnicode_READ(src_kind, src_data, cur);
+                Py_UCS4 ch = PyUnicode_READ(src_kind, src_data, cur);
                 if (ch > max_char) {
                     max_char = ch;
                     if (max_char >= kind_limit)
