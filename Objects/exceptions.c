@@ -8,6 +8,7 @@
 #include <Python.h>
 #include "pycore_initconfig.h"
 #include "pycore_object.h"
+#include "pycore_pylifecycle.h"
 #include "pycore_pymem.h"
 #include "pycore_pystate.h"
 #include "structmember.h"
