@@ -46,7 +46,9 @@ PyAPI_FUNC(int) PyArg_VaParseTupleAndKeywords(PyObject *, PyObject *,
 #endif
 PyAPI_FUNC(int) PyArg_ValidateKeywordArguments(PyObject *);
 PyAPI_FUNC(int) PyArg_UnpackTuple(PyObject *, const char *, Py_ssize_t, Py_ssize_t, ...);
+#ifndef PY_SSIZE_T_CLEAN
 PyAPI_FUNC(PyObject *) Py_BuildValue(const char *, ...);
+#endif
 PyAPI_FUNC(PyObject *) _Py_BuildValue_SizeT(const char *, ...);
 
 

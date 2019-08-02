@@ -1373,8 +1373,6 @@ PyGILState_Release(PyGILState_STATE oldstate)
 
 /* cross-interpreter data */
 
-crossinterpdatafunc _PyCrossInterpreterData_Lookup(PyObject *);
-
 /* This is a separate func from _PyCrossInterpreterData_Lookup in order
    to keep the registry code separate. */
 static crossinterpdatafunc

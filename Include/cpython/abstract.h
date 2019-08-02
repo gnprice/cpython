@@ -8,10 +8,6 @@ extern "C" {
 
 /* === Object Protocol ================================================== */
 
-#ifdef PY_SSIZE_T_CLEAN
-#  define _PyObject_CallMethodId _PyObject_CallMethodId_SizeT
-#endif
-
 /* Convert keyword arguments from the FASTCALL (stack: C array, kwnames: tuple)
    format to a Python dictionary ("kwargs" dict).
 
@@ -172,11 +168,16 @@ _PyObject_CallMethodOneArg(PyObject *self, PyObject *name, PyObject *arg)
            2 | PY_VECTORCALL_ARGUMENTS_OFFSET, NULL);
 }
 
+
+#ifdef PY_SSIZE_T_CLEAN
+#  define _PyObject_CallMethodId _PyObject_CallMethodId_SizeT
+#else
 /* Like PyObject_CallMethod(), but expect a _Py_Identifier*
    as the method name. */
 PyAPI_FUNC(PyObject *) _PyObject_CallMethodId(PyObject *obj,
                                               _Py_Identifier *name,
                                               const char *format, ...);
+#endif
 
 PyAPI_FUNC(PyObject *) _PyObject_CallMethodId_SizeT(PyObject *obj,
                                                     _Py_Identifier *name,
