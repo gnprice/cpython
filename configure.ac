@@ -4730,22 +4730,9 @@ AC_CHECK_HEADERS(term.h,,,[
 #endif
 ])
 
-# On HP/UX 11.0, mvwdelch is a block with a return statement
-AC_MSG_CHECKING(whether mvwdelch is an expression)
-AC_CACHE_VAL(ac_cv_mvwdelch_is_expression,
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <curses.h>]], [[
-  int rtn;
-  rtn = mvwdelch(0,0,0);
-]])],
-[ac_cv_mvwdelch_is_expression=yes],
-[ac_cv_mvwdelch_is_expression=no]))
-AC_MSG_RESULT($ac_cv_mvwdelch_is_expression)
-
-if test "$ac_cv_mvwdelch_is_expression" = yes
-then
-  AC_DEFINE(MVWDELCH_IS_EXPRESSION, 1,
+# TODO cut
+AC_DEFINE(MVWDELCH_IS_EXPRESSION, 1,
   [Define if mvwdelch in curses.h is an expression.])
-fi
 
 # Issue #25720: ncurses has introduced the NCURSES_OPAQUE symbol making opaque
 # structs since version 5.7.  If the macro is defined as zero before including
