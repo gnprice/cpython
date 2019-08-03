@@ -2321,44 +2321,8 @@ case $ac_sys_system/$ac_sys_release in
         else
             LIBTOOL_CRUFT=""
     fi
-    AC_RUN_IFELSE([AC_LANG_SOURCE([[
-    #include <unistd.h>
-    int main(int argc, char*argv[])
-    {
-      if (sizeof(long) == 4) {
-    	  return 0;
-      } else {
-      	  return 1;
-      }
-    }
-    ]])],[ac_osx_32bit=yes],[ac_osx_32bit=no],[ac_osx_32bit=yes])
 
-    if test "${ac_osx_32bit}" = "yes"; then
-    	case `/usr/bin/arch` in
-    	i386)
-    		MACOSX_DEFAULT_ARCH="i386"
-    		;;
-    	ppc)
-    		MACOSX_DEFAULT_ARCH="ppc"
-    		;;
-    	*)
-    		AC_MSG_ERROR([Unexpected output of 'arch' on OSX])
-    		;;
-    	esac
-    else
-    	case `/usr/bin/arch` in
-    	i386)
-    		MACOSX_DEFAULT_ARCH="x86_64"
-    		;;
-    	ppc)
-    		MACOSX_DEFAULT_ARCH="ppc64"
-    		;;
-    	*)
-    		AC_MSG_ERROR([Unexpected output of 'arch' on OSX])
-    		;;
-    	esac
-
-    fi
+    MACOSX_DEFAULT_ARCH="x86_64"
 
     LIBTOOL_CRUFT=$LIBTOOL_CRUFT" -lSystem -lSystemStubs -arch_only ${MACOSX_DEFAULT_ARCH}"
     LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)'
