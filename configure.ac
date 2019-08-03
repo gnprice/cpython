@@ -1770,23 +1770,6 @@ yes)
 	    ;;
 
     Darwin*)
-        # -Wno-long-double, -no-cpp-precomp, and -mno-fused-madd
-        # used to be here, but non-Apple gcc doesn't accept them.
-        if test "${CC}" = gcc
-        then
-            AC_MSG_CHECKING(which compiler should be used)
-            case "${UNIVERSALSDK}" in
-            */MacOSX10.4u.sdk)
-                # Build using 10.4 SDK, force usage of gcc when the
-                # compiler is gcc, otherwise the user will get very
-                # confusing error messages when building on OSX 10.6
-                CC=gcc-4.0
-                CPP=cpp-4.0
-                ;;
-            esac
-            AC_MSG_RESULT($CC)
-        fi
-
         if test "${enable_universalsdk}"
         then
             case "$UNIVERSAL_ARCHS" in
@@ -1848,11 +1831,8 @@ yes)
         # component of the string returned by distutils.get_platform().
         #
         # Use the value from:
-        # 1. the MACOSX_DEPLOYMENT_TARGET environment variable if specified
-        # 2. the operating system version of the build machine if >= 10.6
-        # 3. If running on OS X 10.3 through 10.5, use the legacy tests
-        #       below to pick either 10.3, 10.4, or 10.5 as the target.
-        # 4. If we are running on OS X 10.2 or earlier, good luck!
+        # 1. the MACOSX_DEPLOYMENT_TARGET environment variable if specified, or
+        # 2. the operating system version of the build machine.
 
         AC_MSG_CHECKING(which MACOSX_DEPLOYMENT_TARGET to use)
         cur_target_major=`sw_vers -productVersion | \
@@ -1860,28 +1840,6 @@ yes)
         cur_target_minor=`sw_vers -productVersion | \
                 sed 's/\([[0-9]]*\)\.\([[0-9]]*\).*/\2/'`
         cur_target="${cur_target_major}.${cur_target_minor}"
-        if test ${cur_target_major} -eq 10 && \
-           test ${cur_target_minor} -ge 3 && \
-           test ${cur_target_minor} -le 5
-        then
-            # OS X 10.3 through 10.5
-            cur_target=10.3
-            if test ${enable_universalsdk}
-            then
-                case "$UNIVERSAL_ARCHS" in
-                all|3-way|intel|64-bit)
-                    # These configurations were first supported in 10.5
-                    cur_target='10.5'
-                    ;;
-                esac
-            else
-                if test `/usr/bin/arch` = "i386"
-                then
-                    # 10.4 was the first release to support Intel archs
-                    cur_target="10.4"
-                fi
-            fi
-        fi
         CONFIGURE_MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET-${cur_target}}
 
         # Make sure that MACOSX_DEPLOYMENT_TARGET is set in the

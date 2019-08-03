@@ -3355,11 +3355,6 @@ case $ac_sys_system/$ac_sys_release in
 $as_echo "#define _BSD_SOURCE 1" >>confdefs.h
 
     ;;
-  # Defining _XOPEN_SOURCE on NetBSD version prior to the introduction of
-  # _NETBSD_SOURCE disables certain features (eg. setgroups). Reported by
-  # Marc Recht
-  NetBSD/1.5 | NetBSD/1.5.* | NetBSD/1.6 | NetBSD/1.6.* | NetBSD/1.6[A-S])
-    define_xopen_source=no;;
   # From the perspective of Solaris, _XOPEN_SOURCE is not so much a
   # request to enable features supported by the standard as a request
   # to disable features not supported by the standard.  The best way
@@ -3376,27 +3371,12 @@ $as_echo "#define _BSD_SOURCE 1" >>confdefs.h
   # but used in struct sockaddr.sa_family. Reported by Tim Rice.
   SCO_SV/3.2)
     define_xopen_source=no;;
-  # On MacOS X 10.2, a bug in ncurses.h means that it craps out if
-  # _XOPEN_EXTENDED_SOURCE is defined. Apparently, this is fixed in 10.3, which
-  # identifies itself as Darwin/7.*
   # On Mac OS X 10.4, defining _POSIX_C_SOURCE or _XOPEN_SOURCE
   # disables platform specific features beyond repair.
-  # On Mac OS X 10.3, defining _POSIX_C_SOURCE or _XOPEN_SOURCE
-  # has no effect, don't bother defining them
   Darwin/[6789].*)
     define_xopen_source=no;;
   Darwin/1[0-9].*)
     define_xopen_source=no;;
-  # On AIX 4 and 5.1, mbstate_t is defined only when _XOPEN_SOURCE == 500 but
-  # used in wcsnrtombs() and mbsnrtowcs() even if _XOPEN_SOURCE is not defined
-  # or has another value. By not (re)defining it, the defaults come in place.
-  AIX/4)
-    define_xopen_source=no;;
-  AIX/5)
-    if test `uname -r` -eq 1; then
-      define_xopen_source=no
-    fi
-    ;;
   # On QNX 6.3.2, defining _XOPEN_SOURCE prevents netdb.h from
   # defining NI_NUMERICHOST.
   QNX/6.3.2)
@@ -7372,25 +7352,6 @@ $as_echo "$ac_cv_enable_implicit_function_declaration_error" >&6; }
 	    ;;
 
     Darwin*)
-        # -Wno-long-double, -no-cpp-precomp, and -mno-fused-madd
-        # used to be here, but non-Apple gcc doesn't accept them.
-        if test "${CC}" = gcc
-        then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: checking which compiler should be used" >&5
-$as_echo_n "checking which compiler should be used... " >&6; }
-            case "${UNIVERSALSDK}" in
-            */MacOSX10.4u.sdk)
-                # Build using 10.4 SDK, force usage of gcc when the
-                # compiler is gcc, otherwise the user will get very
-                # confusing error messages when building on OSX 10.6
-                CC=gcc-4.0
-                CPP=cpp-4.0
-                ;;
-            esac
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CC" >&5
-$as_echo "$CC" >&6; }
-        fi
-
         if test "${enable_universalsdk}"
         then
             case "$UNIVERSAL_ARCHS" in
@@ -7452,11 +7413,8 @@ $as_echo "$CC" >&6; }
         # component of the string returned by distutils.get_platform().
         #
         # Use the value from:
-        # 1. the MACOSX_DEPLOYMENT_TARGET environment variable if specified
-        # 2. the operating system version of the build machine if >= 10.6
-        # 3. If running on OS X 10.3 through 10.5, use the legacy tests
-        #       below to pick either 10.3, 10.4, or 10.5 as the target.
-        # 4. If we are running on OS X 10.2 or earlier, good luck!
+        # 1. the MACOSX_DEPLOYMENT_TARGET environment variable if specified, or
+        # 2. the operating system version of the build machine.
 
         { $as_echo "$as_me:${as_lineno-$LINENO}: checking which MACOSX_DEPLOYMENT_TARGET to use" >&5
 $as_echo_n "checking which MACOSX_DEPLOYMENT_TARGET to use... " >&6; }
@@ -7465,28 +7423,6 @@ $as_echo_n "checking which MACOSX_DEPLOYMENT_TARGET to use... " >&6; }
         cur_target_minor=`sw_vers -productVersion | \
                 sed 's/\([0-9]*\)\.\([0-9]*\).*/\2/'`
         cur_target="${cur_target_major}.${cur_target_minor}"
-        if test ${cur_target_major} -eq 10 && \
-           test ${cur_target_minor} -ge 3 && \
-           test ${cur_target_minor} -le 5
-        then
-            # OS X 10.3 through 10.5
-            cur_target=10.3
-            if test ${enable_universalsdk}
-            then
-                case "$UNIVERSAL_ARCHS" in
-                all|3-way|intel|64-bit)
-                    # These configurations were first supported in 10.5
-                    cur_target='10.5'
-                    ;;
-                esac
-            else
-                if test `/usr/bin/arch` = "i386"
-                then
-                    # 10.4 was the first release to support Intel archs
-                    cur_target="10.4"
-                fi
-            fi
-        fi
         CONFIGURE_MACOSX_DEPLOYMENT_TARGET=${MACOSX_DEPLOYMENT_TARGET-${cur_target}}
 
         # Make sure that MACOSX_DEPLOYMENT_TARGET is set in the
