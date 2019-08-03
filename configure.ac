@@ -456,11 +456,6 @@ case $ac_sys_system/$ac_sys_release in
     # As this has a different meaning on Linux, only define it on OpenBSD
     AC_DEFINE(_BSD_SOURCE, 1, [Define on OpenBSD to activate all library features])
     ;;
-  # Defining _XOPEN_SOURCE on NetBSD version prior to the introduction of
-  # _NETBSD_SOURCE disables certain features (eg. setgroups). Reported by
-  # Marc Recht
-  NetBSD/1.5 | NetBSD/1.5.* | NetBSD/1.6 | NetBSD/1.6.* | NetBSD/1.6@<:@A-S@:>@)
-    define_xopen_source=no;;
   # From the perspective of Solaris, _XOPEN_SOURCE is not so much a
   # request to enable features supported by the standard as a request
   # to disable features not supported by the standard.  The best way
