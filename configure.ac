@@ -3597,26 +3597,7 @@ AC_CHECK_LIB(c, inet_aton, [$ac_cv_prog_TRUE],
   AC_CHECK_LIB(resolv, inet_aton)
 )
 
-# On Tru64, chflags seems to be present, but calling it will
-# exit Python
-AC_CACHE_CHECK([for chflags], [ac_cv_have_chflags], [dnl
-AC_RUN_IFELSE([AC_LANG_SOURCE([[
-#include <sys/stat.h>
-#include <unistd.h>
-int main(int argc, char*argv[])
-{
-  if(chflags(argv[0], 0) != 0)
-    return 1;
-  return 0;
-}
-]])],
-[ac_cv_have_chflags=yes],
-[ac_cv_have_chflags=no],
-[ac_cv_have_chflags=cross])
-])
-if test "$ac_cv_have_chflags" = cross ; then
-  AC_CHECK_FUNC([chflags], [ac_cv_have_chflags="yes"], [ac_cv_have_chflags="no"])
-fi
+AC_CHECK_FUNC([chflags], [ac_cv_have_chflags="yes"], [ac_cv_have_chflags="no"])
 if test "$ac_cv_have_chflags" = yes ; then
   AC_DEFINE(HAVE_CHFLAGS, 1, [Define to 1 if you have the 'chflags' function.])
 fi
