@@ -2313,15 +2313,6 @@ esac
 
 AC_SUBST(LIBTOOL_CRUFT)
 case $ac_sys_system/$ac_sys_release in
-  Darwin/@<:@01567@:>@\..*)
-    LIBTOOL_CRUFT="-framework System -lcc_dynamic"
-    if test "${enable_universalsdk}"; then
-	    :
-    else
-        LIBTOOL_CRUFT="${LIBTOOL_CRUFT} -arch_only `/usr/bin/arch`"
-    fi
-    LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -install_name $(PYTHONFRAMEWORKINSTALLDIR)/Versions/$(VERSION)/$(PYTHONFRAMEWORK)'
-    LIBTOOL_CRUFT=$LIBTOOL_CRUFT' -compatibility_version $(VERSION) -current_version $(VERSION)';;
   Darwin/*)
     gcc_version=`gcc -dumpversion`
     if test ${gcc_version} '<' 4.0
