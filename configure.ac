@@ -472,13 +472,8 @@ case $ac_sys_system/$ac_sys_release in
   # but used in struct sockaddr.sa_family. Reported by Tim Rice.
   SCO_SV/3.2)
     define_xopen_source=no;;
-  # On MacOS X 10.2, a bug in ncurses.h means that it craps out if
-  # _XOPEN_EXTENDED_SOURCE is defined. Apparently, this is fixed in 10.3, which
-  # identifies itself as Darwin/7.*
   # On Mac OS X 10.4, defining _POSIX_C_SOURCE or _XOPEN_SOURCE
   # disables platform specific features beyond repair.
-  # On Mac OS X 10.3, defining _POSIX_C_SOURCE or _XOPEN_SOURCE
-  # has no effect, don't bother defining them
   Darwin/@<:@6789@:>@.*)
     define_xopen_source=no;;
   Darwin/1@<:@0-9@:>@.*)
