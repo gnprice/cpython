@@ -478,16 +478,6 @@ case $ac_sys_system/$ac_sys_release in
     define_xopen_source=no;;
   Darwin/1@<:@0-9@:>@.*)
     define_xopen_source=no;;
-  # On AIX 4 and 5.1, mbstate_t is defined only when _XOPEN_SOURCE == 500 but
-  # used in wcsnrtombs() and mbsnrtowcs() even if _XOPEN_SOURCE is not defined
-  # or has another value. By not (re)defining it, the defaults come in place.
-  AIX/4)
-    define_xopen_source=no;;
-  AIX/5)
-    if test `uname -r` -eq 1; then
-      define_xopen_source=no
-    fi
-    ;;
   # On QNX 6.3.2, defining _XOPEN_SOURCE prevents netdb.h from
   # defining NI_NUMERICHOST.
   QNX/6.3.2)
