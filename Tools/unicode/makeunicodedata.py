@@ -85,6 +85,11 @@ EASTASIANWIDTH_NAMES = [ "F", "H", "W", "Na", "A", "N" ]
 
 MANDATORY_LINE_BREAKS = [ "BK", "CR", "LF", "NL" ]
 
+RELEVANT_BINARY_PROPERTIES = set([
+    'Lowercase', 'Line_Break', 'White_Space', 'Uppercase',
+    'XID_Start', 'XID_Continue', 'Cased', 'Case_Ignorable',
+])
+
 # note: should match definitions in Objects/unicodectype.c
 ALPHA_MASK = 0x01
 DECIMAL_MASK = 0x02
@@ -1084,14 +1089,17 @@ class UnicodeData:
             if table[i] is not None:
                 table[i].east_asian_width = widths[i]
 
-        for char, (p,) in itertools.chain(
-                UcdFile(PROP_LIST, version).expanded(),
-                UcdFile(DERIVED_CORE_PROPERTIES, version).expanded(),
+        for char_range, prop in itertools.chain(
+                UcdFile(PROP_LIST, version),
+                UcdFile(DERIVED_CORE_PROPERTIES, version),
         ):
-            if table[char]:
-                # Some properties (e.g. Default_Ignorable_Code_Point)
-                # apply to unassigned code points; ignore them
-                table[char].binary_properties.add(p)
+            if prop not in RELEVANT_BINARY_PROPERTIES:
+                continue
+            for char in expand_range(char_range):
+                if table[char]:
+                    # Some properties (e.g. Default_Ignorable_Code_Point)
+                    # apply to unassigned code points; ignore them
+                    table[char].binary_properties.add(prop)
 
         for char_range, value in UcdFile(LINE_BREAK, version):
             if value not in MANDATORY_LINE_BREAKS:
