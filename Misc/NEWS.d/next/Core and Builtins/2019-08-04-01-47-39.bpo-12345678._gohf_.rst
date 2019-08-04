@@ -1,0 +1,3 @@
+:meth:`str.splitlines` better conforms to Unicode, by no longer
+splitting on the control characters ``\x1c``, ``\x1d``,
+``\x1e``. Patch by Greg Price.

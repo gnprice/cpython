@@ -348,10 +348,7 @@ static const unsigned char ascii_linebreak[] = {
 /*         0x000D, * CARRIAGE RETURN */
     0, 0, 1, 1, 1, 1, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
-/*         0x001C, * FILE SEPARATOR */
-/*         0x001D, * GROUP SEPARATOR */
-/*         0x001E, * RECORD SEPARATOR */
-    0, 0, 0, 0, 1, 1, 1, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
@@ -15290,11 +15287,7 @@ _PyUnicode_Init(void)
 {
     /* XXX - move this array to unicodectype.c ? */
     Py_UCS2 linebreak[] = {
-        0x000A, /* LINE FEED */
-        0x000D, /* CARRIAGE RETURN */
-        0x001C, /* FILE SEPARATOR */
-        0x001D, /* GROUP SEPARATOR */
-        0x001E, /* RECORD SEPARATOR */
+        /* Only linebreaks above ASCII go into the bloom-like filter. */
         0x0085, /* NEXT LINE */
         0x2028, /* LINE SEPARATOR */
         0x2029, /* PARAGRAPH SEPARATOR */

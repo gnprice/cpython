@@ -1975,12 +1975,6 @@ expression support in the :mod:`re` module).
    +-----------------------+-----------------------------+
    | ``\f`` or ``\x0c``    | Form Feed                   |
    +-----------------------+-----------------------------+
-   | ``\x1c``              | File Separator              |
-   +-----------------------+-----------------------------+
-   | ``\x1d``              | Group Separator             |
-   +-----------------------+-----------------------------+
-   | ``\x1e``              | Record Separator            |
-   +-----------------------+-----------------------------+
    | ``\x85``              | Next Line (C1 Control Code) |
    +-----------------------+-----------------------------+
    | ``\u2028``            | Line Separator              |
@@ -1991,6 +1985,10 @@ expression support in the :mod:`re` module).
    .. versionchanged:: 3.2
 
       ``\v`` and ``\f`` added to list of line boundaries.
+
+   .. versionchanged:: 3.9
+
+      ``\x1c``, ``\x1d``, ``\x1e`` removed from list of line boundaries.
 
    For example::
 
