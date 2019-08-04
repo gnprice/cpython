@@ -1327,8 +1327,8 @@ def splitbins(t, trace=0):
         def dump(t1, t2, shift, bytes):
             print("%d+%d bins at shift %d; %d bytes" % (
                 len(t1), len(t2), shift, bytes), file=sys.stderr)
-        print("Size of original table:", len(t)*getsize(t), "bytes",
-              file=sys.stderr)
+        print("Size of original table: {} entries, {} bytes".format(
+            len(t), len(t)*getsize(t)), file=sys.stderr)
     n = len(t)-1    # last valid index
     maxshift = 0    # the most we can shift n and still have something left
     if n > 0:
@@ -1338,7 +1338,7 @@ def splitbins(t, trace=0):
     del n
     bytes = sys.maxsize  # smallest total size so far
     t = tuple(t)    # so slices can be dict keys
-    for shift in range(maxshift + 1):
+    for shift in range(2, maxshift + 1):
         t1 = []
         t2 = []
         size = 2**shift
