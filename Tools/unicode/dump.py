@@ -25,21 +25,19 @@ cell_dots = Dims(2, 4)
 
 # Display choices we make: shape/size of each level of block.
 block_rel = [
-    Dims(2, 1),
-    Dims(2, 2),
-    Dims(2, 2),
-    Dims(2, 2),
+    Dims(8, 4),
     Dims(2, 2),
     Dims(2, 2),
     Dims(2, 2),
 ]
 num_levels = len(block_rel)
 
-sepx = ['', '', ' ', '  ', '    ', '      ', '       ']
-sepy = ['', '', '\n', '\n\n', '\n\n', '\n\n\n', '\n\n\n\n']
+sepx = ['', ' ', '  ', '    ', '      ', '       ']
+sepy = ['', '\n', '\n\n', '\n\n', '\n\n\n', '\n\n\n\n']
 
 
-predicate = lambda ch: ch.isalnum()
+import unicodedata
+predicate = lambda ch: ch.isprintable() or unicodedata.category(ch) == 'Cn'
 
 base_codepoint = 0x0000
 
@@ -123,7 +121,7 @@ def header_big(lvl: int, base: int) -> str:
 
 header_type = {
     4: header_big,
-    2: header_small,
+    1: header_small,
 }
 
 
