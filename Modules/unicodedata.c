@@ -775,29 +775,31 @@ nfc_nfkc(PyObject *self, PyObject *input, int k)
     return result;
 }
 
-typedef enum {YES, NO, MAYBE} NormalMode;
+typedef enum {YES, MAYBE, NO} NormalMode;
 
 /* Return YES if the input is certainly normalized, NO or MAYBE if it might not be. */
 static NormalMode
 is_normalized(PyObject *self, PyObject *input, int nfc, int k)
 {
-    Py_ssize_t i, len;
-    int kind;
-    void *data;
-    unsigned char prev_combining = 0, quickcheck_mask;
+    /* This is an implementation of the following algorithm:
+       https://www.unicode.org/reports/tr15/#Detecting_Normalization_Forms
+       See there for background.
+    */
 
     /* An older version of the database is requested, quickchecks must be
        disabled. */
     if (self && UCD_Check(self))
         return NO;
 
-    /* This is an implementation of the following algorithm:
-       https://www.unicode.org/reports/tr15/#Detecting_Normalization_Forms
-       See there for background.
-    */
+    Py_ssize_t i, len;
+    int kind;
+    void *data;
+    unsigned char prev_combining = 0;
 
     /* The two quickcheck bits at this shift mean 0=Yes, 1=Maybe, 2=No. */
-    quickcheck_mask = 3 << ((nfc ? 4 : 0) + (k ? 2 : 0));
+    int quickcheck_mask_shift = ((nfc ? 4 : 0) + (k ? 2 : 0));
+
+    NormalMode result = YES; /* certainly normalized, unless we find something */
 
     i = 0;
     kind = PyUnicode_KIND(input);
@@ -806,16 +808,21 @@ is_normalized(PyObject *self, PyObject *input, int nfc, int k)
     while (i < len) {
         Py_UCS4 ch = PyUnicode_READ(kind, data, i++);
         const _PyUnicode_DatabaseRecord *record = _getrecord_ex(ch);
-        unsigned char combining = record->combining;
-        unsigned char quickcheck = record->normalization_quick_check;
 
-        if (quickcheck & quickcheck_mask)
-            return MAYBE; /* this string might need normalization */
+        unsigned char combining = record->combining;
         if (combining && prev_combining > combining)
             return NO; /* non-canonical sort order, not normalized */
         prev_combining = combining;
+
+        unsigned char quickcheck = record->normalization_quick_check;
+        switch ((quickcheck >> quickcheck_mask_shift) & 3) {
+        case NO:
+          return NO;
+        case MAYBE:
+          result = MAYBE; /* this string might need normalization */
+        }
     }
-    return YES; /* certainly normalized */
+    return result;
 }
 
 /*[clinic input]
