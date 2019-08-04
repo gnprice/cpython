@@ -74,10 +74,12 @@ CATEGORY_NAMES = [ "Cn", "Lu", "Ll", "Lt", "Mn", "Mc", "Me", "Nd",
     "Nl", "No", "Zs", "Zl", "Zp", "Cc", "Cf", "Cs", "Co", "Cn", "Lm",
     "Lo", "Pc", "Pd", "Ps", "Pe", "Pi", "Pf", "Po", "Sm", "Sc", "Sk",
     "So" ]
+category_id_by_name = {name: i for i, name in enumerate(CATEGORY_NAMES)}
 
 BIDIRECTIONAL_NAMES = [ "", "L", "LRE", "LRO", "R", "AL", "RLE", "RLO",
     "PDF", "EN", "ES", "ET", "AN", "CS", "NSM", "BN", "B", "S", "WS",
     "ON", "LRI", "RLI", "FSI", "PDI" ]
+bidirectional_id_by_name = {name: i for i, name in enumerate(BIDIRECTIONAL_NAMES)}
 
 EASTASIANWIDTH_NAMES = [ "F", "H", "W", "Na", "A", "N" ]
 
@@ -151,9 +153,9 @@ def makeunicodedata(unicode, trace):
         record = unicode.table[char]
         if record:
             # extract database properties
-            category = CATEGORY_NAMES.index(record.general_category)
+            category = category_id_by_name[record.general_category]
             combining = int(record.canonical_combining_class)
-            bidirectional = BIDIRECTIONAL_NAMES.index(record.bidi_class)
+            bidirectional = bidirectional_id_by_name[record.bidi_class]
             mirrored = record.bidi_mirrored == "Y"
             eastasianwidth = EASTASIANWIDTH_NAMES.index(record.east_asian_width)
             normalizationquickcheck = record.quick_check
@@ -829,9 +831,9 @@ def merge_old_version(version, new, old):
                         # new.table we are using it for aliases and named seq
                         assert value == ''
                     elif k == 2:
-                        category_changes[i] = CATEGORY_NAMES.index(value)
+                        category_changes[i] = category_id_by_name[value]
                     elif k == 4:
-                        bidir_changes[i] = BIDIRECTIONAL_NAMES.index(value)
+                        bidir_changes[i] = bidirectional_id_by_name[value]
                     elif k == 5:
                         # We assume that all normalization changes are in 1:1 mappings
                         assert " " not in value
