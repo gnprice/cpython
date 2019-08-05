@@ -314,18 +314,26 @@ _PyLong_Copy(PyLongObject *src)
 
 /* Create a new int object from a C long int */
 
+static PyObject * _Py_NO_INLINE long_fromlong_inner(long ival);
+
 PyObject *
 PyLong_FromLong(long ival)
+{
+    if (is_small_int(ival)) {
+        return get_small_int((sdigit)ival);
+    }
+
+    return long_fromlong_inner(ival);
+}
+
+static PyObject * _Py_NO_INLINE
+long_fromlong_inner(long ival)
 {
     PyLongObject *v;
     unsigned long abs_ival;
     unsigned long t;  /* unsigned so >> doesn't propagate sign bit */
     int ndigits = 0;
     int sign;
-
-    if (is_small_int(ival)) {
-        return get_small_int((sdigit)ival);
-    }
 
     if (ival < 0) {
         /* negate: can't write this as abs_ival = -ival since that
