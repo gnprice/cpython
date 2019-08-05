@@ -314,7 +314,7 @@ _PyLong_Copy(PyLongObject *src)
 
 /* Create a new int object from a C long int */
 
-static PyObject * _Py_NO_INLINE long_fromlong_inner(long ival);
+static PyObject * _Py_NO_INLINE long_fromlong_inner(unsigned long abs_ival, int sign);
 
 PyObject *
 PyLong_FromLong(long ival)
@@ -323,18 +323,8 @@ PyLong_FromLong(long ival)
         return get_small_int((sdigit)ival);
     }
 
-    return long_fromlong_inner(ival);
-}
-
-static PyObject * _Py_NO_INLINE
-long_fromlong_inner(long ival)
-{
-    PyLongObject *v;
     unsigned long abs_ival;
-    unsigned long t;  /* unsigned so >> doesn't propagate sign bit */
-    int ndigits = 0;
     int sign;
-
     if (ival < 0) {
         /* negate: can't write this as abs_ival = -ival since that
            invokes undefined behaviour when ival is LONG_MIN */
@@ -348,7 +338,7 @@ long_fromlong_inner(long ival)
 
     /* Fast path for single-digit ints */
     if (!(abs_ival >> PyLong_SHIFT)) {
-        v = _PyLong_New(1);
+        PyLongObject *v = _PyLong_New(1);
         if (v) {
             Py_SIZE(v) = sign;
             v->ob_digit[0] = Py_SAFE_DOWNCAST(
@@ -356,6 +346,16 @@ long_fromlong_inner(long ival)
         }
         return (PyObject*)v;
     }
+
+    return long_fromlong_inner(abs_ival, sign);
+}
+
+static PyObject * _Py_NO_INLINE
+long_fromlong_inner(unsigned long abs_ival, int sign)
+{
+    PyLongObject *v;
+    unsigned long t;  /* unsigned so >> doesn't propagate sign bit */
+    int ndigits = 0;
 
 #if PyLong_SHIFT==15
     /* 2 digits */
