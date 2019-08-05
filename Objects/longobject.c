@@ -49,7 +49,11 @@ static PyLongObject small_ints[NSMALLNEGINTS + NSMALLPOSINTS];
 static PyLongObject small_ints[1];
 #endif
 
-#define IS_SMALL_INT(ival) (-NSMALLNEGINTS <= (ival) && (ival) < NSMALLPOSINTS)
+static inline int
+is_small_int(long long ival)
+{
+    return -NSMALLNEGINTS <= ival && ival < NSMALLPOSINTS;
+}
 
 #ifdef COUNT_ALLOCS
 Py_ssize_t _Py_quick_int_allocs, _Py_quick_neg_int_allocs;
@@ -59,7 +63,7 @@ static PyObject *
 get_small_int(sdigit ival)
 {
     PyObject *v;
-    assert(IS_SMALL_INT(ival));
+    assert(is_small_int(ival));
     v = (PyObject *)&small_ints[ival + NSMALLNEGINTS];
     Py_INCREF(v);
 #ifdef COUNT_ALLOCS
@@ -76,7 +80,7 @@ maybe_small_long(PyLongObject *v)
 {
     if (v && Py_ABS(Py_SIZE(v)) <= 1) {
         sdigit ival = MEDIUM_VALUE(v);
-        if (IS_SMALL_INT(ival)) {
+        if (is_small_int(ival)) {
             Py_DECREF(v);
             return (PyLongObject *)get_small_int(ival);
         }
@@ -295,7 +299,7 @@ _PyLong_Copy(PyLongObject *src)
         i = -(i);
     if (i < 2) {
         sdigit ival = MEDIUM_VALUE(src);
-        if (IS_SMALL_INT(ival)) {
+        if (is_small_int(ival)) {
             return get_small_int(ival);
         }
     }
@@ -319,7 +323,7 @@ PyLong_FromLong(long ival)
     int ndigits = 0;
     int sign;
 
-    if (IS_SMALL_INT(ival)) {
+    if (is_small_int(ival)) {
         return get_small_int((sdigit)ival);
     }
 
@@ -1152,7 +1156,7 @@ PyLong_FromLongLong(long long ival)
     int ndigits = 0;
     int negative = 0;
 
-    if (IS_SMALL_INT(ival)) {
+    if (is_small_int(ival)) {
         return get_small_int((sdigit)ival);
     }
 
@@ -1227,7 +1231,7 @@ PyLong_FromSsize_t(Py_ssize_t ival)
     int ndigits = 0;
     int negative = 0;
 
-    if (IS_SMALL_INT(ival)) {
+    if (is_small_int(ival)) {
         return get_small_int((sdigit)ival);
     }
 
