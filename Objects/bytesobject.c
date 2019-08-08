@@ -1077,6 +1077,38 @@ _PyBytes_FormatEx(const char *format, Py_ssize_t format_len,
     return NULL;
 }
 
+// hex(sum(1 << ord(c) for c in '"\'\\abfnrtv'))
+// TODO if no __int128
+static unsigned __int128 bytes_escape_filter =
+    (((unsigned __int128)0x0054404610000000UL) << 64)
+    | (unsigned __int128)0x0000008400000000UL;
+
+static inline int
+bytes_test_escape_char(unsigned char c)
+{
+    return (bytes_escape_filter >> c) & 1;
+}
+
+/* A small perfect hash on the 10 single-character escapes. */
+static inline int
+bytes_hash_escape_char(unsigned char c)
+{
+    return 0x1f & (c ^ (c >> 5));
+}
+
+static char bytes_escape_hash_table[0x20] = {
+    [0x03] = '\"',   // bytes_hash_escape_char('"')
+    [0x06] = '\'',   // bytes_hash_escape_char('\'')
+    [0x1e] = '\\',   // bytes_hash_escape_char('\\')
+    [0x02] = '\x07', // bytes_hash_escape_char('a')
+    [0x01] = '\b',   // bytes_hash_escape_char('b')
+    [0x05] = '\x0c', // bytes_hash_escape_char('f')
+    [0x0d] = '\n',   // bytes_hash_escape_char('n')
+    [0x11] = '\r',   // bytes_hash_escape_char('r')
+    [0x17] = '\t',   // bytes_hash_escape_char('t')
+    [0x15] = '\x0b', // bytes_hash_escape_char('v')
+};
+
 /* Unescape a backslash-escaped string. */
 PyObject *_PyBytes_DecodeEscape(const char *s,
                                 Py_ssize_t len,
@@ -1111,30 +1143,13 @@ PyObject *_PyBytes_DecodeEscape(const char *s,
             goto failed;
         }
 
-        switch (*s++) {
-        /* XXX This assumes ASCII! */
-        case '\n': break;
-        case '\\': *p++ = '\\'; break;
-        case '\'': *p++ = '\''; break;
-        case '\"': *p++ = '\"'; break;
-        case 'b': *p++ = '\b'; break;
-        case 'f': *p++ = '\014'; break; /* FF */
-        case 't': *p++ = '\t'; break;
-        case 'n': *p++ = '\n'; break;
-        case 'r': *p++ = '\r'; break;
-        case 'v': *p++ = '\013'; break; /* VT */
-        case 'a': *p++ = '\007'; break; /* BEL, not classic C */
-        case '0': case '1': case '2': case '3':
-        case '4': case '5': case '6': case '7':
-            c = s[-1] - '0';
-            if (s < end && '0' <= *s && *s <= '7') {
-                c = (c<<3) + *s++ - '0';
-                if (s < end && '0' <= *s && *s <= '7')
-                    c = (c<<3) + *s++ - '0';
-            }
-            *p++ = c;
-            break;
-        case 'x':
+        char escape = *s++;
+        if (bytes_test_escape_char(escape)) {
+            *p++ = bytes_escape_hash_table[bytes_hash_escape_char(escape)];
+            continue;
+        }
+
+        if (escape == 'x') {
             if (s+1 < end) {
                 int digit1, digit2;
                 digit1 = _PyLong_DigitValue[Py_CHARMASK(s[0])];
@@ -1142,7 +1157,7 @@ PyObject *_PyBytes_DecodeEscape(const char *s,
                 if (digit1 < 16 && digit2 < 16) {
                     *p++ = (unsigned char)((digit1 << 4) + digit2);
                     s += 2;
-                    break;
+                    continue;
                 }
             }
             /* invalid hexadecimal digits */
@@ -1167,15 +1182,28 @@ PyObject *_PyBytes_DecodeEscape(const char *s,
             /* skip \x */
             if (s < end && Py_ISXDIGIT(s[0]))
                 s++; /* and a hexdigit */
-            break;
+            continue;
+        }
 
-        default:
-            if (*first_invalid_escape == NULL) {
-                *first_invalid_escape = s-1; /* Back up one char, since we've
-                                                already incremented s. */
+        if ('0' <= escape && escape <= '7') {
+            c = escape - '0';
+            if (s < end && '0' <= *s && *s <= '7') {
+                c = (c<<3) + *s++ - '0';
+                if (s < end && '0' <= *s && *s <= '7')
+                    c = (c<<3) + *s++ - '0';
             }
-            *p++ = '\\';
-            s--;
+            *p++ = c;
+            continue;
+        }
+
+        if (escape == '\n') {
+            continue;
+        }
+
+        *p++ = '\\';
+        s--; // Back up one char, since we've already incremented s.
+        if (*first_invalid_escape == NULL) {
+            *first_invalid_escape = s;
         }
     }
 
