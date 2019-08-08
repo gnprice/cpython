@@ -1903,42 +1903,39 @@ expression support in the :mod:`re` module).
 
 .. method:: str.split(sep=None, maxsplit=-1)
 
-   Return a list of the words in the string, using *sep* as the delimiter
-   string.  If *maxsplit* is given, at most *maxsplit* splits are done (thus,
-   the list will have at most ``maxsplit+1`` elements).  If *maxsplit* is not
-   specified or ``-1``, then there is no limit on the number of splits
-   (all possible splits are made).
+   Return a list of pieces of the string, as separated either by
+   *sep* or by whitespace.
 
-   If *sep* is given, consecutive delimiters are not grouped together and are
-   deemed to delimit empty strings (for example, ``'1,,2'.split(',')`` returns
-   ``['1', '', '2']``).  The *sep* argument may consist of multiple characters
-   (for example, ``'1<>2<>3'.split('<>')`` returns ``['1', '2', '3']``).
-   Splitting an empty string with a specified separator returns ``['']``.
+   If *sep* is not ``None``, it must be a string, and the pieces are
+   separated by substrings equal to *sep*.  There is always at least one
+   piece in the result.
 
-   For example::
+   If *sep* is ``None`` (the default), the pieces are separated by any
+   whitespace characters (as identified by :meth:`isspace`), and empty
+   pieces are discarded.
 
-      >>> '1,2,3'.split(',')
-      ['1', '2', '3']
+   If *maxsplit* is given, at most *maxsplit* splits are done (so that
+   the result has at most ``maxsplit+1`` pieces).
+
+   Examples with a string *sep*::
+
+      >>> '1,2,,3,'.split(',')     # pieces can be empty
+      ['1', '2', '', '3', '']
+      >>> ''.split(',')            # empty string -> one empty piece
+      ['']
+      >>> '1<>2<>3<4'.split('<>')  # only whole `sep` counts
+      ['1', '2', '3<4']
       >>> '1,2,3'.split(',', maxsplit=1)
       ['1', '2,3']
-      >>> '1,2,,3,'.split(',')
-      ['1', '2', '', '3', '']
 
-   If *sep* is not specified or is ``None``, a different splitting algorithm is
-   applied: runs of consecutive whitespace are regarded as a single separator,
-   and the result will contain no empty strings at the start or end if the
-   string has leading or trailing whitespace.  Consequently, splitting an empty
-   string or a string consisting of just whitespace with a ``None`` separator
-   returns ``[]``.
+   Examples splitting on whitespace::
 
-   For example::
-
-      >>> '1 2 3'.split()
+      >>> '1 2  3 '.split()        # no empty pieces
       ['1', '2', '3']
+      >>> '   \n \u2001 '.split()  # Unicode whitespace, like U+2001 EM QUAD
+      []
       >>> '1 2 3'.split(maxsplit=1)
       ['1', '2 3']
-      >>> '   1   2   3   '.split()
-      ['1', '2', '3']
 
 
 .. index::
