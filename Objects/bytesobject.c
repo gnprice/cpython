@@ -1132,10 +1132,24 @@ PyObject *_PyBytes_DecodeEscape(const char *s,
     end = s + len;
     while (s < end) {
         if (*s != '\\') {
-            *p++ = *s++;
-            continue;
+            Py_ssize_t literal_len;
+            char *literal_end = memchr(s, '\\', end - s);
+            if (literal_end != NULL) {
+                literal_len = literal_end - s;
+            } else {
+                literal_len = end - s;
+            }
+
+            memcpy(p, s, literal_len);
+            p += literal_len;
+            s += literal_len;
+
+            if (s == end) {
+                break;
+            }
         }
 
+        assert(s < end && *s == '\\');
         s++;
         if (s == end) {
             PyErr_SetString(PyExc_ValueError,
