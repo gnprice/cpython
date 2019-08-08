@@ -2851,12 +2851,15 @@ produce new objects.
 .. method:: bytes.rsplit(sep=None, maxsplit=-1)
             bytearray.rsplit(sep=None, maxsplit=-1)
 
-   Split the binary sequence into subsequences of the same type, using *sep*
-   as the delimiter string. If *maxsplit* is given, at most *maxsplit* splits
-   are done, the *rightmost* ones.  If *sep* is not specified or ``None``,
-   any subsequence consisting solely of ASCII whitespace is a separator.
-   Except for splitting from the right, :meth:`rsplit` behaves like
-   :meth:`split` which is described in detail below.
+   Return a list of pieces of the binary sequence, as subsequences
+   separated either by *sep* or by whitespace.
+
+   This behaves just like :meth:`split` (and see there for details),
+   except that the splits are done from the end (the right) of the
+   sequence.  For example::
+
+      >>> b'1,2,3'.rsplit(b',', maxsplit=1)
+      [b'1,2', b'3']
 
 
 .. method:: bytes.rstrip([chars])
@@ -2886,46 +2889,41 @@ produce new objects.
 .. method:: bytes.split(sep=None, maxsplit=-1)
             bytearray.split(sep=None, maxsplit=-1)
 
-   Split the binary sequence into subsequences of the same type, using *sep*
-   as the delimiter string. If *maxsplit* is given and non-negative, at most
-   *maxsplit* splits are done (thus, the list will have at most ``maxsplit+1``
-   elements).  If *maxsplit* is not specified or is ``-1``, then there is no
-   limit on the number of splits (all possible splits are made).
+   Return a list of pieces of the binary sequence, as subsequences
+   separated either by *sep* or by whitespace.  The pieces are of the
+   same type as the given sequence.
 
-   If *sep* is given, consecutive delimiters are not grouped together and are
-   deemed to delimit empty subsequences (for example, ``b'1,,2'.split(b',')``
-   returns ``[b'1', b'', b'2']``).  The *sep* argument may consist of a
-   multibyte sequence (for example, ``b'1<>2<>3'.split(b'<>')`` returns
-   ``[b'1', b'2', b'3']``). Splitting an empty sequence with a specified
-   separator returns ``[b'']`` or ``[bytearray(b'')]`` depending on the type
-   of object being split.  The *sep* argument may be any
-   :term:`bytes-like object`.
+   If *sep* is not ``None``, it must be a :term:`bytes-like object`, and
+   the pieces are separated by subsequences equal to the bytes of *sep*.
+   There is always at least one piece in the result.
 
-   For example::
+   If *sep* is ``None`` (the default), the pieces are separated by any
+   ASCII whitespace characters, and empty pieces are discarded.
 
-      >>> b'1,2,3'.split(b',')
-      [b'1', b'2', b'3']
+   If *maxsplit* is given, at most *maxsplit* splits are done (so that
+   the result has at most ``maxsplit+1`` pieces).
+
+   Examples with a non-``None`` *sep*::
+
+      >>> b'1,2,,3,'.split(b',')         # pieces can be empty
+      [b'1', b'2', b'', b'3', b'']
+      >>> b''.split(b',')                # empty sequence -> one empty piece
+      [b'']
+      >>> b'1<>2<>3<4'.split(b'<>')      # only whole `sep` counts
+      [b'1', b'2', b'3<4']
       >>> b'1,2,3'.split(b',', maxsplit=1)
       [b'1', b'2,3']
-      >>> b'1,2,,3,'.split(b',')
-      [b'1', b'2', b'', b'3', b'']
+      >>> b'1,2'.split(bytearray(b','))  # `sep` can be any bytes-like type
+      [b'1', b'2']
 
-   If *sep* is not specified or is ``None``, a different splitting algorithm
-   is applied: runs of consecutive ASCII whitespace are regarded as a single
-   separator, and the result will contain no empty strings at the start or
-   end if the sequence has leading or trailing whitespace.  Consequently,
-   splitting an empty sequence or a sequence consisting solely of ASCII
-   whitespace without a specified separator returns ``[]``.
+   Examples splitting on whitespace::
 
-   For example::
-
-
-      >>> b'1 2 3'.split()
+      >>> b'1 2  3 '.split()             # no empty pieces
       [b'1', b'2', b'3']
+      >>> b'\t\n\v\f\r '.split()         # all ASCII whitespace
+      []
       >>> b'1 2 3'.split(maxsplit=1)
       [b'1', b'2 3']
-      >>> b'   1   2   3   '.split()
-      [b'1', b'2', b'3']
 
 
 .. method:: bytes.strip([chars])
