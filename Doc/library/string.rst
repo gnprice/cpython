@@ -64,6 +64,10 @@ The constants defined in this module are:
    combination of :const:`digits`, :const:`ascii_letters`, :const:`punctuation`,
    and :const:`whitespace`.
 
+   Note that this differs from :meth:`str.isprintable` on the characters of
+   :const:`whitespace` other than ``' '``.  Because they are not suitable for
+   the output of :func:`repr`, the method :meth:`str.isprintable` excludes
+   them, but :const:`printable` nevertheless includes them.
 
 .. data:: whitespace
 

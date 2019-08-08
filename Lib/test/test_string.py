@@ -20,6 +20,17 @@ class ModuleTest(unittest.TestCase):
         self.assertEqual(string.punctuation, '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~')
         self.assertEqual(string.printable, string.digits + string.ascii_lowercase + string.ascii_uppercase + string.punctuation + string.whitespace)
 
+    def test_attrs_vs_methods(self):
+        for i in range(128):
+            char = chr(i)
+            self.assertEqual(char in string.whitespace, char.isspace())
+            self.assertEqual(char in string.ascii_lowercase, char.islower())
+            self.assertEqual(char in string.ascii_uppercase, char.isupper())
+            self.assertEqual(char in string.ascii_letters, char.isalpha())
+            self.assertEqual(char in string.digits, char.isdigit())
+            if char not in string.whitespace or char == ' ':
+                self.assertEqual(char in string.printable, char.isprintable())
+
     def test_capwords(self):
         self.assertEqual(string.capwords('abc def ghi'), 'Abc Def Ghi')
         self.assertEqual(string.capwords('abc\tdef\nghi'), 'Abc Def Ghi')
