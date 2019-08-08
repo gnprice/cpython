@@ -1881,11 +1881,15 @@ expression support in the :mod:`re` module).
 
 .. method:: str.rsplit(sep=None, maxsplit=-1)
 
-   Return a list of the words in the string, using *sep* as the delimiter string.
-   If *maxsplit* is given, at most *maxsplit* splits are done, the *rightmost*
-   ones.  If *sep* is not specified or ``None``, any whitespace string is a
-   separator.  Except for splitting from the right, :meth:`rsplit` behaves like
-   :meth:`split` which is described in detail below.
+   Return a list of pieces of the string, as separated either by *sep* or
+   by whitespace.
+
+   This behaves just like :meth:`split` (see details there), except that
+   the splits are done from the end (the right) of the string.  For
+   example::
+
+      >>> '1,2,3'.rsplit(',', maxsplit=1)
+      ['1,2', '3']
 
 
 .. method:: str.rstrip([chars])
