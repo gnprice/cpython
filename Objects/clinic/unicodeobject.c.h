@@ -475,10 +475,9 @@ PyDoc_STRVAR(unicode_isprintable__doc__,
 "isprintable($self, /)\n"
 "--\n"
 "\n"
-"Return True if the string is printable, False otherwise.\n"
+"Return True if all characters in the string are printable, False otherwise.\n"
 "\n"
-"A string is printable if all of its characters are considered printable in\n"
-"repr() or if it is empty.");
+"A character is printable if repr() may use it in its output.");
 
 #define UNICODE_ISPRINTABLE_METHODDEF    \
     {"isprintable", (PyCFunction)unicode_isprintable, METH_NOARGS, unicode_isprintable__doc__},
@@ -812,12 +811,12 @@ PyDoc_STRVAR(unicode_split__doc__,
 "split($self, /, sep=None, maxsplit=-1)\n"
 "--\n"
 "\n"
-"Return a list of the words in the string, using sep as the delimiter string.\n"
+"Return a list of pieces of the string, as separated either by sep or whitespace.\n"
 "\n"
 "  sep\n"
-"    The delimiter according which to split the string.\n"
-"    None (the default value) means split according to any whitespace,\n"
-"    and discard empty strings from the result.\n"
+"    The delimiter to split by, a string.\n"
+"    None (the default value) means split on all whitespace characters,\n"
+"    and discard empty pieces.\n"
 "  maxsplit\n"
 "    Maximum number of splits to do.\n"
 "    -1 (the default value) means no limit.");
@@ -912,12 +911,12 @@ PyDoc_STRVAR(unicode_rsplit__doc__,
 "rsplit($self, /, sep=None, maxsplit=-1)\n"
 "--\n"
 "\n"
-"Return a list of the words in the string, using sep as the delimiter string.\n"
+"Return a list of pieces of the string, as separated either by sep or whitespace.\n"
 "\n"
 "  sep\n"
-"    The delimiter according which to split the string.\n"
-"    None (the default value) means split according to any whitespace,\n"
-"    and discard empty strings from the result.\n"
+"    The delimiter to split by, a string.\n"
+"    None (the default value) means split on all whitespace characters,\n"
+"    and discard empty pieces.\n"
 "  maxsplit\n"
 "    Maximum number of splits to do.\n"
 "    -1 (the default value) means no limit.\n"
@@ -1232,4 +1231,4 @@ unicode_sizeof(PyObject *self, PyObject *Py_UNUSED(ignored))
 {
     return unicode_sizeof_impl(self);
 }
-/*[clinic end generated code: output=d1541724cb4a0070 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=a4812260df11f10c input=a9049054013a1b77]*/

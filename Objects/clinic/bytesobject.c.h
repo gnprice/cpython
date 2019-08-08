@@ -6,12 +6,12 @@ PyDoc_STRVAR(bytes_split__doc__,
 "split($self, /, sep=None, maxsplit=-1)\n"
 "--\n"
 "\n"
-"Return a list of the sections in the bytes, using sep as the delimiter.\n"
+"Return a list of pieces of the bytes, as separated either by sep or whitespace.\n"
 "\n"
 "  sep\n"
-"    The delimiter according which to split the bytes.\n"
+"    The delimiter to split by, as a bytes-like object.\n"
 "    None (the default value) means split on ASCII whitespace characters\n"
-"    (space, tab, return, newline, formfeed, vertical tab).\n"
+"    (any of b\'\\t\\n\\v\\f\\r \'), and discard empty pieces.\n"
 "  maxsplit\n"
 "    Maximum number of splits to do.\n"
 "    -1 (the default value) means no limit.");
@@ -160,17 +160,17 @@ PyDoc_STRVAR(bytes_rsplit__doc__,
 "rsplit($self, /, sep=None, maxsplit=-1)\n"
 "--\n"
 "\n"
-"Return a list of the sections in the bytes, using sep as the delimiter.\n"
+"Return a list of pieces of the bytes, as separated either by sep or whitespace.\n"
 "\n"
 "  sep\n"
-"    The delimiter according which to split the bytes.\n"
+"    The delimiter to split by, as a bytes-like object.\n"
 "    None (the default value) means split on ASCII whitespace characters\n"
-"    (space, tab, return, newline, formfeed, vertical tab).\n"
+"    (any of b\'\\t\\n\\v\\f\\r \'), and discard empty pieces.\n"
 "  maxsplit\n"
 "    Maximum number of splits to do.\n"
 "    -1 (the default value) means no limit.\n"
 "\n"
-"Splitting is done starting at the end of the bytes and working to the front.");
+"Splits are done starting at the end of the bytes and working to the front.");
 
 #define BYTES_RSPLIT_METHODDEF    \
     {"rsplit", (PyCFunction)(void(*)(void))bytes_rsplit, METH_FASTCALL|METH_KEYWORDS, bytes_rsplit__doc__},
@@ -755,4 +755,4 @@ skip_optional_pos:
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=2d0a3733e13e753a input=a9049054013a1b77]*/
+/*[clinic end generated code: output=0075d0427239d15e input=a9049054013a1b77]*/

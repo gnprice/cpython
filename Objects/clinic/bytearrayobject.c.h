@@ -225,12 +225,12 @@ PyDoc_STRVAR(bytearray_split__doc__,
 "split($self, /, sep=None, maxsplit=-1)\n"
 "--\n"
 "\n"
-"Return a list of the sections in the bytearray, using sep as the delimiter.\n"
+"Return a list of pieces of the bytearray, as separated either by sep or whitespace.\n"
 "\n"
 "  sep\n"
-"    The delimiter according which to split the bytearray.\n"
+"    The delimiter to split by, as a bytes-like object.\n"
 "    None (the default value) means split on ASCII whitespace characters\n"
-"    (space, tab, return, newline, formfeed, vertical tab).\n"
+"    (any of b\'\\t\\n\\v\\f\\r \'), and discard empty pieces.\n"
 "  maxsplit\n"
 "    Maximum number of splits to do.\n"
 "    -1 (the default value) means no limit.");
@@ -327,17 +327,17 @@ PyDoc_STRVAR(bytearray_rsplit__doc__,
 "rsplit($self, /, sep=None, maxsplit=-1)\n"
 "--\n"
 "\n"
-"Return a list of the sections in the bytearray, using sep as the delimiter.\n"
+"Return a list of pieces of the bytearray, as separated either by sep or whitespace.\n"
 "\n"
 "  sep\n"
-"    The delimiter according which to split the bytearray.\n"
+"    The delimiter to split by, as a bytes-like object.\n"
 "    None (the default value) means split on ASCII whitespace characters\n"
-"    (space, tab, return, newline, formfeed, vertical tab).\n"
+"    (any of b\'\\t\\n\\v\\f\\r \'), and discard empty pieces.\n"
 "  maxsplit\n"
 "    Maximum number of splits to do.\n"
 "    -1 (the default value) means no limit.\n"
 "\n"
-"Splitting is done starting at the end of the bytearray and working to the front.");
+"Splits are done starting at the end of the bytearray and working to the front.");
 
 #define BYTEARRAY_RSPLIT_METHODDEF    \
     {"rsplit", (PyCFunction)(void(*)(void))bytearray_rsplit, METH_FASTCALL|METH_KEYWORDS, bytearray_rsplit__doc__},
@@ -1011,4 +1011,4 @@ bytearray_sizeof(PyByteArrayObject *self, PyObject *Py_UNUSED(ignored))
 {
     return bytearray_sizeof_impl(self);
 }
-/*[clinic end generated code: output=7848247e5469ba1b input=a9049054013a1b77]*/
+/*[clinic end generated code: output=a3b73a30e1771358 input=a9049054013a1b77]*/

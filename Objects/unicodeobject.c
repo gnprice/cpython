@@ -12250,7 +12250,7 @@ repr() or if it is empty.
 
 static PyObject *
 unicode_isprintable_impl(PyObject *self)
-/*[clinic end generated code: output=3ab9626cd32dd1a0 input=98a0e1c2c1813209]*/
+/*[clinic end generated code: output=3ab9626cd32dd1a0 input=4e56bcc6b06ca18c]*/
 {
     Py_ssize_t i, length;
     int kind;
@@ -12957,19 +12957,19 @@ PyUnicode_Split(PyObject *s, PyObject *sep, Py_ssize_t maxsplit)
 str.split as unicode_split
 
     sep: object = None
-        The delimiter according which to split the string.
-        None (the default value) means split according to any whitespace,
-        and discard empty strings from the result.
+        The delimiter to split by, a string.
+        None (the default value) means split on all whitespace characters,
+        and discard empty pieces.
     maxsplit: Py_ssize_t = -1
         Maximum number of splits to do.
         -1 (the default value) means no limit.
 
-Return a list of the words in the string, using sep as the delimiter string.
+Return a list of pieces of the string, as separated either by sep or whitespace.
 [clinic start generated code]*/
 
 static PyObject *
 unicode_split_impl(PyObject *self, PyObject *sep, Py_ssize_t maxsplit)
-/*[clinic end generated code: output=3a65b1db356948dc input=606e750488a82359]*/
+/*[clinic end generated code: output=3a65b1db356948dc input=6aa56d7da4d0f587]*/
 {
     if (sep == Py_None)
         return split(self, NULL, maxsplit);
@@ -13150,14 +13150,14 @@ PyUnicode_RSplit(PyObject *s, PyObject *sep, Py_ssize_t maxsplit)
 /*[clinic input]
 str.rsplit as unicode_rsplit = str.split
 
-Return a list of the words in the string, using sep as the delimiter string.
+Return a list of pieces of the string, as separated either by sep or whitespace.
 
 Splits are done starting at the end of the string and working to the front.
 [clinic start generated code]*/
 
 static PyObject *
 unicode_rsplit_impl(PyObject *self, PyObject *sep, Py_ssize_t maxsplit)
-/*[clinic end generated code: output=c2b815c63bcabffc input=12ad4bf57dd35f15]*/
+/*[clinic end generated code: output=c2b815c63bcabffc input=e7430871d364cd5b]*/
 {
     if (sep == Py_None)
         return rsplit(self, NULL, maxsplit);

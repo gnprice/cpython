@@ -1754,19 +1754,19 @@ static PyBufferProcs bytes_as_buffer = {
 bytes.split
 
     sep: object = None
-        The delimiter according which to split the bytes.
+        The delimiter to split by, as a bytes-like object.
         None (the default value) means split on ASCII whitespace characters
-        (space, tab, return, newline, formfeed, vertical tab).
+        (any of b'\t\n\v\f\r '), and discard empty pieces.
     maxsplit: Py_ssize_t = -1
         Maximum number of splits to do.
         -1 (the default value) means no limit.
 
-Return a list of the sections in the bytes, using sep as the delimiter.
+Return a list of pieces of the bytes, as separated either by sep or whitespace.
 [clinic start generated code]*/
 
 static PyObject *
 bytes_split_impl(PyBytesObject *self, PyObject *sep, Py_ssize_t maxsplit)
-/*[clinic end generated code: output=52126b5844c1d8ef input=8b809b39074abbfa]*/
+/*[clinic end generated code: output=52126b5844c1d8ef input=7a4afdc84b98c405]*/
 {
     Py_ssize_t len = PyBytes_GET_SIZE(self), n;
     const char *s = PyBytes_AS_STRING(self), *sub;
@@ -1844,14 +1844,14 @@ bytes_rpartition_impl(PyBytesObject *self, Py_buffer *sep)
 /*[clinic input]
 bytes.rsplit = bytes.split
 
-Return a list of the sections in the bytes, using sep as the delimiter.
+Return a list of pieces of the bytes, as separated either by sep or whitespace.
 
-Splitting is done starting at the end of the bytes and working to the front.
+Splits are done starting at the end of the bytes and working to the front.
 [clinic start generated code]*/
 
 static PyObject *
 bytes_rsplit_impl(PyBytesObject *self, PyObject *sep, Py_ssize_t maxsplit)
-/*[clinic end generated code: output=ba698d9ea01e1c8f input=0f86c9f28f7d7b7b]*/
+/*[clinic end generated code: output=ba698d9ea01e1c8f input=53c516c0bc81d60c]*/
 {
     Py_ssize_t len = PyBytes_GET_SIZE(self), n;
     const char *s = PyBytes_AS_STRING(self), *sub;
