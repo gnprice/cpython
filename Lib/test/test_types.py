@@ -384,7 +384,7 @@ class TypesTests(unittest.TestCase):
             self.assertEqual(locale.format_string('%g', x, grouping=True), format(x, 'n'))
             self.assertEqual(locale.format_string('%.10g', x, grouping=True), format(x, '.10n'))
 
-    @run_with_locale('LC_NUMERIC', 'en_US.UTF8')
+    @run_with_locale('LC_NUMERIC', 'ps_AF.UTF8', 'en_US.UTF8')
     def test_int__format__locale(self):
         # test locale support for __format__ code 'n' for integers
 

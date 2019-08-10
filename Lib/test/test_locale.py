@@ -134,6 +134,32 @@ class FrFRCookedTest(BaseCookedTest):
     }
 
 
+class PsAFCookedTest(BaseCookedTest):
+    # A cooked "ps_AF" locale, with non-ASCII decimal separator,
+    # thousands separator, and currency symbol.
+
+    cooked_values = {
+        'currency_symbol': '\u060b',    # AFGHANI SIGN
+        'decimal_point': '\u066b',      # ARABIC DECIMAL SEPARATOR
+        'frac_digits': 0,
+        'grouping': [3, 0],
+        'int_curr_symbol': 'AFN ',
+        'int_frac_digits': 0,
+        'mon_decimal_point': '\u066b',
+        'mon_grouping': [3, 0],
+        'mon_thousands_sep': '\u066c',  # ARABIC THOUSANDS SEPARATOR
+        'n_cs_precedes': 0,
+        'n_sep_by_space': 1,
+        'n_sign_posn': 1,
+        'negative_sign': '-',
+        'p_cs_precedes': 0,
+        'p_sep_by_space': 1,
+        'p_sign_posn': 1,
+        'positive_sign': '',
+        'thousands_sep': '\u066c',
+    }
+
+
 class BaseFormattingTest(object):
     #
     # Utility functions for formatting tests
@@ -337,6 +363,28 @@ class TestFrFRNumberFormatting(FrFRCookedTest, BaseFormattingTest):
         # XXX is the trailing space a bug?
         self._test_currency(50000, "50 000,00 EUR ",
             grouping=True, international=True)
+
+
+class TestPsAFNumberFormatting(PsAFCookedTest, BaseFormattingTest):
+    decimal = '\u066b'
+    thousands = '\u066c'
+    currency = '\u060b'
+
+    def test_decimal_point(self):
+        self._test_format("%.2f", 12345.67, out=f'12345{self.decimal}67')
+
+    def test_grouping(self):
+        self._test_format("%.2f", 12345.67, grouping=True,
+                          out=f'12{self.thousands}345{self.decimal}67')
+
+    def test_integer_grouping(self):
+        self._test_format("%4d", 4200, grouping=True,
+                          out=f'4{self.thousands}200')
+
+    def test_currency(self):
+        self._test_currency(50000, f"50000 {self.currency}")
+        self._test_currency(50000, f"50{self.thousands}000 {self.currency}",
+                            grouping=True)
 
 
 class TestCollation(unittest.TestCase):
