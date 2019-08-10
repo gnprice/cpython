@@ -616,6 +616,7 @@ fill_number(_PyUnicodeWriter *writer, const NumberFieldWidths *spec,
         writer->pos++;
     }
     if (spec->n_prefix) {
+
         _PyUnicode_FastCopyCharacters(writer->buffer, writer->pos,
                                       prefix, p_start,
                                       spec->n_prefix);
@@ -623,8 +624,8 @@ fill_number(_PyUnicodeWriter *writer, const NumberFieldWidths *spec,
             Py_ssize_t t;
             for (t = 0; t < spec->n_prefix; t++) {
                 Py_UCS4 c = PyUnicode_READ(kind, data, writer->pos + t);
-                c = Py_ToUpper(c);
                 assert (c <= 127);
+                c = Py_ToUpper((char)c);
                 PyUnicode_WRITE(kind, data, writer->pos + t, c);
             }
         }
@@ -653,11 +654,8 @@ fill_number(_PyUnicodeWriter *writer, const NumberFieldWidths *spec,
         Py_ssize_t t;
         for (t = 0; t < spec->n_grouped_digits; t++) {
             Py_UCS4 c = PyUnicode_READ(kind, data, writer->pos + t);
-            c = Py_ToUpper(c);
-            if (c > 127) {
-                PyErr_SetString(PyExc_SystemError, "non-ascii grouped digit");
-                return -1;
-            }
+            assert (c <= 127);
+            c = Py_ToUpper((char)c);
             PyUnicode_WRITE(kind, data, writer->pos + t, c);
         }
     }
