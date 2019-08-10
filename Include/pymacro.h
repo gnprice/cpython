@@ -21,8 +21,8 @@
 /* Get the size of a structure member in bytes */
 #define Py_MEMBER_SIZE(type, member) sizeof(((type *)0)->member)
 
-/* Argument must be a char or an int in [-128, 127] or [0, 255]. */
-#define Py_CHARMASK(c) ((unsigned char)((c) & 0xff))
+/* Legacy spelling of a cast; prefer just explicitly writing the cast. */
+#define Py_CHARMASK(c) ((unsigned char)(c))
 
 /* Assert a build-time dependency, as an expression.
 

@@ -145,8 +145,8 @@ complete listing.
 
 .. c:macro:: Py_CHARMASK(c)
 
-   Argument must be a character or an integer in the range [-128, 127] or [0,
-   255].  This macro returns ``c`` cast to an ``unsigned char``.
+   A legacy way of spelling a cast to ``unsigned char``.  Prefer
+   writing the cast explicitly.
 
 .. c:macro:: Py_GETENV(s)
 
