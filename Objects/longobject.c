@@ -2057,19 +2057,17 @@ long_format_binary(PyObject *aa, int base, int alternate,
             *--p = '-';                                                 \
     } while (0)
 
+#define BUFFER_START(TYPE)                                              \
+    (writer ? (TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos       \
+            : (TYPE*)PyUnicode_DATA(v))
+
 #define WRITE_UNICODE_DIGITS(TYPE)                                      \
     do {                                                                \
-        if (writer)                                                     \
-            p = (TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos + sz; \
-        else                                                            \
-            p = (TYPE*)PyUnicode_DATA(v) + sz;                          \
+        p = BUFFER_START(TYPE) + sz;                                    \
                                                                         \
         WRITE_DIGITS(p);                                                \
                                                                         \
-        if (writer)                                                     \
-            assert(p == ((TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos)); \
-        else                                                            \
-            assert(p == (TYPE*)PyUnicode_DATA(v));                      \
+        assert(p == BUFFER_START(TYPE));                                \
     } while (0)
 
     if (bytes_writer) {
@@ -2091,6 +2089,7 @@ long_format_binary(PyObject *aa, int base, int alternate,
         WRITE_UNICODE_DIGITS(Py_UCS4);
     }
 #undef WRITE_DIGITS
+#undef BUFFER_START
 #undef WRITE_UNICODE_DIGITS
 
     if (writer) {
