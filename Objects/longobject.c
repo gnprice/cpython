@@ -1891,16 +1891,6 @@ long_to_decimal_string_internal(PyObject *aa,
     (writer ? (TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos     \
             : (TYPE*)PyUnicode_DATA(str))
 
-#define WRITE_UNICODE_DIGITS(TYPE)                                    \
-    do {                                                              \
-        p = BUFFER_START(TYPE) + strlen;                              \
-                                                                      \
-        WRITE_DIGITS(p);                                              \
-                                                                      \
-        /* check we've counted correctly */                           \
-        assert(p == BUFFER_START(TYPE));                              \
-    } while (0)
-
     /* fill the string right-to-left */
     if (bytes_writer) {
         char *p = *bytes_str + strlen;
@@ -1908,21 +1898,23 @@ long_to_decimal_string_internal(PyObject *aa,
         assert(p == *bytes_str);
     }
     else if (kind == PyUnicode_1BYTE_KIND) {
-        Py_UCS1 *p;
-        WRITE_UNICODE_DIGITS(Py_UCS1);
+        Py_UCS1 *p = BUFFER_START(Py_UCS1) + strlen;
+        WRITE_DIGITS(p);
+        assert(p == BUFFER_START(Py_UCS1));
     }
     else if (kind == PyUnicode_2BYTE_KIND) {
-        Py_UCS2 *p;
-        WRITE_UNICODE_DIGITS(Py_UCS2);
+        Py_UCS2 *p = BUFFER_START(Py_UCS2) + strlen;
+        WRITE_DIGITS(p);
+        assert(p == BUFFER_START(Py_UCS2));
     }
     else {
-        Py_UCS4 *p;
         assert (kind == PyUnicode_4BYTE_KIND);
-        WRITE_UNICODE_DIGITS(Py_UCS4);
+        Py_UCS4 *p = BUFFER_START(Py_UCS4) + strlen;
+        WRITE_DIGITS(p);
+        assert(p == BUFFER_START(Py_UCS4));
     }
 #undef WRITE_DIGITS
 #undef BUFFER_START
-#undef WRITE_UNICODE_DIGITS
 
     Py_DECREF(scratch);
     if (writer) {
