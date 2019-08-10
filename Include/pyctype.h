@@ -26,8 +26,14 @@ PyAPI_DATA(const unsigned int) _Py_ctype_table[256];
 PyAPI_DATA(const unsigned char) _Py_ctype_tolower[256];
 PyAPI_DATA(const unsigned char) _Py_ctype_toupper[256];
 
+static inline unsigned char
+Py_ToUpper(char c)
+{
+  return _Py_ctype_toupper[(unsigned char)c];
+}
+
 #define Py_TOLOWER(c) (_Py_ctype_tolower[Py_CHARMASK(c)])
-#define Py_TOUPPER(c) (_Py_ctype_toupper[Py_CHARMASK(c)])
+#define Py_TOUPPER(c) (Py_ToUpper(Py_CHARMASK(c)))
 
 #endif /* !PYCTYPE_H */
 #endif /* !Py_LIMITED_API */

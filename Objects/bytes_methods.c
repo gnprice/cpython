@@ -318,7 +318,7 @@ _Py_bytes_upper(char *result, const char *cptr, Py_ssize_t len)
     Py_ssize_t i;
 
     for (i = 0; i < len; i++) {
-        result[i] = Py_TOUPPER((unsigned char) cptr[i]);
+        result[i] = Py_ToUpper((unsigned char) cptr[i]);
     }
 }
 
@@ -339,7 +339,7 @@ _Py_bytes_title(char *result, const char *s, Py_ssize_t len)
         int c = Py_CHARMASK(*s++);
         if (Py_ISLOWER(c)) {
             if (!previous_is_cased)
-                c = Py_TOUPPER(c);
+                c = Py_ToUpper(c);
             previous_is_cased = 1;
         } else if (Py_ISUPPER(c)) {
             if (previous_is_cased)
@@ -362,7 +362,7 @@ void
 _Py_bytes_capitalize(char *result, const char *s, Py_ssize_t len)
 {
     if (len > 0) {
-        *result = Py_TOUPPER(*s);
+        *result = Py_ToUpper(*s);
         _Py_bytes_lower(result + 1, s + 1, len - 1);
     }
 }
@@ -382,7 +382,7 @@ _Py_bytes_swapcase(char *result, const char *s, Py_ssize_t len)
     for (i = 0; i < len; i++) {
         int c = Py_CHARMASK(*s++);
         if (Py_ISLOWER(c)) {
-            *result = Py_TOUPPER(c);
+            *result = Py_ToUpper(c);
         }
         else if (Py_ISUPPER(c)) {
             *result = Py_TOLOWER(c);
