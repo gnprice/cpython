@@ -1242,9 +1242,8 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
 
     mod = _PyImport_FindExtensionObject(name, name);
     if (mod || _PyErr_Occurred(tstate)) {
-        Py_DECREF(name);
         Py_XINCREF(mod);
-        return mod;
+        goto out;
     }
 
     namestr = PyUnicode_AsUTF8(name);
@@ -1259,16 +1258,15 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
             if (p->initfunc == NULL) {
                 /* Cannot re-init internal module ("sys" or "builtins") */
                 mod = PyImport_AddModule(namestr);
-                Py_DECREF(name);
-                return mod;
+                goto out;
             }
             mod = (*p->initfunc)();
             if (mod == NULL) {
                 goto error;
             }
             if (PyObject_TypeCheck(mod, &PyModuleDef_Type)) {
-                Py_DECREF(name);
-                return PyModule_FromDefAndSpec((PyModuleDef*)mod, spec);
+                mod = PyModule_FromDefAndSpec((PyModuleDef*)mod, spec);
+                goto out;
             } else {
                 /* Remember pointer to module init function. */
                 def = PyModule_GetDef(mod);
@@ -1280,8 +1278,7 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
                                                    modules) < 0) {
                     goto error;
                 }
-                Py_DECREF(name);
-                return mod;
+                goto out;
             }
         }
     }
@@ -1289,8 +1286,10 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
     Py_RETURN_NONE;
 
   error:
+    mod = NULL;
+  out:
     Py_DECREF(name);
-    return NULL;
+    return mod;
 }
 
 
