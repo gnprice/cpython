@@ -1755,37 +1755,6 @@ divrem1(PyLongObject *a, digit n, digit *prem)
     return long_normalize(z);
 }
 
-/* Convert base _PyLong_DECIMAL_BASE to decimal.  pout must have
-   length size.  p must point just past the end of a long-enough
-   output buffer. */
-
-static void
-long_write_digits_decimal(char *p, digit *pout, Py_ssize_t size, int negative)
-{
-    Py_ssize_t i, j;
-    digit rem;
-
-    /* pout[0] through pout[size-2] contribute exactly
-       _PyLong_DECIMAL_SHIFT digits each */
-    for (i=0; i < size - 1; i++) {
-        rem = pout[i];
-        for (j = 0; j < _PyLong_DECIMAL_SHIFT; j++) {
-            *--p = '0' + rem % 10;
-            rem /= 10;
-        }
-    }
-    /* pout[size-1]: always produce at least one decimal digit */
-    rem = pout[i];
-    do {
-        *--p = '0' + rem % 10;
-        rem /= 10;
-    } while (rem != 0);
-
-    /* and sign */
-    if (negative)
-        *--p = '-';
-}
-
 /* Convert an integer to a base 10 string.  Returns a new non-shared
    string.  (Return value is non-shared so that callers can modify the
    returned value if necessary.) */
@@ -1895,6 +1864,29 @@ long_to_decimal_string_internal(PyObject *aa,
         kind = PyUnicode_KIND(str);
     }
 
+#define WRITE_DIGITS(p)                                               \
+    do {                                                              \
+        /* pout[0] through pout[size-2] contribute exactly            \
+           _PyLong_DECIMAL_SHIFT digits each */                       \
+        for (i=0; i < size - 1; i++) {                                \
+            rem = pout[i];                                            \
+            for (j = 0; j < _PyLong_DECIMAL_SHIFT; j++) {             \
+                *--p = '0' + rem % 10;                                \
+                rem /= 10;                                            \
+            }                                                         \
+        }                                                             \
+        /* pout[size-1]: always produce at least one decimal digit */ \
+        rem = pout[i];                                                \
+        do {                                                          \
+            *--p = '0' + rem % 10;                                    \
+            rem /= 10;                                                \
+        } while (rem != 0);                                           \
+                                                                      \
+        /* and sign */                                                \
+        if (negative)                                                 \
+            *--p = '-';                                               \
+    } while (0)
+
 #define WRITE_UNICODE_DIGITS(TYPE)                                    \
     do {                                                              \
         if (writer)                                                   \
@@ -1902,7 +1894,7 @@ long_to_decimal_string_internal(PyObject *aa,
         else                                                          \
             p = (TYPE*)PyUnicode_DATA(str) + strlen;                  \
                                                                       \
-        long_write_digits_decimal(p, pout, size, negative);           \
+        WRITE_DIGITS(p);                                              \
                                                                       \
         /* check we've counted correctly */                           \
         if (writer)                                                   \
@@ -1914,7 +1906,7 @@ long_to_decimal_string_internal(PyObject *aa,
     /* fill the string right-to-left */
     if (bytes_writer) {
         char *p = *bytes_str + strlen;
-        long_write_digits_decimal(p, pout, size, negative);
+        WRITE_DIGITS(p);
         assert(p == *bytes_str);
     }
     else if (kind == PyUnicode_1BYTE_KIND) {
@@ -1930,6 +1922,7 @@ long_to_decimal_string_internal(PyObject *aa,
         assert (kind == PyUnicode_4BYTE_KIND);
         WRITE_UNICODE_DIGITS(Py_UCS4);
     }
+#undef WRITE_DIGITS
 #undef WRITE_UNICODE_DIGITS
 
     Py_DECREF(scratch);
