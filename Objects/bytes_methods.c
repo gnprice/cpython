@@ -185,7 +185,7 @@ _Py_bytes_islower(const char *cptr, Py_ssize_t len)
 
     /* Shortcut for single character strings */
     if (len == 1)
-        return PyBool_FromLong(Py_ISLOWER(*p));
+        return PyBool_FromLong(Py_IsLower(*p));
 
     /* Special case for empty strings */
     if (len == 0)
@@ -196,7 +196,7 @@ _Py_bytes_islower(const char *cptr, Py_ssize_t len)
     for (; p < e; p++) {
         if (Py_ISUPPER(*p))
             Py_RETURN_FALSE;
-        else if (!cased && Py_ISLOWER(*p))
+        else if (!cased && Py_IsLower(*p))
             cased = 1;
     }
     return PyBool_FromLong(cased);
@@ -227,7 +227,7 @@ _Py_bytes_isupper(const char *cptr, Py_ssize_t len)
     e = p + len;
     cased = 0;
     for (; p < e; p++) {
-        if (Py_ISLOWER(*p))
+        if (Py_IsLower(*p))
             Py_RETURN_FALSE;
         else if (!cased && Py_ISUPPER(*p))
             cased = 1;
@@ -271,7 +271,7 @@ _Py_bytes_istitle(const char *cptr, Py_ssize_t len)
             previous_is_cased = 1;
             cased = 1;
         }
-        else if (Py_ISLOWER(ch)) {
+        else if (Py_IsLower(ch)) {
             if (!previous_is_cased)
                 Py_RETURN_FALSE;
             previous_is_cased = 1;
@@ -330,7 +330,7 @@ _Py_bytes_title(char *result, const char *s, Py_ssize_t len)
 
     for (i = 0; i < len; i++) {
         int c = Py_CHARMASK(*s++);
-        if (Py_ISLOWER(c)) {
+        if (Py_IsLower(c)) {
             if (!previous_is_cased)
                 c = Py_ToUpper(c);
             previous_is_cased = 1;
@@ -374,7 +374,7 @@ _Py_bytes_swapcase(char *result, const char *s, Py_ssize_t len)
 
     for (i = 0; i < len; i++) {
         int c = Py_CHARMASK(*s++);
-        if (Py_ISLOWER(c)) {
+        if (Py_IsLower(c)) {
             *result = Py_ToUpper(c);
         }
         else if (Py_ISUPPER(c)) {

@@ -12,10 +12,16 @@
 
 PyAPI_DATA(const unsigned int) _Py_ctype_table[256];
 
+static inline int
+Py_IsLower(char c)
+{
+  return _Py_ctype_table[(unsigned char)c] & PY_CTF_LOWER;
+}
+
 /* Unlike their C counterparts, the following macros are not meant to
  * handle an int with any of the values [EOF, 0-UCHAR_MAX]. The argument
  * must be a signed/unsigned char. */
-#define Py_ISLOWER(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_LOWER)
+#define Py_ISLOWER(c)  (Py_IsLower(Py_CHARMASK(c)))
 #define Py_ISUPPER(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_UPPER)
 #define Py_ISALPHA(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_ALPHA)
 #define Py_ISDIGIT(c)  (_Py_ctype_table[Py_CHARMASK(c)] & PY_CTF_DIGIT)
