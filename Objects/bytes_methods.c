@@ -318,7 +318,7 @@ _Py_bytes_upper(char *result, const char *cptr, Py_ssize_t len)
     Py_ssize_t i;
 
     for (i = 0; i < len; i++) {
-        result[i] = Py_ToUpper((unsigned char) cptr[i]);
+        result[i] = Py_ToUpper(cptr[i]);
     }
 }
 
