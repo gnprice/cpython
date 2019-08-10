@@ -1282,8 +1282,9 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
             }
         }
     }
-    Py_DECREF(name);
-    Py_RETURN_NONE;
+    Py_INCREF(Py_None);
+    mod = Py_None;
+    goto out;
 
   error:
     mod = NULL;
