@@ -1887,20 +1887,18 @@ long_to_decimal_string_internal(PyObject *aa,
             *--p = '-';                                               \
     } while (0)
 
+#define BUFFER_START(TYPE)                                            \
+    (writer ? (TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos     \
+            : (TYPE*)PyUnicode_DATA(str))
+
 #define WRITE_UNICODE_DIGITS(TYPE)                                    \
     do {                                                              \
-        if (writer)                                                   \
-            p = (TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos + strlen; \
-        else                                                          \
-            p = (TYPE*)PyUnicode_DATA(str) + strlen;                  \
+        p = BUFFER_START(TYPE) + strlen;                              \
                                                                       \
         WRITE_DIGITS(p);                                              \
                                                                       \
         /* check we've counted correctly */                           \
-        if (writer)                                                   \
-            assert(p == ((TYPE*)PyUnicode_DATA(writer->buffer) + writer->pos)); \
-        else                                                          \
-            assert(p == (TYPE*)PyUnicode_DATA(str));                  \
+        assert(p == BUFFER_START(TYPE));                              \
     } while (0)
 
     /* fill the string right-to-left */
@@ -1923,6 +1921,7 @@ long_to_decimal_string_internal(PyObject *aa,
         WRITE_UNICODE_DIGITS(Py_UCS4);
     }
 #undef WRITE_DIGITS
+#undef BUFFER_START
 #undef WRITE_UNICODE_DIGITS
 
     Py_DECREF(scratch);
