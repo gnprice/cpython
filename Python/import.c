@@ -1249,8 +1249,7 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
 
     namestr = PyUnicode_AsUTF8(name);
     if (namestr == NULL) {
-        Py_DECREF(name);
-        return NULL;
+        goto error;
     }
 
     PyObject *modules = tstate->interp->modules;
@@ -1265,8 +1264,7 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
             }
             mod = (*p->initfunc)();
             if (mod == NULL) {
-                Py_DECREF(name);
-                return NULL;
+                goto error;
             }
             if (PyObject_TypeCheck(mod, &PyModuleDef_Type)) {
                 Py_DECREF(name);
@@ -1275,14 +1273,12 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
                 /* Remember pointer to module init function. */
                 def = PyModule_GetDef(mod);
                 if (def == NULL) {
-                    Py_DECREF(name);
-                    return NULL;
+                    goto error;
                 }
                 def->m_base.m_init = p->initfunc;
                 if (_PyImport_FixupExtensionObject(mod, name, name,
                                                    modules) < 0) {
-                    Py_DECREF(name);
-                    return NULL;
+                    goto error;
                 }
                 Py_DECREF(name);
                 return mod;
@@ -1291,6 +1287,10 @@ _imp_create_builtin(PyObject *module, PyObject *spec)
     }
     Py_DECREF(name);
     Py_RETURN_NONE;
+
+  error:
+    Py_DECREF(name);
+    return NULL;
 }
 
 
