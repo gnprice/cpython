@@ -41,6 +41,13 @@ PyObject *_PyLong_One = NULL;
    -NSMALLNEGINTS (inclusive) to NSMALLPOSINTS (not inclusive).
 */
 static PyLongObject small_ints[NSMALLNEGINTS + NSMALLPOSINTS];
+#else
+/* Zero-length arrays are nonstandard, so give it length 1 instead.
+   Release builds will optimize this away anyway, because it's
+   never accessed in this case.
+*/
+static PyLongObject small_ints[1];
+#endif
 
 #define IS_SMALL_INT(ival) (-NSMALLNEGINTS <= (ival) && (ival) < NSMALLPOSINTS)
 
@@ -76,11 +83,6 @@ maybe_small_long(PyLongObject *v)
     }
     return v;
 }
-#else
-#define IS_SMALL_INT(ival) 0
-#define get_small_int(ival) (assert(0), NULL)
-#define maybe_small_long(val) (val)
-#endif
 
 /* If a freshly-allocated int is already shared, it must
    be a small integer, so negating it must go to PyLong_FromLong */
