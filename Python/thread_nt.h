@@ -6,12 +6,12 @@
 #include <windows.h>
 #include <limits.h>
 #ifdef HAVE_PROCESS_H
-#include <process.h>
+#  include <process.h>
 #endif
 
 /* options */
 #ifndef _PY_USE_CV_LOCKS
-#define _PY_USE_CV_LOCKS 1     /* use locks based on cond vars */
+#  define _PY_USE_CV_LOCKS 1     /* use locks based on cond vars */
 #endif
 
 /* Now, define a non-recursive mutex using either condition variables
@@ -21,7 +21,7 @@
 
 #if _PY_USE_CV_LOCKS
 
-#include "condvar.h"
+#  include "condvar.h"
 
 typedef struct _NRMUTEX
 {
@@ -113,7 +113,7 @@ LeaveNonRecursiveMutex(PNRMUTEX mutex)
 #else /* if ! _PY_USE_CV_LOCKS */
 
 /* NR-locks based on a kernel mutex */
-#define PNRMUTEX HANDLE
+#  define PNRMUTEX HANDLE
 
 PNRMUTEX
 AllocNonRecursiveMutex()

@@ -19,7 +19,7 @@
 #include <Python.h>
 #include <unistd.h>
 #ifdef HAVE_SPAWN_H
-#include <spawn.h>
+#  include <spawn.h>
 #endif
 #include <stdio.h>
 #include <string.h>
@@ -95,9 +95,9 @@ setup_spawnattr(posix_spawnattr_t* spawnattr)
     size_t count;
     cpu_type_t cpu_types[1];
     short flags = 0;
-#ifdef __LP64__
+#  ifdef __LP64__
     int   ch;
-#endif
+#  endif
 
     if ((errno = posix_spawnattr_init(spawnattr)) != 0) {
         err(2, "posix_spawnattr_int");
@@ -111,19 +111,19 @@ setup_spawnattr(posix_spawnattr_t* spawnattr)
      * "arch -ppc python"
      */
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
     cpu_types[0] = CPU_TYPE_POWERPC64;
 
-#elif defined(__x86_64__)
+#  elif defined(__x86_64__)
     cpu_types[0] = CPU_TYPE_X86_64;
 
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
     cpu_types[0] = CPU_TYPE_POWERPC;
-#elif defined(__i386__)
+#  elif defined(__i386__)
     cpu_types[0] = CPU_TYPE_X86;
-#else
-#       error "Unknown CPU"
-#endif
+#  else
+#    error "Unknown CPU"
+#  endif
 
     if (posix_spawnattr_setbinpref_np(spawnattr, count,
                             cpu_types, &ocount) == -1) {

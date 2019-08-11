@@ -1,8 +1,8 @@
 #ifndef Py_LONGOBJECT_H
-#define Py_LONGOBJECT_H
-#ifdef __cplusplus
+#  define Py_LONGOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 
 /* Long (arbitrary precision) integer object interface */
@@ -11,9 +11,9 @@ typedef struct _longobject PyLongObject; /* Revealed in longintrepr.h */
 
 PyAPI_DATA(PyTypeObject) PyLong_Type;
 
-#define PyLong_Check(op) \
+#  define PyLong_Check(op) \
         PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_LONG_SUBCLASS)
-#define PyLong_CheckExact(op) (Py_TYPE(op) == &PyLong_Type)
+#  define PyLong_CheckExact(op) (Py_TYPE(op) == &PyLong_Type)
 
 PyAPI_FUNC(PyObject *) PyLong_FromLong(long);
 PyAPI_FUNC(PyObject *) PyLong_FromUnsignedLong(unsigned long);
@@ -26,58 +26,58 @@ PyAPI_FUNC(Py_ssize_t) PyLong_AsSsize_t(PyObject *);
 PyAPI_FUNC(size_t) PyLong_AsSize_t(PyObject *);
 PyAPI_FUNC(unsigned long) PyLong_AsUnsignedLong(PyObject *);
 PyAPI_FUNC(unsigned long) PyLong_AsUnsignedLongMask(PyObject *);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(int) _PyLong_AsInt(PyObject *);
-#endif
+#  endif
 PyAPI_FUNC(PyObject *) PyLong_GetInfo(void);
 
 /* It may be useful in the future. I've added it in the PyInt -> PyLong
    cleanup to keep the extra information. [CH] */
-#define PyLong_AS_LONG(op) PyLong_AsLong(op)
+#  define PyLong_AS_LONG(op) PyLong_AsLong(op)
 
 /* Issue #1983: pid_t can be longer than a C long on some systems */
-#if !defined(SIZEOF_PID_T) || SIZEOF_PID_T == SIZEOF_INT
-#define _Py_PARSE_PID "i"
-#define PyLong_FromPid PyLong_FromLong
-#define PyLong_AsPid PyLong_AsLong
-#elif SIZEOF_PID_T == SIZEOF_LONG
-#define _Py_PARSE_PID "l"
-#define PyLong_FromPid PyLong_FromLong
-#define PyLong_AsPid PyLong_AsLong
-#elif defined(SIZEOF_LONG_LONG) && SIZEOF_PID_T == SIZEOF_LONG_LONG
-#define _Py_PARSE_PID "L"
-#define PyLong_FromPid PyLong_FromLongLong
-#define PyLong_AsPid PyLong_AsLongLong
-#else
-#error "sizeof(pid_t) is neither sizeof(int), sizeof(long) or sizeof(long long)"
-#endif /* SIZEOF_PID_T */
+#  if !defined(SIZEOF_PID_T) || SIZEOF_PID_T == SIZEOF_INT
+#    define _Py_PARSE_PID "i"
+#    define PyLong_FromPid PyLong_FromLong
+#    define PyLong_AsPid PyLong_AsLong
+#  elif SIZEOF_PID_T == SIZEOF_LONG
+#    define _Py_PARSE_PID "l"
+#    define PyLong_FromPid PyLong_FromLong
+#    define PyLong_AsPid PyLong_AsLong
+#  elif defined(SIZEOF_LONG_LONG) && SIZEOF_PID_T == SIZEOF_LONG_LONG
+#    define _Py_PARSE_PID "L"
+#    define PyLong_FromPid PyLong_FromLongLong
+#    define PyLong_AsPid PyLong_AsLongLong
+#  else
+#    error "sizeof(pid_t) is neither sizeof(int), sizeof(long) or sizeof(long long)"
+#  endif /* SIZEOF_PID_T */
 
-#if SIZEOF_VOID_P == SIZEOF_INT
-#  define _Py_PARSE_INTPTR "i"
-#  define _Py_PARSE_UINTPTR "I"
-#elif SIZEOF_VOID_P == SIZEOF_LONG
-#  define _Py_PARSE_INTPTR "l"
-#  define _Py_PARSE_UINTPTR "k"
-#elif defined(SIZEOF_LONG_LONG) && SIZEOF_VOID_P == SIZEOF_LONG_LONG
-#  define _Py_PARSE_INTPTR "L"
-#  define _Py_PARSE_UINTPTR "K"
-#else
-#  error "void* different in size from int, long and long long"
-#endif /* SIZEOF_VOID_P */
+#  if SIZEOF_VOID_P == SIZEOF_INT
+#    define _Py_PARSE_INTPTR "i"
+#    define _Py_PARSE_UINTPTR "I"
+#  elif SIZEOF_VOID_P == SIZEOF_LONG
+#    define _Py_PARSE_INTPTR "l"
+#    define _Py_PARSE_UINTPTR "k"
+#  elif defined(SIZEOF_LONG_LONG) && SIZEOF_VOID_P == SIZEOF_LONG_LONG
+#    define _Py_PARSE_INTPTR "L"
+#    define _Py_PARSE_UINTPTR "K"
+#  else
+#    error "void* different in size from int, long and long long"
+#  endif /* SIZEOF_VOID_P */
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(int) _PyLong_UnsignedShort_Converter(PyObject *, void *);
 PyAPI_FUNC(int) _PyLong_UnsignedInt_Converter(PyObject *, void *);
 PyAPI_FUNC(int) _PyLong_UnsignedLong_Converter(PyObject *, void *);
 PyAPI_FUNC(int) _PyLong_UnsignedLongLong_Converter(PyObject *, void *);
 PyAPI_FUNC(int) _PyLong_Size_t_Converter(PyObject *, void *);
-#endif
+#  endif
 
 /* Used by Python/mystrtoul.c, _PyBytes_FromHex(),
    _PyBytes_DecodeEscapeRecode(), etc. */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_DATA(unsigned char) _PyLong_DigitValue[256];
-#endif
+#  endif
 
 /* _PyLong_Frexp returns a double x and an exponent e such that the
    true value is approximately equal to x * 2**e.  e is >= 0.  x is
@@ -85,9 +85,9 @@ PyAPI_DATA(unsigned char) _PyLong_DigitValue[256];
    zeroes); otherwise, 0.5 <= abs(x) < 1.0.  On overflow, which is
    possible if the number of bits doesn't fit into a Py_ssize_t, sets
    OverflowError and returns -1.0 for x, 0 for e. */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(double) _PyLong_Frexp(PyLongObject *a, Py_ssize_t *e);
-#endif
+#  endif
 
 PyAPI_FUNC(double) PyLong_AsDouble(PyObject *);
 PyAPI_FUNC(PyObject *) PyLong_FromVoidPtr(void *);
@@ -101,14 +101,14 @@ PyAPI_FUNC(unsigned long long) PyLong_AsUnsignedLongLongMask(PyObject *);
 PyAPI_FUNC(long long) PyLong_AsLongLongAndOverflow(PyObject *, int *);
 
 PyAPI_FUNC(PyObject *) PyLong_FromString(const char *, char **, int);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 Py_DEPRECATED(3.3)
 PyAPI_FUNC(PyObject *) PyLong_FromUnicode(Py_UNICODE*, Py_ssize_t, int);
 PyAPI_FUNC(PyObject *) PyLong_FromUnicodeObject(PyObject *u, int base);
 PyAPI_FUNC(PyObject *) _PyLong_FromBytes(const char *, Py_ssize_t, int);
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 /* _PyLong_Sign.  Return 0 if v is 0, -1 if v < 0, +1 if v > 0.
    v must not be NULL, and must be a normalized long.
    There are no error cases.
@@ -215,7 +215,7 @@ PyAPI_FUNC(int) _PyLong_FormatAdvancedWriter(
     PyObject *format_spec,
     Py_ssize_t start,
     Py_ssize_t end);
-#endif /* Py_LIMITED_API */
+#  endif /* Py_LIMITED_API */
 
 /* These aren't really part of the int object, but they're handy. The
    functions are in Python/mystrtoul.c.
@@ -223,20 +223,20 @@ PyAPI_FUNC(int) _PyLong_FormatAdvancedWriter(
 PyAPI_FUNC(unsigned long) PyOS_strtoul(const char *, char **, int);
 PyAPI_FUNC(long) PyOS_strtol(const char *, char **, int);
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 /* For use by the gcd function in mathmodule.c */
 PyAPI_FUNC(PyObject *) _PyLong_GCD(PyObject *, PyObject *);
-#endif /* !Py_LIMITED_API */
+#  endif /* !Py_LIMITED_API */
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_DATA(PyObject *) _PyLong_Zero;
 PyAPI_DATA(PyObject *) _PyLong_One;
 
 PyAPI_FUNC(PyObject *) _PyLong_Rshift(PyObject *, size_t);
 PyAPI_FUNC(PyObject *) _PyLong_Lshift(PyObject *, size_t);
-#endif
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_LONGOBJECT_H */

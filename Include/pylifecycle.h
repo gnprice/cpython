@@ -2,19 +2,19 @@
 /* Interfaces to configure, query, create & destroy the Python runtime */
 
 #ifndef Py_PYLIFECYCLE_H
-#define Py_PYLIFECYCLE_H
-#ifdef __cplusplus
+#  define Py_PYLIFECYCLE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 
 /* Initialization and finalization */
 PyAPI_FUNC(void) Py_Initialize(void);
 PyAPI_FUNC(void) Py_InitializeEx(int);
 PyAPI_FUNC(void) Py_Finalize(void);
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
 PyAPI_FUNC(int) Py_FinalizeEx(void);
-#endif
+#  endif
 PyAPI_FUNC(int) Py_IsInitialized(void);
 
 /* Subinterpreter support */
@@ -45,9 +45,9 @@ PyAPI_FUNC(wchar_t *) Py_GetPrefix(void);
 PyAPI_FUNC(wchar_t *) Py_GetExecPrefix(void);
 PyAPI_FUNC(wchar_t *) Py_GetPath(void);
 PyAPI_FUNC(void)      Py_SetPath(const wchar_t *);
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 int _Py_CheckPython3(void);
-#endif
+#  endif
 
 /* In their own files */
 PyAPI_FUNC(const char *) Py_GetVersion(void);
@@ -61,13 +61,13 @@ typedef void (*PyOS_sighandler_t)(int);
 PyAPI_FUNC(PyOS_sighandler_t) PyOS_getsig(int);
 PyAPI_FUNC(PyOS_sighandler_t) PyOS_setsig(int, PyOS_sighandler_t);
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_PYLIFECYCLE_H
-#  include  "cpython/pylifecycle.h"
-#  undef Py_CPYTHON_PYLIFECYCLE_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_PYLIFECYCLE_H
+#    include  "cpython/pylifecycle.h"
+#    undef Py_CPYTHON_PYLIFECYCLE_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_PYLIFECYCLE_H */

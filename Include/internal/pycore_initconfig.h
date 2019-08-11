@@ -1,53 +1,53 @@
 #ifndef Py_INTERNAL_CORECONFIG_H
-#define Py_INTERNAL_CORECONFIG_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_CORECONFIG_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pycore_pystate.h"   /* _PyRuntimeState */
+#  include "pycore_pystate.h"   /* _PyRuntimeState */
 
 /* --- PyStatus ----------------------------------------------- */
 
 /* Almost all errors causing Python initialization to fail */
-#ifdef _MSC_VER
+#  ifdef _MSC_VER
    /* Visual Studio 2015 doesn't implement C99 __func__ in C */
-#  define _PyStatus_GET_FUNC() __FUNCTION__
-#else
-#  define _PyStatus_GET_FUNC() __func__
-#endif
+#    define _PyStatus_GET_FUNC() __FUNCTION__
+#  else
+#    define _PyStatus_GET_FUNC() __func__
+#  endif
 
-#define _PyStatus_OK() \
+#  define _PyStatus_OK() \
     (PyStatus){._type = _PyStatus_TYPE_OK,}
     /* other fields are set to 0 */
-#define _PyStatus_ERR(ERR_MSG) \
+#  define _PyStatus_ERR(ERR_MSG) \
     (PyStatus){ \
         ._type = _PyStatus_TYPE_ERROR, \
         .func = _PyStatus_GET_FUNC(), \
         .err_msg = (ERR_MSG)}
         /* other fields are set to 0 */
-#define _PyStatus_NO_MEMORY() _PyStatus_ERR("memory allocation failed")
-#define _PyStatus_EXIT(EXITCODE) \
+#  define _PyStatus_NO_MEMORY() _PyStatus_ERR("memory allocation failed")
+#  define _PyStatus_EXIT(EXITCODE) \
     (PyStatus){ \
         ._type = _PyStatus_TYPE_EXIT, \
         .exitcode = (EXITCODE)}
-#define _PyStatus_IS_ERROR(err) \
+#  define _PyStatus_IS_ERROR(err) \
     (err._type == _PyStatus_TYPE_ERROR)
-#define _PyStatus_IS_EXIT(err) \
+#  define _PyStatus_IS_EXIT(err) \
     (err._type == _PyStatus_TYPE_EXIT)
-#define _PyStatus_EXCEPTION(err) \
+#  define _PyStatus_EXCEPTION(err) \
     (err._type != _PyStatus_TYPE_OK)
 
 /* --- PyWideStringList ------------------------------------------------ */
 
-#define PyWideStringList_INIT (PyWideStringList){.length = 0, .items = NULL}
+#  define PyWideStringList_INIT (PyWideStringList){.length = 0, .items = NULL}
 
-#ifndef NDEBUG
+#  ifndef NDEBUG
 PyAPI_FUNC(int) _PyWideStringList_CheckConsistency(const PyWideStringList *list);
-#endif
+#  endif
 PyAPI_FUNC(void) _PyWideStringList_Clear(PyWideStringList *list);
 PyAPI_FUNC(int) _PyWideStringList_Copy(PyWideStringList *list,
     const PyWideStringList *list2);
@@ -99,7 +99,7 @@ typedef struct {
     int dev_mode;             /* -X dev and PYTHONDEVMODE */
 } _PyPreCmdline;
 
-#define _PyPreCmdline_INIT \
+#  define _PyPreCmdline_INIT \
     (_PyPreCmdline){ \
         .use_environment = -1, \
         .isolated = -1, \
@@ -135,7 +135,7 @@ extern PyStatus _PyPreConfig_Write(const PyPreConfig *preconfig);
 
 /* --- PyConfig ---------------------------------------------- */
 
-#define _Py_CONFIG_VERSION 1
+#  define _Py_CONFIG_VERSION 1
 
 typedef enum {
     /* Py_Initialize() API: backward compatibility with Python 3.6 and 3.7 */
@@ -162,7 +162,7 @@ extern PyStatus _PyConfig_SetPyArgv(
 
 PyAPI_FUNC(PyObject*) _Py_GetConfigsAsDict(void);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_CORECONFIG_H */

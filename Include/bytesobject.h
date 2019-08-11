@@ -2,12 +2,12 @@
 /* Bytes (String) object interface */
 
 #ifndef Py_BYTESOBJECT_H
-#define Py_BYTESOBJECT_H
-#ifdef __cplusplus
+#  define Py_BYTESOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include <stdarg.h>
+#  include <stdarg.h>
 
 /*
 Type PyBytesObject represents a character string.  An extra zero byte is
@@ -27,7 +27,7 @@ functions should be applied to nil objects.
 /* Caching the hash (ob_shash) saves recalculation of a string's hash value.
    This significantly speeds up dict lookups. */
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef struct {
     PyObject_VAR_HEAD
     Py_hash_t ob_shash;
@@ -39,14 +39,14 @@ typedef struct {
      *     ob_shash is the hash of the string or -1 if not computed yet.
      */
 } PyBytesObject;
-#endif
+#  endif
 
 PyAPI_DATA(PyTypeObject) PyBytes_Type;
 PyAPI_DATA(PyTypeObject) PyBytesIter_Type;
 
-#define PyBytes_Check(op) \
+#  define PyBytes_Check(op) \
                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_BYTES_SUBCLASS)
-#define PyBytes_CheckExact(op) (Py_TYPE(op) == &PyBytes_Type)
+#  define PyBytes_CheckExact(op) (Py_TYPE(op) == &PyBytes_Type)
 
 PyAPI_FUNC(PyObject *) PyBytes_FromStringAndSize(const char *, Py_ssize_t);
 PyAPI_FUNC(PyObject *) PyBytes_FromString(const char *);
@@ -60,7 +60,7 @@ PyAPI_FUNC(char *) PyBytes_AsString(PyObject *);
 PyAPI_FUNC(PyObject *) PyBytes_Repr(PyObject *, int);
 PyAPI_FUNC(void) PyBytes_Concat(PyObject **, PyObject *);
 PyAPI_FUNC(void) PyBytes_ConcatAndDel(PyObject **, PyObject *);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(int) _PyBytes_Resize(PyObject **, Py_ssize_t);
 PyAPI_FUNC(PyObject*) _PyBytes_FormatEx(
     const char *format,
@@ -70,30 +70,30 @@ PyAPI_FUNC(PyObject*) _PyBytes_FormatEx(
 PyAPI_FUNC(PyObject*) _PyBytes_FromHex(
     PyObject *string,
     int use_bytearray);
-#endif
+#  endif
 PyAPI_FUNC(PyObject *) PyBytes_DecodeEscape(const char *, Py_ssize_t,
                                             const char *, Py_ssize_t,
                                             const char *);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 /* Helper for PyBytes_DecodeEscape that detects invalid escape chars. */
 PyAPI_FUNC(PyObject *) _PyBytes_DecodeEscape(const char *, Py_ssize_t,
                                              const char *, Py_ssize_t,
                                              const char *,
                                              const char **);
-#endif
+#  endif
 
 /* Macro, trading safety for speed */
-#ifndef Py_LIMITED_API
-#define PyBytes_AS_STRING(op) (assert(PyBytes_Check(op)), \
+#  ifndef Py_LIMITED_API
+#    define PyBytes_AS_STRING(op) (assert(PyBytes_Check(op)), \
                                 (((PyBytesObject *)(op))->ob_sval))
-#define PyBytes_GET_SIZE(op)  (assert(PyBytes_Check(op)),Py_SIZE(op))
-#endif
+#    define PyBytes_GET_SIZE(op)  (assert(PyBytes_Check(op)),Py_SIZE(op))
+#  endif
 
 /* _PyBytes_Join(sep, x) is like sep.join(x).  sep must be PyBytesObject*,
    x must be an iterable object. */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) _PyBytes_Join(PyObject *sep, PyObject *x);
-#endif
+#  endif
 
 /* Provides access to the internal data buffer and size of a string
    object or the default encoded version of a Unicode object. Passing
@@ -111,7 +111,7 @@ PyAPI_FUNC(int) PyBytes_AsStringAndSize(
 /* Using the current locale, insert the thousands grouping
    into the string pointed to by buffer.  For the argument descriptions,
    see Objects/stringlib/localeutil.h */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(Py_ssize_t) _PyBytes_InsertThousandsGroupingLocale(char *buffer,
                                                    Py_ssize_t n_buffer,
                                                    char *digits,
@@ -128,16 +128,16 @@ PyAPI_FUNC(Py_ssize_t) _PyBytes_InsertThousandsGrouping(char *buffer,
                                                    Py_ssize_t min_width,
                                                    const char *grouping,
                                                    const char *thousands_sep);
-#endif
+#  endif
 
 /* Flags used by string formatting */
-#define F_LJUST (1<<0)
-#define F_SIGN  (1<<1)
-#define F_BLANK (1<<2)
-#define F_ALT   (1<<3)
-#define F_ZERO  (1<<4)
+#  define F_LJUST (1<<0)
+#  define F_SIGN  (1<<1)
+#  define F_BLANK (1<<2)
+#  define F_ALT   (1<<3)
+#  define F_ZERO  (1<<4)
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 /* The _PyBytesWriter structure is big: it contains an embedded "stack buffer".
    A _PyBytesWriter variable must be declared at the end of variables in a
    function to optimize the memory allocation on the stack. */
@@ -216,9 +216,9 @@ PyAPI_FUNC(void*) _PyBytesWriter_WriteBytes(_PyBytesWriter *writer,
     void *str,
     const void *bytes,
     Py_ssize_t size);
-#endif   /* Py_LIMITED_API */
+#  endif   /* Py_LIMITED_API */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_BYTESOBJECT_H */

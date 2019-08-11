@@ -52,13 +52,13 @@ FFI_INTEGRAL_TYPEDEF(pointer, 4, 4, FFI_TYPE_POINTER);
 
 #if defined X86 || defined ARM || defined M68K || defined(X86_DARWIN)
 
-#	ifdef X86_64
+#ifdef X86_64
 		FFI_INTEGRAL_TYPEDEF(uint64, 8, 8, FFI_TYPE_UINT64);
 		FFI_INTEGRAL_TYPEDEF(sint64, 8, 8, FFI_TYPE_SINT64);
-#	else
+#else
 		FFI_INTEGRAL_TYPEDEF(uint64, 8, 4, FFI_TYPE_UINT64);
 		FFI_INTEGRAL_TYPEDEF(sint64, 8, 4, FFI_TYPE_SINT64);
-#	endif
+#endif
 
 #elif defined(POWERPC_DARWIN)
 FFI_INTEGRAL_TYPEDEF(uint64, 8, 8, FFI_TYPE_UINT64);
@@ -73,17 +73,17 @@ FFI_INTEGRAL_TYPEDEF(sint64, 8, 8, FFI_TYPE_SINT64);
 
 #if defined X86 || defined X86_WIN32 || defined M68K || defined(X86_DARWIN)
 
-#	if defined X86_WIN32 || defined X86_64
+#if defined X86_WIN32 || defined X86_64
 		FFI_INTEGRAL_TYPEDEF(double, 8, 8, FFI_TYPE_DOUBLE);
-#	else
+#else
 		FFI_INTEGRAL_TYPEDEF(double, 8, 4, FFI_TYPE_DOUBLE);
-#	endif
+#endif
 
-#	ifdef X86_DARWIN
+#ifdef X86_DARWIN
 		FFI_INTEGRAL_TYPEDEF(longdouble, 16, 16, FFI_TYPE_LONGDOUBLE);
-#	else
+#else
 		FFI_INTEGRAL_TYPEDEF(longdouble, 12, 4, FFI_TYPE_LONGDOUBLE);
-#	endif
+#endif
 
 #elif defined ARM || defined SH || defined POWERPC_AIX 
 FFI_INTEGRAL_TYPEDEF(double, 8, 4, FFI_TYPE_DOUBLE);
@@ -91,20 +91,20 @@ FFI_INTEGRAL_TYPEDEF(longdouble, 8, 4, FFI_TYPE_LONGDOUBLE);
 #elif defined POWERPC_DARWIN
 FFI_INTEGRAL_TYPEDEF(double, 8, 8, FFI_TYPE_DOUBLE);
 
-#	if __GNUC__ >= 4
+#if __GNUC__ >= 4
 		FFI_INTEGRAL_TYPEDEF(longdouble, 16, 16, FFI_TYPE_LONGDOUBLE);
-#	else
+#else
 		FFI_INTEGRAL_TYPEDEF(longdouble, 8, 8, FFI_TYPE_LONGDOUBLE);
-#	endif
+#endif
 
 #elif defined SPARC
 FFI_INTEGRAL_TYPEDEF(double, 8, 8, FFI_TYPE_DOUBLE);
 
-#	ifdef SPARC64
+#ifdef SPARC64
 		FFI_INTEGRAL_TYPEDEF(longdouble, 16, 16, FFI_TYPE_LONGDOUBLE);
-#	else
+#else
 		FFI_INTEGRAL_TYPEDEF(longdouble, 16, 8, FFI_TYPE_LONGDOUBLE);
-#	endif
+#endif
 
 #elif defined X86_64 || defined POWERPC64
 FFI_INTEGRAL_TYPEDEF(double, 8, 8, FFI_TYPE_DOUBLE);

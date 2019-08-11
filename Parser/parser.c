@@ -16,9 +16,9 @@
 
 #ifdef Py_DEBUG
 extern int Py_DebugFlag;
-#define D(x) if (!Py_DebugFlag); else x
+#  define D(x) if (!Py_DebugFlag); else x
 #else
-#define D(x)
+#  define D(x)
 #endif
 
 
@@ -61,7 +61,7 @@ s_pop(stack *s)
 
 #else /* !Py_DEBUG */
 
-#define s_pop(s) (s)->s_top++
+#  define s_pop(s) (s)->s_top++
 
 #endif
 
@@ -152,7 +152,7 @@ classify(parser_state *ps, int type, const char *str)
                 strcmp(l->lb_str, str) != 0)
                 continue;
 #ifdef PY_PARSER_REQUIRES_FUTURE_KEYWORD
-#if 0
+#  if 0
             /* Leaving this in as an example */
             if (!(ps->p_flags & CO_FUTURE_WITH_STATEMENT)) {
                 if (str[0] == 'w' && strcmp(str, "with") == 0)
@@ -160,7 +160,7 @@ classify(parser_state *ps, int type, const char *str)
                 else if (str[0] == 'a' && strcmp(str, "as") == 0)
                     break; /* not a keyword yet */
             }
-#endif
+#  endif
 #endif
             D(printf("It's a keyword\n"));
             return n - i;
@@ -183,7 +183,7 @@ classify(parser_state *ps, int type, const char *str)
 }
 
 #ifdef PY_PARSER_REQUIRES_FUTURE_KEYWORD
-#if 0
+#  if 0
 /* Leaving this in as an example */
 static void
 future_hack(parser_state *ps)
@@ -224,7 +224,7 @@ future_hack(parser_state *ps)
         }
     }
 }
-#endif
+#  endif
 #endif /* future keyword */
 
 int
@@ -296,12 +296,12 @@ PyParser_AddToken(parser_state *ps, int type, char *str,
                              d->d_name,
                              ps->p_stack.s_top->s_state));
 #ifdef PY_PARSER_REQUIRES_FUTURE_KEYWORD
-#if 0
+#  if 0
                     if (d->d_name[0] == 'i' &&
                         strcmp(d->d_name,
                            "import_stmt") == 0)
                         future_hack(ps);
-#endif
+#  endif
 #endif
                     s_pop(&ps->p_stack);
                     if (s_empty(&ps->p_stack)) {
@@ -316,11 +316,11 @@ PyParser_AddToken(parser_state *ps, int type, char *str,
 
         if (s->s_accept) {
 #ifdef PY_PARSER_REQUIRES_FUTURE_KEYWORD
-#if 0
+#  if 0
             if (d->d_name[0] == 'i' &&
                 strcmp(d->d_name, "import_stmt") == 0)
                 future_hack(ps);
-#endif
+#  endif
 #endif
             /* Pop this dfa and try again */
             s_pop(&ps->p_stack);

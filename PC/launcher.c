@@ -38,7 +38,7 @@
  * which builds the setuptools-style launcher.
  */
 #if defined(SCRIPT_WRAPPER)
-#define RC_NO_SCRIPT        105
+#  define RC_NO_SCRIPT        105
 #endif
 /*
  * VENV_REDIRECT is used to choose the variant that looks for an adjacent or
@@ -46,8 +46,8 @@
  * launch the original python.exe.
  */
 #if defined(VENV_REDIRECT)
-#define RC_NO_VENV_CFG      106
-#define RC_BAD_VENV_CFG     107
+#  define RC_NO_VENV_CFG      106
+#  define RC_BAD_VENV_CFG     107
 #endif
 
 /* Just for now - static definition */
@@ -141,25 +141,25 @@ static wchar_t * get_env(wchar_t * key)
 }
 
 #if defined(_DEBUG)
-#if defined(_WINDOWS)
+#  if defined(_WINDOWS)
 
-#define PYTHON_EXECUTABLE L"pythonw_d.exe"
+#    define PYTHON_EXECUTABLE L"pythonw_d.exe"
 
+#  else
+
+#    define PYTHON_EXECUTABLE L"python_d.exe"
+
+#  endif
 #else
+#  if defined(_WINDOWS)
 
-#define PYTHON_EXECUTABLE L"python_d.exe"
+#    define PYTHON_EXECUTABLE L"pythonw.exe"
 
-#endif
-#else
-#if defined(_WINDOWS)
+#  else
 
-#define PYTHON_EXECUTABLE L"pythonw.exe"
+#    define PYTHON_EXECUTABLE L"python.exe"
 
-#else
-
-#define PYTHON_EXECUTABLE L"python.exe"
-
-#endif
+#  endif
 #endif
 
 #define MAX_VERSION_SIZE    4
@@ -553,11 +553,11 @@ locate_python(wchar_t * wanted_ver, BOOL from_shebang)
  * Check for a script located alongside the executable
  */
 
-#if defined(_WINDOWS)
-#define SCRIPT_SUFFIX L"-script.pyw"
-#else
-#define SCRIPT_SUFFIX L"-script.py"
-#endif
+#  if defined(_WINDOWS)
+#    define SCRIPT_SUFFIX L"-script.pyw"
+#  else
+#    define SCRIPT_SUFFIX L"-script.py"
+#  endif
 
 static wchar_t wrapped_script_path[MAX_PATH];
 

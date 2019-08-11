@@ -247,7 +247,7 @@ static uint64_t pydict_global_version = 0;
 
 /* Dictionary reuse scheme to save calls to malloc and free */
 #ifndef PyDict_MAXFREELIST
-#define PyDict_MAXFREELIST 80
+#  define PyDict_MAXFREELIST 80
 #endif
 static PyDictObject *free_list[PyDict_MAXFREELIST];
 static int numfree = 0;
@@ -289,13 +289,13 @@ PyDict_Fini(void)
 
 #define DK_SIZE(dk) ((dk)->dk_size)
 #if SIZEOF_VOID_P > 4
-#define DK_IXSIZE(dk)                          \
+#  define DK_IXSIZE(dk)                          \
     (DK_SIZE(dk) <= 0xff ?                     \
         1 : DK_SIZE(dk) <= 0xffff ?            \
             2 : DK_SIZE(dk) <= 0xffffffff ?    \
                 4 : sizeof(int64_t))
 #else
-#define DK_IXSIZE(dk)                          \
+#  define DK_IXSIZE(dk)                          \
     (DK_SIZE(dk) <= 0xff ?                     \
         1 : DK_SIZE(dk) <= 0xffff ?            \
             2 : sizeof(int32_t))

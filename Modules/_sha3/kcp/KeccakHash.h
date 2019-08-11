@@ -18,8 +18,8 @@ http://creativecommons.org/publicdomain/zero/1.0/
 
 #ifndef KeccakP1600_excluded
 
-#include "KeccakSponge.h"
-#include <string.h>
+#  include "KeccakSponge.h"
+#  include <string.h>
 
 typedef unsigned char BitSequence;
 typedef size_t DataLength;
@@ -50,27 +50,27 @@ HashReturn Keccak_HashInitialize(Keccak_HashInstance *hashInstance, unsigned int
 
 /** Macro to initialize a SHAKE128 instance as specified in the FIPS 202 standard.
   */
-#define Keccak_HashInitialize_SHAKE128(hashInstance)        Keccak_HashInitialize(hashInstance, 1344,  256,   0, 0x1F)
+#  define Keccak_HashInitialize_SHAKE128(hashInstance)        Keccak_HashInitialize(hashInstance, 1344,  256,   0, 0x1F)
 
 /** Macro to initialize a SHAKE256 instance as specified in the FIPS 202 standard.
   */
-#define Keccak_HashInitialize_SHAKE256(hashInstance)        Keccak_HashInitialize(hashInstance, 1088,  512,   0, 0x1F)
+#  define Keccak_HashInitialize_SHAKE256(hashInstance)        Keccak_HashInitialize(hashInstance, 1088,  512,   0, 0x1F)
 
 /** Macro to initialize a SHA3-224 instance as specified in the FIPS 202 standard.
   */
-#define Keccak_HashInitialize_SHA3_224(hashInstance)        Keccak_HashInitialize(hashInstance, 1152,  448, 224, 0x06)
+#  define Keccak_HashInitialize_SHA3_224(hashInstance)        Keccak_HashInitialize(hashInstance, 1152,  448, 224, 0x06)
 
 /** Macro to initialize a SHA3-256 instance as specified in the FIPS 202 standard.
   */
-#define Keccak_HashInitialize_SHA3_256(hashInstance)        Keccak_HashInitialize(hashInstance, 1088,  512, 256, 0x06)
+#  define Keccak_HashInitialize_SHA3_256(hashInstance)        Keccak_HashInitialize(hashInstance, 1088,  512, 256, 0x06)
 
 /** Macro to initialize a SHA3-384 instance as specified in the FIPS 202 standard.
   */
-#define Keccak_HashInitialize_SHA3_384(hashInstance)        Keccak_HashInitialize(hashInstance,  832,  768, 384, 0x06)
+#  define Keccak_HashInitialize_SHA3_384(hashInstance)        Keccak_HashInitialize(hashInstance,  832,  768, 384, 0x06)
 
 /** Macro to initialize a SHA3-512 instance as specified in the FIPS 202 standard.
   */
-#define Keccak_HashInitialize_SHA3_512(hashInstance)        Keccak_HashInitialize(hashInstance,  576, 1024, 512, 0x06)
+#  define Keccak_HashInitialize_SHA3_512(hashInstance)        Keccak_HashInitialize(hashInstance,  576, 1024, 512, 0x06)
 
 /**
   * Function to give input data to be absorbed.

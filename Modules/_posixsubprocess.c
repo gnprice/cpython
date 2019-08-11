@@ -1,7 +1,7 @@
 /* Authors: Gregory P. Smith & Jeffrey Yasskin */
 #include "Python.h"
 #if defined(HAVE_PIPE2) && !defined(_GNU_SOURCE)
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
 #include <unistd.h>
 #include <fcntl.h>
@@ -22,29 +22,29 @@
 #endif
 
 #ifdef _Py_MEMORY_SANITIZER
-# include <sanitizer/msan_interface.h>
+#include <sanitizer/msan_interface.h>
 #endif
 
 #if defined(__ANDROID__) && __ANDROID_API__ < 21 && !defined(SYS_getdents64)
-# include <sys/linux-syscalls.h>
-# define SYS_getdents64  __NR_getdents64
+#include <sys/linux-syscalls.h>
+#define SYS_getdents64  __NR_getdents64
 #endif
 
 #if defined(__sun) && defined(__SVR4)
 /* readdir64 is used to work around Solaris 9 bug 6395699. */
-# define readdir readdir64
-# define dirent dirent64
-# if !defined(HAVE_DIRFD)
+#define readdir readdir64
+#define dirent dirent64
+#if !defined(HAVE_DIRFD)
 /* Some versions of Solaris lack dirfd(). */
 #  define dirfd(dirp) ((dirp)->dd_fd)
 #  define HAVE_DIRFD
-# endif
+#endif
 #endif
 
 #if defined(__FreeBSD__) || (defined(__APPLE__) && defined(__MACH__))
-# define FD_DIR "/dev/fd"
+#define FD_DIR "/dev/fd"
 #else
-# define FD_DIR "/proc/self/fd"
+#define FD_DIR "/proc/self/fd"
 #endif
 
 #define POSIX_CALL(call)   do { if ((call) == -1) goto error; } while (0)

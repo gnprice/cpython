@@ -144,83 +144,83 @@ const char *mpd_version(void);
 /* BEGIN CONFIG_64 */
 #if defined(CONFIG_64)
 /* types for modular and base arithmetic */
-#define MPD_UINT_MAX UINT64_MAX
-#define MPD_BITS_PER_UINT 64
+#  define MPD_UINT_MAX UINT64_MAX
+#  define MPD_BITS_PER_UINT 64
 typedef uint64_t mpd_uint_t;  /* unsigned mod type */
 
-#define MPD_SIZE_MAX SIZE_MAX
+#  define MPD_SIZE_MAX SIZE_MAX
 typedef size_t mpd_size_t; /* unsigned size type */
 
 /* type for exp, digits, len, prec */
-#define MPD_SSIZE_MAX INT64_MAX
-#define MPD_SSIZE_MIN INT64_MIN
+#  define MPD_SSIZE_MAX INT64_MAX
+#  define MPD_SSIZE_MIN INT64_MIN
 typedef int64_t mpd_ssize_t;
-#define _mpd_strtossize strtoll
+#  define _mpd_strtossize strtoll
 
 /* decimal arithmetic */
-#define MPD_RADIX 10000000000000000000ULL  /* 10**19 */
-#define MPD_RDIGITS 19
-#define MPD_MAX_POW10 19
-#define MPD_EXPDIGITS 19  /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
+#  define MPD_RADIX 10000000000000000000ULL  /* 10**19 */
+#  define MPD_RDIGITS 19
+#  define MPD_MAX_POW10 19
+#  define MPD_EXPDIGITS 19  /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
 
-#define MPD_MAXTRANSFORM_2N 4294967296ULL      /* 2**32 */
-#define MPD_MAX_PREC 999999999999999999LL
-#define MPD_MAX_PREC_LOG2 64
-#define MPD_ELIMIT  1000000000000000000LL
-#define MPD_MAX_EMAX   999999999999999999LL    /* ELIMIT-1 */
-#define MPD_MIN_EMIN  (-999999999999999999LL)  /* -EMAX */
-#define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
-#define MPD_EXP_INF 2000000000000000001LL
-#define MPD_EXP_CLAMP (-4000000000000000001LL)
-#define MPD_MAXIMPORT 105263157894736842L /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
+#  define MPD_MAXTRANSFORM_2N 4294967296ULL      /* 2**32 */
+#  define MPD_MAX_PREC 999999999999999999LL
+#  define MPD_MAX_PREC_LOG2 64
+#  define MPD_ELIMIT  1000000000000000000LL
+#  define MPD_MAX_EMAX   999999999999999999LL    /* ELIMIT-1 */
+#  define MPD_MIN_EMIN  (-999999999999999999LL)  /* -EMAX */
+#  define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
+#  define MPD_EXP_INF 2000000000000000001LL
+#  define MPD_EXP_CLAMP (-4000000000000000001LL)
+#  define MPD_MAXIMPORT 105263157894736842L /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
 
 /* conversion specifiers */
-#define PRI_mpd_uint_t PRIu64
-#define PRI_mpd_ssize_t PRIi64
+#  define PRI_mpd_uint_t PRIu64
+#  define PRI_mpd_ssize_t PRIi64
 /* END CONFIG_64 */
 
 
 /* BEGIN CONFIG_32 */
 #elif defined(CONFIG_32)
 /* types for modular and base arithmetic */
-#define MPD_UINT_MAX UINT32_MAX
-#define MPD_BITS_PER_UINT 32
+#  define MPD_UINT_MAX UINT32_MAX
+#  define MPD_BITS_PER_UINT 32
 typedef uint32_t mpd_uint_t;  /* unsigned mod type */
 
-#ifndef LEGACY_COMPILER
-#define MPD_UUINT_MAX UINT64_MAX
+#  ifndef LEGACY_COMPILER
+#    define MPD_UUINT_MAX UINT64_MAX
 typedef uint64_t mpd_uuint_t; /* double width unsigned mod type */
-#endif
+#  endif
 
-#define MPD_SIZE_MAX SIZE_MAX
+#  define MPD_SIZE_MAX SIZE_MAX
 typedef size_t mpd_size_t; /* unsigned size type */
 
 /* type for dec->len, dec->exp, ctx->prec */
-#define MPD_SSIZE_MAX INT32_MAX
-#define MPD_SSIZE_MIN INT32_MIN
+#  define MPD_SSIZE_MAX INT32_MAX
+#  define MPD_SSIZE_MIN INT32_MIN
 typedef int32_t mpd_ssize_t;
-#define _mpd_strtossize strtol
+#  define _mpd_strtossize strtol
 
 /* decimal arithmetic */
-#define MPD_RADIX 1000000000UL  /* 10**9 */
-#define MPD_RDIGITS 9
-#define MPD_MAX_POW10 9
-#define MPD_EXPDIGITS 10 /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
+#  define MPD_RADIX 1000000000UL  /* 10**9 */
+#  define MPD_RDIGITS 9
+#  define MPD_MAX_POW10 9
+#  define MPD_EXPDIGITS 10 /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
 
-#define MPD_MAXTRANSFORM_2N 33554432UL /* 2**25 */
-#define MPD_MAX_PREC 425000000L
-#define MPD_MAX_PREC_LOG2 32
-#define MPD_ELIMIT 425000001L
-#define MPD_MAX_EMAX 425000000L        /* ELIMIT-1 */
-#define MPD_MIN_EMIN (-425000000L)     /* -EMAX */
-#define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
-#define MPD_EXP_INF 1000000001L      /* allows for emax=999999999 in the tests */
-#define MPD_EXP_CLAMP (-2000000001L) /* allows for emin=-999999999 in the tests */
-#define MPD_MAXIMPORT 94444445L      /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
+#  define MPD_MAXTRANSFORM_2N 33554432UL /* 2**25 */
+#  define MPD_MAX_PREC 425000000L
+#  define MPD_MAX_PREC_LOG2 32
+#  define MPD_ELIMIT 425000001L
+#  define MPD_MAX_EMAX 425000000L        /* ELIMIT-1 */
+#  define MPD_MIN_EMIN (-425000000L)     /* -EMAX */
+#  define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
+#  define MPD_EXP_INF 1000000001L      /* allows for emax=999999999 in the tests */
+#  define MPD_EXP_CLAMP (-2000000001L) /* allows for emin=-999999999 in the tests */
+#  define MPD_MAXIMPORT 94444445L      /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
 
 /* conversion specifiers */
-#define PRI_mpd_uint_t PRIu32
-#define PRI_mpd_ssize_t PRIi32
+#  define PRI_mpd_uint_t PRIu32
+#  define PRI_mpd_ssize_t PRIi32
 /* END CONFIG_32 */
 
 #else

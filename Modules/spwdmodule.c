@@ -7,7 +7,7 @@
 
 #include <sys/types.h>
 #ifdef HAVE_SHADOW_H
-#include <shadow.h>
+#  include <shadow.h>
 #endif
 
 #include "clinic/spwdmodule.c.h"
@@ -82,8 +82,8 @@ static PyObject *mkspent(struct spwd *p)
     if (v == NULL)
         return NULL;
 
-#define SETI(i,val) PyStructSequence_SET_ITEM(v, i, PyLong_FromLong((long) val))
-#define SETS(i,val) sets(v, i, val)
+#  define SETI(i,val) PyStructSequence_SET_ITEM(v, i, PyLong_FromLong((long) val))
+#  define SETS(i,val) sets(v, i, val)
 
     SETS(setIndex++, p->sp_namp);
     SETS(setIndex++, p->sp_pwdp);
@@ -97,8 +97,8 @@ static PyObject *mkspent(struct spwd *p)
     SETS(setIndex++, p->sp_namp); /* Backward compatibility for sp_nam */
     SETS(setIndex++, p->sp_pwdp); /* Backward compatibility for sp_pwd */
 
-#undef SETS
-#undef SETI
+#  undef SETS
+#  undef SETI
 
     if (PyErr_Occurred()) {
         Py_DECREF(v);

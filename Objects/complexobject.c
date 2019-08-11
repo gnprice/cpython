@@ -57,7 +57,7 @@ _Py_c_prod(Py_complex a, Py_complex b)
 
 /* Avoid bad optimization on Windows ARM64 until the compiler is fixed */
 #ifdef _M_ARM64
-#pragma optimize("", off)
+#  pragma optimize("", off)
 #endif
 Py_complex
 _Py_c_quot(Py_complex a, Py_complex b)
@@ -117,7 +117,7 @@ _Py_c_quot(Py_complex a, Py_complex b)
     return r;
 }
 #ifdef _M_ARM64
-#pragma optimize("", on)
+#  pragma optimize("", on)
 #endif
 
 Py_complex

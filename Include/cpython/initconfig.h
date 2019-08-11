@@ -1,9 +1,9 @@
 #ifndef Py_PYCORECONFIG_H
-#define Py_PYCORECONFIG_H
-#ifndef Py_LIMITED_API
-#ifdef __cplusplus
+#  define Py_PYCORECONFIG_H
+#  ifndef Py_LIMITED_API
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 /* --- PyStatus ----------------------------------------------- */
 
@@ -87,7 +87,7 @@ typedef struct {
        should be enabled or not. */
     int coerce_c_locale_warn;
 
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     /* If greater than 1, use the "mbcs" encoding instead of the UTF-8
        encoding for the filesystem encoding.
 
@@ -97,7 +97,7 @@ typedef struct {
 
        See PEP 529 for more details. */
     int legacy_windows_fs_encoding;
-#endif
+#    endif
 
     /* Enable UTF-8 mode? (PEP 540)
 
@@ -328,7 +328,7 @@ typedef struct {
        See also 'stdio_encoding' attribute. */
     wchar_t *stdio_errors;
 
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     /* If greater than zero, use io.FileIO instead of WindowsConsoleIO for sys
        standard streams.
 
@@ -338,7 +338,7 @@ typedef struct {
 
        See PEP 528 for more details. */
     int legacy_windows_stdio;
-#endif
+#    endif
 
     /* Value of the --check-hash-based-pycs command line option:
 
@@ -426,8 +426,8 @@ PyAPI_FUNC(PyStatus) PyConfig_SetWideStringList(PyConfig *config,
     PyWideStringList *list,
     Py_ssize_t length, wchar_t **items);
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
-#endif /* !Py_LIMITED_API */
+#    endif
+#  endif /* !Py_LIMITED_API */
 #endif /* !Py_PYCORECONFIG_H */

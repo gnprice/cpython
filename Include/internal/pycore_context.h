@@ -1,11 +1,11 @@
 #ifndef Py_INTERNAL_CONTEXT_H
-#define Py_INTERNAL_CONTEXT_H
+#  define Py_INTERNAL_CONTEXT_H
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pycore_hamt.h"
+#  include "pycore_hamt.h"
 
 struct _pycontextobject {
     PyObject_HEAD

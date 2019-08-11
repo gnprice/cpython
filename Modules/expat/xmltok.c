@@ -35,11 +35,11 @@
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
   /* for vs2012/11.0/1700 and earlier Visual Studio compilers */
-# define bool   int
-# define false  0
-# define true   1
+#define bool   int
+#define false  0
+#define true   1
 #else
-# include <stdbool.h>
+#include <stdbool.h>
 #endif
 
 
@@ -47,7 +47,7 @@
 #include "winconfig.h"
 #else
 #ifdef HAVE_EXPAT_CONFIG_H
-#include <expat_config.h>
+#  include <expat_config.h>
 #endif
 #endif /* ndef _WIN32 */
 
@@ -899,8 +899,8 @@ static const struct normal_encoding little2_encoding = {
 static const struct normal_encoding internal_little2_encoding_ns = {
   { VTABLE, 2, 0, 1 },
   {
-#include "iasciitab.h"
-#include "latin1tab.h"
+#  include "iasciitab.h"
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(little2_) NULL_VTABLE
 };
@@ -1040,8 +1040,8 @@ static const struct normal_encoding big2_encoding = {
 static const struct normal_encoding internal_big2_encoding_ns = {
   { VTABLE, 2, 0, 1 },
   {
-#include "iasciitab.h"
-#include "latin1tab.h"
+#  include "iasciitab.h"
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(big2_) NULL_VTABLE
 };

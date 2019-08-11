@@ -47,7 +47,7 @@ static PyObject _dummy_struct;
 
 /* Set this to zero to turn-off linear probing */
 #ifndef LINEAR_PROBES
-#define LINEAR_PROBES 9
+#  define LINEAR_PROBES 9
 #endif
 
 /* This must be >= 1 */
@@ -2367,7 +2367,7 @@ PyObject *_PySet_Dummy = dummy;
 /* Test code to be called with any three element set.
    Returns True and original set is restored. */
 
-#define assertRaises(call_return_value, exception)              \
+#  define assertRaises(call_return_value, exception)              \
     do {                                                        \
         assert(call_return_value);                              \
         assert(PyErr_ExceptionMatches(exception));              \
@@ -2500,7 +2500,7 @@ test_c_api(PySetObject *so, PyObject *Py_UNUSED(ignored))
     Py_RETURN_TRUE;
 }
 
-#undef assertRaises
+#  undef assertRaises
 
 #endif
 

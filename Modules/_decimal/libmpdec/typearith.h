@@ -44,8 +44,8 @@
  */
 
 #if defined(CONFIG_64)
-#if defined(ANSI)
-#if defined(HAVE_UINT128_T)
+#  if defined(ANSI)
+#    if defined(HAVE_UINT128_T)
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -67,7 +67,7 @@ _mpd_div_words(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo,
     *q = (mpd_uint_t)(hl / d); /* quotient is known to fit */
     *r = (mpd_uint_t)(hl - (__uint128_t)(*q) * d);
 }
-#else
+#    else
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -198,10 +198,10 @@ again2:
     *q = q1*b + q0;
     *r = (un21*b + un0 - q0*v) >> s;
 }
-#endif
+#    endif
 
 /* END ANSI */
-#elif defined(ASM)
+#  elif defined(ASM)
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -233,9 +233,9 @@ _mpd_div_words(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo,
     *r = rr;
 }
 /* END GCC ASM */
-#elif defined(MASM)
-#include <intrin.h>
-#pragma intrinsic(_umul128)
+#  elif defined(MASM)
+#    include <intrin.h>
+#    pragma intrinsic(_umul128)
 
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
@@ -247,11 +247,11 @@ void _mpd_div_words(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo,
                     mpd_uint_t d);
 
 /* END MASM (_MSC_VER) */
-#else
+#  else
   #error "need platform specific 128 bit multiplication and division"
-#endif
+#  endif
 
-#define DIVMOD(q, r, v, d) *q = v / d; *r = v - *q * d
+#  define DIVMOD(q, r, v, d) *q = v / d; *r = v - *q * d
 static inline void
 _mpd_divmod_pow10(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t v, mpd_uint_t exp)
 {
@@ -301,8 +301,8 @@ _mpd_divmod_pow10(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t v, mpd_uint_t exp)
 
 /* END CONFIG_64 */
 #elif defined(CONFIG_32)
-#if defined(ANSI)
-#if !defined(LEGACY_COMPILER)
+#  if defined(ANSI)
+#    if !defined(LEGACY_COMPILER)
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -325,7 +325,7 @@ _mpd_div_words(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo,
     *r = (mpd_uint_t)(hl - (mpd_uuint_t)(*q) * d);
 }
 /* END ANSI + uint64_t */
-#else
+#    else
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -455,10 +455,10 @@ again2:
     *q = q1*b + q0;
     *r = (un21*b + un0 - q0*v) >> s;
 }
-#endif /* END ANSI + LEGACY_COMPILER */
+#    endif /* END ANSI + LEGACY_COMPILER */
 
 /* END ANSI */
-#elif defined(ASM)
+#  elif defined(ASM)
 static inline void
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -490,7 +490,7 @@ _mpd_div_words(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo,
     *r = rr;
 }
 /* END GCC ASM */
-#elif defined(MASM)
+#  elif defined(MASM)
 static inline void __cdecl
 _mpd_mul_words(mpd_uint_t *hi, mpd_uint_t *lo, mpd_uint_t a, mpd_uint_t b)
 {
@@ -525,11 +525,11 @@ _mpd_div_words(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo,
     *r = rr;
 }
 /* END MASM (_MSC_VER) */
-#else
+#  else
   #error "need platform specific 64 bit multiplication and division"
-#endif
+#  endif
 
-#define DIVMOD(q, r, v, d) *q = v / d; *r = v - *q * d
+#  define DIVMOD(q, r, v, d) *q = v / d; *r = v - *q * d
 static inline void
 _mpd_divmod_pow10(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t v, mpd_uint_t exp)
 {

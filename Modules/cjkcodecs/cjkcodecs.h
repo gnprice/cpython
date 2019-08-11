@@ -354,7 +354,7 @@ find_pairencmap(ucs2_t body, ucs2_t modifier,
 #endif
 
 #ifdef USING_IMPORTED_MAPS
-#define IMPORT_MAP(locale, charset, encmap, decmap) \
+#  define IMPORT_MAP(locale, charset, encmap, decmap) \
     importmap("_codecs_" #locale, "__map_" #charset, \
               (const void**)encmap, (const void**)decmap)
 

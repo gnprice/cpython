@@ -1,5 +1,5 @@
 #if STRINGLIB_IS_UNICODE
-# error "transmogrify.h only compatible with byte-wise strings"
+#  error "transmogrify.h only compatible with byte-wise strings"
 #endif
 
 /* the more complicated methods.  parts of these should be pulled out into the

@@ -2,44 +2,44 @@
 /* Module object interface */
 
 #ifndef Py_MODULEOBJECT_H
-#define Py_MODULEOBJECT_H
-#ifdef __cplusplus
+#  define Py_MODULEOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 PyAPI_DATA(PyTypeObject) PyModule_Type;
 
-#define PyModule_Check(op) PyObject_TypeCheck(op, &PyModule_Type)
-#define PyModule_CheckExact(op) (Py_TYPE(op) == &PyModule_Type)
+#  define PyModule_Check(op) PyObject_TypeCheck(op, &PyModule_Type)
+#  define PyModule_CheckExact(op) (Py_TYPE(op) == &PyModule_Type)
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(PyObject *) PyModule_NewObject(
     PyObject *name
     );
-#endif
+#  endif
 PyAPI_FUNC(PyObject *) PyModule_New(
     const char *name            /* UTF-8 encoded string */
     );
 PyAPI_FUNC(PyObject *) PyModule_GetDict(PyObject *);
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(PyObject *) PyModule_GetNameObject(PyObject *);
-#endif
+#  endif
 PyAPI_FUNC(const char *) PyModule_GetName(PyObject *);
 Py_DEPRECATED(3.2) PyAPI_FUNC(const char *) PyModule_GetFilename(PyObject *);
 PyAPI_FUNC(PyObject *) PyModule_GetFilenameObject(PyObject *);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(void) _PyModule_Clear(PyObject *);
 PyAPI_FUNC(void) _PyModule_ClearDict(PyObject *);
 PyAPI_FUNC(int) _PyModuleSpec_IsInitializing(PyObject *);
-#endif
+#  endif
 PyAPI_FUNC(struct PyModuleDef*) PyModule_GetDef(PyObject*);
 PyAPI_FUNC(void*) PyModule_GetState(PyObject*);
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 /* New in 3.5 */
 PyAPI_FUNC(PyObject *) PyModuleDef_Init(struct PyModuleDef*);
 PyAPI_DATA(PyTypeObject) PyModuleDef_Type;
-#endif
+#  endif
 
 typedef struct PyModuleDef_Base {
   PyObject_HEAD
@@ -48,7 +48,7 @@ typedef struct PyModuleDef_Base {
   PyObject* m_copy;
 } PyModuleDef_Base;
 
-#define PyModuleDef_HEAD_INIT { \
+#  define PyModuleDef_HEAD_INIT { \
     PyObject_HEAD_INIT(NULL)    \
     NULL, /* m_init */          \
     0,    /* m_index */         \
@@ -56,21 +56,21 @@ typedef struct PyModuleDef_Base {
   }
 
 struct PyModuleDef_Slot;
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 /* New in 3.5 */
 typedef struct PyModuleDef_Slot{
     int slot;
     void *value;
 } PyModuleDef_Slot;
 
-#define Py_mod_create 1
-#define Py_mod_exec 2
+#    define Py_mod_create 1
+#    define Py_mod_exec 2
 
-#ifndef Py_LIMITED_API
-#define _Py_mod_LAST_SLOT 2
-#endif
+#    ifndef Py_LIMITED_API
+#      define _Py_mod_LAST_SLOT 2
+#    endif
 
-#endif /* New in 3.5 */
+#  endif /* New in 3.5 */
 
 typedef struct PyModuleDef{
   PyModuleDef_Base m_base;
@@ -84,7 +84,7 @@ typedef struct PyModuleDef{
   freefunc m_free;
 } PyModuleDef;
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_MODULEOBJECT_H */

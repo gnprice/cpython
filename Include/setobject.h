@@ -1,12 +1,12 @@
 /* Set object interface */
 
 #ifndef Py_SETOBJECT_H
-#define Py_SETOBJECT_H
-#ifdef __cplusplus
+#  define Py_SETOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 
 /* There are three kinds of entries in the table:
 
@@ -21,7 +21,7 @@ meaning that dummy entries can be detected by
 either entry->key==dummy or by entry->hash==-1.
 */
 
-#define PySet_MINSIZE 8
+#    define PySet_MINSIZE 8
 
 typedef struct {
     PyObject *key;
@@ -64,7 +64,7 @@ typedef struct {
     PyObject *weakreflist;      /* List of weak references */
 } PySetObject;
 
-#define PySet_GET_SIZE(so) (assert(PyAnySet_Check(so)),(((PySetObject *)(so))->used))
+#    define PySet_GET_SIZE(so) (assert(PyAnySet_Check(so)),(((PySetObject *)(so))->used))
 
 PyAPI_DATA(PyObject *) _PySet_Dummy;
 
@@ -72,7 +72,7 @@ PyAPI_FUNC(int) _PySet_NextEntry(PyObject *set, Py_ssize_t *pos, PyObject **key,
 PyAPI_FUNC(int) _PySet_Update(PyObject *set, PyObject *iterable);
 PyAPI_FUNC(int) PySet_ClearFreeList(void);
 
-#endif /* Section excluded by Py_LIMITED_API */
+#  endif /* Section excluded by Py_LIMITED_API */
 
 PyAPI_DATA(PyTypeObject) PySet_Type;
 PyAPI_DATA(PyTypeObject) PyFrozenSet_Type;
@@ -88,21 +88,21 @@ PyAPI_FUNC(int) PySet_Discard(PyObject *set, PyObject *key);
 PyAPI_FUNC(PyObject *) PySet_Pop(PyObject *set);
 PyAPI_FUNC(Py_ssize_t) PySet_Size(PyObject *anyset);
 
-#define PyFrozenSet_CheckExact(ob) (Py_TYPE(ob) == &PyFrozenSet_Type)
-#define PyAnySet_CheckExact(ob) \
+#  define PyFrozenSet_CheckExact(ob) (Py_TYPE(ob) == &PyFrozenSet_Type)
+#  define PyAnySet_CheckExact(ob) \
     (Py_TYPE(ob) == &PySet_Type || Py_TYPE(ob) == &PyFrozenSet_Type)
-#define PyAnySet_Check(ob) \
+#  define PyAnySet_Check(ob) \
     (Py_TYPE(ob) == &PySet_Type || Py_TYPE(ob) == &PyFrozenSet_Type || \
       PyType_IsSubtype(Py_TYPE(ob), &PySet_Type) || \
       PyType_IsSubtype(Py_TYPE(ob), &PyFrozenSet_Type))
-#define PySet_Check(ob) \
+#  define PySet_Check(ob) \
     (Py_TYPE(ob) == &PySet_Type || \
     PyType_IsSubtype(Py_TYPE(ob), &PySet_Type))
-#define   PyFrozenSet_Check(ob) \
+#  define   PyFrozenSet_Check(ob) \
     (Py_TYPE(ob) == &PyFrozenSet_Type || \
       PyType_IsSubtype(Py_TYPE(ob), &PyFrozenSet_Type))
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_SETOBJECT_H */

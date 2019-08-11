@@ -80,12 +80,12 @@ _Py_parse_inf_or_nan(const char *p, char **endptr)
             s += 5;
         retval = negate ? -Py_HUGE_VAL : Py_HUGE_VAL;
     }
-#ifdef Py_NAN
+#  ifdef Py_NAN
     else if (case_insensitive_match(s, "nan")) {
         s += 3;
         retval = negate ? -Py_NAN : Py_NAN;
     }
-#endif
+#  endif
     else {
         s = p;
         retval = -1.0;
@@ -480,7 +480,7 @@ change_decimal_from_locale_to_dot(char* buffer)
 The exponent always contains at least two digits, and only as many more digits
 as necessary to represent the exponent.
 */
-#define MIN_EXPONENT_DIGITS 2
+#  define MIN_EXPONENT_DIGITS 2
 
 /* Ensure that any exponent, if present, is at least MIN_EXPONENT_DIGITS
    in length. */
@@ -690,7 +690,7 @@ ensure_decimal_point(char* buffer, size_t buf_size, int precision)
 }
 
 /* see FORMATBUFLEN in unicodeobject.c */
-#define FLOAT_FORMATBUFLEN 120
+#  define FLOAT_FORMATBUFLEN 120
 
 /**
  * _PyOS_ascii_formatd:
@@ -948,9 +948,9 @@ char * PyOS_double_to_string(double val,
 
 /* I'm using a lookup table here so that I don't have to invent a non-locale
    specific way to convert to uppercase */
-#define OFS_INF 0
-#define OFS_NAN 1
-#define OFS_E 2
+#  define OFS_INF 0
+#  define OFS_NAN 1
+#  define OFS_E 2
 
 /* The lengths of these are known to the code below, so don't change them */
 static const char * const lc_float_strings[] = {

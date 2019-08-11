@@ -120,112 +120,112 @@
    the following code */
 #ifndef PY_NO_SHORT_FLOAT_REPR
 
-#include "float.h"
+#  include "float.h"
 
-#define MALLOC PyMem_Malloc
-#define FREE PyMem_Free
+#  define MALLOC PyMem_Malloc
+#  define FREE PyMem_Free
 
 /* This code should also work for ARM mixed-endian format on little-endian
    machines, where doubles have byte order 45670123 (in increasing address
    order, 0 being the least significant byte). */
-#ifdef DOUBLE_IS_LITTLE_ENDIAN_IEEE754
-#  define IEEE_8087
-#endif
-#if defined(DOUBLE_IS_BIG_ENDIAN_IEEE754) ||  \
+#  ifdef DOUBLE_IS_LITTLE_ENDIAN_IEEE754
+#    define IEEE_8087
+#  endif
+#  if defined(DOUBLE_IS_BIG_ENDIAN_IEEE754) ||  \
   defined(DOUBLE_IS_ARM_MIXED_ENDIAN_IEEE754)
-#  define IEEE_MC68k
-#endif
-#if defined(IEEE_8087) + defined(IEEE_MC68k) != 1
-#error "Exactly one of IEEE_8087 or IEEE_MC68k should be defined."
-#endif
+#    define IEEE_MC68k
+#  endif
+#  if defined(IEEE_8087) + defined(IEEE_MC68k) != 1
+#    error "Exactly one of IEEE_8087 or IEEE_MC68k should be defined."
+#  endif
 
 /* The code below assumes that the endianness of integers matches the
    endianness of the two 32-bit words of a double.  Check this. */
-#if defined(WORDS_BIGENDIAN) && (defined(DOUBLE_IS_LITTLE_ENDIAN_IEEE754) || \
+#  if defined(WORDS_BIGENDIAN) && (defined(DOUBLE_IS_LITTLE_ENDIAN_IEEE754) || \
                                  defined(DOUBLE_IS_ARM_MIXED_ENDIAN_IEEE754))
-#error "doubles and ints have incompatible endianness"
-#endif
+#    error "doubles and ints have incompatible endianness"
+#  endif
 
-#if !defined(WORDS_BIGENDIAN) && defined(DOUBLE_IS_BIG_ENDIAN_IEEE754)
-#error "doubles and ints have incompatible endianness"
-#endif
+#  if !defined(WORDS_BIGENDIAN) && defined(DOUBLE_IS_BIG_ENDIAN_IEEE754)
+#    error "doubles and ints have incompatible endianness"
+#  endif
 
 
 typedef uint32_t ULong;
 typedef int32_t Long;
 typedef uint64_t ULLong;
 
-#undef DEBUG
-#ifdef Py_DEBUG
-#define DEBUG
-#endif
+#  undef DEBUG
+#  ifdef Py_DEBUG
+#    define DEBUG
+#  endif
 
 /* End Python #define linking */
 
-#ifdef DEBUG
-#define Bug(x) {fprintf(stderr, "%s\n", x); exit(1);}
-#endif
+#  ifdef DEBUG
+#    define Bug(x) {fprintf(stderr, "%s\n", x); exit(1);}
+#  endif
 
-#ifndef PRIVATE_MEM
-#define PRIVATE_MEM 2304
-#endif
-#define PRIVATE_mem ((PRIVATE_MEM+sizeof(double)-1)/sizeof(double))
+#  ifndef PRIVATE_MEM
+#    define PRIVATE_MEM 2304
+#  endif
+#  define PRIVATE_mem ((PRIVATE_MEM+sizeof(double)-1)/sizeof(double))
 static double private_mem[PRIVATE_mem], *pmem_next = private_mem;
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 typedef union { double d; ULong L[2]; } U;
 
-#ifdef IEEE_8087
-#define word0(x) (x)->L[1]
-#define word1(x) (x)->L[0]
-#else
-#define word0(x) (x)->L[0]
-#define word1(x) (x)->L[1]
-#endif
-#define dval(x) (x)->d
+#  ifdef IEEE_8087
+#    define word0(x) (x)->L[1]
+#    define word1(x) (x)->L[0]
+#  else
+#    define word0(x) (x)->L[0]
+#    define word1(x) (x)->L[1]
+#  endif
+#  define dval(x) (x)->d
 
-#ifndef STRTOD_DIGLIM
-#define STRTOD_DIGLIM 40
-#endif
+#  ifndef STRTOD_DIGLIM
+#    define STRTOD_DIGLIM 40
+#  endif
 
 /* maximum permitted exponent value for strtod; exponents larger than
    MAX_ABS_EXP in absolute value get truncated to +-MAX_ABS_EXP.  MAX_ABS_EXP
    should fit into an int. */
-#ifndef MAX_ABS_EXP
-#define MAX_ABS_EXP 1100000000U
-#endif
+#  ifndef MAX_ABS_EXP
+#    define MAX_ABS_EXP 1100000000U
+#  endif
 /* Bound on length of pieces of input strings in _Py_dg_strtod; specifically,
    this is used to bound the total number of digits ignoring leading zeros and
    the number of digits that follow the decimal point.  Ideally, MAX_DIGITS
    should satisfy MAX_DIGITS + 400 < MAX_ABS_EXP; that ensures that the
    exponent clipping in _Py_dg_strtod can't affect the value of the output. */
-#ifndef MAX_DIGITS
-#define MAX_DIGITS 1000000000U
-#endif
+#  ifndef MAX_DIGITS
+#    define MAX_DIGITS 1000000000U
+#  endif
 
 /* Guard against trying to use the above values on unusual platforms with ints
  * of width less than 32 bits. */
-#if MAX_ABS_EXP > INT_MAX
-#error "MAX_ABS_EXP should fit in an int"
-#endif
-#if MAX_DIGITS > INT_MAX
-#error "MAX_DIGITS should fit in an int"
-#endif
+#  if MAX_ABS_EXP > INT_MAX
+#    error "MAX_ABS_EXP should fit in an int"
+#  endif
+#  if MAX_DIGITS > INT_MAX
+#    error "MAX_DIGITS should fit in an int"
+#  endif
 
 /* The following definition of Storeinc is appropriate for MIPS processors.
  * An alternative that might be better on some machines is
  * #define Storeinc(a,b,c) (*a++ = b << 16 | c & 0xffff)
  */
-#if defined(IEEE_8087)
-#define Storeinc(a,b,c) (((unsigned short *)a)[1] = (unsigned short)b,  \
+#  if defined(IEEE_8087)
+#    define Storeinc(a,b,c) (((unsigned short *)a)[1] = (unsigned short)b,  \
                          ((unsigned short *)a)[0] = (unsigned short)c, a++)
-#else
-#define Storeinc(a,b,c) (((unsigned short *)a)[0] = (unsigned short)b,  \
+#  else
+#    define Storeinc(a,b,c) (((unsigned short *)a)[0] = (unsigned short)b,  \
                          ((unsigned short *)a)[1] = (unsigned short)c, a++)
-#endif
+#  endif
 
 /* #define P DBL_MANT_DIG */
 /* Ten_pmax = floor(P*log(2)/log(5)) */
@@ -233,55 +233,55 @@ typedef union { double d; ULong L[2]; } U;
 /* Quick_max = floor((P-1)*log(FLT_RADIX)/log(10) - 1) */
 /* Int_max = floor(P*log(FLT_RADIX)/log(10) - 1) */
 
-#define Exp_shift  20
-#define Exp_shift1 20
-#define Exp_msk1    0x100000
-#define Exp_msk11   0x100000
-#define Exp_mask  0x7ff00000
-#define P 53
-#define Nbits 53
-#define Bias 1023
-#define Emax 1023
-#define Emin (-1022)
-#define Etiny (-1074)  /* smallest denormal is 2**Etiny */
-#define Exp_1  0x3ff00000
-#define Exp_11 0x3ff00000
-#define Ebits 11
-#define Frac_mask  0xfffff
-#define Frac_mask1 0xfffff
-#define Ten_pmax 22
-#define Bletch 0x10
-#define Bndry_mask  0xfffff
-#define Bndry_mask1 0xfffff
-#define Sign_bit 0x80000000
-#define Log2P 1
-#define Tiny0 0
-#define Tiny1 1
-#define Quick_max 14
-#define Int_max 14
+#  define Exp_shift  20
+#  define Exp_shift1 20
+#  define Exp_msk1    0x100000
+#  define Exp_msk11   0x100000
+#  define Exp_mask  0x7ff00000
+#  define P 53
+#  define Nbits 53
+#  define Bias 1023
+#  define Emax 1023
+#  define Emin (-1022)
+#  define Etiny (-1074)  /* smallest denormal is 2**Etiny */
+#  define Exp_1  0x3ff00000
+#  define Exp_11 0x3ff00000
+#  define Ebits 11
+#  define Frac_mask  0xfffff
+#  define Frac_mask1 0xfffff
+#  define Ten_pmax 22
+#  define Bletch 0x10
+#  define Bndry_mask  0xfffff
+#  define Bndry_mask1 0xfffff
+#  define Sign_bit 0x80000000
+#  define Log2P 1
+#  define Tiny0 0
+#  define Tiny1 1
+#  define Quick_max 14
+#  define Int_max 14
 
-#ifndef Flt_Rounds
-#ifdef FLT_ROUNDS
-#define Flt_Rounds FLT_ROUNDS
-#else
-#define Flt_Rounds 1
-#endif
-#endif /*Flt_Rounds*/
+#  ifndef Flt_Rounds
+#    ifdef FLT_ROUNDS
+#      define Flt_Rounds FLT_ROUNDS
+#    else
+#      define Flt_Rounds 1
+#    endif
+#  endif /*Flt_Rounds*/
 
-#define Rounding Flt_Rounds
+#  define Rounding Flt_Rounds
 
-#define Big0 (Frac_mask1 | Exp_msk1*(DBL_MAX_EXP+Bias-1))
-#define Big1 0xffffffff
+#  define Big0 (Frac_mask1 | Exp_msk1*(DBL_MAX_EXP+Bias-1))
+#  define Big1 0xffffffff
 
 /* Standard NaN used by _Py_dg_stdnan. */
 
-#define NAN_WORD0 0x7ff80000
-#define NAN_WORD1 0
+#  define NAN_WORD0 0x7ff80000
+#  define NAN_WORD1 0
 
 /* Bits of the representation of positive infinity. */
 
-#define POSINF_WORD0 0x7ff00000
-#define POSINF_WORD1 0
+#  define POSINF_WORD0 0x7ff00000
+#  define POSINF_WORD1 0
 
 /* struct BCinfo is used to pass information from _Py_dg_strtod to bigcomp */
 
@@ -291,9 +291,9 @@ BCinfo {
     int e0, nd, nd0, scale;
 };
 
-#define FFFFFFFF 0xffffffffUL
+#  define FFFFFFFF 0xffffffffUL
 
-#define Kmax 7
+#  define Kmax 7
 
 /* struct Bigint is used to represent arbitrary-precision integers.  These
    integers are stored in sign-magnitude format, with the magnitude stored as
@@ -326,7 +326,7 @@ Bigint {
 
 typedef struct Bigint Bigint;
 
-#ifndef Py_USING_MEMORY_DEBUGGER
+#  ifndef Py_USING_MEMORY_DEBUGGER
 
 /* Memory management: memory is allocated from, and returned to, Kmax+1 pools
    of memory, where pool k (0 <= k <= Kmax) is for Bigints b with b->maxwds ==
@@ -395,7 +395,7 @@ Bfree(Bigint *v)
     }
 }
 
-#else
+#  else
 
 /* Alternative versions of Balloc and Bfree that use PyMem_Malloc and
    PyMem_Free directly in place of the custom memory allocation scheme above.
@@ -435,9 +435,9 @@ Bfree(Bigint *v)
     }
 }
 
-#endif /* Py_USING_MEMORY_DEBUGGER */
+#  endif /* Py_USING_MEMORY_DEBUGGER */
 
-#define Bcopy(x,y) memcpy((char *)&x->sign, (char *)&y->sign,   \
+#  define Bcopy(x,y) memcpy((char *)&x->sign, (char *)&y->sign,   \
                           y->wds*sizeof(Long) + 2*sizeof(int))
 
 /* Multiply a Bigint b by m and add a.  Either modifies b in place and returns
@@ -671,7 +671,7 @@ mult(Bigint *a, Bigint *b)
     return c;
 }
 
-#ifndef Py_USING_MEMORY_DEBUGGER
+#  ifndef Py_USING_MEMORY_DEBUGGER
 
 /* p5s is a linked list of powers of 5 of the form 5**(2**i), i >= 2 */
 
@@ -732,7 +732,7 @@ pow5mult(Bigint *b, int k)
     return b;
 }
 
-#else
+#  else
 
 /* Version of pow5mult that doesn't cache powers of 5. Provided for
    the benefit of memory debugging tools like Valgrind. */
@@ -782,7 +782,7 @@ pow5mult(Bigint *b, int k)
     return b;
 }
 
-#endif /* Py_USING_MEMORY_DEBUGGER */
+#  endif /* Py_USING_MEMORY_DEBUGGER */
 
 /* shift a Bigint b left by k bits.  Return a pointer to the shifted result,
    or NULL on failure.  If the returned pointer is distinct from b then the
@@ -843,12 +843,12 @@ cmp(Bigint *a, Bigint *b)
 
     i = a->wds;
     j = b->wds;
-#ifdef DEBUG
+#  ifdef DEBUG
     if (i > 1 && !a->x[i-1])
         Bug("cmp called with a->x[a->wds-1] == 0");
     if (j > 1 && !b->x[j-1])
         Bug("cmp called with b->x[b->wds-1] == 0");
-#endif
+#  endif
     if (i -= j)
         return i;
     xa0 = a->x;
@@ -949,9 +949,9 @@ b2d(Bigint *a, int *e)
     xa0 = a->x;
     xa = xa0 + a->wds;
     y = *--xa;
-#ifdef DEBUG
+#  ifdef DEBUG
     if (!y) Bug("zero y in b2d");
-#endif
+#  endif
     k = hi0bits(y);
     *e = 32 - k;
     if (k < Ebits) {
@@ -1134,12 +1134,12 @@ static const double tinytens[] = { 1e-16, 1e-32, 1e-64, 1e-128,
 };
 /* The factor of 2^53 in tinytens[4] helps us avoid setting the underflow */
 /* flag unnecessarily.  It leads to a song and dance at the end of strtod. */
-#define Scale_Bit 0x10
-#define n_bigtens 5
+#  define Scale_Bit 0x10
+#  define n_bigtens 5
 
-#define ULbits 32
-#define kshift 5
-#define kmask 31
+#  define ULbits 32
+#  define kshift 5
+#  define kmask 31
 
 
 static int
@@ -1163,10 +1163,10 @@ quorem(Bigint *b, Bigint *S)
     ULLong borrow, carry, y, ys;
 
     n = S->wds;
-#ifdef DEBUG
+#  ifdef DEBUG
     /*debug*/ if (b->wds > n)
         /*debug*/       Bug("oversize b in quorem");
-#endif
+#  endif
     if (b->wds < n)
         return 0;
     sx = S->x;
@@ -1174,10 +1174,10 @@ quorem(Bigint *b, Bigint *S)
     bx = b->x;
     bxe = bx + n;
     q = *bxe / (*sxe + 1);      /* ensure q <= true quotient */
-#ifdef DEBUG
+#  ifdef DEBUG
     /*debug*/ if (q > 9)
         /*debug*/       Bug("oversized quotient in quorem");
-#endif
+#  endif
     if (q) {
         borrow = 0;
         carry = 0;
@@ -2641,7 +2641,7 @@ _Py_dg_dtoa(double dd, int mode, int ndigits,
      * and for all and pass them and a shift to quorem, so it
      * can do shifts and ors to compute the numerator for q.
      */
-#define iInc 28
+#  define iInc 28
     i = dshift(S, s2);
     b2 += i;
     m2 += i;
@@ -2840,8 +2840,8 @@ _Py_dg_dtoa(double dd, int mode, int ndigits,
         _Py_dg_freedtoa(s0);
     return NULL;
 }
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif  /* PY_NO_SHORT_FLOAT_REPR */

@@ -34,7 +34,7 @@ Copyright (c) Corporation for National Research Initiatives.
 #include "Python.h"
 
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 /*[clinic input]

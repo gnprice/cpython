@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef MS_WINDOWS
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
 /* To avoid a circular dependency on frozen.o, we create our own structure

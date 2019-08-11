@@ -1,10 +1,10 @@
 /* Abstract Object Interface (many thanks to Jim Fulton) */
 
 #ifndef Py_ABSTRACTOBJECT_H
-#define Py_ABSTRACTOBJECT_H
-#ifdef __cplusplus
+#  define Py_ABSTRACTOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /* === Object Protocol ================================================== */
 
@@ -88,7 +88,7 @@ extern "C" {
    -1 on failure.
 
    This is the equivalent of the Python statement: del o.attr_name. */
-#define PyObject_DelAttrString(O,A) PyObject_SetAttrString((O),(A), NULL)
+#  define PyObject_DelAttrString(O,A) PyObject_SetAttrString((O),(A), NULL)
 
 
 /* Implemented as a macro:
@@ -98,7 +98,7 @@ extern "C" {
    Delete attribute named attr_name, for object o. Returns -1
    on failure.  This is the equivalent of the Python
    statement: del o.attr_name. */
-#define  PyObject_DelAttr(O,A) PyObject_SetAttr((O),(A), NULL)
+#  define  PyObject_DelAttr(O,A) PyObject_SetAttr((O),(A), NULL)
 
 
 /* Implemented elsewhere:
@@ -135,16 +135,16 @@ extern "C" {
    This function always succeeds. */
 
 
-#ifdef PY_SSIZE_T_CLEAN
-#  define PyObject_CallFunction _PyObject_CallFunction_SizeT
-#  define PyObject_CallMethod _PyObject_CallMethod_SizeT
-#endif
+#  ifdef PY_SSIZE_T_CLEAN
+#    define PyObject_CallFunction _PyObject_CallFunction_SizeT
+#    define PyObject_CallMethod _PyObject_CallMethod_SizeT
+#  endif
 
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03090000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03090000
 /* Call a callable Python object without any arguments */
 PyAPI_FUNC(PyObject *) PyObject_CallNoArgs(PyObject *func);
-#endif
+#  endif
 
 
 /* Call a callable Python object 'callable' with arguments given by the
@@ -278,9 +278,9 @@ PyAPI_FUNC(Py_ssize_t) PyObject_Size(PyObject *o);
 
 
 /* For DLL compatibility */
-#undef PyObject_Length
+#  undef PyObject_Length
 PyAPI_FUNC(Py_ssize_t) PyObject_Length(PyObject *o);
-#define PyObject_Length PyObject_Size
+#  define PyObject_Length PyObject_Size
 
 /* Return element of 'o' corresponding to the object 'key'. Return NULL
   on failure.
@@ -408,10 +408,10 @@ PyAPI_FUNC(PyObject *) PyNumber_Subtract(PyObject *o1, PyObject *o2);
    This is the equivalent of the Python expression: o1 * o2. */
 PyAPI_FUNC(PyObject *) PyNumber_Multiply(PyObject *o1, PyObject *o2);
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 /* This is the equivalent of the Python expression: o1 @ o2. */
 PyAPI_FUNC(PyObject *) PyNumber_MatrixMultiply(PyObject *o1, PyObject *o2);
-#endif
+#  endif
 
 /* Returns the result of dividing o1 by o2 giving an integral result,
    or NULL on failure.
@@ -541,10 +541,10 @@ PyAPI_FUNC(PyObject *) PyNumber_InPlaceSubtract(PyObject *o1, PyObject *o2);
    This is the equivalent of the Python expression: o1 *= o2. */
 PyAPI_FUNC(PyObject *) PyNumber_InPlaceMultiply(PyObject *o1, PyObject *o2);
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 /* This is the equivalent of the Python expression: o1 @= o2. */
 PyAPI_FUNC(PyObject *) PyNumber_InPlaceMatrixMultiply(PyObject *o1, PyObject *o2);
-#endif
+#  endif
 
 /* Returns the result of dividing o1 by o2 giving an integral result, possibly
    in-place, or NULL on failure.
@@ -623,9 +623,9 @@ PyAPI_FUNC(int) PySequence_Check(PyObject *o);
 PyAPI_FUNC(Py_ssize_t) PySequence_Size(PyObject *o);
 
 /* For DLL compatibility */
-#undef PySequence_Length
+#  undef PySequence_Length
 PyAPI_FUNC(Py_ssize_t) PySequence_Length(PyObject *o);
-#define PySequence_Length PySequence_Size
+#  define PySequence_Length PySequence_Size
 
 
 /* Return the concatenation of o1 and o2 on success, and NULL on failure.
@@ -693,17 +693,17 @@ PyAPI_FUNC(PyObject *) PySequence_Fast(PyObject *o, const char* m);
 
 /* Return the size of the sequence 'o', assuming that 'o' was returned by
    PySequence_Fast and is not NULL. */
-#define PySequence_Fast_GET_SIZE(o) \
+#  define PySequence_Fast_GET_SIZE(o) \
     (PyList_Check(o) ? PyList_GET_SIZE(o) : PyTuple_GET_SIZE(o))
 
 /* Return the 'i'-th element of the sequence 'o', assuming that o was returned
    by PySequence_Fast, and that i is within bounds. */
-#define PySequence_Fast_GET_ITEM(o, i)\
+#  define PySequence_Fast_GET_ITEM(o, i)\
      (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
 
 /* Return a pointer to the underlying item array for
    an object returned by PySequence_Fast */
-#define PySequence_Fast_ITEMS(sf) \
+#  define PySequence_Fast_ITEMS(sf) \
     (PyList_Check(sf) ? ((PyListObject *)(sf))->ob_item \
                       : ((PyTupleObject *)(sf))->ob_item)
 
@@ -721,7 +721,7 @@ PyAPI_FUNC(Py_ssize_t) PySequence_Count(PyObject *o, PyObject *value);
 PyAPI_FUNC(int) PySequence_Contains(PyObject *seq, PyObject *ob);
 
 /* For DLL-level backwards compatibility */
-#undef PySequence_In
+#  undef PySequence_In
 /* Determine if the sequence 'o' contains 'value'. If an item in 'o' is equal
    to 'value', return 1, otherwise return 0. On error, return -1.
 
@@ -729,7 +729,7 @@ PyAPI_FUNC(int) PySequence_Contains(PyObject *seq, PyObject *ob);
 PyAPI_FUNC(int) PySequence_In(PyObject *o, PyObject *value);
 
 /* For source-level backwards compatibility */
-#define PySequence_In PySequence_Contains
+#  define PySequence_In PySequence_Contains
 
 
 /* Return the first index for which o[i] == value.
@@ -766,9 +766,9 @@ PyAPI_FUNC(int) PyMapping_Check(PyObject *o);
 PyAPI_FUNC(Py_ssize_t) PyMapping_Size(PyObject *o);
 
 /* For DLL compatibility */
-#undef PyMapping_Length
+#  undef PyMapping_Length
 PyAPI_FUNC(Py_ssize_t) PyMapping_Length(PyObject *o);
-#define PyMapping_Length PyMapping_Size
+#  define PyMapping_Length PyMapping_Size
 
 
 /* Implemented as a macro:
@@ -779,7 +779,7 @@ PyAPI_FUNC(Py_ssize_t) PyMapping_Length(PyObject *o);
    failure.
 
    This is equivalent to the Python statement: del o[key]. */
-#define PyMapping_DelItemString(O,K) PyObject_DelItemString((O),(K))
+#  define PyMapping_DelItemString(O,K) PyObject_DelItemString((O),(K))
 
 /* Implemented as a macro:
 
@@ -789,7 +789,7 @@ PyAPI_FUNC(Py_ssize_t) PyMapping_Length(PyObject *o);
    Returns -1 on failure.
 
    This is equivalent to the Python statement: del o[key]. */
-#define PyMapping_DelItem(O,K) PyObject_DelItem((O),(K))
+#  define PyMapping_DelItem(O,K) PyObject_DelItem((O),(K))
 
 /* On success, return 1 if the mapping object 'o' has the key 'key',
    and 0 otherwise.
@@ -838,13 +838,13 @@ PyAPI_FUNC(int) PyObject_IsInstance(PyObject *object, PyObject *typeorclass);
 /* issubclass(object, typeorclass) */
 PyAPI_FUNC(int) PyObject_IsSubclass(PyObject *object, PyObject *typeorclass);
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_ABSTRACTOBJECT_H
-#  include  "cpython/abstract.h"
-#  undef Py_CPYTHON_ABSTRACTOBJECT_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_ABSTRACTOBJECT_H
+#    include  "cpython/abstract.h"
+#    undef Py_CPYTHON_ABSTRACTOBJECT_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* Py_ABSTRACTOBJECT_H */

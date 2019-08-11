@@ -159,7 +159,7 @@ static struct sipkey *sip_tokey(struct sipkey *key, const void *src) {
 
 #ifdef SIPHASH_TOBIN
 
-#define sip_binof(v) sip_tobin((unsigned char[8]){ 0 }, (v))
+#  define sip_binof(v) sip_tobin((unsigned char[8]){ 0 }, (v))
 
 static void *sip_tobin(void *dst, uint64_t u64) {
 	SIP_U64TO8_LE((unsigned char *)dst, u64);
@@ -372,7 +372,7 @@ static int sip24_valid(void) {
 
 #ifdef SIPHASH_MAIN
 
-#include <stdio.h>
+#  include <stdio.h>
 
 int main(void) {
 	const int ok = sip24_valid();

@@ -81,5 +81,5 @@
 #define Py_am_anext 79
 #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 /* New in 3.5 */
-#define Py_tp_finalize 80
+#  define Py_tp_finalize 80
 #endif

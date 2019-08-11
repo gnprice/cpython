@@ -1,12 +1,12 @@
 #ifndef Py_WINREPARSE_H
-#define Py_WINREPARSE_H
+#  define Py_WINREPARSE_H
 
-#ifdef MS_WINDOWS
-#include <windows.h>
+#  ifdef MS_WINDOWS
+#    include <windows.h>
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 /* The following structure was copied from
    http://msdn.microsoft.com/en-us/library/ff552012.aspx as the required
@@ -41,19 +41,19 @@ typedef struct {
     };
 } _Py_REPARSE_DATA_BUFFER, *_Py_PREPARSE_DATA_BUFFER;
 
-#define _Py_REPARSE_DATA_BUFFER_HEADER_SIZE \
+#    define _Py_REPARSE_DATA_BUFFER_HEADER_SIZE \
     FIELD_OFFSET(_Py_REPARSE_DATA_BUFFER, GenericReparseBuffer)
-#define _Py_MAXIMUM_REPARSE_DATA_BUFFER_SIZE  ( 16 * 1024 )
+#    define _Py_MAXIMUM_REPARSE_DATA_BUFFER_SIZE  ( 16 * 1024 )
 
 // Defined in WinBase.h in 'recent' versions of Windows 10 SDK
-#ifndef SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
-#define SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE 0x2
-#endif
+#    ifndef SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE
+#      define SYMBOLIC_LINK_FLAG_ALLOW_UNPRIVILEGED_CREATE 0x2
+#    endif
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
+#    endif
 
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
 #endif /* !Py_WINREPARSE_H */

@@ -10,15 +10,15 @@ extern int winerror_to_errno(int);
 #endif
 
 #ifdef HAVE_LANGINFO_H
-#include <langinfo.h>
+#  include <langinfo.h>
 #endif
 
 #ifdef HAVE_SYS_IOCTL_H
-#include <sys/ioctl.h>
+#  include <sys/ioctl.h>
 #endif
 
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #endif /* HAVE_FCNTL_H */
 
 #ifdef O_CLOEXEC
@@ -87,7 +87,7 @@ _Py_device_encoding(int fd)
 
 #if !defined(_Py_FORCE_UTF8_FS_ENCODING) && !defined(MS_WINDOWS)
 
-#define USE_FORCE_ASCII
+#  define USE_FORCE_ASCII
 
 extern int _Py_normalize_encoding(const char *, char *, size_t);
 
@@ -132,7 +132,7 @@ check_force_ascii(void)
         return 0;
     }
 
-#if defined(HAVE_LANGINFO_H) && defined(CODESET)
+#  if defined(HAVE_LANGINFO_H) && defined(CODESET)
     const char *codeset = nl_langinfo(CODESET);
     if (!codeset || codeset[0] == '\0') {
         /* CODESET is not set or empty */
@@ -144,7 +144,7 @@ check_force_ascii(void)
         goto error;
     }
 
-#ifdef __hpux
+#    ifdef __hpux
     if (strcmp(encoding, "roman8") == 0) {
         unsigned char ch;
         wchar_t wch;
@@ -161,7 +161,7 @@ check_force_ascii(void)
             return 1;
         }
     }
-#else
+#    else
     const char* ascii_aliases[] = {
         "ascii",
         /* Aliases from Lib/encodings/aliases.py */
@@ -208,12 +208,12 @@ check_force_ascii(void)
     }
     /* None of the bytes in the range 0x80-0xff can be decoded from the locale
        encoding: the locale encoding is really ASCII */
-#endif   /* !defined(__hpux) */
+#    endif   /* !defined(__hpux) */
     return 0;
-#else
+#  else
     /* nl_langinfo(CODESET) is not available: always force ASCII */
     return 1;
-#endif   /* defined(HAVE_LANGINFO_H) && defined(CODESET) */
+#  endif   /* defined(HAVE_LANGINFO_H) && defined(CODESET) */
 
 error:
     /* if an error occurred, force the ASCII encoding */
@@ -549,15 +549,15 @@ _Py_DecodeLocaleEx(const char* arg, wchar_t **wstr, size_t *wlen,
                             errors);
 #else
     int use_utf8 = (Py_UTF8Mode == 1);
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     use_utf8 |= !Py_LegacyWindowsFSEncodingFlag;
-#endif
+#  endif
     if (use_utf8) {
         return _Py_DecodeUTF8Ex(arg, strlen(arg), wstr, wlen, reason,
                                 errors);
     }
 
-#ifdef USE_FORCE_ASCII
+#  ifdef USE_FORCE_ASCII
     if (force_ascii == -1) {
         force_ascii = check_force_ascii();
     }
@@ -566,7 +566,7 @@ _Py_DecodeLocaleEx(const char* arg, wchar_t **wstr, size_t *wlen,
         /* force ASCII encoding to workaround mbstowcs() issue */
         return decode_ascii(arg, wstr, wlen, reason, errors);
     }
-#endif
+#  endif
 
     return decode_current_locale(arg, wstr, wlen, reason, errors);
 #endif   /* !_Py_FORCE_UTF8_FS_ENCODING */
@@ -741,15 +741,15 @@ encode_locale_ex(const wchar_t *text, char **str, size_t *error_pos,
                             raw_malloc, errors);
 #else
     int use_utf8 = (Py_UTF8Mode == 1);
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     use_utf8 |= !Py_LegacyWindowsFSEncodingFlag;
-#endif
+#  endif
     if (use_utf8) {
         return _Py_EncodeUTF8Ex(text, str, error_pos, reason,
                                 raw_malloc, errors);
     }
 
-#ifdef USE_FORCE_ASCII
+#  ifdef USE_FORCE_ASCII
     if (force_ascii == -1) {
         force_ascii = check_force_ascii();
     }
@@ -758,7 +758,7 @@ encode_locale_ex(const wchar_t *text, char **str, size_t *error_pos,
         return encode_ascii(text, str, error_pos, reason,
                             raw_malloc, errors);
     }
-#endif
+#  endif
 
     return encode_current_locale(text, str, error_pos, reason,
                                  raw_malloc, errors);
@@ -846,9 +846,9 @@ _Py_time_t_to_FILE_TIME(time_t time_in, int nsec_in, FILETIME *out_ptr)
 }
 
 /* Below, we *know* that ugo+r is 0444 */
-#if _S_IREAD != 0400
-#error Unsupported C library
-#endif
+#  if _S_IREAD != 0400
+#    error Unsupported C library
+#  endif
 static int
 attributes_to_mode(DWORD attr)
 {
@@ -1090,11 +1090,11 @@ set_inheritable(int fd, int inheritable, int raise, int *atomic_flag_works)
     HANDLE handle;
     DWORD flags;
 #else
-#if defined(HAVE_SYS_IOCTL_H) && defined(FIOCLEX) && defined(FIONCLEX)
+#  if defined(HAVE_SYS_IOCTL_H) && defined(FIOCLEX) && defined(FIONCLEX)
     static int ioctl_works = -1;
     int request;
     int err;
-#endif
+#  endif
     int flags, new_flags;
     int res;
 #endif
@@ -1138,7 +1138,7 @@ set_inheritable(int fd, int inheritable, int raise, int *atomic_flag_works)
 
 #else
 
-#if defined(HAVE_SYS_IOCTL_H) && defined(FIOCLEX) && defined(FIONCLEX)
+#  if defined(HAVE_SYS_IOCTL_H) && defined(FIOCLEX) && defined(FIONCLEX)
     if (ioctl_works != 0 && raise != 0) {
         /* fast-path: ioctl() only requires one syscall */
         /* caveat: raise=0 is an indicator that we must be async-signal-safe
@@ -1172,7 +1172,7 @@ set_inheritable(int fd, int inheritable, int raise, int *atomic_flag_works)
         }
         /* fallback to fcntl() if ioctl() does not work */
     }
-#endif
+#  endif
 
     /* slow-path: fcntl() requires two syscalls */
     flags = fcntl(fd, F_GETFD);
@@ -1962,11 +1962,11 @@ _Py_get_blocking(int fd)
 int
 _Py_set_blocking(int fd, int blocking)
 {
-#if defined(HAVE_SYS_IOCTL_H) && defined(FIONBIO)
+#  if defined(HAVE_SYS_IOCTL_H) && defined(FIONBIO)
     int arg = !blocking;
     if (ioctl(fd, FIONBIO, &arg) < 0)
         goto error;
-#else
+#  else
     int flags, res;
 
     _Py_BEGIN_SUPPRESS_IPH
@@ -1985,7 +1985,7 @@ _Py_set_blocking(int fd, int blocking)
 
     if (res < 0)
         goto error;
-#endif
+#  endif
     return 0;
 
 error:

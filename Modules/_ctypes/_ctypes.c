@@ -106,13 +106,13 @@ bytes(cdata)
 
 #include <ffi.h>
 #ifdef MS_WIN32
-#include <windows.h>
-#include <malloc.h>
-#ifndef IS_INTRESOURCE
-#define IS_INTRESOURCE(x) (((size_t)(x) >> 16) == 0)
-#endif
+#  include <windows.h>
+#  include <malloc.h>
+#  ifndef IS_INTRESOURCE
+#    define IS_INTRESOURCE(x) (((size_t)(x) >> 16) == 0)
+#  endif
 #else
-#include "ctypes_dlfcn.h"
+#  include "ctypes_dlfcn.h"
 #endif
 #include "ctypes.h"
 
@@ -276,7 +276,7 @@ _ctypes_alloc_format_string_for_type(char code, int big_endian)
     case 'i': pep_code = 'q'; break;
     case 'I': pep_code = 'Q'; break;
 #else
-# error SIZEOF_INT has an unexpected value
+#  error SIZEOF_INT has an unexpected value
 #endif /* SIZEOF_INT */
 #if SIZEOF_LONG == 4
     case 'l': pep_code = 'l'; break;
@@ -285,7 +285,7 @@ _ctypes_alloc_format_string_for_type(char code, int big_endian)
     case 'l': pep_code = 'q'; break;
     case 'L': pep_code = 'Q'; break;
 #else
-# error SIZEOF_LONG has an unexpected value
+#  error SIZEOF_LONG has an unexpected value
 #endif /* SIZEOF_LONG */
 #if SIZEOF__BOOL == 1
     case '?': pep_code = '?'; break;
@@ -296,7 +296,7 @@ _ctypes_alloc_format_string_for_type(char code, int big_endian)
 #elif SIZEOF__BOOL == 8
     case '?': pep_code = 'Q'; break;
 #else
-# error SIZEOF__BOOL has an unexpected value
+#  error SIZEOF__BOOL has an unexpected value
 #endif /* SIZEOF__BOOL */
     default:
         /* The standard-size code is the same as the ctypes one */
@@ -701,14 +701,14 @@ CDataType_in_dll(PyObject *type, PyObject *args)
 #else
     address = (void *)ctypes_dlsym(handle, name);
     if (!address) {
-#ifdef __CYGWIN__
+#  ifdef __CYGWIN__
 /* dlerror() isn't very helpful on cygwin */
         PyErr_Format(PyExc_ValueError,
                      "symbol '%s' not found",
                      name);
-#else
+#  else
         PyErr_SetString(PyExc_ValueError, ctypes_dlerror());
-#endif
+#  endif
         return NULL;
     }
 #endif
@@ -3263,7 +3263,7 @@ static PyGetSetDef PyCFuncPtr_getsets[] = {
 static PPROC FindAddress(void *handle, const char *name, PyObject *type)
 {
     PPROC address;
-#ifdef MS_WIN64
+#  ifdef MS_WIN64
     /* win64 has no stdcall calling conv, so it should
        also not have the name mangling of it.
     */
@@ -3271,7 +3271,7 @@ static PPROC FindAddress(void *handle, const char *name, PyObject *type)
     address = (PPROC)GetProcAddress(handle, name);
     Py_END_ALLOW_THREADS
     return address;
-#else
+#  else
     char *mangled_name;
     int i;
     StgDictObject *dict;
@@ -3306,7 +3306,7 @@ static PPROC FindAddress(void *handle, const char *name, PyObject *type)
             return address;
     }
     return NULL;
-#endif
+#  endif
 }
 #endif
 
@@ -3509,14 +3509,14 @@ PyCFuncPtr_FromDll(PyTypeObject *type, PyObject *args, PyObject *kwds)
 #else
     address = (PPROC)ctypes_dlsym(handle, name);
     if (!address) {
-#ifdef __CYGWIN__
+#  ifdef __CYGWIN__
 /* dlerror() isn't very helpful on cygwin */
         PyErr_Format(PyExc_AttributeError,
                      "function '%s' not found",
                      name);
-#else
+#  else
         PyErr_SetString(PyExc_AttributeError, ctypes_dlerror());
-#endif
+#  endif
         Py_DECREF(ftuple);
         return NULL;
     }
@@ -5724,14 +5724,14 @@ PyInit__ctypes(void)
 
 /* If RTLD_LOCAL is not defined (Windows!), set it to zero. */
 #if !HAVE_DECL_RTLD_LOCAL
-#define RTLD_LOCAL 0
+#  define RTLD_LOCAL 0
 #endif
 
 /* If RTLD_GLOBAL is not defined (cygwin), set it to the same value as
    RTLD_LOCAL.
 */
 #if !HAVE_DECL_RTLD_GLOBAL
-#define RTLD_GLOBAL RTLD_LOCAL
+#  define RTLD_GLOBAL RTLD_LOCAL
 #endif
 
     PyModule_AddObject(m, "RTLD_LOCAL", PyLong_FromLong(RTLD_LOCAL));

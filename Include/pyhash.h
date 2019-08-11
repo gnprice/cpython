@@ -1,34 +1,34 @@
 #ifndef Py_HASH_H
 
-#define Py_HASH_H
-#ifdef __cplusplus
+#  define Py_HASH_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /* Helpers for hash functions */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(Py_hash_t) _Py_HashDouble(double);
 PyAPI_FUNC(Py_hash_t) _Py_HashPointer(void*);
 PyAPI_FUNC(Py_hash_t) _Py_HashBytes(const void*, Py_ssize_t);
-#endif
+#  endif
 
 /* Prime multiplier used in string and various other hashes. */
-#define _PyHASH_MULTIPLIER 1000003UL  /* 0xf4243 */
+#  define _PyHASH_MULTIPLIER 1000003UL  /* 0xf4243 */
 
 /* Parameters used for the numeric hash implementation.  See notes for
    _Py_HashDouble in Python/pyhash.c.  Numeric hashes are based on
    reduction modulo the prime 2**_PyHASH_BITS - 1. */
 
-#if SIZEOF_VOID_P >= 8
-#  define _PyHASH_BITS 61
-#else
-#  define _PyHASH_BITS 31
-#endif
+#  if SIZEOF_VOID_P >= 8
+#    define _PyHASH_BITS 61
+#  else
+#    define _PyHASH_BITS 31
+#  endif
 
-#define _PyHASH_MODULUS (((size_t)1 << _PyHASH_BITS) - 1)
-#define _PyHASH_INF 314159
-#define _PyHASH_NAN 0
-#define _PyHASH_IMAG _PyHASH_MULTIPLIER
+#  define _PyHASH_MODULUS (((size_t)1 << _PyHASH_BITS) - 1)
+#  define _PyHASH_INF 314159
+#  define _PyHASH_NAN 0
+#  define _PyHASH_IMAG _PyHASH_MULTIPLIER
 
 
 /* hash secret
@@ -50,7 +50,7 @@ PyAPI_FUNC(Py_hash_t) _Py_HashBytes(const void*, Py_ssize_t);
  * (*) The siphash member may not be available on 32 bit platforms without
  *     an unsigned int64 data type.
  */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef union {
     /* ensure 24 bytes */
     unsigned char uc[24];
@@ -75,15 +75,15 @@ typedef union {
     } expat;
 } _Py_HashSecret_t;
 PyAPI_DATA(_Py_HashSecret_t) _Py_HashSecret;
-#endif
+#  endif
 
-#ifdef Py_DEBUG
+#  ifdef Py_DEBUG
 PyAPI_DATA(int) _Py_HashSecret_Initialized;
-#endif
+#  endif
 
 
 /* hash function definition */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef struct {
     Py_hash_t (*const hash)(const void *, Py_ssize_t);
     const char *name;
@@ -92,7 +92,7 @@ typedef struct {
 } PyHash_FuncDef;
 
 PyAPI_FUNC(PyHash_FuncDef*) PyHash_GetFuncDef(void);
-#endif
+#  endif
 
 
 /* cutoff for small string DJBX33A optimization in range [1, cutoff).
@@ -106,11 +106,11 @@ PyAPI_FUNC(PyHash_FuncDef*) PyHash_GetFuncDef(void);
  * strings. A cutoff of 7 on 64bit platforms and 5 on 32bit platforms should
  * provide a decent safety margin.
  */
-#ifndef Py_HASH_CUTOFF
-#  define Py_HASH_CUTOFF 0
-#elif (Py_HASH_CUTOFF > 7 || Py_HASH_CUTOFF < 0)
-#  error Py_HASH_CUTOFF must in range 0...7.
-#endif /* Py_HASH_CUTOFF */
+#  ifndef Py_HASH_CUTOFF
+#    define Py_HASH_CUTOFF 0
+#  elif (Py_HASH_CUTOFF > 7 || Py_HASH_CUTOFF < 0)
+#    error Py_HASH_CUTOFF must in range 0...7.
+#  endif /* Py_HASH_CUTOFF */
 
 
 /* hash algorithm selection
@@ -126,20 +126,20 @@ PyAPI_FUNC(PyHash_FuncDef*) PyHash_GetFuncDef(void);
  *
  * XXX: Figure out __declspec() for extern PyHash_FuncDef.
  */
-#define Py_HASH_EXTERNAL 0
-#define Py_HASH_SIPHASH24 1
-#define Py_HASH_FNV 2
+#  define Py_HASH_EXTERNAL 0
+#  define Py_HASH_SIPHASH24 1
+#  define Py_HASH_FNV 2
 
-#ifndef Py_HASH_ALGORITHM
-#  ifndef HAVE_ALIGNED_REQUIRED
-#    define Py_HASH_ALGORITHM Py_HASH_SIPHASH24
-#  else
-#    define Py_HASH_ALGORITHM Py_HASH_FNV
-#  endif /* uint64_t && uint32_t && aligned */
-#endif /* Py_HASH_ALGORITHM */
+#  ifndef Py_HASH_ALGORITHM
+#    ifndef HAVE_ALIGNED_REQUIRED
+#      define Py_HASH_ALGORITHM Py_HASH_SIPHASH24
+#    else
+#      define Py_HASH_ALGORITHM Py_HASH_FNV
+#    endif /* uint64_t && uint32_t && aligned */
+#  endif /* Py_HASH_ALGORITHM */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif /* !Py_HASH_H */

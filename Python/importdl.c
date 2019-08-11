@@ -10,18 +10,18 @@
 */
 #ifdef HAVE_DYNAMIC_LOADING
 
-#include "importdl.h"
+#  include "importdl.h"
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 extern dl_funcptr _PyImport_FindSharedFuncptrWindows(const char *prefix,
                                                      const char *shortname,
                                                      PyObject *pathname,
                                                      FILE *fp);
-#else
+#  else
 extern dl_funcptr _PyImport_FindSharedFuncptr(const char *prefix,
                                               const char *shortname,
                                               const char *pathname, FILE *fp);
-#endif
+#  endif
 
 static const char * const ascii_only_prefix = "PyInit";
 static const char * const nonascii_prefix = "PyInitU";
@@ -89,9 +89,9 @@ error:
 PyObject *
 _PyImport_LoadDynamicModuleWithSpec(PyObject *spec, FILE *fp)
 {
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     PyObject *pathbytes = NULL;
-#endif
+#  endif
     PyObject *name_unicode = NULL, *name = NULL, *path = NULL, *m = NULL;
     const char *name_buf, *hook_prefix;
     const char *oldcontext;
@@ -124,10 +124,10 @@ _PyImport_LoadDynamicModuleWithSpec(PyObject *spec, FILE *fp)
         return NULL;
     }
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     exportfunc = _PyImport_FindSharedFuncptrWindows(hook_prefix, name_buf,
                                                     path, fp);
-#else
+#  else
     pathbytes = PyUnicode_EncodeFSDefault(path);
     if (pathbytes == NULL)
         goto error;
@@ -135,7 +135,7 @@ _PyImport_LoadDynamicModuleWithSpec(PyObject *spec, FILE *fp)
                                              PyBytes_AS_STRING(pathbytes),
                                              fp);
     Py_DECREF(pathbytes);
-#endif
+#  endif
 
     if (exportfunc == NULL) {
         if (!PyErr_Occurred()) {

@@ -66,13 +66,13 @@ static PySocketModule_APIObject PySocketModule;
 #include "openssl/dh.h"
 
 #ifndef HAVE_X509_VERIFY_PARAM_SET1_HOST
-#  ifdef LIBRESSL_VERSION_NUMBER
-#    error "LibreSSL is missing X509_VERIFY_PARAM_set1_host(), see https://github.com/libressl-portable/portable/issues/381"
-#  elif OPENSSL_VERSION_NUMBER > 0x1000200fL
-#    define HAVE_X509_VERIFY_PARAM_SET1_HOST
-#  else
-#    error "libssl is too old and does not support X509_VERIFY_PARAM_set1_host()"
-#  endif
+#ifdef LIBRESSL_VERSION_NUMBER
+#  error "LibreSSL is missing X509_VERIFY_PARAM_set1_host(), see https://github.com/libressl-portable/portable/issues/381"
+#elif OPENSSL_VERSION_NUMBER > 0x1000200fL
+#  define HAVE_X509_VERIFY_PARAM_SET1_HOST
+#else
+#  error "libssl is too old and does not support X509_VERIFY_PARAM_set1_host()"
+#endif
 #endif
 
 /* SSL error object */
@@ -136,37 +136,37 @@ static void _PySSLFixErrno(void) {
 #include "_ssl_data.h"
 
 #if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && !defined(LIBRESSL_VERSION_NUMBER)
-#  define OPENSSL_VERSION_1_1 1
-#  define PY_OPENSSL_1_1_API 1
+#define OPENSSL_VERSION_1_1 1
+#define PY_OPENSSL_1_1_API 1
 #endif
 
 /* LibreSSL 2.7.0 provides necessary OpenSSL 1.1.0 APIs */
 #if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x2070000fL
-#  define PY_OPENSSL_1_1_API 1
+#define PY_OPENSSL_1_1_API 1
 #endif
 
 /* Openssl comes with TLSv1.1 and TLSv1.2 between 1.0.0h and 1.0.1
     http://www.openssl.org/news/changelog.html
  */
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
-# define HAVE_TLSv1_2 1
+#define HAVE_TLSv1_2 1
 #else
-# define HAVE_TLSv1_2 0
+#define HAVE_TLSv1_2 0
 #endif
 
 /* SNI support (client- and server-side) appeared in OpenSSL 1.0.0 and 0.9.8f
  * This includes the SSL_set_SSL_CTX() function.
  */
 #ifdef SSL_CTRL_SET_TLSEXT_HOSTNAME
-# define HAVE_SNI 1
+#define HAVE_SNI 1
 #else
-# define HAVE_SNI 0
+#define HAVE_SNI 0
 #endif
 
 #ifdef TLSEXT_TYPE_application_layer_protocol_negotiation
-# define HAVE_ALPN 1
+#define HAVE_ALPN 1
 #else
-# define HAVE_ALPN 0
+#define HAVE_ALPN 0
 #endif
 
 /* We cannot rely on OPENSSL_NO_NEXTPROTONEG because LibreSSL 2.6.1 dropped
@@ -176,13 +176,13 @@ static void _PySSLFixErrno(void) {
  * OpenSSL 1.1.1-pre1 dropped NPN but still has TLSEXT_TYPE_next_proto_neg.
  */
 #ifdef OPENSSL_NO_NEXTPROTONEG
-# define HAVE_NPN 0
+#define HAVE_NPN 0
 #elif (OPENSSL_VERSION_NUMBER >= 0x10101000L) && !defined(LIBRESSL_VERSION_NUMBER)
-# define HAVE_NPN 0
+#define HAVE_NPN 0
 #elif defined(TLSEXT_TYPE_next_proto_neg)
-# define HAVE_NPN 1
+#define HAVE_NPN 1
 #else
-# define HAVE_NPN 0
+#define HAVE_NPN 0
 #endif
 
 #if (OPENSSL_VERSION_NUMBER >= 0x10101000L) && !defined(LIBRESSL_VERSION_NUMBER)
@@ -395,9 +395,9 @@ static unsigned int _ssl_locks_count = 0;
  * OpenSSL 0.9.8m but do not appear in some 0.9.9-dev versions such the
  * 0.9.9 from "May 2008" that NetBSD 5.0 uses. */
 #if OPENSSL_VERSION_NUMBER >= 0x009080dfL && OPENSSL_VERSION_NUMBER != 0x00909000L
-# define HAVE_SSL_CTX_CLEAR_OPTIONS
+#define HAVE_SSL_CTX_CLEAR_OPTIONS
 #else
-# undef HAVE_SSL_CTX_CLEAR_OPTIONS
+#undef HAVE_SSL_CTX_CLEAR_OPTIONS
 #endif
 
 /* In case of 'tls-unique' it will be 12 bytes for TLS, 36 bytes for

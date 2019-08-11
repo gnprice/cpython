@@ -49,90 +49,90 @@
    -------------------------------------------------------------------- */
 
 #ifndef LIBFFI_H
-#define LIBFFI_H
+#  define LIBFFI_H
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /*	Specify which architecture libffi is configured for. */
-#ifdef MACOSX
-#	if defined(__i386__) || defined(__x86_64__)
-#		define X86_DARWIN
-#	elif defined(__ppc__) || defined(__ppc64__)
-#		define POWERPC_DARWIN
-#	else
-#	error "Unsupported MacOS X CPU type"
-#	endif
-#else
-#error "Unsupported OS type"
-#endif
+#  ifdef MACOSX
+#    if defined(__i386__) || defined(__x86_64__)
+#      define X86_DARWIN
+#    elif defined(__ppc__) || defined(__ppc64__)
+#      define POWERPC_DARWIN
+#    else
+#      error "Unsupported MacOS X CPU type"
+#    endif
+#  else
+#    error "Unsupported OS type"
+#  endif
 
 /* ---- System configuration information --------------------------------- */
 
-#include "ffitarget.h"
-#include "fficonfig.h"
+#  include "ffitarget.h"
+#  include "fficonfig.h"
 
-#ifndef LIBFFI_ASM
+#  ifndef LIBFFI_ASM
 
-#include <stddef.h>
-#include <limits.h>
+#    include <stddef.h>
+#    include <limits.h>
 
 /*	LONG_LONG_MAX is not always defined (not if STRICT_ANSI, for example).
 	But we can find it either under the correct ANSI name, or under GNU
 	C's internal name.  */
-#ifdef LONG_LONG_MAX
-#	define FFI_LONG_LONG_MAX LONG_LONG_MAX
-#else
-#	ifdef LLONG_MAX
-#		define FFI_LONG_LONG_MAX LLONG_MAX
-#	else
-#		ifdef __GNUC__
-#			define FFI_LONG_LONG_MAX __LONG_LONG_MAX__
-#		endif
-#	endif
-#endif
+#    ifdef LONG_LONG_MAX
+#      define FFI_LONG_LONG_MAX LONG_LONG_MAX
+#    else
+#      ifdef LLONG_MAX
+#        define FFI_LONG_LONG_MAX LLONG_MAX
+#      else
+#        ifdef __GNUC__
+#          define FFI_LONG_LONG_MAX __LONG_LONG_MAX__
+#        endif
+#      endif
+#    endif
 
-#if SCHAR_MAX == 127
-#	define ffi_type_uchar	ffi_type_uint8
-#	define ffi_type_schar	ffi_type_sint8
-#else
-#error "char size not supported"
-#endif
+#    if SCHAR_MAX == 127
+#      define ffi_type_uchar	ffi_type_uint8
+#      define ffi_type_schar	ffi_type_sint8
+#    else
+#      error "char size not supported"
+#    endif
 
-#if SHRT_MAX == 32767
-#	define ffi_type_ushort	ffi_type_uint16
-#	define ffi_type_sshort	ffi_type_sint16
-#elif SHRT_MAX == 2147483647
-#	define ffi_type_ushort	ffi_type_uint32
-#	define ffi_type_sshort	ffi_type_sint32
-#else
-#error "short size not supported"
-#endif
+#    if SHRT_MAX == 32767
+#      define ffi_type_ushort	ffi_type_uint16
+#      define ffi_type_sshort	ffi_type_sint16
+#    elif SHRT_MAX == 2147483647
+#      define ffi_type_ushort	ffi_type_uint32
+#      define ffi_type_sshort	ffi_type_sint32
+#    else
+#      error "short size not supported"
+#    endif
 
-#if INT_MAX == 32767
-#	define ffi_type_uint	ffi_type_uint16
-#	define ffi_type_sint	ffi_type_sint16
-#elif INT_MAX == 2147483647
-#	define ffi_type_uint	ffi_type_uint32
-#	define ffi_type_sint	ffi_type_sint32
-#elif INT_MAX == 9223372036854775807
-#	define ffi_type_uint	ffi_type_uint64
-#	define ffi_type_sint	ffi_type_sint64
-#else
-#error "int size not supported"
-#endif
+#    if INT_MAX == 32767
+#      define ffi_type_uint	ffi_type_uint16
+#      define ffi_type_sint	ffi_type_sint16
+#    elif INT_MAX == 2147483647
+#      define ffi_type_uint	ffi_type_uint32
+#      define ffi_type_sint	ffi_type_sint32
+#    elif INT_MAX == 9223372036854775807
+#      define ffi_type_uint	ffi_type_uint64
+#      define ffi_type_sint	ffi_type_sint64
+#    else
+#      error "int size not supported"
+#    endif
 
-#define ffi_type_ulong	ffi_type_uint64
-#define ffi_type_slong	ffi_type_sint64
+#    define ffi_type_ulong	ffi_type_uint64
+#    define ffi_type_slong	ffi_type_sint64
 
-#if LONG_MAX == 2147483647
-#	if FFI_LONG_LONG_MAX != 9223372036854775807
-#		error "no 64-bit data type supported"
-#	endif
-#elif LONG_MAX != 9223372036854775807
-#error "long size not supported"
-#endif
+#    if LONG_MAX == 2147483647
+#      if FFI_LONG_LONG_MAX != 9223372036854775807
+#        error "no 64-bit data type supported"
+#      endif
+#    elif LONG_MAX != 9223372036854775807
+#      error "long size not supported"
+#    endif
 
 /*	The closure code assumes that this works on pointers, i.e. a size_t
 	can hold a pointer.	*/
@@ -174,20 +174,20 @@ typedef struct	ffi_cif {
 /*@dependent@*/	ffi_type*	rtype;
 				unsigned	bytes;
 				unsigned	flags;
-#ifdef FFI_EXTRA_CIF_FIELDS
+#    ifdef FFI_EXTRA_CIF_FIELDS
 				FFI_EXTRA_CIF_FIELDS;
-#endif
+#    endif
 } ffi_cif;
 
 /* ---- Definitions for the raw API -------------------------------------- */
 
-#ifndef FFI_SIZEOF_ARG
-#	if LONG_MAX == 2147483647
-#		define FFI_SIZEOF_ARG	4
-#	elif LONG_MAX == 9223372036854775807
-#		define FFI_SIZEOF_ARG	8
-#	endif
-#endif
+#    ifndef FFI_SIZEOF_ARG
+#      if LONG_MAX == 2147483647
+#        define FFI_SIZEOF_ARG	4
+#      elif LONG_MAX == 9223372036854775807
+#        define FFI_SIZEOF_ARG	8
+#      endif
+#    endif
 
 typedef union {
 	ffi_sarg	sint;
@@ -248,7 +248,7 @@ ffi_java_raw_size(
 
 /* ---- Definitions for closures ----------------------------------------- */
 
-#if FFI_CLOSURES
+#    if FFI_CLOSURES
 
 typedef struct ffi_closure {
 	char		tramp[FFI_TRAMPOLINE_SIZE];
@@ -271,13 +271,13 @@ typedef struct ffi_raw_closure {
 	char		tramp[FFI_TRAMPOLINE_SIZE];
 	ffi_cif*	cif;
 
-#if !FFI_NATIVE_RAW_API
+#      if !FFI_NATIVE_RAW_API
 	/*	if this is enabled, then a raw closure has the same layout 
 		as a regular closure.  We use this to install an intermediate 
 		handler to do the transaltion, void** -> ffi_raw*. */
 	void	(*translate_args)(ffi_cif*,void*,void**,void*);
 	void*	this_closure;
-#endif
+#      endif
 
 	void	(*fun)(ffi_cif*,void*,ffi_raw*,void*);
 	void*	user_data;
@@ -297,7 +297,7 @@ ffi_prep_java_raw_closure(
 	void				(*fun)(ffi_cif*,void*,ffi_raw*,void*),
 	void*				user_data);
 
-#endif	// FFI_CLOSURES
+#    endif	// FFI_CLOSURES
 
 /* ---- Public interface definition -------------------------------------- */
 
@@ -317,39 +317,39 @@ ffi_call(
 /*@dependent@*/	void**		avalue);
 
 /* Useful for eliminating compiler warnings */
-#define FFI_FN(f) ((void (*)(void))f)
+#    define FFI_FN(f) ((void (*)(void))f)
 
-#endif	// #ifndef LIBFFI_ASM
+#  endif	// #ifndef LIBFFI_ASM
 /* ---- Definitions shared with assembly code ---------------------------- */
 
 /*	If these change, update src/mips/ffitarget.h. */
-#define FFI_TYPE_VOID       0
-#define FFI_TYPE_INT        1
-#define FFI_TYPE_FLOAT      2
-#define FFI_TYPE_DOUBLE     3
+#  define FFI_TYPE_VOID       0
+#  define FFI_TYPE_INT        1
+#  define FFI_TYPE_FLOAT      2
+#  define FFI_TYPE_DOUBLE     3
 
-#ifdef HAVE_LONG_DOUBLE
-#	define FFI_TYPE_LONGDOUBLE 4
-#else
-#	define FFI_TYPE_LONGDOUBLE FFI_TYPE_DOUBLE
-#endif
+#  ifdef HAVE_LONG_DOUBLE
+#    define FFI_TYPE_LONGDOUBLE 4
+#  else
+#    define FFI_TYPE_LONGDOUBLE FFI_TYPE_DOUBLE
+#  endif
 
-#define FFI_TYPE_UINT8      5
-#define FFI_TYPE_SINT8      6
-#define FFI_TYPE_UINT16     7
-#define FFI_TYPE_SINT16     8
-#define FFI_TYPE_UINT32     9
-#define FFI_TYPE_SINT32     10
-#define FFI_TYPE_UINT64     11
-#define FFI_TYPE_SINT64     12
-#define FFI_TYPE_STRUCT     13
-#define FFI_TYPE_POINTER    14
+#  define FFI_TYPE_UINT8      5
+#  define FFI_TYPE_SINT8      6
+#  define FFI_TYPE_UINT16     7
+#  define FFI_TYPE_SINT16     8
+#  define FFI_TYPE_UINT32     9
+#  define FFI_TYPE_SINT32     10
+#  define FFI_TYPE_UINT64     11
+#  define FFI_TYPE_SINT64     12
+#  define FFI_TYPE_STRUCT     13
+#  define FFI_TYPE_POINTER    14
 
 /*	This should always refer to the last type code (for sanity checks) */
-#define FFI_TYPE_LAST       FFI_TYPE_POINTER
+#  define FFI_TYPE_LAST       FFI_TYPE_POINTER
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif	// #ifndef LIBFFI_H

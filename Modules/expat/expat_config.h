@@ -7,9 +7,9 @@
 
 #include <pyconfig.h>
 #ifdef WORDS_BIGENDIAN
-#define BYTEORDER 4321
+#  define BYTEORDER 4321
 #else
-#define BYTEORDER 1234
+#  define BYTEORDER 1234
 #endif
 
 #define HAVE_MEMMOVE 1

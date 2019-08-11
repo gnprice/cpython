@@ -208,7 +208,7 @@ PyParser_ParseFileFlagsEx(FILE *fp, const char *filename,
 }
 
 #ifdef PY_PARSER_REQUIRES_FUTURE_KEYWORD
-#if 0
+#  if 0
 static const char with_msg[] =
 "%s:%d: Warning: 'with' will become a reserved keyword in Python 2.6\n";
 
@@ -222,7 +222,7 @@ warn(const char *msg, const char *filename, int lineno)
         filename = "<string>";
     PySys_WriteStderr(msg, filename, lineno);
 }
-#endif
+#  endif
 #endif
 
 /* Parse input coming from the given tokenizer structure.

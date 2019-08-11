@@ -28,11 +28,11 @@
  */
 
 #ifdef _MSC_VER
-# include <windows.h>
+#  include <windows.h>
 #endif
 
 #ifdef __cplusplus
-# error "This file should be built as pure C to avoid name mangling"
+#  error "This file should be built as pure C to avoid name mangling"
 #endif
 
 #include <stdlib.h>
@@ -115,16 +115,16 @@ void AnnotateNoOp(const char *file, int line,
 void AnnotateFlushState(const char *file, int line){}
 
 static int GetRunningOnValgrind(void) {
-#ifdef RUNNING_ON_VALGRIND
+#  ifdef RUNNING_ON_VALGRIND
   if (RUNNING_ON_VALGRIND) return 1;
-#endif
+#  endif
 
-#ifndef _MSC_VER
+#  ifndef _MSC_VER
   const char *running_on_valgrind_str = getenv("RUNNING_ON_VALGRIND");
   if (running_on_valgrind_str) {
     return strcmp(running_on_valgrind_str, "0") != 0;
   }
-#else
+#  else
   /* Visual Studio issues warnings if we use getenv,
    * so we use GetEnvironmentVariableA instead.
    */
@@ -136,7 +136,7 @@ static int GetRunningOnValgrind(void) {
    */
   if (res > 0 && !strcmp(value, "0"))
     return 1;
-#endif
+#  endif
   return 0;
 }
 

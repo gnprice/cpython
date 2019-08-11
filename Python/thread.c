@@ -12,13 +12,13 @@
 /* This means pthreads are not implemented in libc headers, hence the macro
    not present in unistd.h. But they still can be implemented as an external
    library (e.g. gnu pth in pthread emulation) */
-# ifdef HAVE_PTHREAD_H
-#  include <pthread.h> /* _POSIX_THREADS */
-# endif
+#  ifdef HAVE_PTHREAD_H
+#    include <pthread.h> /* _POSIX_THREADS */
+#  endif
 #endif
 
 #ifndef DONT_HAVE_STDIO_H
-#include <stdio.h>
+#  include <stdio.h>
 #endif
 
 #include <stdlib.h>
@@ -35,22 +35,22 @@
    a check of __ia64 to verify that we're running on an ia64 system instead
    of a pa-risc system.
 */
-#ifdef __hpux
-#ifdef _SC_THREADS
-#define _POSIX_THREADS
-#endif
-#endif
+#  ifdef __hpux
+#    ifdef _SC_THREADS
+#      define _POSIX_THREADS
+#    endif
+#  endif
 
 #endif /* _POSIX_THREADS */
 
 
 #ifdef Py_DEBUG
 static int thread_debug = 0;
-#define dprintf(args)   (void)((thread_debug & 1) && printf args)
-#define d2printf(args)  ((thread_debug & 8) && printf args)
+#  define dprintf(args)   (void)((thread_debug & 1) && printf args)
+#  define d2printf(args)  ((thread_debug & 8) && printf args)
 #else
-#define dprintf(args)
-#define d2printf(args)
+#  define dprintf(args)
+#  define d2printf(args)
 #endif
 
 static int initialized;
@@ -78,13 +78,13 @@ PyThread_init_thread(void)
 }
 
 #if defined(_POSIX_THREADS)
-#   define PYTHREAD_NAME "pthread"
-#   include "thread_pthread.h"
+#  define PYTHREAD_NAME "pthread"
+#  include "thread_pthread.h"
 #elif defined(NT_THREADS)
-#   define PYTHREAD_NAME "nt"
-#   include "thread_nt.h"
+#  define PYTHREAD_NAME "nt"
+#  include "thread_nt.h"
 #else
-#   error "Require native threads. See https://bugs.python.org/issue31370"
+#  error "Require native threads. See https://bugs.python.org/issue31370"
 #endif
 
 
@@ -193,11 +193,11 @@ PyThread_GetInfo(void)
     PyStructSequence_SET_ITEM(threadinfo, pos++, value);
 
 #ifdef _POSIX_THREADS
-#ifdef USE_SEMAPHORES
+#  ifdef USE_SEMAPHORES
     value = PyUnicode_FromString("semaphore");
-#else
+#  else
     value = PyUnicode_FromString("mutex+cond");
-#endif
+#  endif
     if (value == NULL) {
         Py_DECREF(threadinfo);
         return NULL;

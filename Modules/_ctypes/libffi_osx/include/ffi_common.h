@@ -6,47 +6,47 @@
    ----------------------------------------------------------------------- */
 
 #ifndef FFI_COMMON_H
-#define FFI_COMMON_H
+#  define FFI_COMMON_H
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include "fficonfig.h"
+#  include "fficonfig.h"
 
 /*	Do not move this. Some versions of AIX are very picky about where
 	this is positioned. */
-#ifdef __GNUC__
-#	define alloca __builtin_alloca
-#else
-#	if HAVE_ALLOCA_H
-#		include <alloca.h>
-#	else
-#		ifdef _AIX
-#			pragma alloca
-#		else
-#			ifndef alloca	/* predefined by HP cc +Olibcalls */
+#  ifdef __GNUC__
+#    define alloca __builtin_alloca
+#  else
+#    if HAVE_ALLOCA_H
+#      include <alloca.h>
+#    else
+#      ifdef _AIX
+#        pragma alloca
+#      else
+#        ifndef alloca	/* predefined by HP cc +Olibcalls */
 char* alloca();
-#			endif
-#		endif
-#	endif
-#endif
+#        endif
+#      endif
+#    endif
+#  endif
 
 /*	Check for the existence of memcpy. */
-#if STDC_HEADERS
-#	include <string.h>
-#else
-#	ifndef HAVE_MEMCPY
-#		define memcpy(d, s, n) bcopy((s), (d), (n))
-#	endif
-#endif
+#  if STDC_HEADERS
+#    include <string.h>
+#  else
+#    ifndef HAVE_MEMCPY
+#      define memcpy(d, s, n) bcopy((s), (d), (n))
+#    endif
+#  endif
 
 /*#if defined(FFI_DEBUG) 
-#include <stdio.h>
+#  include <stdio.h>
 #endif*/
 
 #ifdef FFI_DEBUG
-#include <stdio.h>
+#  include <stdio.h>
 
 /*@exits@*/ void
 ffi_assert(
@@ -61,13 +61,13 @@ ffi_type_test(
 /*@temp@*/				char*	file,
 						int		line);
 
-#	define FFI_ASSERT(x)			((x) ? (void)0 : ffi_assert(#x, __FILE__,__LINE__))
-#	define FFI_ASSERT_AT(x, f, l)	((x) ? 0 : ffi_assert(#x, (f), (l)))
-#	define FFI_ASSERT_VALID_TYPE(x)	ffi_type_test(x, __FILE__, __LINE__)
+#  define FFI_ASSERT(x)			((x) ? (void)0 : ffi_assert(#x, __FILE__,__LINE__))
+#  define FFI_ASSERT_AT(x, f, l)	((x) ? 0 : ffi_assert(#x, (f), (l)))
+#  define FFI_ASSERT_VALID_TYPE(x)	ffi_type_test(x, __FILE__, __LINE__)
 #else
-#	define FFI_ASSERT(x) 
-#	define FFI_ASSERT_AT(x, f, l)
-#	define FFI_ASSERT_VALID_TYPE(x)
+#  define FFI_ASSERT(x) 
+#  define FFI_ASSERT_AT(x, f, l)
+#  define FFI_ASSERT_VALID_TYPE(x)
 #endif	// #ifdef FFI_DEBUG
 
 #define ALIGN(v, a)	(((size_t)(v) + (a) - 1) & ~((a) - 1))

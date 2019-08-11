@@ -1,14 +1,14 @@
 #ifndef Py_INTERNAL_OBJECT_H
-#define Py_INTERNAL_OBJECT_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_OBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pycore_pystate.h"   /* _PyRuntime */
+#  include "pycore_pystate.h"   /* _PyRuntime */
 
 PyAPI_FUNC(int) _PyType_CheckConsistency(PyTypeObject *type);
 PyAPI_FUNC(int) _PyUnicode_CheckConsistency(PyObject *op, int check_content);
@@ -45,7 +45,7 @@ static inline void _PyObject_GC_TRACK_impl(const char *filename, int lineno,
     _PyRuntime.gc.generation0->_gc_prev = (uintptr_t)gc;
 }
 
-#define _PyObject_GC_TRACK(op) \
+#  define _PyObject_GC_TRACK(op) \
     _PyObject_GC_TRACK_impl(__FILE__, __LINE__, _PyObject_CAST(op))
 
 /* Tell the GC to stop tracking this object.
@@ -73,10 +73,10 @@ static inline void _PyObject_GC_UNTRACK_impl(const char *filename, int lineno,
     gc->_gc_prev &= _PyGC_PREV_MASK_FINALIZED;
 }
 
-#define _PyObject_GC_UNTRACK(op) \
+#  define _PyObject_GC_UNTRACK(op) \
     _PyObject_GC_UNTRACK_impl(__FILE__, __LINE__, _PyObject_CAST(op))
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_OBJECT_H */

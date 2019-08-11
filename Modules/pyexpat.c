@@ -1577,11 +1577,11 @@ PyDoc_STRVAR(pyexpat_module_documentation,
 /* Initialization function for the module */
 
 #ifndef MODULE_NAME
-#define MODULE_NAME "pyexpat"
+#  define MODULE_NAME "pyexpat"
 #endif
 
 #ifndef MODULE_INITFUNC
-#define MODULE_INITFUNC PyInit_pyexpat
+#  define MODULE_INITFUNC PyInit_pyexpat
 #endif
 
 static struct PyModuleDef pyexpatmodule = {

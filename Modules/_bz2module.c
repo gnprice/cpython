@@ -12,12 +12,12 @@
 
 
 #ifndef BZ_CONFIG_ERROR
-#define BZ2_bzCompress bzCompress
-#define BZ2_bzCompressInit bzCompressInit
-#define BZ2_bzCompressEnd bzCompressEnd
-#define BZ2_bzDecompress bzDecompress
-#define BZ2_bzDecompressInit bzDecompressInit
-#define BZ2_bzDecompressEnd bzDecompressEnd
+#  define BZ2_bzCompress bzCompress
+#  define BZ2_bzCompressInit bzCompressInit
+#  define BZ2_bzCompressEnd bzCompressEnd
+#  define BZ2_bzDecompress bzDecompress
+#  define BZ2_bzDecompressInit bzDecompressInit
+#  define BZ2_bzDecompressEnd bzDecompressEnd
 #endif  /* ! BZ_CONFIG_ERROR */
 
 
@@ -108,9 +108,9 @@ catch_bz2_error(int bzerror)
 }
 
 #if BUFSIZ < 8192
-#define INITIAL_BUFFER_SIZE 8192
+#  define INITIAL_BUFFER_SIZE 8192
 #else
-#define INITIAL_BUFFER_SIZE BUFSIZ
+#  define INITIAL_BUFFER_SIZE BUFSIZ
 #endif
 
 static int

@@ -1,14 +1,14 @@
 /* Static DTrace probes interface */
 
 #ifndef Py_DTRACE_H
-#define Py_DTRACE_H
-#ifdef __cplusplus
+#  define Py_DTRACE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifdef WITH_DTRACE
+#  ifdef WITH_DTRACE
 
-#include "pydtrace_probes.h"
+#    include "pydtrace_probes.h"
 
 /* pydtrace_probes.h, on systems with DTrace, is auto-generated to include
    `PyDTrace_{PROBE}` and `PyDTrace_{PROBE}_ENABLED()` macros for every probe
@@ -21,7 +21,7 @@ extern "C" {
            PyDTrace_FUNCTION_ENTRY(f);
 */
 
-#else
+#  else
 
 /* Without DTrace, compile to nothing. */
 
@@ -51,9 +51,9 @@ static inline int PyDTrace_IMPORT_FIND_LOAD_START_ENABLED(void) { return 0; }
 static inline int PyDTrace_IMPORT_FIND_LOAD_DONE_ENABLED(void) { return 0; }
 static inline int PyDTrace_AUDIT_ENABLED(void) { return 0; }
 
-#endif /* !WITH_DTRACE */
+#  endif /* !WITH_DTRACE */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_DTRACE_H */

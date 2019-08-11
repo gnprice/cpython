@@ -27,7 +27,7 @@ static PyHash_FuncDef PyHash_Func;
 
 /* Count _Py_HashBytes() calls */
 #ifdef Py_HASH_STATS
-#define Py_HASH_STATS_MAX 32
+#  define Py_HASH_STATS_MAX 32
 static Py_ssize_t hashstats[Py_HASH_STATS_MAX + 1] = {0};
 #endif
 
@@ -249,9 +249,9 @@ fnv(const void *src, Py_ssize_t len)
         unsigned char bytes[SIZEOF_PY_UHASH_T];
     } block;
 
-#ifdef Py_DEBUG
+#  ifdef Py_DEBUG
     assert(_Py_HashSecret_Initialized);
-#endif
+#  endif
     remainder = len % SIZEOF_PY_UHASH_T;
     if (remainder == 0) {
         /* Process at least one block byte by byte to reduce hash collisions

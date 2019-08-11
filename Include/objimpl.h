@@ -3,13 +3,13 @@
 */
 
 #ifndef Py_OBJIMPL_H
-#define Py_OBJIMPL_H
+#  define Py_OBJIMPL_H
 
-#include "pymem.h"
+#  include "pymem.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /* BEWARE:
 
@@ -95,19 +95,19 @@ PyObject_{New, NewVar, Del}.
    the raw memory.
 */
 PyAPI_FUNC(void *) PyObject_Malloc(size_t size);
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 PyAPI_FUNC(void *) PyObject_Calloc(size_t nelem, size_t elsize);
-#endif
+#  endif
 PyAPI_FUNC(void *) PyObject_Realloc(void *ptr, size_t new_size);
 PyAPI_FUNC(void) PyObject_Free(void *ptr);
 
 
 /* Macros */
-#define PyObject_MALLOC         PyObject_Malloc
-#define PyObject_REALLOC        PyObject_Realloc
-#define PyObject_FREE           PyObject_Free
-#define PyObject_Del            PyObject_Free
-#define PyObject_DEL            PyObject_Free
+#  define PyObject_MALLOC         PyObject_Malloc
+#  define PyObject_REALLOC        PyObject_Realloc
+#  define PyObject_FREE           PyObject_Free
+#  define PyObject_Del            PyObject_Free
+#  define PyObject_DEL            PyObject_Free
 
 
 /*
@@ -122,9 +122,9 @@ PyAPI_FUNC(PyVarObject *) PyObject_InitVar(PyVarObject *,
 PyAPI_FUNC(PyObject *) _PyObject_New(PyTypeObject *);
 PyAPI_FUNC(PyVarObject *) _PyObject_NewVar(PyTypeObject *, Py_ssize_t);
 
-#define PyObject_New(type, typeobj) \
+#  define PyObject_New(type, typeobj) \
                 ( (type *) _PyObject_New(typeobj) )
-#define PyObject_NewVar(type, typeobj, n) \
+#  define PyObject_NewVar(type, typeobj, n) \
                 ( (type *) _PyObject_NewVar((typeobj), (n)) )
 
 /* Inline functions trading binary compatibility for speed:
@@ -145,7 +145,7 @@ _PyObject_INIT(PyObject *op, PyTypeObject *typeobj)
     return op;
 }
 
-#define PyObject_INIT(op, typeobj) \
+#  define PyObject_INIT(op, typeobj) \
     _PyObject_INIT(_PyObject_CAST(op), (typeobj))
 
 static inline PyVarObject*
@@ -157,10 +157,10 @@ _PyObject_INIT_VAR(PyVarObject *op, PyTypeObject *typeobj, Py_ssize_t size)
     return op;
 }
 
-#define PyObject_INIT_VAR(op, typeobj, size) \
+#  define PyObject_INIT_VAR(op, typeobj, size) \
     _PyObject_INIT_VAR(_PyVarObject_CAST(op), (typeobj), (size))
 
-#define _PyObject_SIZE(typeobj) ( (typeobj)->tp_basicsize )
+#  define _PyObject_SIZE(typeobj) ( (typeobj)->tp_basicsize )
 
 /* _PyObject_VAR_SIZE returns the number of bytes (as size_t) allocated for a
    vrbl-size object with nitems items, exclusive of gc overhead (if any).  The
@@ -172,20 +172,20 @@ _PyObject_INIT_VAR(PyVarObject *op, PyTypeObject *typeobj, Py_ssize_t size)
    Note that there's no memory wastage in doing this, as malloc has to
    return (at worst) pointer-aligned memory anyway.
 */
-#if ((SIZEOF_VOID_P - 1) & SIZEOF_VOID_P) != 0
-#   error "_PyObject_VAR_SIZE requires SIZEOF_VOID_P be a power of 2"
-#endif
+#  if ((SIZEOF_VOID_P - 1) & SIZEOF_VOID_P) != 0
+#    error "_PyObject_VAR_SIZE requires SIZEOF_VOID_P be a power of 2"
+#  endif
 
-#define _PyObject_VAR_SIZE(typeobj, nitems)     \
+#  define _PyObject_VAR_SIZE(typeobj, nitems)     \
     _Py_SIZE_ROUND_UP((typeobj)->tp_basicsize + \
         (nitems)*(typeobj)->tp_itemsize,        \
         SIZEOF_VOID_P)
 
-#define PyObject_NEW(type, typeobj) \
+#  define PyObject_NEW(type, typeobj) \
 ( (type *) PyObject_Init( \
     (PyObject *) PyObject_MALLOC( _PyObject_SIZE(typeobj) ), (typeobj)) )
 
-#define PyObject_NEW_VAR(type, typeobj, n) \
+#  define PyObject_NEW_VAR(type, typeobj, n) \
 ( (type *) PyObject_InitVar( \
       (PyVarObject *) PyObject_MALLOC(_PyObject_VAR_SIZE((typeobj),(n)) ),\
       (typeobj), (n)) )
@@ -229,10 +229,10 @@ _PyObject_INIT_VAR(PyVarObject *op, PyTypeObject *typeobj, Py_ssize_t size)
 PyAPI_FUNC(Py_ssize_t) PyGC_Collect(void);
 
 /* Test if a type has a GC head */
-#define PyType_IS_GC(t) PyType_HasFeature((t), Py_TPFLAGS_HAVE_GC)
+#  define PyType_IS_GC(t) PyType_HasFeature((t), Py_TPFLAGS_HAVE_GC)
 
 PyAPI_FUNC(PyVarObject *) _PyObject_GC_Resize(PyVarObject *, Py_ssize_t);
-#define PyObject_GC_Resize(type, op, n) \
+#  define PyObject_GC_Resize(type, op, n) \
                 ( (type *) _PyObject_GC_Resize(_PyVarObject_CAST(op), (n)) )
 
 
@@ -252,9 +252,9 @@ PyAPI_FUNC(void) PyObject_GC_UnTrack(void *);
 
 PyAPI_FUNC(void) PyObject_GC_Del(void *);
 
-#define PyObject_GC_New(type, typeobj) \
+#  define PyObject_GC_New(type, typeobj) \
                 ( (type *) _PyObject_GC_New(typeobj) )
-#define PyObject_GC_NewVar(type, typeobj, n) \
+#  define PyObject_GC_NewVar(type, typeobj, n) \
                 ( (type *) _PyObject_GC_NewVar((typeobj), (n)) )
 
 
@@ -263,7 +263,7 @@ PyAPI_FUNC(void) PyObject_GC_Del(void *);
  * "visit" and "arg".  This is intended to keep tp_traverse functions
  * looking as much alike as possible.
  */
-#define Py_VISIT(op)                                                    \
+#  define Py_VISIT(op)                                                    \
     do {                                                                \
         if (op) {                                                       \
             int vret = visit(_PyObject_CAST(op), arg);                  \
@@ -272,13 +272,13 @@ PyAPI_FUNC(void) PyObject_GC_Del(void *);
         }                                                               \
     } while (0)
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_OBJIMPL_H
-#  include  "cpython/objimpl.h"
-#  undef Py_CPYTHON_OBJIMPL_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_OBJIMPL_H
+#    include  "cpython/objimpl.h"
+#    undef Py_CPYTHON_OBJIMPL_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_OBJIMPL_H */

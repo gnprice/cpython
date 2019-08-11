@@ -16,10 +16,10 @@ class int "PyObject *" "&PyLong_Type"
 /*[clinic end generated code: output=da39a3ee5e6b4b0d input=ec0275e3422a36e3]*/
 
 #ifndef NSMALLPOSINTS
-#define NSMALLPOSINTS           257
+#  define NSMALLPOSINTS           257
 #endif
 #ifndef NSMALLNEGINTS
-#define NSMALLNEGINTS           5
+#  define NSMALLNEGINTS           5
 #endif
 
 _Py_IDENTIFIER(little);
@@ -41,9 +41,9 @@ PyObject *_PyLong_One = NULL;
    -NSMALLNEGINTS (inclusive) to NSMALLPOSINTS (not inclusive).
 */
 static PyLongObject small_ints[NSMALLNEGINTS + NSMALLPOSINTS];
-#ifdef COUNT_ALLOCS
+#  ifdef COUNT_ALLOCS
 Py_ssize_t _Py_quick_int_allocs, _Py_quick_neg_int_allocs;
-#endif
+#  endif
 
 static PyObject *
 get_small_int(sdigit ival)
@@ -52,15 +52,15 @@ get_small_int(sdigit ival)
     assert(-NSMALLNEGINTS <= ival && ival < NSMALLPOSINTS);
     v = (PyObject *)&small_ints[ival + NSMALLNEGINTS];
     Py_INCREF(v);
-#ifdef COUNT_ALLOCS
+#  ifdef COUNT_ALLOCS
     if (ival >= 0)
         _Py_quick_int_allocs++;
     else
         _Py_quick_neg_int_allocs++;
-#endif
+#  endif
     return v;
 }
-#define CHECK_SMALL_INT(ival) \
+#  define CHECK_SMALL_INT(ival) \
     do if (-NSMALLNEGINTS <= ival && ival < NSMALLPOSINTS) { \
         return get_small_int((sdigit)ival); \
     } while(0)
@@ -78,8 +78,8 @@ maybe_small_long(PyLongObject *v)
     return v;
 }
 #else
-#define CHECK_SMALL_INT(ival)
-#define maybe_small_long(val) (val)
+#  define CHECK_SMALL_INT(ival)
+#  define maybe_small_long(val) (val)
 #endif
 
 /* If a freshly-allocated int is already shared, it must
@@ -1090,9 +1090,9 @@ PyLong_FromVoidPtr(void *p)
     return PyLong_FromUnsignedLong((unsigned long)(uintptr_t)p);
 #else
 
-#if SIZEOF_LONG_LONG < SIZEOF_VOID_P
-#   error "PyLong_FromVoidPtr: sizeof(long long) < sizeof(void*)"
-#endif
+#  if SIZEOF_LONG_LONG < SIZEOF_VOID_P
+#    error "PyLong_FromVoidPtr: sizeof(long long) < sizeof(void*)"
+#  endif
     return PyLong_FromUnsignedLongLong((unsigned long long)(uintptr_t)p);
 #endif /* SIZEOF_VOID_P <= SIZEOF_LONG */
 
@@ -1112,9 +1112,9 @@ PyLong_AsVoidPtr(PyObject *vv)
         x = PyLong_AsUnsignedLong(vv);
 #else
 
-#if SIZEOF_LONG_LONG < SIZEOF_VOID_P
-#   error "PyLong_AsVoidPtr: sizeof(long long) < sizeof(void*)"
-#endif
+#  if SIZEOF_LONG_LONG < SIZEOF_VOID_P
+#    error "PyLong_AsVoidPtr: sizeof(long long) < sizeof(void*)"
+#  endif
     long long x;
 
     if (PyLong_Check(vv) && _PyLong_Sign(vv) < 0)
@@ -2903,9 +2903,9 @@ x_divrem(PyLongObject *v1, PyLongObject *w1, PyLongObject **prem)
 
 /* attempt to define 2.0**DBL_MANT_DIG as a compile-time constant */
 #if DBL_MANT_DIG == 53
-#define EXP2_DBL_MANT_DIG 9007199254740992.0
+#  define EXP2_DBL_MANT_DIG 9007199254740992.0
 #else
-#define EXP2_DBL_MANT_DIG (ldexp(1.0, DBL_MANT_DIG))
+#  define EXP2_DBL_MANT_DIG (ldexp(1.0, DBL_MANT_DIG))
 #endif
 
 double
@@ -5049,7 +5049,7 @@ simple:
     x = PyLong_AsLongLong((PyObject *)a);
     y = PyLong_AsLongLong((PyObject *)b);
 #else
-# error "_PyLong_GCD"
+#  error "_PyLong_GCD"
 #endif
     x = Py_ABS(x);
     y = Py_ABS(y);
@@ -5067,7 +5067,7 @@ simple:
 #elif PY_LLONG_MAX >> PyLong_SHIFT >> PyLong_SHIFT
     return PyLong_FromLongLong(x);
 #else
-# error "_PyLong_GCD"
+#  error "_PyLong_GCD"
 #endif
 
 error:

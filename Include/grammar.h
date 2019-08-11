@@ -2,12 +2,12 @@
 /* Grammar interface */
 
 #ifndef Py_GRAMMAR_H
-#define Py_GRAMMAR_H
-#ifdef __cplusplus
+#  define Py_GRAMMAR_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include "bitset.h" /* Sigh... */
+#  include "bitset.h" /* Sigh... */
 
 /* A label of an arc */
 
@@ -16,7 +16,7 @@ typedef struct {
     const char  *lb_str;
 } label;
 
-#define EMPTY 0         /* Label number 0 is by definition the empty label */
+#  define EMPTY 0         /* Label number 0 is by definition the empty label */
 
 /* A list of labels */
 
@@ -71,7 +71,7 @@ const char *PyGrammar_LabelRepr(label *lb);
 void PyGrammar_AddAccelerators(grammar *g);
 void PyGrammar_RemoveAccelerators(grammar *);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_GRAMMAR_H */

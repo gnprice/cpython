@@ -1,6 +1,6 @@
 #ifndef Py_LIMITED_API
-#ifndef Py_BYTES_CTYPE_H
-#define Py_BYTES_CTYPE_H
+#  ifndef Py_BYTES_CTYPE_H
+#    define Py_BYTES_CTYPE_H
 
 /*
  * The internal implementation behind PyBytes (bytes) and PyByteArray (bytearray)
@@ -63,7 +63,7 @@ extern const char _Py_center__doc__[];
 extern const char _Py_zfill__doc__[];
 
 /* this is needed because some docs are shared from the .o, not static */
-#define PyDoc_STRVAR_shared(name,str) const char name[] = PyDoc_STR(str)
+#    define PyDoc_STRVAR_shared(name,str) const char name[] = PyDoc_STR(str)
 
-#endif /* !Py_BYTES_CTYPE_H */
+#  endif /* !Py_BYTES_CTYPE_H */
 #endif /* !Py_LIMITED_API */

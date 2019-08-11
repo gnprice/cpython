@@ -8,14 +8,14 @@
 #include "pycore_traceback.h"
 
 #ifndef __STDC__
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
 extern char *strerror(int);
-#endif
+#  endif
 #endif
 
 #ifdef MS_WINDOWS
-#include <windows.h>
-#include <winbase.h>
+#  include <windows.h>
+#  include <winbase.h>
 #endif
 
 #include <ctype.h>
@@ -271,7 +271,7 @@ PyErr_ExceptionMatches(PyObject *exc)
 
 
 #ifndef Py_NORMALIZE_RECURSION_LIMIT
-#define Py_NORMALIZE_RECURSION_LIMIT 32
+#  define Py_NORMALIZE_RECURSION_LIMIT 32
 #endif
 
 /* Used in many places to normalize a raised exception, including in

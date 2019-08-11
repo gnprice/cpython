@@ -1,14 +1,14 @@
 /* Unicode name database interface */
 #ifndef Py_LIMITED_API
-#ifndef Py_UCNHASH_H
-#define Py_UCNHASH_H
-#ifdef __cplusplus
+#  ifndef Py_UCNHASH_H
+#    define Py_UCNHASH_H
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 /* revised ucnhash CAPI interface (exported through a "wrapper") */
 
-#define PyUnicodeData_CAPSULE_NAME "unicodedata.ucnhash_CAPI"
+#    define PyUnicodeData_CAPSULE_NAME "unicodedata.ucnhash_CAPI"
 
 typedef struct {
 
@@ -29,8 +29,8 @@ typedef struct {
 
 } _PyUnicode_Name_CAPI;
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
-#endif /* !Py_UCNHASH_H */
+#    endif
+#  endif /* !Py_UCNHASH_H */
 #endif /* !Py_LIMITED_API */

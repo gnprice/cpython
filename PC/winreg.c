@@ -237,9 +237,9 @@ class HKEY_return_converter(CReturnConverter):
         data.return_conversion.append(
             'return_value = PyHKEY_FromHKEY(_return_value);\n')
 
-# HACK: this only works for PyHKEYObjects, nothing else.
-#       Should this be generalized and enshrined in clinic.py,
-#       destroy this converter with prejudice.
+#HACK: this only works for PyHKEYObjects, nothing else.
+#Should this be generalized and enshrined in clinic.py,
+#destroy this converter with prejudice.
 class self_return_converter(CReturnConverter):
     type = 'PyHKEYObject *'
 

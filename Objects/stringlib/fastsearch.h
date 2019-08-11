@@ -18,13 +18,13 @@
 #define FAST_RSEARCH 2
 
 #if LONG_BIT >= 128
-#define STRINGLIB_BLOOM_WIDTH 128
+#  define STRINGLIB_BLOOM_WIDTH 128
 #elif LONG_BIT >= 64
-#define STRINGLIB_BLOOM_WIDTH 64
+#  define STRINGLIB_BLOOM_WIDTH 64
 #elif LONG_BIT >= 32
-#define STRINGLIB_BLOOM_WIDTH 32
+#  define STRINGLIB_BLOOM_WIDTH 32
 #else
-#error "LONG_BIT is smaller than 32"
+#  error "LONG_BIT is smaller than 32"
 #endif
 
 #define STRINGLIB_BLOOM_ADD(mask, ch) \
@@ -105,12 +105,12 @@ STRINGLIB(rfind_char)(const STRINGLIB_CHAR* s, Py_ssize_t n, STRINGLIB_CHAR ch)
        faster than our hand-written loop below */
 
     if (n > MEMCHR_CUT_OFF) {
-#if STRINGLIB_SIZEOF_CHAR == 1
+#  if STRINGLIB_SIZEOF_CHAR == 1
         p = memrchr(s, ch, n);
         if (p != NULL)
             return (p - s);
         return -1;
-#else
+#  else
         /* use memrchr if we can choose a needle without two many likely
            false positives */
         const STRINGLIB_CHAR *s1;
@@ -146,7 +146,7 @@ STRINGLIB(rfind_char)(const STRINGLIB_CHAR* s, Py_ssize_t n, STRINGLIB_CHAR ch)
             }
             while (n > MEMCHR_CUT_OFF);
         }
-#endif
+#  endif
     }
 #endif  /* HAVE_MEMRCHR */
     p = s + n;

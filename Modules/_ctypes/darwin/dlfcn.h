@@ -29,13 +29,13 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 #ifndef _DLFCN_H_
-#define _DLFCN_H_
+#  define _DLFCN_H_
 
-#include <AvailabilityMacros.h>
+#  include <AvailabilityMacros.h>
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 
 /*
@@ -50,35 +50,35 @@ typedef struct dl_info {
 } Dl_info;
 
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_2
-#warning CTYPES_DARWIN_DLFCN
-#define CTYPES_DARWIN_DLFCN
+#  if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_2
+#    warning CTYPES_DARWIN_DLFCN
+#    define CTYPES_DARWIN_DLFCN
 extern void * (*ctypes_dlopen)(const char *path, int mode);
 extern void * (*ctypes_dlsym)(void * handle, const char *symbol);
 extern const char * (*ctypes_dlerror)(void);
 extern int (*ctypes_dlclose)(void * handle);
 extern int (*ctypes_dladdr)(const void *, Dl_info *);
-#else
+#  else
 extern void * dlopen(const char *path, int mode);
 extern void * dlsym(void * handle, const char *symbol);
 extern const char * dlerror(void);
 extern int dlclose(void * handle);
 extern int dladdr(const void *, Dl_info *);
-#endif
+#  endif
 
-#define RTLD_LAZY	0x1
-#define RTLD_NOW	0x2
-#define RTLD_LOCAL	0x4
-#define RTLD_GLOBAL	0x8
-#define RTLD_NOLOAD	0x10
-#define RTLD_NODELETE	0x80
+#  define RTLD_LAZY	0x1
+#  define RTLD_NOW	0x2
+#  define RTLD_LOCAL	0x4
+#  define RTLD_GLOBAL	0x8
+#  define RTLD_NOLOAD	0x10
+#  define RTLD_NODELETE	0x80
 
 /* These are from the Mac OS X 10.4 headers */
-#define RTLD_NEXT       ((void *) -1)   /* Search subsequent objects. */
-#define RTLD_DEFAULT    ((void *) -2)   /* Use default search algorithm. */
+#  define RTLD_NEXT       ((void *) -1)   /* Search subsequent objects. */
+#  define RTLD_DEFAULT    ((void *) -2)   /* Use default search algorithm. */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif /* _DLFCN_H_ */

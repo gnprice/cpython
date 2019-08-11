@@ -424,7 +424,7 @@ _PyObject_DebugTypeStats(FILE *out);
 #  define _PyObject_ASSERTIONS 1
 #endif
 
-#  define _PyObject_ASSERT_FROM(obj, expr, msg, filename, lineno, func) \
+#define _PyObject_ASSERT_FROM(obj, expr, msg, filename, lineno, func) \
     (((expr) || !_PyObject_ASSERTIONS) \
       ? (void)(0) \
       : _PyObject_AssertFailed((obj), Py_STRINGIFY(expr), \

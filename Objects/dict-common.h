@@ -1,5 +1,5 @@
 #ifndef Py_DICT_COMMON_H
-#define Py_DICT_COMMON_H
+#  define Py_DICT_COMMON_H
 
 typedef struct {
     /* Cached hash code of me_key. */
@@ -14,9 +14,9 @@ typedef struct {
 typedef Py_ssize_t (*dict_lookup_func)
     (PyDictObject *mp, PyObject *key, Py_hash_t hash, PyObject **value_addr);
 
-#define DKIX_EMPTY (-1)
-#define DKIX_DUMMY (-2)  /* Used internally */
-#define DKIX_ERROR (-3)
+#  define DKIX_EMPTY (-1)
+#  define DKIX_DUMMY (-2)  /* Used internally */
+#  define DKIX_ERROR (-3)
 
 /* See dictobject.c for actual layout of DictKeysObject */
 struct _dictkeysobject {

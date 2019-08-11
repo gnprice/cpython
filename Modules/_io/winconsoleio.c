@@ -14,10 +14,10 @@
 
 #include "structmember.h"
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif
 #include <stddef.h> /* For offsetof */
 
@@ -30,11 +30,11 @@
 /* BUFSIZ determines how many characters can be typed at the console
    before it starts blocking. */
 #if BUFSIZ < (16*1024)
-#define SMALLCHUNK (2*1024)
+#  define SMALLCHUNK (2*1024)
 #elif (BUFSIZ >= (2 << 25))
-#error "unreasonable BUFSIZ > 64 MiB defined"
+#  error "unreasonable BUFSIZ > 64 MiB defined"
 #else
-#define SMALLCHUNK BUFSIZ
+#  define SMALLCHUNK BUFSIZ
 #endif
 
 /* BUFMAX determines how many bytes can be read in one go. */

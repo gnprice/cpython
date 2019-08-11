@@ -1,14 +1,14 @@
 #ifndef Py_INTERNAL_TRACEBACK_H
-#define Py_INTERNAL_TRACEBACK_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_TRACEBACK_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pystate.h"   /* PyInterpreterState */
+#  include "pystate.h"   /* PyInterpreterState */
 
 /* Write the Python traceback into the file 'fd'. For example:
 
@@ -90,7 +90,7 @@ PyAPI_FUNC(PyObject*) _PyTraceBack_FromFrame(
     PyObject *tb_next,
     struct _frame *frame);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_TRACEBACK_H */

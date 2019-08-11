@@ -2,19 +2,19 @@
 /* Generator object interface */
 
 #ifndef Py_LIMITED_API
-#ifndef Py_GENOBJECT_H
-#define Py_GENOBJECT_H
-#ifdef __cplusplus
+#  ifndef Py_GENOBJECT_H
+#    define Py_GENOBJECT_H
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
-#include "pystate.h"   /* _PyErr_StackItem */
+#    include "pystate.h"   /* _PyErr_StackItem */
 
 struct _frame; /* Avoid including frameobject.h */
 
 /* _PyGenObject_HEAD defines the initial segment of generator
    and coroutine objects. */
-#define _PyGenObject_HEAD(prefix)                                           \
+#    define _PyGenObject_HEAD(prefix)                                           \
     PyObject_HEAD                                                           \
     /* Note: gi_frame can be NULL if the generator is "finished" */         \
     struct _frame *prefix##_frame;                                          \
@@ -37,8 +37,8 @@ typedef struct {
 
 PyAPI_DATA(PyTypeObject) PyGen_Type;
 
-#define PyGen_Check(op) PyObject_TypeCheck(op, &PyGen_Type)
-#define PyGen_CheckExact(op) (Py_TYPE(op) == &PyGen_Type)
+#    define PyGen_Check(op) PyObject_TypeCheck(op, &PyGen_Type)
+#    define PyGen_CheckExact(op) (Py_TYPE(op) == &PyGen_Type)
 
 PyAPI_FUNC(PyObject *) PyGen_New(struct _frame *);
 PyAPI_FUNC(PyObject *) PyGen_NewWithQualName(struct _frame *,
@@ -50,7 +50,7 @@ PyAPI_FUNC(PyObject *) _PyGen_Send(PyGenObject *, PyObject *);
 PyObject *_PyGen_yf(PyGenObject *);
 PyAPI_FUNC(void) _PyGen_Finalize(PyObject *self);
 
-#ifndef Py_LIMITED_API
+#    ifndef Py_LIMITED_API
 typedef struct {
     _PyGenObject_HEAD(cr)
     PyObject *cr_origin;
@@ -61,7 +61,7 @@ PyAPI_DATA(PyTypeObject) _PyCoroWrapper_Type;
 
 PyAPI_DATA(PyTypeObject) _PyAIterWrapper_Type;
 
-#define PyCoro_CheckExact(op) (Py_TYPE(op) == &PyCoro_Type)
+#      define PyCoro_CheckExact(op) (Py_TYPE(op) == &PyCoro_Type)
 PyObject *_PyCoro_GetAwaitableIter(PyObject *o);
 PyAPI_FUNC(PyObject *) PyCoro_New(struct _frame *,
     PyObject *name, PyObject *qualname);
@@ -90,18 +90,18 @@ PyAPI_DATA(PyTypeObject) _PyAsyncGenAThrow_Type;
 PyAPI_FUNC(PyObject *) PyAsyncGen_New(struct _frame *,
     PyObject *name, PyObject *qualname);
 
-#define PyAsyncGen_CheckExact(op) (Py_TYPE(op) == &PyAsyncGen_Type)
+#      define PyAsyncGen_CheckExact(op) (Py_TYPE(op) == &PyAsyncGen_Type)
 
 PyObject *_PyAsyncGenValueWrapperNew(PyObject *);
 
 int PyAsyncGen_ClearFreeLists(void);
 
-#endif
+#    endif
 
-#undef _PyGenObject_HEAD
+#    undef _PyGenObject_HEAD
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
-#endif /* !Py_GENOBJECT_H */
+#    endif
+#  endif /* !Py_GENOBJECT_H */
 #endif /* Py_LIMITED_API */

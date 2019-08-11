@@ -16,17 +16,17 @@
 #include <mswsock.h>
 
 #if defined(MS_WIN32) && !defined(MS_WIN64)
-#  define F_POINTER "k"
-#  define T_POINTER T_ULONG
+#define F_POINTER "k"
+#define T_POINTER T_ULONG
 #else
-#  define F_POINTER "K"
-#  define T_POINTER T_ULONGLONG
+#define F_POINTER "K"
+#define T_POINTER T_ULONGLONG
 #endif
 
 /* Compatibility with Python 3.3 */
 #if PY_VERSION_HEX < 0x03040000
-#    define PyMem_RawMalloc PyMem_Malloc
-#    define PyMem_RawFree PyMem_Free
+#define PyMem_RawMalloc PyMem_Malloc
+#define PyMem_RawFree PyMem_Free
 #endif
 
 #define F_HANDLE F_POINTER

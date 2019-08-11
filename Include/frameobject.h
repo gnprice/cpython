@@ -1,11 +1,11 @@
 /* Frame object interface */
 
 #ifndef Py_LIMITED_API
-#ifndef Py_FRAMEOBJECT_H
-#define Py_FRAMEOBJECT_H
-#ifdef __cplusplus
+#  ifndef Py_FRAMEOBJECT_H
+#    define Py_FRAMEOBJECT_H
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 typedef struct {
     int b_type;                 /* what kind of block this is */
@@ -50,7 +50,7 @@ typedef struct _frame {
 
 PyAPI_DATA(PyTypeObject) PyFrame_Type;
 
-#define PyFrame_Check(op) (Py_TYPE(op) == &PyFrame_Type)
+#    define PyFrame_Check(op) (Py_TYPE(op) == &PyFrame_Type)
 
 PyAPI_FUNC(PyFrameObject *) PyFrame_New(PyThreadState *, PyCodeObject *,
                                         PyObject *, PyObject *);
@@ -85,8 +85,8 @@ PyAPI_FUNC(void) _PyFrame_DebugMallocStats(FILE *out);
 /* Return the line of code the frame is currently executing. */
 PyAPI_FUNC(int) PyFrame_GetLineNumber(PyFrameObject *);
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
-#endif /* !Py_FRAMEOBJECT_H */
+#    endif
+#  endif /* !Py_FRAMEOBJECT_H */
 #endif /* Py_LIMITED_API */

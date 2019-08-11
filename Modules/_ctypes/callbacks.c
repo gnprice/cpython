@@ -3,7 +3,7 @@
 
 #include <ffi.h>
 #ifdef MS_WIN32
-#include <windows.h>
+#  include <windows.h>
 #endif
 #include "ctypes.h"
 
@@ -556,7 +556,7 @@ STDAPI DllCanUnloadNow(void)
     return result;
 }
 
-#ifndef Py_NO_ENABLE_SHARED
+#  ifndef Py_NO_ENABLE_SHARED
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRes)
 {
     switch(fdwReason) {
@@ -566,7 +566,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRes)
     }
     return TRUE;
 }
-#endif
+#  endif
 
 #endif
 

@@ -31,7 +31,7 @@
 */
 
 #if !defined(_GNU_SOURCE)
-# define _GNU_SOURCE 1                  /* syscall prototype */
+#define _GNU_SOURCE 1                  /* syscall prototype */
 #endif
 
 #include <stddef.h>
@@ -64,24 +64,24 @@
 #include "siphash.h"
 
 #if defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM)
-# if defined(HAVE_GETRANDOM)
+#if defined(HAVE_GETRANDOM)
 #  include <sys/random.h>    /* getrandom */
-# else
+#else
 #  include <unistd.h>        /* syscall */
 #  include <sys/syscall.h>   /* SYS_getrandom */
-# endif
-# if ! defined(GRND_NONBLOCK)
+#endif
+#if ! defined(GRND_NONBLOCK)
 #  define GRND_NONBLOCK  0x0001
-# endif  /* defined(GRND_NONBLOCK) */
+#endif  /* defined(GRND_NONBLOCK) */
 #endif  /* defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM) */
 
 #if defined(HAVE_LIBBSD) \
     && (defined(HAVE_ARC4RANDOM_BUF) || defined(HAVE_ARC4RANDOM))
-# include <bsd/stdlib.h>
+#include <bsd/stdlib.h>
 #endif
 
 #if defined(_WIN32) && !defined(LOAD_LIBRARY_SEARCH_SYSTEM32)
-# define LOAD_LIBRARY_SEARCH_SYSTEM32  0x00000800
+#define LOAD_LIBRARY_SEARCH_SYSTEM32  0x00000800
 #endif
 
 #if !defined(HAVE_GETRANDOM) && !defined(HAVE_SYSCALL_GETRANDOM) \
@@ -89,7 +89,7 @@
     && !defined(XML_DEV_URANDOM) \
     && !defined(_WIN32) \
     && !defined(XML_POOR_ENTROPY)
-# error  \
+#error  \
     You do not have support for any sources of high quality entropy \
     enabled.  For end user security, that is probably not what you want. \
     \
@@ -144,11 +144,11 @@ typedef char ICHAR;
 #ifdef XML_UNICODE
 
 #ifdef XML_UNICODE_WCHAR_T
-#define XML_T(x) (const wchar_t)x
-#define XML_L(x) L ## x
+#  define XML_T(x) (const wchar_t)x
+#  define XML_L(x) L ## x
 #else
-#define XML_T(x) (const unsigned short)x
-#define XML_L(x) x
+#  define XML_T(x) (const unsigned short)x
+#  define XML_L(x) x
 #endif
 
 #else
@@ -684,11 +684,11 @@ writeRandomBytes_getrandom_nonblock(void * target, size_t count) {
     const size_t bytesToWrite = count - bytesWrittenTotal;
 
     const int bytesWrittenMore =
-#if defined(HAVE_GETRANDOM)
+#  if defined(HAVE_GETRANDOM)
         getrandom(currentTarget, bytesToWrite, getrandomFlags);
-#else
+#  else
         syscall(SYS_getrandom, currentTarget, bytesToWrite, getrandomFlags);
-#endif
+#  endif
 
     if (bytesWrittenMore > 0) {
       bytesWrittenTotal += bytesWrittenMore;
@@ -807,11 +807,11 @@ gather_time_entropy(void)
 
   gettimeofday_res = gettimeofday(&tv, NULL);
 
-#if defined(NDEBUG)
+#  if defined(NDEBUG)
   (void)gettimeofday_res;
-#else
+#  else
   assert (gettimeofday_res == 0);
-#endif  /* defined(NDEBUG) */
+#  endif  /* defined(NDEBUG) */
 
   /* Microseconds time is <20 bits entropy */
   return tv.tv_usec;

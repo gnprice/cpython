@@ -30,7 +30,7 @@ _posixshmem.shm_open -> int
     flags: int
     mode: int = 0o777
 
-# "shm_open(path, flags, mode=0o777)\n\n\
+#"shm_open(path, flags, mode=0o777)\n\n\
 
 Open a shared memory object.  Returns a file descriptor (integer).
 

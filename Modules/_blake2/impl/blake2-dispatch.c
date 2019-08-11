@@ -12,12 +12,12 @@
 */
 #include <stdio.h>
 #if defined(WIN32)
-#include <windows.h>
+#  include <windows.h>
 #endif
 #include "blake2.h"
 
 #if defined(__x86_64__) || defined(__i386__) || defined(_M_IX86) || defined(_M_X64)
-#define HAVE_X86
+#  define HAVE_X86
 #endif
 
 typedef enum
@@ -48,20 +48,20 @@ static const char feature_names[][8] =
 
 #if defined(HAVE_X86)
 
-#if defined(__GNUC__)
+#  if defined(__GNUC__)
 static inline void cpuid( uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx )
 {
   __asm__ __volatile__(
-#if defined(__i386__) /* This is needed for -fPIC to work on i386 */
+#    if defined(__i386__) /* This is needed for -fPIC to work on i386 */
     "movl %%ebx, %%esi\n\t"
-#endif
+#    endif
     "cpuid\n\t"
-#if defined(__i386__)
+#    if defined(__i386__)
     "xchgl %%ebx, %%esi\n\t"
     : "=a"( *eax ), "=S"( *ebx ), "=c"( *ecx ), "=d"( *edx ) : "a"( *eax ) );
-#else
+#    else
     : "=a"( *eax ), "=b"( *ebx ), "=c"( *ecx ), "=d"( *edx ) : "a"( *eax ) );
-#endif
+#    endif
 }
 
 static inline uint64_t xgetbv(uint32_t xcr)
@@ -75,8 +75,8 @@ static inline uint64_t xgetbv(uint32_t xcr)
   return ((uint64_t)d << 32) | a;
 }
 
-#elif defined(_MSC_VER)
-#include <intrin.h>
+#  elif defined(_MSC_VER)
+#    include <intrin.h>
 static inline void cpuid( uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx )
 {
   int regs[4];
@@ -86,9 +86,9 @@ static inline void cpuid( uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t 
   *ecx = regs[2];
   *edx = regs[3];
 }
-#else
-#error "Don't know how to call cpuid on this compiler!"
-#endif
+#  else
+#    error "Don't know how to call cpuid on this compiler!"
+#  endif
 
 #endif /* HAVE_X86 */
 
@@ -114,15 +114,15 @@ static inline cpu_feature_t get_cpu_features( void )
   if( 1 & ( ecx >> 19 ) )
     feature = SSE41;
 
-#if defined(WIN32) /* Work around the fact that Windows <7 does NOT support AVX... */
+#  if defined(WIN32) /* Work around the fact that Windows <7 does NOT support AVX... */
   if( IsProcessorFeaturePresent(17) ) /* Some environments don't know about PF_XSAVE_ENABLED */
-#endif
+#  endif
   {
     /* check for AVX and OSXSAVE bits */
     if( 1 & ( ecx >> 28 ) & (ecx >> 27) ) {
-#if !defined(WIN32) /* Already checked for this in WIN32 */
+#  if !defined(WIN32) /* Already checked for this in WIN32 */
     if( (xgetbv(0) & 6) == 6 ) /* XCR0 */
-#endif
+#  endif
       feature = AVX;
     }
 

@@ -16,8 +16,8 @@
  * This is evil.  Only the user or the app's main() should do this!
  * We must save and restore the locale around the rl_initialize() call.
  */
-#define SAVE_LOCALE
-#include <locale.h>
+#  define SAVE_LOCALE
+#  include <locale.h>
 #endif
 
 #ifdef SAVE_LOCALE
@@ -32,17 +32,17 @@
 #include <readline/history.h>
 
 #ifdef HAVE_RL_COMPLETION_MATCHES
-#define completion_matches(x, y) \
+#  define completion_matches(x, y) \
     rl_completion_matches((x), ((rl_compentry_func_t *)(y)))
 #else
-#if defined(_RL_FUNCTION_TYPEDEF)
+#  if defined(_RL_FUNCTION_TYPEDEF)
 extern char **completion_matches(char *, rl_compentry_func_t *);
-#else
+#  else
 
-#if !defined(__APPLE__)
+#    if !defined(__APPLE__)
 extern char **completion_matches(char *, CPFunction *);
-#endif
-#endif
+#    endif
+#  endif
 #endif
 
 #ifdef __APPLE__
@@ -365,11 +365,11 @@ set_completion_display_matches_hook(PyObject *self, PyObject *args)
        default completion display. */
     rl_completion_display_matches_hook =
         readlinestate_global->completion_display_matches_hook ?
-#if defined(_RL_FUNCTION_TYPEDEF)
+#  if defined(_RL_FUNCTION_TYPEDEF)
         (rl_compdisp_func_t *)on_completion_display_matches_hook : 0;
-#else
+#  else
         (VFunction *)on_completion_display_matches_hook : 0;
-#endif
+#  endif
 #endif
     return result;
 
@@ -904,11 +904,11 @@ on_startup_hook()
 
 #ifdef HAVE_RL_PRE_INPUT_HOOK
 static int
-#if defined(_RL_FUNCTION_TYPEDEF)
+#  if defined(_RL_FUNCTION_TYPEDEF)
 on_pre_input_hook(void)
-#else
+#  else
 on_pre_input_hook()
-#endif
+#  endif
 {
     int r;
     PyGILState_STATE gilstate = PyGILState_Ensure();
@@ -973,11 +973,11 @@ readline_sigwinch_handler(int signum)
             sigwinch_ohandler != SIG_IGN && sigwinch_ohandler != SIG_DFL)
         sigwinch_ohandler(signum);
 
-#ifndef HAVE_SIGACTION
+#  ifndef HAVE_SIGACTION
     /* If the handler was installed with signal() rather than sigaction(),
     we need to reinstall it. */
     PyOS_setsig(SIGWINCH, readline_sigwinch_handler);
-#endif
+#  endif
 }
 #endif
 

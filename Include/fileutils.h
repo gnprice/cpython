@@ -1,10 +1,10 @@
 #ifndef Py_FILEUTILS_H
-#define Py_FILEUTILS_H
-#ifdef __cplusplus
+#  define Py_FILEUTILS_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 PyAPI_FUNC(wchar_t *) Py_DecodeLocale(
     const char *arg,
     size_t *size);
@@ -16,10 +16,10 @@ PyAPI_FUNC(char*) Py_EncodeLocale(
 PyAPI_FUNC(char*) _Py_EncodeLocaleRaw(
     const wchar_t *text,
     size_t *error_pos);
-#endif
+#  endif
 
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03080000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03080000
 typedef enum {
     _Py_ERROR_UNKNOWN=0,
     _Py_ERROR_STRICT,
@@ -49,25 +49,25 @@ PyAPI_FUNC(int) _Py_EncodeLocaleEx(
     const char **reason,
     int current_locale,
     _Py_error_handler errors);
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) _Py_device_encoding(int);
 
-#if defined(MS_WINDOWS) || defined(__APPLE__)
+#    if defined(MS_WINDOWS) || defined(__APPLE__)
     /* On Windows, the count parameter of read() is an int (bpo-9015, bpo-9611).
        On macOS 10.13, read() and write() with more than INT_MAX bytes
        fail with EINVAL (bpo-24658). */
-#   define _PY_READ_MAX  INT_MAX
-#   define _PY_WRITE_MAX INT_MAX
-#else
+#      define _PY_READ_MAX  INT_MAX
+#      define _PY_WRITE_MAX INT_MAX
+#    else
     /* write() should truncate the input to PY_SSIZE_T_MAX bytes,
        but it's safer to do it ourself to have a portable behaviour */
-#   define _PY_READ_MAX  PY_SSIZE_T_MAX
-#   define _PY_WRITE_MAX PY_SSIZE_T_MAX
-#endif
+#      define _PY_READ_MAX  PY_SSIZE_T_MAX
+#      define _PY_WRITE_MAX PY_SSIZE_T_MAX
+#    endif
 
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
 struct _Py_stat_struct {
     unsigned long st_dev;
     uint64_t st_ino;
@@ -85,9 +85,9 @@ struct _Py_stat_struct {
     int st_ctime_nsec;
     unsigned long st_file_attributes;
 };
-#else
-#  define _Py_stat_struct stat
-#endif
+#    else
+#      define _Py_stat_struct stat
+#    endif
 
 PyAPI_FUNC(int) _Py_fstat(
     int fd,
@@ -136,27 +136,27 @@ PyAPI_FUNC(Py_ssize_t) _Py_write_noraise(
     const void *buf,
     size_t count);
 
-#ifdef HAVE_READLINK
+#    ifdef HAVE_READLINK
 PyAPI_FUNC(int) _Py_wreadlink(
     const wchar_t *path,
     wchar_t *buf,
     /* Number of characters of 'buf' buffer
        including the trailing NUL character */
     size_t buflen);
-#endif
+#    endif
 
-#ifdef HAVE_REALPATH
+#    ifdef HAVE_REALPATH
 PyAPI_FUNC(wchar_t*) _Py_wrealpath(
     const wchar_t *path,
     wchar_t *resolved_path,
     /* Number of characters of 'resolved_path' buffer
        including the trailing NUL character */
     size_t resolved_path_len);
-#endif
+#    endif
 
-#ifndef MS_WINDOWS
+#    ifndef MS_WINDOWS
 PyAPI_FUNC(int) _Py_isabs(const wchar_t *path);
-#endif
+#    endif
 
 PyAPI_FUNC(int) _Py_abspath(const wchar_t *path, wchar_t **abspath_p);
 
@@ -176,15 +176,15 @@ PyAPI_FUNC(int) _Py_set_inheritable_async_safe(int fd, int inheritable,
 
 PyAPI_FUNC(int) _Py_dup(int fd);
 
-#ifndef MS_WINDOWS
+#    ifndef MS_WINDOWS
 PyAPI_FUNC(int) _Py_get_blocking(int fd);
 
 PyAPI_FUNC(int) _Py_set_blocking(int fd, int blocking);
-#endif   /* !MS_WINDOWS */
+#    endif   /* !MS_WINDOWS */
 
-#endif   /* Py_LIMITED_API */
+#  endif   /* Py_LIMITED_API */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_FILEUTILS_H */

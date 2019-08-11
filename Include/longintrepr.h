@@ -1,9 +1,9 @@
 #ifndef Py_LIMITED_API
-#ifndef Py_LONGINTREPR_H
-#define Py_LONGINTREPR_H
-#ifdef __cplusplus
+#  ifndef Py_LONGINTREPR_H
+#    define Py_LONGINTREPR_H
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 
 /* This is published for the benefit of "friends" marshal.c and _decimal.c. */
@@ -41,31 +41,31 @@ extern "C" {
   platform.
 */
 
-#if PYLONG_BITS_IN_DIGIT == 30
+#    if PYLONG_BITS_IN_DIGIT == 30
 typedef uint32_t digit;
 typedef int32_t sdigit; /* signed variant of digit */
 typedef uint64_t twodigits;
 typedef int64_t stwodigits; /* signed variant of twodigits */
-#define PyLong_SHIFT    30
-#define _PyLong_DECIMAL_SHIFT   9 /* max(e such that 10**e fits in a digit) */
-#define _PyLong_DECIMAL_BASE    ((digit)1000000000) /* 10 ** DECIMAL_SHIFT */
-#elif PYLONG_BITS_IN_DIGIT == 15
+#      define PyLong_SHIFT    30
+#      define _PyLong_DECIMAL_SHIFT   9 /* max(e such that 10**e fits in a digit) */
+#      define _PyLong_DECIMAL_BASE    ((digit)1000000000) /* 10 ** DECIMAL_SHIFT */
+#    elif PYLONG_BITS_IN_DIGIT == 15
 typedef unsigned short digit;
 typedef short sdigit; /* signed variant of digit */
 typedef unsigned long twodigits;
 typedef long stwodigits; /* signed variant of twodigits */
-#define PyLong_SHIFT    15
-#define _PyLong_DECIMAL_SHIFT   4 /* max(e such that 10**e fits in a digit) */
-#define _PyLong_DECIMAL_BASE    ((digit)10000) /* 10 ** DECIMAL_SHIFT */
-#else
-#error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
-#endif
-#define PyLong_BASE     ((digit)1 << PyLong_SHIFT)
-#define PyLong_MASK     ((digit)(PyLong_BASE - 1))
+#      define PyLong_SHIFT    15
+#      define _PyLong_DECIMAL_SHIFT   4 /* max(e such that 10**e fits in a digit) */
+#      define _PyLong_DECIMAL_BASE    ((digit)10000) /* 10 ** DECIMAL_SHIFT */
+#    else
+#      error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
+#    endif
+#    define PyLong_BASE     ((digit)1 << PyLong_SHIFT)
+#    define PyLong_MASK     ((digit)(PyLong_BASE - 1))
 
-#if PyLong_SHIFT % 5 != 0
-#error "longobject.c requires that PyLong_SHIFT be divisible by 5"
-#endif
+#    if PyLong_SHIFT % 5 != 0
+#      error "longobject.c requires that PyLong_SHIFT be divisible by 5"
+#    endif
 
 /* Long integer representation.
    The absolute value of a number is equal to
@@ -92,8 +92,8 @@ PyAPI_FUNC(PyLongObject *) _PyLong_New(Py_ssize_t);
 /* Return a copy of src. */
 PyAPI_FUNC(PyObject *) _PyLong_Copy(PyLongObject *src);
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
-#endif /* !Py_LONGINTREPR_H */
+#    endif
+#  endif /* !Py_LONGINTREPR_H */
 #endif /* Py_LIMITED_API */

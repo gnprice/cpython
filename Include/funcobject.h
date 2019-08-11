@@ -1,11 +1,11 @@
 
 /* Function object interface */
 #ifndef Py_LIMITED_API
-#ifndef Py_FUNCOBJECT_H
-#define Py_FUNCOBJECT_H
-#ifdef __cplusplus
+#  ifndef Py_FUNCOBJECT_H
+#    define Py_FUNCOBJECT_H
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 /* Function objects and code objects should not be confused with each other:
  *
@@ -43,7 +43,7 @@ typedef struct {
 
 PyAPI_DATA(PyTypeObject) PyFunction_Type;
 
-#define PyFunction_Check(op) (Py_TYPE(op) == &PyFunction_Type)
+#    define PyFunction_Check(op) (Py_TYPE(op) == &PyFunction_Type)
 
 PyAPI_FUNC(PyObject *) PyFunction_New(PyObject *, PyObject *);
 PyAPI_FUNC(PyObject *) PyFunction_NewWithQualName(PyObject *, PyObject *, PyObject *);
@@ -59,29 +59,29 @@ PyAPI_FUNC(int) PyFunction_SetClosure(PyObject *, PyObject *);
 PyAPI_FUNC(PyObject *) PyFunction_GetAnnotations(PyObject *);
 PyAPI_FUNC(int) PyFunction_SetAnnotations(PyObject *, PyObject *);
 
-#ifndef Py_LIMITED_API
+#    ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) _PyFunction_Vectorcall(
     PyObject *func,
     PyObject *const *stack,
     size_t nargsf,
     PyObject *kwnames);
-#endif
+#    endif
 
 /* Macros for direct access to these values. Type checks are *not*
    done, so use with care. */
-#define PyFunction_GET_CODE(func) \
+#    define PyFunction_GET_CODE(func) \
         (((PyFunctionObject *)func) -> func_code)
-#define PyFunction_GET_GLOBALS(func) \
+#    define PyFunction_GET_GLOBALS(func) \
         (((PyFunctionObject *)func) -> func_globals)
-#define PyFunction_GET_MODULE(func) \
+#    define PyFunction_GET_MODULE(func) \
         (((PyFunctionObject *)func) -> func_module)
-#define PyFunction_GET_DEFAULTS(func) \
+#    define PyFunction_GET_DEFAULTS(func) \
         (((PyFunctionObject *)func) -> func_defaults)
-#define PyFunction_GET_KW_DEFAULTS(func) \
+#    define PyFunction_GET_KW_DEFAULTS(func) \
         (((PyFunctionObject *)func) -> func_kwdefaults)
-#define PyFunction_GET_CLOSURE(func) \
+#    define PyFunction_GET_CLOSURE(func) \
         (((PyFunctionObject *)func) -> func_closure)
-#define PyFunction_GET_ANNOTATIONS(func) \
+#    define PyFunction_GET_ANNOTATIONS(func) \
         (((PyFunctionObject *)func) -> func_annotations)
 
 /* The classmethod and staticmethod types lives here, too */
@@ -91,8 +91,8 @@ PyAPI_DATA(PyTypeObject) PyStaticMethod_Type;
 PyAPI_FUNC(PyObject *) PyClassMethod_New(PyObject *);
 PyAPI_FUNC(PyObject *) PyStaticMethod_New(PyObject *);
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
-#endif /* !Py_FUNCOBJECT_H */
+#    endif
+#  endif /* !Py_FUNCOBJECT_H */
 #endif /* Py_LIMITED_API */

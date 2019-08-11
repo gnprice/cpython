@@ -1,10 +1,10 @@
 #ifndef Py_CONTEXT_H
-#define Py_CONTEXT_H
-#ifdef __cplusplus
+#  define Py_CONTEXT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 
 
 PyAPI_DATA(PyTypeObject) PyContext_Type;
@@ -17,9 +17,9 @@ PyAPI_DATA(PyTypeObject) PyContextToken_Type;
 typedef struct _pycontexttokenobject PyContextToken;
 
 
-#define PyContext_CheckExact(o) (Py_TYPE(o) == &PyContext_Type)
-#define PyContextVar_CheckExact(o) (Py_TYPE(o) == &PyContextVar_Type)
-#define PyContextToken_CheckExact(o) (Py_TYPE(o) == &PyContextToken_Type)
+#    define PyContext_CheckExact(o) (Py_TYPE(o) == &PyContext_Type)
+#    define PyContextVar_CheckExact(o) (Py_TYPE(o) == &PyContextVar_Type)
+#    define PyContextToken_CheckExact(o) (Py_TYPE(o) == &PyContextToken_Type)
 
 
 PyAPI_FUNC(PyObject *) PyContext_New(void);
@@ -76,9 +76,9 @@ PyAPI_FUNC(PyObject *) _PyContext_NewHamtForTests(void);
 PyAPI_FUNC(int) PyContext_ClearFreeList(void);
 
 
-#endif /* !Py_LIMITED_API */
+#  endif /* !Py_LIMITED_API */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_CONTEXT_H */

@@ -64,14 +64,14 @@ static void _PyMem_SetupDebugHooksDomain(PyMemAllocatorDomain domain);
 
 #ifdef WITH_PYMALLOC
 
-#ifdef MS_WINDOWS
-#  include <windows.h>
-#elif defined(HAVE_MMAP)
-#  include <sys/mman.h>
-#  ifdef MAP_ANONYMOUS
-#    define ARENAS_USE_MMAP
+#  ifdef MS_WINDOWS
+#    include <windows.h>
+#  elif defined(HAVE_MMAP)
+#    include <sys/mman.h>
+#    ifdef MAP_ANONYMOUS
+#      define ARENAS_USE_MMAP
+#    endif
 #  endif
-#endif
 
 /* Forward declaration */
 static void* _PyObject_Malloc(void *ctx, size_t size);
@@ -722,12 +722,12 @@ PyObject_Free(void *ptr)
 
 #ifdef WITH_PYMALLOC
 
-#ifdef WITH_VALGRIND
-#include <valgrind/valgrind.h>
+#  ifdef WITH_VALGRIND
+#    include <valgrind/valgrind.h>
 
 /* -1 indicates that we haven't checked that we're running on valgrind yet. */
 static int running_on_valgrind = -1;
-#endif
+#  endif
 
 
 /* An object allocator for Python.
@@ -843,16 +843,16 @@ static int running_on_valgrind = -1;
  * You shouldn't change this unless you know what you are doing.
  */
 
-#if SIZEOF_VOID_P > 4
-#define ALIGNMENT              16               /* must be 2^N */
-#define ALIGNMENT_SHIFT         4
-#else
-#define ALIGNMENT               8               /* must be 2^N */
-#define ALIGNMENT_SHIFT         3
-#endif
+#  if SIZEOF_VOID_P > 4
+#    define ALIGNMENT              16               /* must be 2^N */
+#    define ALIGNMENT_SHIFT         4
+#  else
+#    define ALIGNMENT               8               /* must be 2^N */
+#    define ALIGNMENT_SHIFT         3
+#  endif
 
 /* Return the number of bytes in size class I, as a uint. */
-#define INDEX2SIZE(I) (((uint)(I) + 1) << ALIGNMENT_SHIFT)
+#  define INDEX2SIZE(I) (((uint)(I) + 1) << ALIGNMENT_SHIFT)
 
 /*
  * Max size threshold below which malloc requests are considered to be
@@ -869,8 +869,8 @@ static int running_on_valgrind = -1;
  * Although not required, for better performance and space efficiency,
  * it is recommended that SMALL_REQUEST_THRESHOLD is set to a power of 2.
  */
-#define SMALL_REQUEST_THRESHOLD 512
-#define NB_SMALL_SIZE_CLASSES   (SMALL_REQUEST_THRESHOLD / ALIGNMENT)
+#  define SMALL_REQUEST_THRESHOLD 512
+#  define NB_SMALL_SIZE_CLASSES   (SMALL_REQUEST_THRESHOLD / ALIGNMENT)
 
 /*
  * The system's VMM page size can be obtained on most unices with a
@@ -882,17 +882,17 @@ static int running_on_valgrind = -1;
  * violation fault.  4K is apparently OK for all the platforms that python
  * currently targets.
  */
-#define SYSTEM_PAGE_SIZE        (4 * 1024)
-#define SYSTEM_PAGE_SIZE_MASK   (SYSTEM_PAGE_SIZE - 1)
+#  define SYSTEM_PAGE_SIZE        (4 * 1024)
+#  define SYSTEM_PAGE_SIZE_MASK   (SYSTEM_PAGE_SIZE - 1)
 
 /*
  * Maximum amount of memory managed by the allocator for small requests.
  */
-#ifdef WITH_MEMORY_LIMITS
-#ifndef SMALL_MEMORY_LIMIT
-#define SMALL_MEMORY_LIMIT      (64 * 1024 * 1024)      /* 64 MB -- more? */
-#endif
-#endif
+#  ifdef WITH_MEMORY_LIMITS
+#    ifndef SMALL_MEMORY_LIMIT
+#      define SMALL_MEMORY_LIMIT      (64 * 1024 * 1024)      /* 64 MB -- more? */
+#    endif
+#  endif
 
 /*
  * The allocator sub-allocates <Big> blocks of memory (called arenas) aligned
@@ -907,23 +907,23 @@ static int running_on_valgrind = -1;
  * Arenas are allocated with mmap() on systems supporting anonymous memory
  * mappings to reduce heap fragmentation.
  */
-#define ARENA_SIZE              (256 << 10)     /* 256KB */
+#  define ARENA_SIZE              (256 << 10)     /* 256KB */
 
-#ifdef WITH_MEMORY_LIMITS
-#define MAX_ARENAS              (SMALL_MEMORY_LIMIT / ARENA_SIZE)
-#endif
+#  ifdef WITH_MEMORY_LIMITS
+#    define MAX_ARENAS              (SMALL_MEMORY_LIMIT / ARENA_SIZE)
+#  endif
 
 /*
  * Size of the pools used for small blocks. Should be a power of 2,
  * between 1K and SYSTEM_PAGE_SIZE, that is: 1k, 2k, 4k.
  */
-#define POOL_SIZE               SYSTEM_PAGE_SIZE        /* must be 2^N */
-#define POOL_SIZE_MASK          SYSTEM_PAGE_SIZE_MASK
+#  define POOL_SIZE               SYSTEM_PAGE_SIZE        /* must be 2^N */
+#  define POOL_SIZE_MASK          SYSTEM_PAGE_SIZE_MASK
 
-#define MAX_POOLS_IN_ARENA  (ARENA_SIZE / POOL_SIZE)
-#if MAX_POOLS_IN_ARENA * POOL_SIZE != ARENA_SIZE
-#   error "arena size not an exact multiple of pool size"
-#endif
+#  define MAX_POOLS_IN_ARENA  (ARENA_SIZE / POOL_SIZE)
+#  if MAX_POOLS_IN_ARENA * POOL_SIZE != ARENA_SIZE
+#    error "arena size not an exact multiple of pool size"
+#  endif
 
 /*
  * -- End of tunable settings section --
@@ -990,15 +990,15 @@ struct arena_object {
     struct arena_object* prevarena;
 };
 
-#define POOL_OVERHEAD   _Py_SIZE_ROUND_UP(sizeof(struct pool_header), ALIGNMENT)
+#  define POOL_OVERHEAD   _Py_SIZE_ROUND_UP(sizeof(struct pool_header), ALIGNMENT)
 
-#define DUMMY_SIZE_IDX          0xffff  /* size class of newly cached pools */
+#  define DUMMY_SIZE_IDX          0xffff  /* size class of newly cached pools */
 
 /* Round pointer P down to the closest pool-aligned address <= P, as a poolp */
-#define POOL_ADDR(P) ((poolp)_Py_ALIGN_DOWN((P), POOL_SIZE))
+#  define POOL_ADDR(P) ((poolp)_Py_ALIGN_DOWN((P), POOL_SIZE))
 
 /* Return total number of blocks in pool of size index I, as a uint. */
-#define NUMBLOCKS(I) ((uint)(POOL_SIZE - POOL_OVERHEAD) / INDEX2SIZE(I))
+#  define NUMBLOCKS(I) ((uint)(POOL_SIZE - POOL_OVERHEAD) / INDEX2SIZE(I))
 
 /*==========================================================================*/
 
@@ -1098,35 +1098,35 @@ on that C doesn't insert any padding anywhere in a pool_header at or before
 the prevpool member.
 **************************************************************************** */
 
-#define PTA(x)  ((poolp )((uint8_t *)&(usedpools[2*(x)]) - 2*sizeof(block *)))
-#define PT(x)   PTA(x), PTA(x)
+#  define PTA(x)  ((poolp )((uint8_t *)&(usedpools[2*(x)]) - 2*sizeof(block *)))
+#  define PT(x)   PTA(x), PTA(x)
 
 static poolp usedpools[2 * ((NB_SMALL_SIZE_CLASSES + 7) / 8) * 8] = {
     PT(0), PT(1), PT(2), PT(3), PT(4), PT(5), PT(6), PT(7)
-#if NB_SMALL_SIZE_CLASSES > 8
+#  if NB_SMALL_SIZE_CLASSES > 8
     , PT(8), PT(9), PT(10), PT(11), PT(12), PT(13), PT(14), PT(15)
-#if NB_SMALL_SIZE_CLASSES > 16
+#    if NB_SMALL_SIZE_CLASSES > 16
     , PT(16), PT(17), PT(18), PT(19), PT(20), PT(21), PT(22), PT(23)
-#if NB_SMALL_SIZE_CLASSES > 24
+#      if NB_SMALL_SIZE_CLASSES > 24
     , PT(24), PT(25), PT(26), PT(27), PT(28), PT(29), PT(30), PT(31)
-#if NB_SMALL_SIZE_CLASSES > 32
+#        if NB_SMALL_SIZE_CLASSES > 32
     , PT(32), PT(33), PT(34), PT(35), PT(36), PT(37), PT(38), PT(39)
-#if NB_SMALL_SIZE_CLASSES > 40
+#          if NB_SMALL_SIZE_CLASSES > 40
     , PT(40), PT(41), PT(42), PT(43), PT(44), PT(45), PT(46), PT(47)
-#if NB_SMALL_SIZE_CLASSES > 48
+#            if NB_SMALL_SIZE_CLASSES > 48
     , PT(48), PT(49), PT(50), PT(51), PT(52), PT(53), PT(54), PT(55)
-#if NB_SMALL_SIZE_CLASSES > 56
+#              if NB_SMALL_SIZE_CLASSES > 56
     , PT(56), PT(57), PT(58), PT(59), PT(60), PT(61), PT(62), PT(63)
-#if NB_SMALL_SIZE_CLASSES > 64
-#error "NB_SMALL_SIZE_CLASSES should be less than 64"
-#endif /* NB_SMALL_SIZE_CLASSES > 64 */
-#endif /* NB_SMALL_SIZE_CLASSES > 56 */
-#endif /* NB_SMALL_SIZE_CLASSES > 48 */
-#endif /* NB_SMALL_SIZE_CLASSES > 40 */
-#endif /* NB_SMALL_SIZE_CLASSES > 32 */
-#endif /* NB_SMALL_SIZE_CLASSES > 24 */
-#endif /* NB_SMALL_SIZE_CLASSES > 16 */
-#endif /* NB_SMALL_SIZE_CLASSES >  8 */
+#                if NB_SMALL_SIZE_CLASSES > 64
+#                  error "NB_SMALL_SIZE_CLASSES should be less than 64"
+#                endif /* NB_SMALL_SIZE_CLASSES > 64 */
+#              endif /* NB_SMALL_SIZE_CLASSES > 56 */
+#            endif /* NB_SMALL_SIZE_CLASSES > 48 */
+#          endif /* NB_SMALL_SIZE_CLASSES > 40 */
+#        endif /* NB_SMALL_SIZE_CLASSES > 32 */
+#      endif /* NB_SMALL_SIZE_CLASSES > 24 */
+#    endif /* NB_SMALL_SIZE_CLASSES > 16 */
+#  endif /* NB_SMALL_SIZE_CLASSES >  8 */
 };
 
 /*==========================================================================
@@ -1198,7 +1198,7 @@ static struct arena_object* nfp2lasta[MAX_POOLS_IN_ARENA + 1] = { NULL };
  * 16 = can allocate 16 arenas = 16 * ARENA_SIZE = 4MB before growing the
  * `arenas` vector.
  */
-#define INITIAL_ARENA_OBJECTS 16
+#  define INITIAL_ARENA_OBJECTS 16
 
 /* Number of arenas allocated that haven't been free()'d. */
 static size_t narenas_currently_allocated = 0;
@@ -1265,10 +1265,10 @@ new_arena(void)
         numarenas = maxarenas ? maxarenas << 1 : INITIAL_ARENA_OBJECTS;
         if (numarenas <= maxarenas)
             return NULL;                /* overflow */
-#if SIZEOF_SIZE_T <= SIZEOF_INT
+#  if SIZEOF_SIZE_T <= SIZEOF_INT
         if (numarenas > SIZE_MAX / sizeof(*arenas))
             return NULL;                /* overflow */
-#endif
+#  endif
         nbytes = numarenas * sizeof(*arenas);
         arenaobj = (struct arena_object *)PyMem_RawRealloc(arenas, nbytes);
         if (arenaobj == NULL)
@@ -1458,11 +1458,11 @@ allocate_from_new_pool(uint size)
      */
     if (UNLIKELY(usable_arenas == NULL)) {
         /* No arena has a free pool:  allocate a new arena. */
-#ifdef WITH_MEMORY_LIMITS
+#  ifdef WITH_MEMORY_LIMITS
         if (narenas_currently_allocated >= MAX_ARENAS) {
             return NULL;
         }
-#endif
+#  endif
         usable_arenas = new_arena();
         if (usable_arenas == NULL) {
             return NULL;
@@ -1589,14 +1589,14 @@ allocate_from_new_pool(uint size)
 static inline int
 pymalloc_alloc(void *ctx, void **ptr_p, size_t nbytes)
 {
-#ifdef WITH_VALGRIND
+#  ifdef WITH_VALGRIND
     if (UNLIKELY(running_on_valgrind == -1)) {
         running_on_valgrind = RUNNING_ON_VALGRIND;
     }
     if (UNLIKELY(running_on_valgrind)) {
         return 0;
     }
-#endif
+#  endif
 
     if (UNLIKELY(nbytes == 0)) {
         return 0;
@@ -1861,11 +1861,11 @@ pymalloc_free(void *ctx, void *p)
 {
     assert(p != NULL);
 
-#ifdef WITH_VALGRIND
+#  ifdef WITH_VALGRIND
     if (UNLIKELY(running_on_valgrind > 0)) {
         return 0;
     }
-#endif
+#  endif
 
     poolp pool = POOL_ADDR(p);
     if (UNLIKELY(!address_in_range(p, pool))) {
@@ -1948,12 +1948,12 @@ pymalloc_realloc(void *ctx, void **newptr_p, void *p, size_t nbytes)
 
     assert(p != NULL);
 
-#ifdef WITH_VALGRIND
+#  ifdef WITH_VALGRIND
     /* Treat running_on_valgrind == -1 the same as 0 */
     if (UNLIKELY(running_on_valgrind > 0)) {
         return 0;
     }
-#endif
+#  endif
 
     pool = POOL_ADDR(p);
     if (!address_in_range(p, pool)) {
@@ -2589,7 +2589,7 @@ _PyDebugAllocatorStats(FILE *out,
 
 #ifdef WITH_PYMALLOC
 
-#ifdef Py_DEBUG
+#  ifdef Py_DEBUG
 /* Is target in the list?  The list is traversed via the nextpool pointers.
  * The list may be NULL-terminated, or circular.  Return 1 if target is in
  * list, else 0.
@@ -2608,7 +2608,7 @@ pool_is_in_list(const poolp target, poolp list)
     } while (list != NULL && list != origlist);
     return 0;
 }
-#endif
+#  endif
 
 /* Print summary info to "out" about the state of pymalloc's structures.
  * In Py_DEBUG mode, also perform some expensive internal consistency
@@ -2689,19 +2689,19 @@ _PyObject_DebugMallocStats(FILE *out)
 
             if (p->ref.count == 0) {
                 /* currently unused */
-#ifdef Py_DEBUG
+#  ifdef Py_DEBUG
                 assert(pool_is_in_list(p, arenas[i].freepools));
-#endif
+#  endif
                 continue;
             }
             ++numpools[sz];
             numblocks[sz] += p->ref.count;
             freeblocks = NUMBLOCKS(sz) - p->ref.count;
             numfreeblocks[sz] += freeblocks;
-#ifdef Py_DEBUG
+#  ifdef Py_DEBUG
             if (freeblocks > 0)
                 assert(pool_is_in_list(p, usedpools[sz + sz]));
-#endif
+#  endif
         }
     }
     assert(narenas == narenas_currently_allocated);
@@ -2731,11 +2731,11 @@ _PyObject_DebugMallocStats(FILE *out)
         quantization += p * ((POOL_SIZE - POOL_OVERHEAD) % size);
     }
     fputc('\n', out);
-#ifdef PYMEM_DEBUG_SERIALNO
+#  ifdef PYMEM_DEBUG_SERIALNO
     if (_PyMem_DebugEnabled()) {
         (void)printone(out, "# times object malloc called", serialno);
     }
-#endif
+#  endif
     (void)printone(out, "# arenas allocated total", ntimes_arena_allocated);
     (void)printone(out, "# arenas reclaimed", ntimes_arena_allocated - narenas);
     (void)printone(out, "# arenas highwater mark", narenas_highwater);

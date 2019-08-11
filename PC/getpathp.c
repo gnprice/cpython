@@ -86,18 +86,18 @@
 #include <wchar.h>
 
 #ifndef MS_WINDOWS
-#error getpathp.c should only be built on Windows
+#  error getpathp.c should only be built on Windows
 #endif
 
 #include <windows.h>
 #include <shlwapi.h>
 
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */
 
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif /* HAVE_SYS_STAT_H */
 
 #include <string.h>
@@ -115,7 +115,7 @@
  */
 
 #ifndef LANDMARK
-#define LANDMARK L"lib\\os.py"
+#  define LANDMARK L"lib\\os.py"
 #endif
 
 typedef struct {

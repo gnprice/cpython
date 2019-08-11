@@ -1,17 +1,17 @@
 /* stringlib: codec implementations */
 
 #if !STRINGLIB_IS_UNICODE
-# error "codecs.h is specific to Unicode"
+#  error "codecs.h is specific to Unicode"
 #endif
 
 /* Mask to quickly check whether a C 'long' contains a
    non-ASCII, UTF8-encoded char. */
 #if (SIZEOF_LONG == 8)
-# define ASCII_CHAR_MASK 0x8080808080808080UL
+#  define ASCII_CHAR_MASK 0x8080808080808080UL
 #elif (SIZEOF_LONG == 4)
-# define ASCII_CHAR_MASK 0x80808080UL
+#  define ASCII_CHAR_MASK 0x80808080UL
 #else
-# error C 'long' size should be either 4 or 8!
+#  error C 'long' size should be either 4 or 8!
 #endif
 
 /* 10xxxxxx */
@@ -54,14 +54,14 @@ STRINGLIB(utf8_decode)(const char **inptr, const char *end,
                     _p[1] = (STRINGLIB_CHAR)((value >> 8) & 0xFFu);
                     _p[2] = (STRINGLIB_CHAR)((value >> 16) & 0xFFu);
                     _p[3] = (STRINGLIB_CHAR)((value >> 24) & 0xFFu);
-# if SIZEOF_LONG == 8
+#  if SIZEOF_LONG == 8
                     _p[4] = (STRINGLIB_CHAR)((value >> 32) & 0xFFu);
                     _p[5] = (STRINGLIB_CHAR)((value >> 40) & 0xFFu);
                     _p[6] = (STRINGLIB_CHAR)((value >> 48) & 0xFFu);
                     _p[7] = (STRINGLIB_CHAR)((value >> 56) & 0xFFu);
-# endif
+#  endif
 #else
-# if SIZEOF_LONG == 8
+#  if SIZEOF_LONG == 8
                     _p[0] = (STRINGLIB_CHAR)((value >> 56) & 0xFFu);
                     _p[1] = (STRINGLIB_CHAR)((value >> 48) & 0xFFu);
                     _p[2] = (STRINGLIB_CHAR)((value >> 40) & 0xFFu);
@@ -70,12 +70,12 @@ STRINGLIB(utf8_decode)(const char **inptr, const char *end,
                     _p[5] = (STRINGLIB_CHAR)((value >> 16) & 0xFFu);
                     _p[6] = (STRINGLIB_CHAR)((value >> 8) & 0xFFu);
                     _p[7] = (STRINGLIB_CHAR)(value & 0xFFu);
-# else
+#  else
                     _p[0] = (STRINGLIB_CHAR)((value >> 24) & 0xFFu);
                     _p[1] = (STRINGLIB_CHAR)((value >> 16) & 0xFFu);
                     _p[2] = (STRINGLIB_CHAR)((value >> 8) & 0xFFu);
                     _p[3] = (STRINGLIB_CHAR)(value & 0xFFu);
-# endif
+#  endif
 #endif
                     _s += SIZEOF_LONG;
                     _p += SIZEOF_LONG;
@@ -423,15 +423,15 @@ STRINGLIB(utf8_encoder)(PyObject *unicode,
             assert(writer.overallocate || i == size);
         }
         else
-#if STRINGLIB_SIZEOF_CHAR > 2
+#  if STRINGLIB_SIZEOF_CHAR > 2
         if (ch < 0x10000)
-#endif
+#  endif
         {
             *p++ = (char)(0xe0 | (ch >> 12));
             *p++ = (char)(0x80 | ((ch >> 6) & 0x3f));
             *p++ = (char)(0x80 | (ch & 0x3f));
         }
-#if STRINGLIB_SIZEOF_CHAR > 2
+#  if STRINGLIB_SIZEOF_CHAR > 2
         else /* ch >= 0x10000 */
         {
             assert(ch <= MAX_UNICODE);
@@ -441,7 +441,7 @@ STRINGLIB(utf8_encoder)(PyObject *unicode,
             *p++ = (char)(0x80 | ((ch >> 6) & 0x3f));
             *p++ = (char)(0x80 | (ch & 0x3f));
         }
-#endif /* STRINGLIB_SIZEOF_CHAR > 2 */
+#  endif /* STRINGLIB_SIZEOF_CHAR > 2 */
 #endif /* STRINGLIB_SIZEOF_CHAR > 1 */
     }
 
@@ -463,25 +463,25 @@ STRINGLIB(utf8_encoder)(PyObject *unicode,
 
 /* The pattern for constructing UCS2-repeated masks. */
 #if SIZEOF_LONG == 8
-# define UCS2_REPEAT_MASK 0x0001000100010001ul
+#  define UCS2_REPEAT_MASK 0x0001000100010001ul
 #elif SIZEOF_LONG == 4
-# define UCS2_REPEAT_MASK 0x00010001ul
+#  define UCS2_REPEAT_MASK 0x00010001ul
 #else
-# error C 'long' size should be either 4 or 8!
+#  error C 'long' size should be either 4 or 8!
 #endif
 
 /* The mask for fast checking. */
 #if STRINGLIB_SIZEOF_CHAR == 1
 /* The mask for fast checking of whether a C 'long' contains a
    non-ASCII or non-Latin1 UTF16-encoded characters. */
-# define FAST_CHAR_MASK         (UCS2_REPEAT_MASK * (0xFFFFu & ~STRINGLIB_MAX_CHAR))
+#  define FAST_CHAR_MASK         (UCS2_REPEAT_MASK * (0xFFFFu & ~STRINGLIB_MAX_CHAR))
 #else
 /* The mask for fast checking of whether a C 'long' may contain
    UTF16-encoded surrogate characters. This is an efficient heuristic,
    assuming that non-surrogate characters with a code point >= 0x8000 are
    rare in most input.
 */
-# define FAST_CHAR_MASK         (UCS2_REPEAT_MASK * 0x8000u)
+#  define FAST_CHAR_MASK         (UCS2_REPEAT_MASK * 0x8000u)
 #endif
 /* The mask for fast byte-swapping. */
 #define STRIPPED_MASK           (UCS2_REPEAT_MASK * 0x00FFu)
@@ -532,25 +532,25 @@ STRINGLIB(utf16_decode)(const unsigned char **inptr, const unsigned char *e,
 #endif
                 }
 #if PY_LITTLE_ENDIAN
-# if SIZEOF_LONG == 4
+#  if SIZEOF_LONG == 4
                 p[0] = (STRINGLIB_CHAR)(block & 0xFFFFu);
                 p[1] = (STRINGLIB_CHAR)(block >> 16);
-# elif SIZEOF_LONG == 8
+#  elif SIZEOF_LONG == 8
                 p[0] = (STRINGLIB_CHAR)(block & 0xFFFFu);
                 p[1] = (STRINGLIB_CHAR)((block >> 16) & 0xFFFFu);
                 p[2] = (STRINGLIB_CHAR)((block >> 32) & 0xFFFFu);
                 p[3] = (STRINGLIB_CHAR)(block >> 48);
-# endif
+#  endif
 #else
-# if SIZEOF_LONG == 4
+#  if SIZEOF_LONG == 4
                 p[0] = (STRINGLIB_CHAR)(block >> 16);
                 p[1] = (STRINGLIB_CHAR)(block & 0xFFFFu);
-# elif SIZEOF_LONG == 8
+#  elif SIZEOF_LONG == 8
                 p[0] = (STRINGLIB_CHAR)(block >> 48);
                 p[1] = (STRINGLIB_CHAR)((block >> 32) & 0xFFFFu);
                 p[2] = (STRINGLIB_CHAR)((block >> 16) & 0xFFFFu);
                 p[3] = (STRINGLIB_CHAR)(block & 0xFFFFu);
-# endif
+#  endif
 #endif
                 _q += SIZEOF_LONG;
                 p += SIZEOF_LONG / 2;
@@ -619,7 +619,7 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
 {
     unsigned short *out = *outptr;
     const STRINGLIB_CHAR *end = in + len;
-#if STRINGLIB_SIZEOF_CHAR == 1
+#  if STRINGLIB_SIZEOF_CHAR == 1
     if (native_ordering) {
         const STRINGLIB_CHAR *unrolled_end = in + _Py_SIZE_ROUND_DOWN(len, 4);
         while (in < unrolled_end) {
@@ -633,7 +633,7 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
             *out++ = *in++;
         }
     } else {
-# define SWAB2(CH)  ((CH) << 8) /* high byte is zero */
+#    define SWAB2(CH)  ((CH) << 8) /* high byte is zero */
         const STRINGLIB_CHAR *unrolled_end = in + _Py_SIZE_ROUND_DOWN(len, 4);
         while (in < unrolled_end) {
             out[0] = SWAB2(in[0]);
@@ -646,13 +646,13 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
             Py_UCS4 ch = *in++;
             *out++ = SWAB2((Py_UCS2)ch);
         }
-#undef SWAB2
+#    undef SWAB2
     }
     *outptr = out;
     return len;
-#else
+#  else
     if (native_ordering) {
-#if STRINGLIB_MAX_CHAR < 0x10000
+#    if STRINGLIB_MAX_CHAR < 0x10000
         const STRINGLIB_CHAR *unrolled_end = in + _Py_SIZE_ROUND_DOWN(len, 4);
         while (in < unrolled_end) {
             /* check if any character is a surrogate character */
@@ -667,7 +667,7 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
             out[3] = in[3];
             in += 4; out += 4;
         }
-#endif
+#    endif
         while (in < end) {
             Py_UCS4 ch;
             ch = *in++;
@@ -676,19 +676,19 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
             else if (ch < 0xe000)
                 /* reject surrogate characters (U+D800-U+DFFF) */
                 goto fail;
-#if STRINGLIB_MAX_CHAR >= 0x10000
+#    if STRINGLIB_MAX_CHAR >= 0x10000
             else if (ch >= 0x10000) {
                 out[0] = Py_UNICODE_HIGH_SURROGATE(ch);
                 out[1] = Py_UNICODE_LOW_SURROGATE(ch);
                 out += 2;
             }
-#endif
+#    endif
             else
                 *out++ = ch;
         }
     } else {
-#define SWAB2(CH)  (((CH) << 8) | ((CH) >> 8))
-#if STRINGLIB_MAX_CHAR < 0x10000
+#    define SWAB2(CH)  (((CH) << 8) | ((CH) >> 8))
+#    if STRINGLIB_MAX_CHAR < 0x10000
         const STRINGLIB_CHAR *unrolled_end = in + _Py_SIZE_ROUND_DOWN(len, 4);
         while (in < unrolled_end) {
             /* check if any character is a surrogate character */
@@ -703,7 +703,7 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
             out[3] = SWAB2(in[3]);
             in += 4; out += 4;
         }
-#endif
+#    endif
         while (in < end) {
             Py_UCS4 ch = *in++;
             if (ch < 0xd800)
@@ -711,7 +711,7 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
             else if (ch < 0xe000)
                 /* reject surrogate characters (U+D800-U+DFFF) */
                 goto fail;
-#if STRINGLIB_MAX_CHAR >= 0x10000
+#    if STRINGLIB_MAX_CHAR >= 0x10000
             else if (ch >= 0x10000) {
                 Py_UCS2 ch1 = Py_UNICODE_HIGH_SURROGATE(ch);
                 Py_UCS2 ch2 = Py_UNICODE_LOW_SURROGATE(ch);
@@ -719,31 +719,31 @@ STRINGLIB(utf16_encode)(const STRINGLIB_CHAR *in,
                 out[1] = SWAB2(ch2);
                 out += 2;
             }
-#endif
+#    endif
             else
                 *out++ = SWAB2((Py_UCS2)ch);
         }
-#undef SWAB2
+#    undef SWAB2
     }
     *outptr = out;
     return len;
   fail:
     *outptr = out;
     return len - (end - in + 1);
-#endif
+#  endif
 }
 
-#if STRINGLIB_SIZEOF_CHAR == 1
-# define SWAB4(CH, tmp)  ((CH) << 24) /* high bytes are zero */
-#elif STRINGLIB_SIZEOF_CHAR == 2
-# define SWAB4(CH, tmp)  (tmp = (CH), \
+#  if STRINGLIB_SIZEOF_CHAR == 1
+#    define SWAB4(CH, tmp)  ((CH) << 24) /* high bytes are zero */
+#  elif STRINGLIB_SIZEOF_CHAR == 2
+#    define SWAB4(CH, tmp)  (tmp = (CH), \
             ((tmp & 0x00FFu) << 24) + ((tmp & 0xFF00u) << 8))
             /* high bytes are zero */
-#else
-# define SWAB4(CH, tmp)  (tmp = (CH), \
+#  else
+#    define SWAB4(CH, tmp)  (tmp = (CH), \
             tmp = ((tmp & 0x00FF00FFu) << 8) + ((tmp >> 8) & 0x00FF00FFu), \
             ((tmp & 0x0000FFFFu) << 16) + ((tmp >> 16) & 0x0000FFFFu))
-#endif
+#  endif
 Py_LOCAL_INLINE(Py_ssize_t)
 STRINGLIB(utf32_encode)(const STRINGLIB_CHAR *in,
                         Py_ssize_t len,
@@ -755,14 +755,14 @@ STRINGLIB(utf32_encode)(const STRINGLIB_CHAR *in,
     if (native_ordering) {
         const STRINGLIB_CHAR *unrolled_end = in + _Py_SIZE_ROUND_DOWN(len, 4);
         while (in < unrolled_end) {
-#if STRINGLIB_SIZEOF_CHAR > 1
+#  if STRINGLIB_SIZEOF_CHAR > 1
             /* check if any character is a surrogate character */
             if (((in[0] ^ 0xd800) &
                  (in[1] ^ 0xd800) &
                  (in[2] ^ 0xd800) &
                  (in[3] ^ 0xd800) & 0xf800) == 0)
                 break;
-#endif
+#  endif
             out[0] = in[0];
             out[1] = in[1];
             out[2] = in[2];
@@ -772,18 +772,18 @@ STRINGLIB(utf32_encode)(const STRINGLIB_CHAR *in,
         while (in < end) {
             Py_UCS4 ch;
             ch = *in++;
-#if STRINGLIB_SIZEOF_CHAR > 1
+#  if STRINGLIB_SIZEOF_CHAR > 1
             if (Py_UNICODE_IS_SURROGATE(ch)) {
                 /* reject surrogate characters (U+D800-U+DFFF) */
                 goto fail;
             }
-#endif
+#  endif
             *out++ = ch;
         }
     } else {
         const STRINGLIB_CHAR *unrolled_end = in + _Py_SIZE_ROUND_DOWN(len, 4);
         while (in < unrolled_end) {
-#if STRINGLIB_SIZEOF_CHAR > 1
+#  if STRINGLIB_SIZEOF_CHAR > 1
             Py_UCS4 ch1, ch2, ch3, ch4;
             /* check if any character is a surrogate character */
             if (((in[0] ^ 0xd800) &
@@ -791,7 +791,7 @@ STRINGLIB(utf32_encode)(const STRINGLIB_CHAR *in,
                  (in[2] ^ 0xd800) &
                  (in[3] ^ 0xd800) & 0xf800) == 0)
                 break;
-#endif
+#  endif
             out[0] = SWAB4(in[0], ch1);
             out[1] = SWAB4(in[1], ch2);
             out[2] = SWAB4(in[2], ch3);
@@ -800,23 +800,23 @@ STRINGLIB(utf32_encode)(const STRINGLIB_CHAR *in,
         }
         while (in < end) {
             Py_UCS4 ch = *in++;
-#if STRINGLIB_SIZEOF_CHAR > 1
+#  if STRINGLIB_SIZEOF_CHAR > 1
             if (Py_UNICODE_IS_SURROGATE(ch)) {
                 /* reject surrogate characters (U+D800-U+DFFF) */
                 goto fail;
             }
-#endif
+#  endif
             *out++ = SWAB4(ch, ch);
         }
     }
     *outptr = out;
     return len;
-#if STRINGLIB_SIZEOF_CHAR > 1
+#  if STRINGLIB_SIZEOF_CHAR > 1
   fail:
     *outptr = out;
     return len - (end - in + 1);
-#endif
+#  endif
 }
-#undef SWAB4
+#  undef SWAB4
 
 #endif

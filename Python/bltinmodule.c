@@ -2796,9 +2796,9 @@ _PyBuiltin_Init(PyThreadState *tstate)
      * result, programs leaking references to None and False (etc)
      * couldn't be diagnosed by examining sys.getobjects(0).
      */
-#define ADD_TO_ALL(OBJECT) _Py_AddToAllObjects((PyObject *)(OBJECT), 0)
+#  define ADD_TO_ALL(OBJECT) _Py_AddToAllObjects((PyObject *)(OBJECT), 0)
 #else
-#define ADD_TO_ALL(OBJECT) (void)0
+#  define ADD_TO_ALL(OBJECT) (void)0
 #endif
 
 #define SETBUILTIN(NAME, OBJECT) \

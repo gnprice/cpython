@@ -1,12 +1,12 @@
 /* ByteArray object interface */
 
 #ifndef Py_BYTEARRAYOBJECT_H
-#define Py_BYTEARRAYOBJECT_H
-#ifdef __cplusplus
+#  define Py_BYTEARRAYOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include <stdarg.h>
+#  include <stdarg.h>
 
 /* Type PyByteArrayObject represents a mutable array of bytes.
  * The Python API is that of a sequence;
@@ -19,7 +19,7 @@ extern "C" {
  */
 
 /* Object layout */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef struct {
     PyObject_VAR_HEAD
     Py_ssize_t ob_alloc; /* How many bytes allocated in ob_bytes */
@@ -28,15 +28,15 @@ typedef struct {
     /* XXX(nnorwitz): should ob_exports be Py_ssize_t? */
     int ob_exports;      /* How many buffer exports */
 } PyByteArrayObject;
-#endif
+#  endif
 
 /* Type object */
 PyAPI_DATA(PyTypeObject) PyByteArray_Type;
 PyAPI_DATA(PyTypeObject) PyByteArrayIter_Type;
 
 /* Type check macros */
-#define PyByteArray_Check(self) PyObject_TypeCheck(self, &PyByteArray_Type)
-#define PyByteArray_CheckExact(self) (Py_TYPE(self) == &PyByteArray_Type)
+#  define PyByteArray_Check(self) PyObject_TypeCheck(self, &PyByteArray_Type)
+#  define PyByteArray_CheckExact(self) (Py_TYPE(self) == &PyByteArray_Type)
 
 /* Direct API functions */
 PyAPI_FUNC(PyObject *) PyByteArray_FromObject(PyObject *);
@@ -47,16 +47,16 @@ PyAPI_FUNC(char *) PyByteArray_AsString(PyObject *);
 PyAPI_FUNC(int) PyByteArray_Resize(PyObject *, Py_ssize_t);
 
 /* Macros, trading safety for speed */
-#ifndef Py_LIMITED_API
-#define PyByteArray_AS_STRING(self) \
+#  ifndef Py_LIMITED_API
+#    define PyByteArray_AS_STRING(self) \
     (assert(PyByteArray_Check(self)), \
      Py_SIZE(self) ? ((PyByteArrayObject *)(self))->ob_start : _PyByteArray_empty_string)
-#define PyByteArray_GET_SIZE(self) (assert(PyByteArray_Check(self)), Py_SIZE(self))
+#    define PyByteArray_GET_SIZE(self) (assert(PyByteArray_Check(self)), Py_SIZE(self))
 
 PyAPI_DATA(char) _PyByteArray_empty_string[];
-#endif
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_BYTEARRAYOBJECT_H */

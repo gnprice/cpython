@@ -1,22 +1,22 @@
 #ifndef Py_INTERNAL_PYMEM_H
-#define Py_INTERNAL_PYMEM_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_PYMEM_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "objimpl.h"
-#include "pymem.h"
+#  include "objimpl.h"
+#  include "pymem.h"
 
 
 /* GC runtime state */
 
 /* If we change this, we need to change the default value in the
    signature of gc.collect. */
-#define NUM_GENERATIONS 3
+#  define NUM_GENERATIONS 3
 
 /*
    NOTE: about the counting of long-lived objects.
@@ -166,17 +166,17 @@ PyAPI_FUNC(int) _PyMem_SetDefaultAllocator(
 static inline int _PyMem_IsPtrFreed(void *ptr)
 {
     uintptr_t value = (uintptr_t)ptr;
-#if SIZEOF_VOID_P == 8
+#  if SIZEOF_VOID_P == 8
     return (value == (uintptr_t)0xCDCDCDCDCDCDCDCD
             || value == (uintptr_t)0xDDDDDDDDDDDDDDDD
             || value == (uintptr_t)0xFDFDFDFDFDFDFDFD);
-#elif SIZEOF_VOID_P == 4
+#  elif SIZEOF_VOID_P == 4
     return (value == (uintptr_t)0xCDCDCDCD
             || value == (uintptr_t)0xDDDDDDDD
             || value == (uintptr_t)0xFDFDFDFD);
-#else
-#  error "unknown pointer size"
-#endif
+#  else
+#    error "unknown pointer size"
+#  endif
 }
 
 PyAPI_FUNC(int) _PyMem_GetAllocatorName(
@@ -188,7 +188,7 @@ PyAPI_FUNC(int) _PyMem_GetAllocatorName(
    PYMEM_ALLOCATOR_NOT_SET does nothing. */
 PyAPI_FUNC(int) _PyMem_SetupAllocators(PyMemAllocatorName allocator);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_PYMEM_H */

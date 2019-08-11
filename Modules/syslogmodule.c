@@ -315,16 +315,16 @@ PyInit_syslog(void)
     PyModule_AddIntMacro(m, LOG_LOCAL7);
 
 #ifndef LOG_SYSLOG
-#define LOG_SYSLOG              LOG_DAEMON
+#  define LOG_SYSLOG              LOG_DAEMON
 #endif
 #ifndef LOG_NEWS
-#define LOG_NEWS                LOG_MAIL
+#  define LOG_NEWS                LOG_MAIL
 #endif
 #ifndef LOG_UUCP
-#define LOG_UUCP                LOG_MAIL
+#  define LOG_UUCP                LOG_MAIL
 #endif
 #ifndef LOG_CRON
-#define LOG_CRON                LOG_DAEMON
+#  define LOG_CRON                LOG_DAEMON
 #endif
 
     PyModule_AddIntMacro(m, LOG_SYSLOG);

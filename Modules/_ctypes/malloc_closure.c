@@ -5,9 +5,9 @@
 #else
 #include <sys/mman.h>
 #include <unistd.h>
-# if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
+#if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
 #  define MAP_ANONYMOUS MAP_ANON
-# endif
+#endif
 #endif
 #include "ctypes.h"
 

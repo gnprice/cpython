@@ -12,18 +12,18 @@ forgotten) from the programmer.
 #include "windows.h"
 
 #ifdef Py_ENABLE_SHARED
-#ifdef MS_DLL_ID
+#  ifdef MS_DLL_ID
 // The string is available at build, so fill the buffer immediately
 char dllVersionBuffer[16] = MS_DLL_ID;
-#else
+#  else
 char dllVersionBuffer[16] = ""; // a private buffer
-#endif
+#  endif
 
 // Python Globals
 HMODULE PyWin_DLLhModule = NULL;
 const char *PyWin_DLLVersionString = dllVersionBuffer;
 
-#if HAVE_SXS
+#  if HAVE_SXS
 // Windows "Activation Context" work.
 // Our .pyd extension modules are generally built without a manifest (ie,
 // those included with Python and those built with a default distutils.
@@ -83,7 +83,7 @@ void _Py_DeactivateActCtx(ULONG_PTR cookie)
         if (!(*pfnDeactivateActCtx)(0, cookie))
             OutputDebugString("Python failed to de-activate the activation context\n");
 }
-#endif /* HAVE_SXS */
+#  endif /* HAVE_SXS */
 
 BOOL    WINAPI  DllMain (HANDLE hInst,
                                                 ULONG ul_reason_for_call,
@@ -93,27 +93,27 @@ BOOL    WINAPI  DllMain (HANDLE hInst,
     {
         case DLL_PROCESS_ATTACH:
             PyWin_DLLhModule = hInst;
-#ifndef MS_DLL_ID
+#  ifndef MS_DLL_ID
             // If we have MS_DLL_ID, we don't need to load the string.
             // 1000 is a magic number I picked out of the air.  Could do with a #define, I spose...
             LoadString(hInst, 1000, dllVersionBuffer, sizeof(dllVersionBuffer));
-#endif
+#  endif
 
-#if HAVE_SXS
+#  if HAVE_SXS
             // and capture our activation context for use when loading extensions.
             _LoadActCtxPointers();
             if (pfnGetCurrentActCtx && pfnAddRefActCtx)
                 if ((*pfnGetCurrentActCtx)(&PyWin_DLLhActivationContext))
                     if (!(*pfnAddRefActCtx)(PyWin_DLLhActivationContext))
                         OutputDebugString("Python failed to load the default activation context\n");
-#endif
+#  endif
             break;
 
         case DLL_PROCESS_DETACH:
-#if HAVE_SXS
+#  if HAVE_SXS
             if (pfnReleaseActCtx)
                 (*pfnReleaseActCtx)(PyWin_DLLhActivationContext);
-#endif
+#  endif
             break;
     }
     return TRUE;

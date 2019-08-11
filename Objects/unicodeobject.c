@@ -50,7 +50,7 @@ OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include "stringlib/eq.h"
 
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 /* Uncomment to display statistics on interned strings at exit when
@@ -833,13 +833,13 @@ xmlcharrefreplace(_PyBytesWriter *writer, char *str,
 /* the linebreak mask is set up by Unicode_Init below */
 
 #if LONG_BIT >= 128
-#define BLOOM_WIDTH 128
+#  define BLOOM_WIDTH 128
 #elif LONG_BIT >= 64
-#define BLOOM_WIDTH 64
+#  define BLOOM_WIDTH 64
 #elif LONG_BIT >= 32
-#define BLOOM_WIDTH 32
+#  define BLOOM_WIDTH 32
 #else
-#error "LONG_BIT is smaller than 32"
+#  error "LONG_BIT is smaller than 32"
 #endif
 
 #define BLOOM_MASK unsigned long
@@ -4869,11 +4869,11 @@ PyUnicode_DecodeUTF8(const char *s,
 /* Mask to quickly check whether a C 'long' contains a
    non-ASCII, UTF8-encoded char. */
 #if (SIZEOF_LONG == 8)
-# define ASCII_CHAR_MASK 0x8080808080808080UL
+#  define ASCII_CHAR_MASK 0x8080808080808080UL
 #elif (SIZEOF_LONG == 4)
-# define ASCII_CHAR_MASK 0x80808080UL
+#  define ASCII_CHAR_MASK 0x80808080UL
 #else
-# error C 'long' size should be either 4 or 8!
+#  error C 'long' size should be either 4 or 8!
 #endif
 
 static Py_ssize_t
@@ -4890,7 +4890,7 @@ ascii_decode(const char *start, const char *end, Py_UCS1 *dest)
      * version" will even speed up m68k.
      */
 #if !defined(__m68k__)
-#if SIZEOF_LONG <= SIZEOF_VOID_P
+#  if SIZEOF_LONG <= SIZEOF_VOID_P
     assert(_Py_IS_ALIGNED(dest, SIZEOF_LONG));
     if (_Py_IS_ALIGNED(p, SIZEOF_LONG)) {
         /* Fast path, see in STRINGLIB(utf8_decode) for
@@ -4914,7 +4914,7 @@ ascii_decode(const char *start, const char *end, Py_UCS1 *dest)
         }
         return p - start;
     }
-#endif
+#  endif
 #endif
     while (p < end) {
         /* Fast path, see in STRINGLIB(utf8_decode) in stringlib/codecs.h
@@ -7186,13 +7186,13 @@ PyUnicode_AsASCIIString(PyObject *unicode)
 
 /* --- MBCS codecs for Windows -------------------------------------------- */
 
-#if SIZEOF_INT < SIZEOF_SIZE_T
-#define NEED_RETRY
-#endif
+#  if SIZEOF_INT < SIZEOF_SIZE_T
+#    define NEED_RETRY
+#  endif
 
-#ifndef WC_ERR_INVALID_CHARS
-#  define WC_ERR_INVALID_CHARS 0x0080
-#endif
+#  ifndef WC_ERR_INVALID_CHARS
+#    define WC_ERR_INVALID_CHARS 0x0080
+#  endif
 
 static const char*
 code_page_name(UINT code_page, PyObject **obj)
@@ -7425,14 +7425,14 @@ decode_code_page_stateful(int code_page,
 
     do
     {
-#ifdef NEED_RETRY
+#  ifdef NEED_RETRY
         if (size > INT_MAX) {
             chunk_size = INT_MAX;
             final = 0;
             done = 0;
         }
         else
-#endif
+#  endif
         {
             chunk_size = (int)size;
             final = (consumed == NULL);
@@ -7830,7 +7830,7 @@ encode_code_page(int code_page,
     offset = 0;
     do
     {
-#ifdef NEED_RETRY
+#  ifdef NEED_RETRY
         /* UTF-16 encoding may double the size, so use only INT_MAX/2
            chunks. */
         if (len > INT_MAX/2) {
@@ -7838,7 +7838,7 @@ encode_code_page(int code_page,
             done = 0;
         }
         else
-#endif
+#  endif
         {
             chunk_len = (int)len;
             done = 1;
@@ -7891,7 +7891,7 @@ PyUnicode_AsMBCSString(PyObject *unicode)
     return PyUnicode_EncodeCodePage(CP_ACP, unicode, NULL);
 }
 
-#undef NEED_RETRY
+#  undef NEED_RETRY
 
 #endif /* MS_WINDOWS */
 
@@ -15418,10 +15418,10 @@ unicode_release_interned(void)
        and DECREF the interned dict. */
 
     n = PyList_GET_SIZE(keys);
-#ifdef INTERNED_STATS
+#  ifdef INTERNED_STATS
     fprintf(stderr, "releasing %" PY_FORMAT_SIZE_T "d interned strings\n",
             n);
-#endif
+#  endif
     for (i = 0; i < n; i++) {
         s = PyList_GET_ITEM(keys, i);
         if (PyUnicode_READY(s) == -1) {
@@ -15444,11 +15444,11 @@ unicode_release_interned(void)
         }
         _PyUnicode_STATE(s).interned = SSTATE_NOT_INTERNED;
     }
-#ifdef INTERNED_STATS
+#  ifdef INTERNED_STATS
     fprintf(stderr, "total size of all interned strings: "
             "%" PY_FORMAT_SIZE_T "d/%" PY_FORMAT_SIZE_T "d "
             "mortal/immortal\n", mortal_size, immortal_size);
-#endif
+#  endif
     Py_DECREF(keys);
     PyDict_Clear(interned);
     Py_CLEAR(interned);

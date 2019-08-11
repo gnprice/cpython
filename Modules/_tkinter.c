@@ -82,16 +82,16 @@ Copyright (C) 1994 Steen Lumholt.
    applies to sockets. */
 
 #ifdef MS_WINDOWS
-#define FHANDLETYPE TCL_WIN_SOCKET
+#  define FHANDLETYPE TCL_WIN_SOCKET
 #else
-#define FHANDLETYPE TCL_UNIX_FD
+#  define FHANDLETYPE TCL_UNIX_FD
 #endif
 
 /* If Tcl can wait for a Unix file descriptor, define the EventHook() routine
    which uses this to handle Tcl events while the user is typing commands. */
 
 #if FHANDLETYPE == TCL_UNIX_FD
-#define WAIT_FOR_STDIN
+#  define WAIT_FOR_STDIN
 #endif
 
 #endif /* HAVE_CREATEFILEHANDLER */

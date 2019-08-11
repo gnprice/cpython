@@ -2,10 +2,10 @@
 /* Range object interface */
 
 #ifndef Py_RANGEOBJECT_H
-#define Py_RANGEOBJECT_H
-#ifdef __cplusplus
+#  define Py_RANGEOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /*
 A range object represents an integer range.  This is an immutable object;
@@ -19,9 +19,9 @@ PyAPI_DATA(PyTypeObject) PyRange_Type;
 PyAPI_DATA(PyTypeObject) PyRangeIter_Type;
 PyAPI_DATA(PyTypeObject) PyLongRangeIter_Type;
 
-#define PyRange_Check(op) (Py_TYPE(op) == &PyRange_Type)
+#  define PyRange_Check(op) (Py_TYPE(op) == &PyRange_Type)
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_RANGEOBJECT_H */

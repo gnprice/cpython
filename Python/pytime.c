@@ -1,10 +1,10 @@
 #include "Python.h"
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 #if defined(__APPLE__)
-#include <mach/mach_time.h>   /* mach_absolute_time(), mach_timebase_info() */
+#  include <mach/mach_time.h>   /* mach_absolute_time(), mach_timebase_info() */
 #endif
 
 #define _PyTime_check_mul_overflow(a, b) \
@@ -683,15 +683,15 @@ pygettimeofday(_PyTime_t *tp, _Py_clock_info_t *info, int raise)
 
 #else   /* MS_WINDOWS */
     int err;
-#ifdef HAVE_CLOCK_GETTIME
+#  ifdef HAVE_CLOCK_GETTIME
     struct timespec ts;
-#else
+#  else
     struct timeval tv;
-#endif
+#  endif
 
     assert(info == NULL || raise);
 
-#ifdef HAVE_CLOCK_GETTIME
+#  ifdef HAVE_CLOCK_GETTIME
     err = clock_gettime(CLOCK_REALTIME, &ts);
     if (err) {
         if (raise) {
@@ -715,14 +715,14 @@ pygettimeofday(_PyTime_t *tp, _Py_clock_info_t *info, int raise)
             info->resolution = 1e-9;
         }
     }
-#else   /* HAVE_CLOCK_GETTIME */
+#  else   /* HAVE_CLOCK_GETTIME */
 
      /* test gettimeofday() */
-#ifdef GETTIMEOFDAY_NO_TZ
+#    ifdef GETTIMEOFDAY_NO_TZ
     err = gettimeofday(&tv);
-#else
+#    else
     err = gettimeofday(&tv, (struct timezone *)NULL);
-#endif
+#    endif
     if (err) {
         if (raise) {
             PyErr_SetFromErrno(PyExc_OSError);
@@ -739,7 +739,7 @@ pygettimeofday(_PyTime_t *tp, _Py_clock_info_t *info, int raise)
         info->monotonic = 0;
         info->adjustable = 1;
     }
-#endif   /* !HAVE_CLOCK_GETTIME */
+#  endif   /* !HAVE_CLOCK_GETTIME */
 #endif   /* !MS_WINDOWS */
     return 0;
 }
@@ -879,13 +879,13 @@ pymonotonic(_PyTime_t *tp, _Py_clock_info_t *info, int raise)
 
 #else
     struct timespec ts;
-#ifdef CLOCK_HIGHRES
+#  ifdef CLOCK_HIGHRES
     const clockid_t clk_id = CLOCK_HIGHRES;
     const char *implementation = "clock_gettime(CLOCK_HIGHRES)";
-#else
+#  else
     const clockid_t clk_id = CLOCK_MONOTONIC;
     const char *implementation = "clock_gettime(CLOCK_MONOTONIC)";
-#endif
+#  endif
 
     assert(info == NULL || raise);
 
@@ -1063,7 +1063,7 @@ _PyTime_localtime(time_t t, struct tm *tm)
     return 0;
 #else /* !MS_WINDOWS */
 
-#ifdef _AIX
+#  ifdef _AIX
     /* bpo-34373: AIX does not return NULL if t is too small or too large */
     if (t < -2145916800 /* 1902-01-01 */
        || t > 2145916800 /* 2038-01-01 */) {
@@ -1072,7 +1072,7 @@ _PyTime_localtime(time_t t, struct tm *tm)
                         "localtime argument out of range");
         return -1;
     }
-#endif
+#  endif
 
     errno = 0;
     if (localtime_r(&t, tm) == NULL) {
@@ -1101,11 +1101,11 @@ _PyTime_gmtime(time_t t, struct tm *tm)
     return 0;
 #else /* !MS_WINDOWS */
     if (gmtime_r(&t, tm) == NULL) {
-#ifdef EINVAL
+#  ifdef EINVAL
         if (errno == 0) {
             errno = EINVAL;
         }
-#endif
+#  endif
         PyErr_SetFromErrno(PyExc_OSError);
         return -1;
     }

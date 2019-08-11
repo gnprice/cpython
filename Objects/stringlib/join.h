@@ -1,7 +1,7 @@
 /* stringlib: bytes joining implementation */
 
 #if STRINGLIB_IS_UNICODE
-#error join.h only compatible with byte-wise strings
+#  error join.h only compatible with byte-wise strings
 #endif
 
 Py_LOCAL_INLINE(PyObject *)

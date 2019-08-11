@@ -33,9 +33,9 @@ module marshal
  * #if defined(MS_WINDOWS) && defined(_DEBUG)
  */
 #if defined(MS_WINDOWS)
-#define MAX_MARSHAL_STACK_DEPTH 1000
+#  define MAX_MARSHAL_STACK_DEPTH 1000
 #else
-#define MAX_MARSHAL_STACK_DEPTH 2000
+#  define MAX_MARSHAL_STACK_DEPTH 2000
 #endif
 
 #define TYPE_NULL               '0'
@@ -181,7 +181,7 @@ w_long(long x, WFILE *p)
 #define SIZE32_MAX  0x7FFFFFFF
 
 #if SIZEOF_SIZE_T > 4
-# define W_SIZE(n, p)  do {                     \
+#  define W_SIZE(n, p)  do {                     \
         if ((n) > SIZE32_MAX) {                 \
             (p)->depth--;                       \
             (p)->error = WFERR_UNMARSHALLABLE;  \
@@ -190,7 +190,7 @@ w_long(long x, WFILE *p)
         w_long((long)(n), p);                   \
     } while(0)
 #else
-# define W_SIZE  w_long
+#  define W_SIZE  w_long
 #endif
 
 static void
@@ -215,7 +215,7 @@ w_short_pstring(const char *s, Py_ssize_t n, WFILE *p)
 #define PyLong_MARSHAL_BASE ((short)1 << PyLong_MARSHAL_SHIFT)
 #define PyLong_MARSHAL_MASK (PyLong_MARSHAL_BASE - 1)
 #if PyLong_SHIFT % PyLong_MARSHAL_SHIFT != 0
-#error "PyLong_SHIFT must be a multiple of PyLong_MARSHAL_SHIFT"
+#  error "PyLong_SHIFT must be a multiple of PyLong_MARSHAL_SHIFT"
 #endif
 #define PyLong_MARSHAL_RATIO (PyLong_SHIFT / PyLong_MARSHAL_SHIFT)
 

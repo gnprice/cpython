@@ -1,17 +1,17 @@
 #ifndef Py_TOKENIZER_H
-#define Py_TOKENIZER_H
-#ifdef __cplusplus
+#  define Py_TOKENIZER_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include "object.h"
+#  include "object.h"
 
 /* Tokenizer interface */
 
-#include "token.h"      /* For token types */
+#  include "token.h"      /* For token types */
 
-#define MAXINDENT 100   /* Max indentation level */
-#define MAXLEVEL 200    /* Max parentheses level */
+#  define MAXINDENT 100   /* Max indentation level */
+#  define MAXLEVEL 200    /* Max parentheses level */
 
 enum decoding_state {
     STATE_INIT,
@@ -80,9 +80,9 @@ extern struct tok_state *PyTokenizer_FromFile(FILE *, const char*,
 extern void PyTokenizer_Free(struct tok_state *);
 extern int PyTokenizer_Get(struct tok_state *, char **, char **);
 
-#define tok_dump _Py_tok_dump
+#  define tok_dump _Py_tok_dump
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_TOKENIZER_H */

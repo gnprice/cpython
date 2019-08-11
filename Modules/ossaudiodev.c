@@ -45,9 +45,9 @@ typedef unsigned long uint32_t;
 
 #elif defined(__FreeBSD__)
 
-# ifndef SNDCTL_DSP_CHANNELS
+#ifndef SNDCTL_DSP_CHANNELS
 #  define SNDCTL_DSP_CHANNELS SOUND_PCM_WRITE_CHANNELS
-# endif
+#endif
 
 #endif
 

@@ -14,12 +14,12 @@ returned item's reference count.
 */
 
 #ifndef Py_LISTOBJECT_H
-#define Py_LISTOBJECT_H
-#ifdef __cplusplus
+#  define Py_LISTOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef struct {
     PyObject_VAR_HEAD
     /* Vector of pointers to list elements.  list[0] is ob_item[0], etc. */
@@ -38,16 +38,16 @@ typedef struct {
      */
     Py_ssize_t allocated;
 } PyListObject;
-#endif
+#  endif
 
 PyAPI_DATA(PyTypeObject) PyList_Type;
 PyAPI_DATA(PyTypeObject) PyListIter_Type;
 PyAPI_DATA(PyTypeObject) PyListRevIter_Type;
 PyAPI_DATA(PyTypeObject) PySortWrapper_Type;
 
-#define PyList_Check(op) \
+#  define PyList_Check(op) \
     PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_LIST_SUBCLASS)
-#define PyList_CheckExact(op) (Py_TYPE(op) == &PyList_Type)
+#  define PyList_CheckExact(op) (Py_TYPE(op) == &PyList_Type)
 
 PyAPI_FUNC(PyObject *) PyList_New(Py_ssize_t size);
 PyAPI_FUNC(Py_ssize_t) PyList_Size(PyObject *);
@@ -60,22 +60,22 @@ PyAPI_FUNC(int) PyList_SetSlice(PyObject *, Py_ssize_t, Py_ssize_t, PyObject *);
 PyAPI_FUNC(int) PyList_Sort(PyObject *);
 PyAPI_FUNC(int) PyList_Reverse(PyObject *);
 PyAPI_FUNC(PyObject *) PyList_AsTuple(PyObject *);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) _PyList_Extend(PyListObject *, PyObject *);
 
 PyAPI_FUNC(int) PyList_ClearFreeList(void);
 PyAPI_FUNC(void) _PyList_DebugMallocStats(FILE *out);
-#endif
+#  endif
 
 /* Macro, trading safety for speed */
-#ifndef Py_LIMITED_API
-#define PyList_GET_ITEM(op, i) (((PyListObject *)(op))->ob_item[i])
-#define PyList_SET_ITEM(op, i, v) (((PyListObject *)(op))->ob_item[i] = (v))
-#define PyList_GET_SIZE(op)    (assert(PyList_Check(op)),Py_SIZE(op))
-#define _PyList_ITEMS(op)      (((PyListObject *)(op))->ob_item)
-#endif
+#  ifndef Py_LIMITED_API
+#    define PyList_GET_ITEM(op, i) (((PyListObject *)(op))->ob_item[i])
+#    define PyList_SET_ITEM(op, i, v) (((PyListObject *)(op))->ob_item[i] = (v))
+#    define PyList_GET_SIZE(op)    (assert(PyList_Check(op)),Py_SIZE(op))
+#    define _PyList_ITEMS(op)      (((PyListObject *)(op))->ob_item)
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_LISTOBJECT_H */

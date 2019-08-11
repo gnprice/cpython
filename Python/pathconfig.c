@@ -673,7 +673,7 @@ _PyPathConfig_ComputeSysPath0(const PyWideStringList *argv, PyObject **path0_p)
     /* Special case for Microsoft filename syntax */
     if (have_script_arg) {
         wchar_t *q;
-#if defined(MS_WINDOWS)
+#  if defined(MS_WINDOWS)
         /* Replace the first element in argv with the full path. */
         wchar_t *ptemp;
         if (GetFullPathNameW(path0,
@@ -682,7 +682,7 @@ _PyPathConfig_ComputeSysPath0(const PyWideStringList *argv, PyObject **path0_p)
                            &ptemp)) {
             path0 = fullpath;
         }
-#endif
+#  endif
         p = wcsrchr(path0, SEP);
         /* Test for alternate separator */
         q = wcsrchr(p ? p : path0, '/');
@@ -697,21 +697,21 @@ _PyPathConfig_ComputeSysPath0(const PyWideStringList *argv, PyObject **path0_p)
 #else
     /* All other filename syntaxes */
     if (have_script_arg) {
-#if defined(HAVE_REALPATH)
+#  if defined(HAVE_REALPATH)
         if (_Py_wrealpath(path0, fullpath, Py_ARRAY_LENGTH(fullpath))) {
             path0 = fullpath;
         }
-#endif
+#  endif
         p = wcsrchr(path0, SEP);
     }
     if (p != NULL) {
         n = p + 1 - path0;
-#if SEP == '/' /* Special case for Unix filename syntax */
+#  if SEP == '/' /* Special case for Unix filename syntax */
         if (n > 1) {
             /* Drop trailing separator */
             n--;
         }
-#endif /* Unix */
+#  endif /* Unix */
     }
 #endif /* All others */
 
@@ -726,9 +726,9 @@ _PyPathConfig_ComputeSysPath0(const PyWideStringList *argv, PyObject **path0_p)
 
 
 #ifdef MS_WINDOWS
-#define WCSTOK wcstok_s
+#  define WCSTOK wcstok_s
 #else
-#define WCSTOK wcstok
+#  define WCSTOK wcstok
 #endif
 
 /* Search for a prefix value in an environment file (pyvenv.cfg).

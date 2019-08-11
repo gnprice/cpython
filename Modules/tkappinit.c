@@ -32,9 +32,9 @@ Tcl_AppInit(Tcl_Interp *interp)
 #endif
 
 #ifdef TK_AQUA
-#ifndef MAX_PATH_LEN
-#define MAX_PATH_LEN 1024
-#endif
+#  ifndef MAX_PATH_LEN
+#    define MAX_PATH_LEN 1024
+#  endif
     char tclLibPath[MAX_PATH_LEN], tkLibPath[MAX_PATH_LEN];
     Tcl_Obj*            pathPtr;
 

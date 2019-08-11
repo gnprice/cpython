@@ -11,7 +11,7 @@
 #include <string.h>
 
 #ifdef __APPLE__
-#  include <mach-o/dyld.h>
+#include <mach-o/dyld.h>
 #endif
 
 /* Search in some common locations for the associated Python libraries.
@@ -331,7 +331,7 @@ absolutize(wchar_t *path, size_t path_len)
 
 #if defined(__CYGWIN__) || defined(__MINGW32__)
 #ifndef EXE_SUFFIX
-#define EXE_SUFFIX L".exe"
+#  define EXE_SUFFIX L".exe"
 #endif
 
 /* pathlen: 'path' length in characters including trailing NUL */

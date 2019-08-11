@@ -4,7 +4,7 @@
 #include "Python.h"
 
 #ifdef HAVE_DIRECT_H
-#include <direct.h>
+#  include <direct.h>
 #endif
 #include <ctype.h>
 
@@ -19,15 +19,15 @@ void _Py_DeactivateActCtx(ULONG_PTR cookie);
 #endif
 
 #ifdef _DEBUG
-#define PYD_DEBUG_SUFFIX "_d"
+#  define PYD_DEBUG_SUFFIX "_d"
 #else
-#define PYD_DEBUG_SUFFIX ""
+#  define PYD_DEBUG_SUFFIX ""
 #endif
 
 #ifdef PYD_PLATFORM_TAG
-#define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cp" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) "-" PYD_PLATFORM_TAG ".pyd"
+#  define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cp" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) "-" PYD_PLATFORM_TAG ".pyd"
 #else
-#define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cp" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) ".pyd"
+#  define PYD_TAGGED_SUFFIX PYD_DEBUG_SUFFIX ".cp" Py_STRINGIFY(PY_MAJOR_VERSION) Py_STRINGIFY(PY_MINOR_VERSION) ".pyd"
 #endif
 
 #define PYD_UNTAGGED_SUFFIX PYD_DEBUG_SUFFIX ".pyd"

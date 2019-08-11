@@ -24,9 +24,9 @@
 
 #ifndef MS_WINDOWS
 #define UNIX
-# ifdef HAVE_FCNTL_H
+#ifdef HAVE_FCNTL_H
 #  include <fcntl.h>
-# endif /* HAVE_FCNTL_H */
+#endif /* HAVE_FCNTL_H */
 #endif
 
 #ifdef MS_WINDOWS
@@ -61,9 +61,9 @@ my_getpagesize(void)
     return sysconf(_SC_PAGESIZE);
 }
 
-#define my_getallocationgranularity my_getpagesize
+#  define my_getallocationgranularity my_getpagesize
 #else
-#define my_getpagesize getpagesize
+#  define my_getpagesize getpagesize
 #endif
 
 #endif /* UNIX */
@@ -76,7 +76,7 @@ my_getpagesize(void)
 
 /* Prefer MAP_ANONYMOUS since MAP_ANON is deprecated according to man page. */
 #if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
-#  define MAP_ANONYMOUS MAP_ANON
+#define MAP_ANONYMOUS MAP_ANON
 #endif
 
 typedef enum
@@ -539,15 +539,15 @@ mmap_resize_method(mmap_object *self,
             return NULL;
         }
 
-#ifdef MREMAP_MAYMOVE
+#  ifdef MREMAP_MAYMOVE
         newmap = mremap(self->data, self->size, new_size, MREMAP_MAYMOVE);
-#else
-#if defined(__NetBSD__)
+#  else
+#    if defined(__NetBSD__)
         newmap = mremap(self->data, self->size, self->data, new_size, 0);
-#else
+#    else
         newmap = mremap(self->data, self->size, new_size, 0);
-#endif /* __NetBSD__ */
-#endif
+#    endif /* __NetBSD__ */
+#  endif
         if (newmap == (void *)-1)
         {
             PyErr_SetFromErrno(PyExc_OSError);
@@ -1084,9 +1084,9 @@ static PyTypeObject mmap_object_type = {
 
 #ifdef UNIX
 #ifdef HAVE_LARGEFILE_SUPPORT
-#define _Py_PARSE_OFF_T "L"
+#  define _Py_PARSE_OFF_T "L"
 #else
-#define _Py_PARSE_OFF_T "l"
+#  define _Py_PARSE_OFF_T "l"
 #endif
 
 static PyObject *
@@ -1214,10 +1214,10 @@ new_mmap_object(PyTypeObject *type, PyObject *args, PyObject *kwdict)
         flags |= MAP_ANONYMOUS;
 
         /* VxWorks only supports MAP_ANONYMOUS with MAP_PRIVATE flag */
-#ifdef __VXWORKS__
+#  ifdef __VXWORKS__
         flags &= ~MAP_SHARED;
         flags |= MAP_PRIVATE;
-#endif
+#  endif
 
 #else
         /* SVR4 method to map anonymous memory is to open /dev/zero */

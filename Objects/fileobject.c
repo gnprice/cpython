@@ -6,13 +6,13 @@
 
 #if defined(HAVE_GETC_UNLOCKED) && !defined(_Py_MEMORY_SANITIZER)
 /* clang MemorySanitizer doesn't yet understand getc_unlocked. */
-#define GETC(f) getc_unlocked(f)
-#define FLOCKFILE(f) flockfile(f)
-#define FUNLOCKFILE(f) funlockfile(f)
+#  define GETC(f) getc_unlocked(f)
+#  define FLOCKFILE(f) flockfile(f)
+#  define FUNLOCKFILE(f) funlockfile(f)
 #else
-#define GETC(f) getc(f)
-#define FLOCKFILE(f)
-#define FUNLOCKFILE(f)
+#  define GETC(f) getc(f)
+#  define FLOCKFILE(f)
+#  define FUNLOCKFILE(f)
 #endif
 
 /* Newline flags */

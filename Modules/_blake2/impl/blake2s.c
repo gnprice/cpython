@@ -21,32 +21,32 @@
 #include "blake2-config.h"
 
 #if defined(_MSC_VER)
-#include <intrin.h>
+#  include <intrin.h>
 #endif
 
 #if defined(HAVE_SSE2)
-#include <emmintrin.h>
+#  include <emmintrin.h>
 // MSVC only defines  _mm_set_epi64x for x86_64...
-#if defined(_MSC_VER) && !defined(_M_X64)
+#  if defined(_MSC_VER) && !defined(_M_X64)
 static inline __m128i _mm_set_epi64x( const uint64_t u1, const uint64_t u0 )
 {
   return _mm_set_epi32( u1 >> 32, u1, u0 >> 32, u0 );
 }
-#endif
+#  endif
 #endif
 
 
 #if defined(HAVE_SSSE3)
-#include <tmmintrin.h>
+#  include <tmmintrin.h>
 #endif
 #if defined(HAVE_SSE4_1)
-#include <smmintrin.h>
+#  include <smmintrin.h>
 #endif
 #if defined(HAVE_AVX)
-#include <immintrin.h>
+#  include <immintrin.h>
 #endif
 #if defined(HAVE_XOP) && !defined(_MSC_VER)
-#include <x86intrin.h>
+#  include <x86intrin.h>
 #endif
 
 #include "blake2s-round.h"
@@ -276,9 +276,9 @@ static inline int blake2s_compress( blake2s_state *S, const uint8_t block[BLAKE2
   __m128i buf1, buf2, buf3, buf4;
 #if defined(HAVE_SSE4_1)
   __m128i t0, t1;
-#if !defined(HAVE_XOP)
+#  if !defined(HAVE_XOP)
   __m128i t2;
-#endif
+#  endif
 #endif
   __m128i ff0, ff1;
 #if defined(HAVE_SSSE3) && !defined(HAVE_XOP)

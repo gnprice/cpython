@@ -1,5 +1,5 @@
 #ifndef TKINTER_H
-#define TKINTER_H
+#  define TKINTER_H
 
 /* This header is used to share some macros between _tkinter.c and
  * tkappinit.c.
@@ -11,17 +11,17 @@
  *  TCL_BETA_RELEASE    1
  *  TCL_FINAL_RELEASE   2
  */
-#define TK_HEX_VERSION ((TK_MAJOR_VERSION << 24) | \
+#  define TK_HEX_VERSION ((TK_MAJOR_VERSION << 24) | \
                         (TK_MINOR_VERSION << 16) | \
                         (TK_RELEASE_LEVEL << 8) | \
                         (TK_RELEASE_SERIAL << 0))
 
 /* Protect Tk 8.4.13 and older from a deadlock that happens when trying
  * to load tk after a failed attempt. */
-#if TK_HEX_VERSION < 0x0804020e
-#define TKINTER_PROTECT_LOADTK
-#define TKINTER_LOADTK_ERRMSG \
+#  if TK_HEX_VERSION < 0x0804020e
+#    define TKINTER_PROTECT_LOADTK
+#    define TKINTER_LOADTK_ERRMSG \
         "Calling Tk_Init again after a previous call failed might deadlock"
-#endif
+#  endif
 
 #endif /* !TKINTER_H */

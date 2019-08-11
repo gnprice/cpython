@@ -2,9 +2,9 @@
 #include "structmember.h"
 
 #ifdef STDC_HEADERS
-#include <stddef.h>
+#  include <stddef.h>
 #else
-#include <sys/types.h>          /* For size_t */
+#  include <sys/types.h>          /* For size_t */
 #endif
 
 /*[clinic input]
@@ -108,13 +108,13 @@ static PyTypeObject deque_type;
  */
 
 #ifndef NDEBUG
-#define MARK_END(link)  link = NULL;
-#define CHECK_END(link) assert(link == NULL);
-#define CHECK_NOT_END(link) assert(link != NULL);
+#  define MARK_END(link)  link = NULL;
+#  define CHECK_END(link) assert(link == NULL);
+#  define CHECK_NOT_END(link) assert(link != NULL);
 #else
-#define MARK_END(link)
-#define CHECK_END(link)
-#define CHECK_NOT_END(link)
+#  define MARK_END(link)
+#  define CHECK_END(link)
+#  define CHECK_NOT_END(link)
 #endif
 
 /* A simple freelisting scheme is used to minimize calls to the memory

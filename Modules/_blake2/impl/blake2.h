@@ -12,42 +12,42 @@
 */
 #pragma once
 #ifndef __BLAKE2_H__
-#define __BLAKE2_H__
+#  define __BLAKE2_H__
 
-#include <stddef.h>
-#include <stdint.h>
+#  include <stddef.h>
+#  include <stdint.h>
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+#  if defined(_WIN32) || defined(__CYGWIN__)
     #define BLAKE2_DLL_IMPORT __declspec(dllimport)
     #define BLAKE2_DLL_EXPORT __declspec(dllexport)
     #define BLAKE2_DLL_PRIVATE
-#elif __GNUC__ >= 4
+#  elif __GNUC__ >= 4
   #define BLAKE2_DLL_IMPORT   __attribute__ ((visibility ("default")))
   #define BLAKE2_DLL_EXPORT   __attribute__ ((visibility ("default")))
   #define BLAKE2_DLL_PRIVATE  __attribute__ ((visibility ("hidden")))
-#else
+#  else
   #define BLAKE2_DLL_IMPORT
   #define BLAKE2_DLL_EXPORT
   #define BLAKE2_DLL_PRIVATE
-#endif
+#  endif
 
-#if defined(BLAKE2_DLL)
+#  if defined(BLAKE2_DLL)
   #if defined(BLAKE2_DLL_EXPORTS) // defined if we are building the DLL
     #define BLAKE2_API BLAKE2_DLL_EXPORT
   #else
     #define BLAKE2_API BLAKE2_DLL_IMPORT
   #endif
   #define BLAKE2_PRIVATE BLAKE2_DLL_PRIVATE // must only be used by hidden logic
-#else
+#  else
   #define BLAKE2_API
   #define BLAKE2_PRIVATE
-#endif
+#  endif
 
-#if defined(__cplusplus)
+#  if defined(__cplusplus)
 extern "C" {
-#elif defined(_MSC_VER) && !defined(inline)
-#define inline __inline
-#endif
+#  elif defined(_MSC_VER) && !defined(inline)
+#    define inline __inline
+#  endif
 
   enum blake2s_constant
   {
@@ -67,7 +67,7 @@ extern "C" {
     BLAKE2B_PERSONALBYTES = 16
   };
 
-#pragma pack(push, 1)
+#  pragma pack(push, 1)
   typedef struct __blake2s_param
   {
     uint8_t  digest_length; // 1
@@ -137,7 +137,7 @@ extern "C" {
     uint32_t buflen;
     uint8_t  outlen;
   } blake2bp_state;
-#pragma pack(pop)
+#  pragma pack(pop)
 
   // Streaming API
   BLAKE2_API int blake2s_init( blake2s_state *S, size_t outlen );
@@ -174,9 +174,9 @@ extern "C" {
     return blake2b( out, in, key, outlen, inlen, keylen );
   }
 
-#if defined(__cplusplus)
+#  if defined(__cplusplus)
 }
-#endif
+#  endif
 
 #endif
 

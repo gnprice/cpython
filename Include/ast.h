@@ -1,11 +1,11 @@
 #ifndef Py_AST_H
-#define Py_AST_H
-#ifdef __cplusplus
+#  define Py_AST_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include "Python-ast.h"   /* mod_ty */
-#include "node.h"         /* node */
+#  include "Python-ast.h"   /* mod_ty */
+#  include "node.h"         /* node */
 
 PyAPI_FUNC(int) PyAST_Validate(mod_ty);
 PyAPI_FUNC(mod_ty) PyAST_FromNode(
@@ -19,7 +19,7 @@ PyAPI_FUNC(mod_ty) PyAST_FromNodeObject(
     PyObject *filename,
     PyArena *arena);
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 
 /* _PyAST_ExprAsUnicode is defined in ast_unparse.c */
 PyAPI_FUNC(PyObject *) _PyAST_ExprAsUnicode(expr_ty);
@@ -29,9 +29,9 @@ PyAPI_FUNC(PyObject *) _PyAST_ExprAsUnicode(expr_ty);
    Doesn't set exception. */
 PyAPI_FUNC(PyObject *) _PyAST_GetDocString(asdl_seq *);
 
-#endif /* !Py_LIMITED_API */
+#  endif /* !Py_LIMITED_API */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_AST_H */

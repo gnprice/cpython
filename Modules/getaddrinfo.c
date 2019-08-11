@@ -58,7 +58,7 @@
 #endif
 
 #if defined(__KAME__) && defined(ENABLE_IPV6)
-# define FAITH
+#define FAITH
 #endif
 
 #define SUCCESS 0

@@ -1,7 +1,7 @@
 #ifndef Py_UNICODEOBJECT_H
-#define Py_UNICODEOBJECT_H
+#  define Py_UNICODEOBJECT_H
 
-#include <stdarg.h>
+#  include <stdarg.h>
 
 /*
 
@@ -55,28 +55,28 @@ Copyright (c) Corporation for National Research Initiatives.
  * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * -------------------------------------------------------------------- */
 
-#include <ctype.h>
+#  include <ctype.h>
 
 /* === Internal API ======================================================= */
 
 /* --- Internal Unicode Format -------------------------------------------- */
 
 /* Python 3.x requires unicode */
-#define Py_USING_UNICODE
+#  define Py_USING_UNICODE
 
-#ifndef SIZEOF_WCHAR_T
-#error Must define SIZEOF_WCHAR_T
-#endif
+#  ifndef SIZEOF_WCHAR_T
+#    error Must define SIZEOF_WCHAR_T
+#  endif
 
-#define Py_UNICODE_SIZE SIZEOF_WCHAR_T
+#  define Py_UNICODE_SIZE SIZEOF_WCHAR_T
 
 /* If wchar_t can be used for UCS-4 storage, set Py_UNICODE_WIDE.
    Otherwise, Unicode strings are stored as UCS-2 (with limited support
    for UTF-16) */
 
-#if Py_UNICODE_SIZE >= 4
-#define Py_UNICODE_WIDE
-#endif
+#  if Py_UNICODE_SIZE >= 4
+#    define Py_UNICODE_WIDE
+#  endif
 
 /* Set these flags if the platform has "wchar.h" and the
    wchar_t type is a 16-bit unsigned type */
@@ -87,15 +87,15 @@ Copyright (c) Corporation for National Research Initiatives.
    through the interface functions PyUnicode_FromWideChar(),
    PyUnicode_AsWideChar() and PyUnicode_AsWideCharString(). */
 
-#ifdef HAVE_USABLE_WCHAR_T
-# ifndef HAVE_WCHAR_H
-#  define HAVE_WCHAR_H
-# endif
-#endif
+#  ifdef HAVE_USABLE_WCHAR_T
+#    ifndef HAVE_WCHAR_H
+#      define HAVE_WCHAR_H
+#    endif
+#  endif
 
-#ifdef HAVE_WCHAR_H
-#  include <wchar.h>
-#endif
+#  ifdef HAVE_WCHAR_H
+#    include <wchar.h>
+#  endif
 
 /* Py_UCS4 and Py_UCS2 are typedefs for the respective
    unicode representations. */
@@ -103,17 +103,17 @@ typedef uint32_t Py_UCS4;
 typedef uint16_t Py_UCS2;
 typedef uint8_t Py_UCS1;
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 
 PyAPI_DATA(PyTypeObject) PyUnicode_Type;
 PyAPI_DATA(PyTypeObject) PyUnicodeIter_Type;
 
-#define PyUnicode_Check(op) \
+#  define PyUnicode_Check(op) \
                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_UNICODE_SUBCLASS)
-#define PyUnicode_CheckExact(op) (Py_TYPE(op) == &PyUnicode_Type)
+#  define PyUnicode_CheckExact(op) (Py_TYPE(op) == &PyUnicode_Type)
 
 /* --- Constants ---------------------------------------------------------- */
 
@@ -122,7 +122,7 @@ PyAPI_DATA(PyTypeObject) PyUnicodeIter_Type;
    Unicode character U+FFFD is the official REPLACEMENT CHARACTER in
    Unicode 3.0. */
 
-#define Py_UNICODE_REPLACEMENT_CHARACTER ((Py_UCS4) 0xFFFD)
+#  define Py_UNICODE_REPLACEMENT_CHARACTER ((Py_UCS4) 0xFFFD)
 
 /* === Public API ========================================================= */
 
@@ -138,14 +138,14 @@ PyAPI_FUNC(PyObject*) PyUnicode_FromString(
     const char *u              /* UTF-8 encoded string */
     );
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(PyObject*) PyUnicode_Substring(
     PyObject *str,
     Py_ssize_t start,
     Py_ssize_t end);
-#endif
+#  endif
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 /* Copy the string into a UCS4 buffer including the null character if copy_null
    is set. Return NULL and raise an exception on error. Raise a SystemError if
    the buffer is smaller than the string. Return buffer on success.
@@ -161,15 +161,15 @@ PyAPI_FUNC(Py_UCS4*) PyUnicode_AsUCS4(
  * PyMem_Malloc; if this fails, NULL is returned with a memory error
    exception set. */
 PyAPI_FUNC(Py_UCS4*) PyUnicode_AsUCS4Copy(PyObject *unicode);
-#endif
+#  endif
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 /* Get the length of the Unicode object. */
 
 PyAPI_FUNC(Py_ssize_t) PyUnicode_GetLength(
     PyObject *unicode
 );
-#endif
+#  endif
 
 /* Get the number of Py_UNICODE units in the
    string representation. */
@@ -178,7 +178,7 @@ Py_DEPRECATED(3.3) PyAPI_FUNC(Py_ssize_t) PyUnicode_GetSize(
     PyObject *unicode           /* Unicode object */
     );
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 /* Read a character from the string. */
 
 PyAPI_FUNC(Py_UCS4) PyUnicode_ReadChar(
@@ -196,7 +196,7 @@ PyAPI_FUNC(int) PyUnicode_WriteChar(
     Py_ssize_t index,
     Py_UCS4 character
     );
-#endif
+#  endif
 
 /* Resize a Unicode object. The length is the number of characters, except
    if the kind of the string is PyUnicode_WCHAR_KIND: in this case, the length
@@ -267,12 +267,12 @@ PyAPI_FUNC(PyObject *) PyUnicode_InternFromString(
     );
 
 /* Use only if you know it's a string */
-#define PyUnicode_CHECK_INTERNED(op) \
+#  define PyUnicode_CHECK_INTERNED(op) \
     (((PyASCIIObject *)(op))->state.interned)
 
 /* --- wchar_t support for platforms which support it --------------------- */
 
-#ifdef HAVE_WCHAR_H
+#  ifdef HAVE_WCHAR_H
 
 /* Create a Unicode Object from the wchar_t buffer w of the given
    size.
@@ -315,7 +315,7 @@ PyAPI_FUNC(wchar_t*) PyUnicode_AsWideCharString(
     Py_ssize_t *size            /* number of characters of the result */
     );
 
-#endif
+#  endif
 
 /* --- Unicode ordinals --------------------------------------------------- */
 
@@ -679,7 +679,7 @@ PyAPI_FUNC(PyObject*) PyUnicode_AsCharmapString(
 
 /* --- MBCS codecs for Windows -------------------------------------------- */
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 PyAPI_FUNC(PyObject*) PyUnicode_DecodeMBCS(
     const char *string,         /* MBCS encoded string */
     Py_ssize_t length,          /* size of string */
@@ -693,7 +693,7 @@ PyAPI_FUNC(PyObject*) PyUnicode_DecodeMBCSStateful(
     Py_ssize_t *consumed        /* bytes consumed */
     );
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#    if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(PyObject*) PyUnicode_DecodeCodePageStateful(
     int code_page,              /* code page number */
     const char *string,         /* encoded string */
@@ -701,25 +701,25 @@ PyAPI_FUNC(PyObject*) PyUnicode_DecodeCodePageStateful(
     const char *errors,         /* error handling */
     Py_ssize_t *consumed        /* bytes consumed */
     );
-#endif
+#    endif
 
 PyAPI_FUNC(PyObject*) PyUnicode_AsMBCSString(
     PyObject *unicode           /* Unicode object */
     );
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#    if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(PyObject*) PyUnicode_EncodeCodePage(
     int code_page,              /* code page number */
     PyObject *unicode,          /* Unicode object */
     const char *errors          /* error handling */
     );
-#endif
+#    endif
 
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
 /* --- Locale encoding --------------------------------------------------- */
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 /* Decode a string from the current locale encoding. The decoder is strict if
    *surrogateescape* is equal to zero, otherwise it uses the 'surrogateescape'
    error handler (PEP 383) to escape undecodable bytes. If a byte sequence can
@@ -749,7 +749,7 @@ PyAPI_FUNC(PyObject*) PyUnicode_EncodeLocale(
     PyObject *unicode,
     const char *errors
     );
-#endif
+#  endif
 
 /* --- File system encoding ---------------------------------------------- */
 
@@ -938,7 +938,7 @@ PyAPI_FUNC(Py_ssize_t) PyUnicode_Find(
     int direction               /* Find direction: +1 forward, -1 backward */
     );
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 /* Like PyUnicode_Find, but search for single character only. */
 PyAPI_FUNC(Py_ssize_t) PyUnicode_FindChar(
     PyObject *str,
@@ -947,7 +947,7 @@ PyAPI_FUNC(Py_ssize_t) PyUnicode_FindChar(
     Py_ssize_t end,
     int direction
     );
-#endif
+#  endif
 
 /* Count the number of occurrences of substr in str[start:end]. */
 
@@ -1032,23 +1032,23 @@ PyAPI_FUNC(int) PyUnicode_IsIdentifier(PyObject *s);
 
 /* === Characters Type APIs =============================================== */
 
-#if defined(Py_DEBUG) && !defined(Py_LIMITED_API)
+#  if defined(Py_DEBUG) && !defined(Py_LIMITED_API)
 PyAPI_FUNC(int) _PyUnicode_CheckConsistency(
     PyObject *op,
     int check_content);
-#elif !defined(NDEBUG)
+#  elif !defined(NDEBUG)
 /* For asserts that call _PyUnicode_CheckConsistency(), which would
  * otherwise be a problem when building with asserts but without Py_DEBUG. */
-#define _PyUnicode_CheckConsistency(op, check_content) PyUnicode_Check(op)
-#endif
+#    define _PyUnicode_CheckConsistency(op, check_content) PyUnicode_Check(op)
+#  endif
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_UNICODEOBJECT_H
-#  include  "cpython/unicodeobject.h"
-#  undef Py_CPYTHON_UNICODEOBJECT_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_UNICODEOBJECT_H
+#    include  "cpython/unicodeobject.h"
+#    undef Py_CPYTHON_UNICODEOBJECT_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_UNICODEOBJECT_H */

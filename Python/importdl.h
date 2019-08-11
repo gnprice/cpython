@@ -1,9 +1,9 @@
 #ifndef Py_IMPORTDL_H
-#define Py_IMPORTDL_H
+#  define Py_IMPORTDL_H
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 
 extern const char *_PyImport_DynLoadFiletab[];
@@ -11,17 +11,17 @@ extern const char *_PyImport_DynLoadFiletab[];
 extern PyObject *_PyImport_LoadDynamicModuleWithSpec(PyObject *spec, FILE *);
 
 /* Max length of module suffix searched for -- accommodates "module.slb" */
-#define MAXSUFFIXSIZE 12
+#  define MAXSUFFIXSIZE 12
 
-#ifdef MS_WINDOWS
-#include <windows.h>
+#  ifdef MS_WINDOWS
+#    include <windows.h>
 typedef FARPROC dl_funcptr;
-#else
+#  else
 typedef void (*dl_funcptr)(void);
-#endif
+#  endif
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_IMPORTDL_H */

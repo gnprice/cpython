@@ -1,21 +1,21 @@
 #ifndef Py_INTERNAL_PATHCONFIG_H
-#define Py_INTERNAL_PATHCONFIG_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_PATHCONFIG_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
 typedef struct _PyPathConfig {
     /* Full path to the Python program */
     wchar_t *program_full_path;
     wchar_t *prefix;
     wchar_t *exec_prefix;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     wchar_t *dll_path;
-#endif
+#  endif
     /* Set by Py_SetPath(), or computed by _PyPathConfig_Init() */
     wchar_t *module_search_path;
     /* Python program name */
@@ -31,7 +31,7 @@ typedef struct _PyPathConfig {
     wchar_t *base_executable;
 } _PyPathConfig;
 
-#define _PyPathConfig_INIT \
+#  define _PyPathConfig_INIT \
     {.module_search_path = NULL, \
      .isolated = -1, \
      .site_import = -1}
@@ -55,11 +55,11 @@ extern int _Py_FindEnvConfigValue(
     wchar_t *value,
     size_t value_size);
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 extern wchar_t* _Py_GetDLLPath(void);
-#endif
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_PATHCONFIG_H */

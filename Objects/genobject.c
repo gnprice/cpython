@@ -1215,7 +1215,7 @@ typedef struct {
 
 
 #ifndef _PyAsyncGen_MAXFREELIST
-#define _PyAsyncGen_MAXFREELIST 80
+#  define _PyAsyncGen_MAXFREELIST 80
 #endif
 
 /* Freelists boost performance 6-10%; they also reduce memory

@@ -1,8 +1,8 @@
 #ifndef Py_INTERNAL_CODE_H
-#define Py_INTERNAL_CODE_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_CODE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
  
 typedef struct {
     PyObject *ptr;  /* Cached pointer (borrowed reference) */
@@ -21,7 +21,7 @@ struct _PyOpcache {
 int _PyCode_InitOpcache(PyCodeObject *co);
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_CODE_H */

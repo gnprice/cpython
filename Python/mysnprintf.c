@@ -54,9 +54,9 @@ PyOS_vsnprintf(char *str, size_t size, const char  *format, va_list va)
 {
     int len;  /* # bytes written, excluding \0 */
 #ifdef HAVE_SNPRINTF
-#define _PyOS_vsnprintf_EXTRA_SPACE 1
+#  define _PyOS_vsnprintf_EXTRA_SPACE 1
 #else
-#define _PyOS_vsnprintf_EXTRA_SPACE 512
+#  define _PyOS_vsnprintf_EXTRA_SPACE 512
     char *buffer;
 #endif
     assert(str != NULL);

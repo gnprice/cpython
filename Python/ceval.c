@@ -30,8 +30,8 @@
 
 #ifdef Py_DEBUG
 /* For debugging the interpreter: */
-#define LLTRACE  1      /* Low-level trace feature */
-#define CHECKEXC 1      /* Double-check exception checking */
+#  define LLTRACE  1      /* Low-level trace feature */
+#  define CHECKEXC 1      /* Double-check exception checking */
 #endif
 
 #if !defined(Py_BUILD_CORE)
@@ -90,12 +90,12 @@ static void format_awaitable_error(PyThreadState *, PyTypeObject *, int);
 
 /* Dynamic execution profile */
 #ifdef DYNAMIC_EXECUTION_PROFILE
-#ifdef DXPAIRS
+#  ifdef DXPAIRS
 static long dxpairs[257][256];
-#define dxp dxpairs[256]
-#else
+#    define dxp dxpairs[256]
+#  else
 static long dxp[256];
-#endif
+#  endif
 #endif
 
 /* per opcode cache */
@@ -103,9 +103,9 @@ static long dxp[256];
 // --with-pydebug is used to find memory leak.  opcache makes it harder.
 // So we disable opcache when Py_DEBUG is defined.
 // See bpo-37146
-#define OPCACHE_MIN_RUNS 0  /* disable opcache */
+#  define OPCACHE_MIN_RUNS 0  /* disable opcache */
 #else
-#define OPCACHE_MIN_RUNS 1024  /* create opcache when code executed this time */
+#  define OPCACHE_MIN_RUNS 1024  /* create opcache when code executed this time */
 #endif
 #define OPCACHE_STATS 0  /* Enable stats */
 
@@ -182,7 +182,7 @@ static size_t opcache_global_misses = 0;
 
 
 #ifdef HAVE_ERRNO_H
-#include <errno.h>
+#  include <errno.h>
 #endif
 #include "pythread.h"
 #include "ceval_gil.h"
@@ -632,7 +632,7 @@ Py_MakePendingCalls(void)
 /* The interpreter's recursion limit */
 
 #ifndef Py_DEFAULT_RECURSION_LIMIT
-#define Py_DEFAULT_RECURSION_LIMIT 1000
+#  define Py_DEFAULT_RECURSION_LIMIT 1000
 #endif
 
 int _Py_CheckRecursionLimit = Py_DEFAULT_RECURSION_LIMIT;
@@ -813,8 +813,8 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
 */
 
 #ifdef DYNAMIC_EXECUTION_PROFILE
-#undef USE_COMPUTED_GOTOS
-#define USE_COMPUTED_GOTOS 0
+#  undef USE_COMPUTED_GOTOS
+#  define USE_COMPUTED_GOTOS 0
 #endif
 
 #ifdef HAVE_COMPUTED_GOTOS
@@ -831,14 +831,14 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
 
 #if USE_COMPUTED_GOTOS
 /* Import the static jump table */
-#include "opcode_targets.h"
+#  include "opcode_targets.h"
 
-#define TARGET(op) \
+#  define TARGET(op) \
     op: \
     TARGET_##op
 
-#ifdef LLTRACE
-#define FAST_DISPATCH() \
+#  ifdef LLTRACE
+#    define FAST_DISPATCH() \
     { \
         if (!lltrace && !_Py_TracingPossible(ceval) && !PyDTrace_LINE_ENABLED()) { \
             f->f_lasti = INSTR_OFFSET(); \
@@ -847,8 +847,8 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
         } \
         goto fast_next_opcode; \
     }
-#else
-#define FAST_DISPATCH() \
+#  else
+#    define FAST_DISPATCH() \
     { \
         if (!_Py_TracingPossible(ceval) && !PyDTrace_LINE_ENABLED()) { \
             f->f_lasti = INSTR_OFFSET(); \
@@ -857,9 +857,9 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
         } \
         goto fast_next_opcode; \
     }
-#endif
+#  endif
 
-#define DISPATCH() \
+#  define DISPATCH() \
     { \
         if (!_Py_atomic_load_relaxed(eval_breaker)) { \
             FAST_DISPATCH(); \
@@ -868,18 +868,18 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
     }
 
 #else
-#define TARGET(op) op
-#define FAST_DISPATCH() goto fast_next_opcode
-#define DISPATCH() continue
+#  define TARGET(op) op
+#  define FAST_DISPATCH() goto fast_next_opcode
+#  define DISPATCH() continue
 #endif
 
 
 /* Tuple access macros */
 
 #ifndef Py_DEBUG
-#define GETITEM(v, i) PyTuple_GET_ITEM((PyTupleObject *)(v), (i))
+#  define GETITEM(v, i) PyTuple_GET_ITEM((PyTupleObject *)(v), (i))
 #else
-#define GETITEM(v, i) PyTuple_GetItem((v), (i))
+#  define GETITEM(v, i) PyTuple_GetItem((v), (i))
 #endif
 
 /* Code access macros */
@@ -923,9 +923,9 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
 */
 
 #if defined(DYNAMIC_EXECUTION_PROFILE) || USE_COMPUTED_GOTOS
-#define PREDICT(op)             if (0) goto PRED_##op
+#  define PREDICT(op)             if (0) goto PRED_##op
 #else
-#define PREDICT(op) \
+#  define PREDICT(op) \
     do{ \
         _Py_CODEUNIT word = *next_instr; \
         opcode = _Py_OPCODE(word); \
@@ -960,32 +960,32 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
 #define BASIC_POP()       (*--stack_pointer)
 
 #ifdef LLTRACE
-#define PUSH(v)         { (void)(BASIC_PUSH(v), \
+#  define PUSH(v)         { (void)(BASIC_PUSH(v), \
                           lltrace && prtrace(tstate, TOP(), "push")); \
                           assert(STACK_LEVEL() <= co->co_stacksize); }
-#define POP()           ((void)(lltrace && prtrace(tstate, TOP(), "pop")), \
+#  define POP()           ((void)(lltrace && prtrace(tstate, TOP(), "pop")), \
                          BASIC_POP())
-#define STACK_GROW(n)   do { \
+#  define STACK_GROW(n)   do { \
                           assert(n >= 0); \
                           (void)(BASIC_STACKADJ(n), \
                           lltrace && prtrace(tstate, TOP(), "stackadj")); \
                           assert(STACK_LEVEL() <= co->co_stacksize); \
                         } while (0)
-#define STACK_SHRINK(n) do { \
+#  define STACK_SHRINK(n) do { \
                             assert(n >= 0); \
                             (void)(lltrace && prtrace(tstate, TOP(), "stackadj")); \
                             (void)(BASIC_STACKADJ(-n)); \
                             assert(STACK_LEVEL() <= co->co_stacksize); \
                         } while (0)
-#define EXT_POP(STACK_POINTER) ((void)(lltrace && \
+#  define EXT_POP(STACK_POINTER) ((void)(lltrace && \
                                 prtrace(tstate, (STACK_POINTER)[-1], "ext_pop")), \
                                 *--(STACK_POINTER))
 #else
-#define PUSH(v)                BASIC_PUSH(v)
-#define POP()                  BASIC_POP()
-#define STACK_GROW(n)          BASIC_STACKADJ(n)
-#define STACK_SHRINK(n)        BASIC_STACKADJ(-n)
-#define EXT_POP(STACK_POINTER) (*--(STACK_POINTER))
+#  define PUSH(v)                BASIC_PUSH(v)
+#  define POP()                  BASIC_POP()
+#  define STACK_GROW(n)          BASIC_STACKADJ(n)
+#  define STACK_SHRINK(n)        BASIC_STACKADJ(-n)
+#  define EXT_POP(STACK_POINTER) (*--(STACK_POINTER))
 #endif
 
 /* Local variable macros */
@@ -1047,26 +1047,26 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
 
 #if OPCACHE_STATS
 
-#define OPCACHE_STAT_GLOBAL_HIT() \
+#  define OPCACHE_STAT_GLOBAL_HIT() \
     do { \
         if (co->co_opcache != NULL) opcache_global_hits++; \
     } while (0)
 
-#define OPCACHE_STAT_GLOBAL_MISS() \
+#  define OPCACHE_STAT_GLOBAL_MISS() \
     do { \
         if (co->co_opcache != NULL) opcache_global_misses++; \
     } while (0)
 
-#define OPCACHE_STAT_GLOBAL_OPT() \
+#  define OPCACHE_STAT_GLOBAL_OPT() \
     do { \
         if (co->co_opcache != NULL) opcache_global_opts++; \
     } while (0)
 
 #else /* OPCACHE_STATS */
 
-#define OPCACHE_STAT_GLOBAL_HIT()
-#define OPCACHE_STAT_GLOBAL_MISS()
-#define OPCACHE_STAT_GLOBAL_OPT()
+#  define OPCACHE_STAT_GLOBAL_HIT()
+#  define OPCACHE_STAT_GLOBAL_MISS()
+#  define OPCACHE_STAT_GLOBAL_OPT()
 
 #endif
 
@@ -1294,10 +1294,10 @@ main_loop:
         NEXTOPARG();
     dispatch_opcode:
 #ifdef DYNAMIC_EXECUTION_PROFILE
-#ifdef DXPAIRS
+#  ifdef DXPAIRS
         dxpairs[lastopcode][opcode]++;
         lastopcode = opcode;
-#endif
+#  endif
         dxp[opcode]++;
 #endif
 
@@ -5533,9 +5533,9 @@ getarray(long a[256])
 PyObject *
 _Py_GetDXProfile(PyObject *self, PyObject *args)
 {
-#ifndef DXPAIRS
+#  ifndef DXPAIRS
     return getarray(dxp);
-#else
+#  else
     int i;
     PyObject *l = PyList_New(257);
     if (l == NULL) return NULL;
@@ -5548,7 +5548,7 @@ _Py_GetDXProfile(PyObject *self, PyObject *args)
         PyList_SET_ITEM(l, i, x);
     }
     return l;
-#endif
+#  endif
 }
 
 #endif

@@ -1,10 +1,10 @@
 /* Weak references objects for Python. */
 
 #ifndef Py_WEAKREFOBJECT_H
-#define Py_WEAKREFOBJECT_H
-#ifdef __cplusplus
+#  define Py_WEAKREFOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 
 typedef struct _PyWeakReference PyWeakReference;
@@ -12,7 +12,7 @@ typedef struct _PyWeakReference PyWeakReference;
 /* PyWeakReference is the base struct for the Python ReferenceType, ProxyType,
  * and CallableProxyType.
  */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 struct _PyWeakReference {
     PyObject_HEAD
 
@@ -38,20 +38,20 @@ struct _PyWeakReference {
     PyWeakReference *wr_prev;
     PyWeakReference *wr_next;
 };
-#endif
+#  endif
 
 PyAPI_DATA(PyTypeObject) _PyWeakref_RefType;
 PyAPI_DATA(PyTypeObject) _PyWeakref_ProxyType;
 PyAPI_DATA(PyTypeObject) _PyWeakref_CallableProxyType;
 
-#define PyWeakref_CheckRef(op) PyObject_TypeCheck(op, &_PyWeakref_RefType)
-#define PyWeakref_CheckRefExact(op) \
+#  define PyWeakref_CheckRef(op) PyObject_TypeCheck(op, &_PyWeakref_RefType)
+#  define PyWeakref_CheckRefExact(op) \
         (Py_TYPE(op) == &_PyWeakref_RefType)
-#define PyWeakref_CheckProxy(op) \
+#  define PyWeakref_CheckProxy(op) \
         ((Py_TYPE(op) == &_PyWeakref_ProxyType) || \
          (Py_TYPE(op) == &_PyWeakref_CallableProxyType))
 
-#define PyWeakref_Check(op) \
+#  define PyWeakref_Check(op) \
         (PyWeakref_CheckRef(op) || PyWeakref_CheckProxy(op))
 
 
@@ -61,11 +61,11 @@ PyAPI_FUNC(PyObject *) PyWeakref_NewProxy(PyObject *ob,
                                                 PyObject *callback);
 PyAPI_FUNC(PyObject *) PyWeakref_GetObject(PyObject *ref);
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(Py_ssize_t) _PyWeakref_GetWeakrefCount(PyWeakReference *head);
 
 PyAPI_FUNC(void) _PyWeakref_ClearRef(PyWeakReference *self);
-#endif
+#  endif
 
 /* Explanation for the Py_REFCNT() check: when a weakref's target is part
    of a long chain of deallocations which triggers the trashcan mechanism,
@@ -74,13 +74,13 @@ PyAPI_FUNC(void) _PyWeakref_ClearRef(PyWeakReference *self);
    be able to "see" the target object even though it is supposed to be
    unreachable.  See issue #16602. */
 
-#define PyWeakref_GET_OBJECT(ref)                           \
+#  define PyWeakref_GET_OBJECT(ref)                           \
     (Py_REFCNT(((PyWeakReference *)(ref))->wr_object) > 0   \
      ? ((PyWeakReference *)(ref))->wr_object                \
      : Py_None)
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_WEAKREFOBJECT_H */

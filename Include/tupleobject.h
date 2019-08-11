@@ -1,10 +1,10 @@
 /* Tuple object interface */
 
 #ifndef Py_TUPLEOBJECT_H
-#define Py_TUPLEOBJECT_H
-#ifdef __cplusplus
+#  define Py_TUPLEOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /*
 Another generally useful object type is a tuple of object pointers.
@@ -23,9 +23,9 @@ returned item's reference count.
 PyAPI_DATA(PyTypeObject) PyTuple_Type;
 PyAPI_DATA(PyTypeObject) PyTupleIter_Type;
 
-#define PyTuple_Check(op) \
+#  define PyTuple_Check(op) \
                  PyType_FastSubclass(Py_TYPE(op), Py_TPFLAGS_TUPLE_SUBCLASS)
-#define PyTuple_CheckExact(op) (Py_TYPE(op) == &PyTuple_Type)
+#  define PyTuple_CheckExact(op) (Py_TYPE(op) == &PyTuple_Type)
 
 PyAPI_FUNC(PyObject *) PyTuple_New(Py_ssize_t size);
 PyAPI_FUNC(Py_ssize_t) PyTuple_Size(PyObject *);
@@ -36,13 +36,13 @@ PyAPI_FUNC(PyObject *) PyTuple_Pack(Py_ssize_t, ...);
 
 PyAPI_FUNC(int) PyTuple_ClearFreeList(void);
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_TUPLEOBJECT_H
-#  include  "cpython/tupleobject.h"
-#  undef Py_CPYTHON_TUPLEOBJECT_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_TUPLEOBJECT_H
+#    include  "cpython/tupleobject.h"
+#    undef Py_CPYTHON_TUPLEOBJECT_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_TUPLEOBJECT_H */

@@ -2,7 +2,7 @@
 
 #include <ffi.h>
 #ifdef MS_WIN32
-#include <windows.h>
+#  include <windows.h>
 #endif
 #include "ctypes.h"
 
@@ -460,7 +460,7 @@ get_ulonglong(PyObject *v, unsigned long long *p)
       ( ((v >> 24) & 0xFF)) )
 
 #ifdef _MSC_VER
-#define SWAP_8(v)                               \
+#  define SWAP_8(v)                               \
     ( ( (v & 0x00000000000000FFL) << 56 ) |  \
       ( (v & 0x000000000000FF00L) << 40 ) |  \
       ( (v & 0x0000000000FF0000L) << 24 ) |  \
@@ -470,7 +470,7 @@ get_ulonglong(PyObject *v, unsigned long long *p)
       ( (v & 0x00FF000000000000L) >> 40 ) |  \
       ( ((v >> 56) & 0xFF)) )
 #else
-#define SWAP_8(v)                               \
+#  define SWAP_8(v)                               \
     ( ( (v & 0x00000000000000FFLL) << 56 ) |  \
       ( (v & 0x000000000000FF00LL) << 40 ) |  \
       ( (v & 0x0000000000FF0000LL) << 24 ) |  \
@@ -484,9 +484,9 @@ get_ulonglong(PyObject *v, unsigned long long *p)
 #define SWAP_INT SWAP_4
 
 #if SIZEOF_LONG == 4
-# define SWAP_LONG SWAP_4
+#  define SWAP_LONG SWAP_4
 #elif SIZEOF_LONG == 8
-# define SWAP_LONG SWAP_8
+#  define SWAP_LONG SWAP_8
 #endif
 /*****************************************************************
  * The setter methods return an object which must be kept alive, to keep the
@@ -503,9 +503,9 @@ get_ulonglong(PyObject *v, unsigned long long *p)
  */
 
 #ifdef _CTYPES_DEBUG_KEEP
-#define _RET(x) Py_INCREF(x); return x
+#  define _RET(x) Py_INCREF(x); return x
 #else
-#define _RET(X) Py_RETURN_NONE
+#  define _RET(X) Py_RETURN_NONE
 #endif
 
 /*****************************************************************
@@ -1363,11 +1363,11 @@ Z_set(void *ptr, PyObject *value, Py_ssize_t size)
         return value;
     }
     if (PyLong_Check(value)) {
-#if SIZEOF_VOID_P == SIZEOF_LONG_LONG
+#  if SIZEOF_VOID_P == SIZEOF_LONG_LONG
         *(wchar_t **)ptr = (wchar_t *)PyLong_AsUnsignedLongLongMask(value);
-#else
+#  else
         *(wchar_t **)ptr = (wchar_t *)PyLong_AsUnsignedLongMask(value);
-#endif
+#  endif
         Py_RETURN_NONE;
     }
     if (!PyUnicode_Check(value)) {
@@ -1483,9 +1483,9 @@ P_set(void *ptr, PyObject *value, Py_ssize_t size)
 #if SIZEOF_VOID_P <= SIZEOF_LONG
     v = (void *)PyLong_AsUnsignedLongMask(value);
 #else
-#if SIZEOF_LONG_LONG < SIZEOF_VOID_P
-#   error "PyLong_AsVoidPtr: sizeof(long long) < sizeof(void*)"
-#endif
+#  if SIZEOF_LONG_LONG < SIZEOF_VOID_P
+#    error "PyLong_AsVoidPtr: sizeof(long long) < sizeof(void*)"
+#  endif
     v = (void *)PyLong_AsUnsignedLongLongMask(value);
 #endif
 
@@ -1526,13 +1526,13 @@ static struct fielddesc formattable[] = {
     { 'l', l_set, l_get, &ffi_type_sint64, l_set_sw, l_get_sw},
     { 'L', L_set, L_get, &ffi_type_uint64, L_set_sw, L_get_sw},
 #else
-# error
+#  error
 #endif
 #if SIZEOF_LONG_LONG == 8
     { 'q', q_set, q_get, &ffi_type_sint64, q_set_sw, q_get_sw},
     { 'Q', Q_set, Q_get, &ffi_type_uint64, Q_set_sw, Q_get_sw},
 #else
-# error
+#  error
 #endif
     { 'P', P_set, P_get, &ffi_type_pointer},
     { 'z', z_set, z_get, &ffi_type_pointer},
@@ -1618,8 +1618,8 @@ typedef struct { char c; void *x; } s_void_p;
 typedef struct { char c; wchar_t x; } s_wchar;
 typedef struct { char c; wchar_t *x; } s_wchar_p;
 
-#define WCHAR_ALIGN (sizeof(s_wchar) - sizeof(wchar_t))
-#define WCHAR_P_ALIGN (sizeof(s_wchar_p) - sizeof(wchar_t*))
+#  define WCHAR_ALIGN (sizeof(s_wchar) - sizeof(wchar_t))
+#  define WCHAR_P_ALIGN (sizeof(s_wchar_p) - sizeof(wchar_t*))
 #endif
 */
 
@@ -1655,7 +1655,7 @@ ffi_type ffi_type_float = { sizeof(float), FLOAT_ALIGN, FFI_TYPE_FLOAT };
 ffi_type ffi_type_double = { sizeof(double), DOUBLE_ALIGN, FFI_TYPE_DOUBLE };
 
 #ifdef ffi_type_longdouble
-#undef ffi_type_longdouble
+#  undef ffi_type_longdouble
 #endif
   /* This is already defined on OSX */
 ffi_type ffi_type_longdouble = { sizeof(long double), LONGDOUBLE_ALIGN,

@@ -20,7 +20,7 @@ static void* raw_malloc(size_t size);
 static void raw_free(void *ptr);
 
 #ifdef Py_DEBUG
-#  define TRACE_DEBUG
+#define TRACE_DEBUG
 #endif
 
 /* Protected by the GIL */
@@ -36,12 +36,12 @@ static struct {
    the GIL held from PyMem_RawFree(). It cannot acquire the lock because it
    would introduce a deadlock in PyThreadState_DeleteCurrent(). */
 static PyThread_type_lock tables_lock;
-#  define TABLES_LOCK() PyThread_acquire_lock(tables_lock, 1)
-#  define TABLES_UNLOCK() PyThread_release_lock(tables_lock)
+#define TABLES_LOCK() PyThread_acquire_lock(tables_lock, 1)
+#define TABLES_UNLOCK() PyThread_release_lock(tables_lock)
 #else
    /* variables are protected by the GIL */
-#  define TABLES_LOCK()
-#  define TABLES_UNLOCK()
+#define TABLES_LOCK()
+#define TABLES_UNLOCK()
 #endif
 
 

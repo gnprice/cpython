@@ -1,13 +1,13 @@
 #include <Python.h>
 
 #ifdef MS_WIN32
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 #if defined(MS_WIN32) || defined(__CYGWIN__)
-#define EXPORT(x) __declspec(dllexport) x
+#  define EXPORT(x) __declspec(dllexport) x
 #else
-#define EXPORT(x) x
+#  define EXPORT(x) x
 #endif
 
 /* some functions handy for testing */
@@ -227,9 +227,9 @@ EXPORT(size_t) my_wcslen(wchar_t *src)
 #endif
 
 #ifndef MS_WIN32
-# ifndef __stdcall
-#  define __stdcall /* */
-# endif
+#  ifndef __stdcall
+#    define __stdcall /* */
+#  endif
 #endif
 
 typedef struct {
@@ -420,7 +420,7 @@ struct BITS {
  * IBM XLC compiler does not support this
  */
 #ifndef __xlc__
-#define SIGNED_SHORT_BITFIELDS
+#  define SIGNED_SHORT_BITFIELDS
      short M: 1, N: 2, O: 3, P: 4, Q: 5, R: 6, S: 7;
 #endif
 };
@@ -847,8 +847,8 @@ EXPORT(S8I) __stdcall s_ret_8i_func(S8I inp) { return ret_8i_func(inp); }
 
 #ifdef MS_WIN32
 /* Should port this */
-#include <stdlib.h>
-#include <search.h>
+#  include <stdlib.h>
+#  include <search.h>
 
 EXPORT (HRESULT) KeepObject(IUnknown *punk)
 {

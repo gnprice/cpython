@@ -4,32 +4,32 @@
 #include <stdlib.h>
 #include <string.h>
 #if defined(__APPLE__) || defined(HAVE_PTHREAD_DESTRUCTOR)
-#define destructor xxdestructor
+#  define destructor xxdestructor
 #endif
 #include <pthread.h>
 #if defined(__APPLE__) || defined(HAVE_PTHREAD_DESTRUCTOR)
-#undef destructor
+#  undef destructor
 #endif
 #include <signal.h>
 
 #if defined(__linux__)
-#   include <sys/syscall.h>     /* syscall(SYS_gettid) */
+#  include <sys/syscall.h>     /* syscall(SYS_gettid) */
 #elif defined(__FreeBSD__)
-#   include <pthread_np.h>      /* pthread_getthreadid_np() */
+#  include <pthread_np.h>      /* pthread_getthreadid_np() */
 #elif defined(__OpenBSD__)
-#   include <unistd.h>          /* getthrid() */
+#  include <unistd.h>          /* getthrid() */
 #elif defined(_AIX)
-#   include <sys/thread.h>      /* thread_self() */
+#  include <sys/thread.h>      /* thread_self() */
 #elif defined(__NetBSD__)
-#   include <lwp.h>             /* _lwp_self() */
+#  include <lwp.h>             /* _lwp_self() */
 #endif
 
 /* The POSIX spec requires that use of pthread_attr_setstacksize
    be conditional on _POSIX_THREAD_ATTR_STACKSIZE being defined. */
 #ifdef _POSIX_THREAD_ATTR_STACKSIZE
-#ifndef THREAD_STACK_SIZE
-#define THREAD_STACK_SIZE       0       /* use default stack size */
-#endif
+#  ifndef THREAD_STACK_SIZE
+#    define THREAD_STACK_SIZE       0       /* use default stack size */
+#  endif
 
 /* The default stack size for new threads on OSX and BSD is small enough that
  * we'll get hard crashes instead of 'maximum recursion depth exceeded'
@@ -38,25 +38,25 @@
  * The default stack sizes below are the empirically determined minimal stack
  * sizes where a simple recursive function doesn't cause a hard crash.
  */
-#if defined(__APPLE__) && defined(THREAD_STACK_SIZE) && THREAD_STACK_SIZE == 0
-#undef  THREAD_STACK_SIZE
+#  if defined(__APPLE__) && defined(THREAD_STACK_SIZE) && THREAD_STACK_SIZE == 0
+#    undef  THREAD_STACK_SIZE
 /* Note: This matches the value of -Wl,-stack_size in configure.ac */
-#define THREAD_STACK_SIZE       0x1000000
-#endif
-#if defined(__FreeBSD__) && defined(THREAD_STACK_SIZE) && THREAD_STACK_SIZE == 0
-#undef  THREAD_STACK_SIZE
-#define THREAD_STACK_SIZE       0x400000
-#endif
-#if defined(_AIX) && defined(THREAD_STACK_SIZE) && THREAD_STACK_SIZE == 0
-#undef  THREAD_STACK_SIZE
-#define THREAD_STACK_SIZE       0x200000
-#endif
+#    define THREAD_STACK_SIZE       0x1000000
+#  endif
+#  if defined(__FreeBSD__) && defined(THREAD_STACK_SIZE) && THREAD_STACK_SIZE == 0
+#    undef  THREAD_STACK_SIZE
+#    define THREAD_STACK_SIZE       0x400000
+#  endif
+#  if defined(_AIX) && defined(THREAD_STACK_SIZE) && THREAD_STACK_SIZE == 0
+#    undef  THREAD_STACK_SIZE
+#    define THREAD_STACK_SIZE       0x200000
+#  endif
 /* for safety, ensure a viable minimum stacksize */
-#define THREAD_STACK_MIN        0x8000  /* 32 KiB */
+#  define THREAD_STACK_MIN        0x8000  /* 32 KiB */
 #else  /* !_POSIX_THREAD_ATTR_STACKSIZE */
-#ifdef THREAD_STACK_SIZE
-#error "THREAD_STACK_SIZE defined but _POSIX_THREAD_ATTR_STACKSIZE undefined"
-#endif
+#  ifdef THREAD_STACK_SIZE
+#    error "THREAD_STACK_SIZE defined but _POSIX_THREAD_ATTR_STACKSIZE undefined"
+#  endif
 #endif
 
 /* The POSIX spec says that implementations supporting the sem_*
@@ -65,12 +65,12 @@
 #ifdef _POSIX_SEMAPHORES
 /* On FreeBSD 4.x, _POSIX_SEMAPHORES is defined empty, so
    we need to add 0 to make it work there as well. */
-#if (_POSIX_SEMAPHORES+0) == -1
-#define HAVE_BROKEN_POSIX_SEMAPHORES
-#else
-#include <semaphore.h>
-#include <errno.h>
-#endif
+#  if (_POSIX_SEMAPHORES+0) == -1
+#    define HAVE_BROKEN_POSIX_SEMAPHORES
+#  else
+#    include <semaphore.h>
+#    include <errno.h>
+#  endif
 #endif
 
 
@@ -99,9 +99,9 @@
 
 /* We assume all modern POSIX systems have gettimeofday() */
 #ifdef GETTIMEOFDAY_NO_TZ
-#define GETTIMEOFDAY(ptv) gettimeofday(ptv)
+#  define GETTIMEOFDAY(ptv) gettimeofday(ptv)
 #else
-#define GETTIMEOFDAY(ptv) gettimeofday(ptv, (struct timezone *)NULL)
+#  define GETTIMEOFDAY(ptv) gettimeofday(ptv, (struct timezone *)NULL)
 #endif
 
 #define MICROSECONDS_TO_TIMESPEC(microseconds, ts) \
@@ -123,7 +123,7 @@ do { \
 
 #if defined(HAVE_PTHREAD_CONDATTR_SETCLOCK) && defined(HAVE_CLOCK_GETTIME) && defined(CLOCK_MONOTONIC)
 // monotonic is supported statically.  It doesn't mean it works on runtime.
-#define CONDATTR_MONOTONIC
+#  define CONDATTR_MONOTONIC
 #endif
 
 // NULL when pthread_condattr_setclock(CLOCK_MONOTONIC) is not supported.
@@ -325,25 +325,25 @@ PyThread_get_thread_native_id(void)
 {
     if (!initialized)
         PyThread_init_thread();
-#ifdef __APPLE__
+#  ifdef __APPLE__
     uint64_t native_id;
     (void) pthread_threadid_np(NULL, &native_id);
-#elif defined(__linux__)
+#  elif defined(__linux__)
     pid_t native_id;
     native_id = syscall(SYS_gettid);
-#elif defined(__FreeBSD__)
+#  elif defined(__FreeBSD__)
     int native_id;
     native_id = pthread_getthreadid_np();
-#elif defined(__OpenBSD__)
+#  elif defined(__OpenBSD__)
     pid_t native_id;
     native_id = getthrid();
-#elif defined(_AIX)
+#  elif defined(_AIX)
     tid_t native_id;
     native_id = thread_self();
-#elif defined(__NetBSD__)
+#  elif defined(__NetBSD__)
     lwpid_t native_id;
     native_id = _lwp_self();
-#endif
+#  endif
     return (unsigned long) native_id;
 }
 #endif
@@ -717,12 +717,12 @@ _pythread_pthread_set_stacksize(size_t size)
     }
 
 #if defined(THREAD_STACK_SIZE)
-#if defined(PTHREAD_STACK_MIN)
+#  if defined(PTHREAD_STACK_MIN)
     tss_min = PTHREAD_STACK_MIN > THREAD_STACK_MIN ? PTHREAD_STACK_MIN
                                                    : THREAD_STACK_MIN;
-#else
+#  else
     tss_min = THREAD_STACK_MIN;
-#endif
+#  endif
     if (size >= tss_min) {
         /* validate stack size by setting thread attribute */
         if (pthread_attr_init(&attrs) == 0) {

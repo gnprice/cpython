@@ -58,32 +58,32 @@
 #include "structmember.h"
 
 #ifdef MS_WIN32
-#include <windows.h>
-#include <tchar.h>
+#  include <windows.h>
+#  include <tchar.h>
 #else
-#include "ctypes_dlfcn.h"
+#  include "ctypes_dlfcn.h"
 #endif
 
 #ifdef MS_WIN32
-#include <malloc.h>
+#  include <malloc.h>
 #endif
 
 #include <ffi.h>
 #include "ctypes.h"
 #ifdef HAVE_ALLOCA_H
 /* AIX needs alloca.h for alloca() */
-#include <alloca.h>
+#  include <alloca.h>
 #endif
 
 #ifdef _Py_MEMORY_SANITIZER
-#include <sanitizer/msan_interface.h>
+#  include <sanitizer/msan_interface.h>
 #endif
 
 #if defined(_DEBUG) || defined(__MINGW32__)
 /* Don't use structured exception handling on Windows if this is defined.
    MingW, AFAIK, doesn't support it.
 */
-#define DONT_USE_SEH
+#  define DONT_USE_SEH
 #endif
 
 #define CTYPES_CAPSULE_NAME_PYMEM "_ctypes pymem"
@@ -257,7 +257,7 @@ static WCHAR *FormatError(DWORD code)
     return lpMsgBuf;
 }
 
-#ifndef DONT_USE_SEH
+#  ifndef DONT_USE_SEH
 static void SetException(DWORD code, EXCEPTION_RECORD *pr)
 {
     /* The 'code' is a normal win32 error code so it could be handled by
@@ -417,7 +417,7 @@ static DWORD HandleException(EXCEPTION_POINTERS *ptrs,
         return EXCEPTION_CONTINUE_SEARCH;
     return EXCEPTION_EXECUTE_HANDLER;
 }
-#endif
+#  endif
 
 static PyObject *
 check_hresult(PyObject *self, PyObject *args)
@@ -742,12 +742,12 @@ int can_return_struct_as_int(size_t s)
 
 int can_return_struct_as_sint64(size_t s)
 {
-#ifdef _M_ARM
+#  ifdef _M_ARM
     // 8 byte structs cannot be returned in a register on ARM32
     return 0;
-#else
+#  else
     return s == 8;
-#endif
+#  endif
 }
 #endif
 
@@ -844,19 +844,19 @@ static int _call_function_pointer(int flags,
         space[1] = GetLastError();
         SetLastError(temp);
     }
-#ifndef DONT_USE_SEH
+#  ifndef DONT_USE_SEH
     __try {
-#endif
+#  endif
 #endif
                 ffi_call(&cif, (void *)pProc, resmem, avalues);
 #ifdef MS_WIN32
-#ifndef DONT_USE_SEH
+#  ifndef DONT_USE_SEH
     }
     __except (HandleException(GetExceptionInformation(),
                               &dwExceptionCode, &record)) {
         ;
     }
-#endif
+#  endif
     if (flags & FUNCFLAG_USE_LASTERROR) {
         int temp = space[1];
         space[1] = GetLastError();
@@ -872,12 +872,12 @@ static int _call_function_pointer(int flags,
         Py_BLOCK_THREADS
     Py_XDECREF(error_object);
 #ifdef MS_WIN32
-#ifndef DONT_USE_SEH
+#  ifndef DONT_USE_SEH
     if (dwExceptionCode) {
         SetException(dwExceptionCode, &record);
         return -1;
     }
-#endif
+#  endif
 #endif
     if ((flags & FUNCFLAG_PYTHONAPI) && PyErr_Occurred())
         return -1;
@@ -1048,9 +1048,9 @@ GetComError(HRESULT errcode, GUID *riid, IUnknown *pIunk)
 
 #if (defined(__x86_64__) && (defined(__MINGW64__) || defined(__CYGWIN__))) || \
     defined(__aarch64__) || defined(__riscv)
-#define CTYPES_PASS_BY_REF_HACK
-#define POW2(x) (((x & ~(x - 1)) == x) ? x : 0)
-#define IS_PASS_BY_REF(x) (x > 8 || !POW2(x))
+#  define CTYPES_PASS_BY_REF_HACK
+#  define POW2(x) (((x & ~(x - 1)) == x) ? x : 0)
+#  define IS_PASS_BY_REF(x) (x > 8 || !POW2(x))
 #endif
 
 /*
@@ -1298,11 +1298,11 @@ static PyObject *load_library(PyObject *self, PyObject *args)
     } else if (err) {
         return PyErr_SetFromWindowsErr(err);
     }
-#ifdef _WIN64
+#  ifdef _WIN64
     return PyLong_FromVoidPtr(hMod);
-#else
+#  else
     return Py_BuildValue("i", hMod);
-#endif
+#  endif
 }
 
 static const char free_library_doc[] =
@@ -1366,12 +1366,12 @@ static PyObject *py_dl_open(PyObject *self, PyObject *args)
     PyObject *name, *name2;
     char *name_str;
     void * handle;
-#if HAVE_DECL_RTLD_LOCAL
+#  if HAVE_DECL_RTLD_LOCAL
     int mode = RTLD_NOW | RTLD_LOCAL;
-#else
+#  else
     /* cygwin doesn't define RTLD_LOCAL */
     int mode = RTLD_NOW;
-#endif
+#  endif
     if (!PyArg_ParseTuple(args, "O|i:dlopen", &name, &mode))
         return NULL;
     mode |= RTLD_NOW;

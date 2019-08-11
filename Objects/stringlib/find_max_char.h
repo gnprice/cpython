@@ -1,17 +1,17 @@
 /* Finding the optimal width of unicode characters in a buffer */
 
 #if !STRINGLIB_IS_UNICODE
-# error "find_max_char.h is specific to Unicode"
+#  error "find_max_char.h is specific to Unicode"
 #endif
 
 /* Mask to quickly check whether a C 'long' contains a
    non-ASCII, UTF8-encoded char. */
 #if (SIZEOF_LONG == 8)
-# define UCS1_ASCII_CHAR_MASK 0x8080808080808080UL
+#  define UCS1_ASCII_CHAR_MASK 0x8080808080808080UL
 #elif (SIZEOF_LONG == 4)
-# define UCS1_ASCII_CHAR_MASK 0x80808080UL
+#  define UCS1_ASCII_CHAR_MASK 0x80808080UL
 #else
-# error C 'long' size should be either 4 or 8!
+#  error C 'long' size should be either 4 or 8!
 #endif
 
 #if STRINGLIB_SIZEOF_CHAR == 1
@@ -43,31 +43,31 @@ STRINGLIB(find_max_char)(const STRINGLIB_CHAR *begin, const STRINGLIB_CHAR *end)
     return 127;
 }
 
-#undef ASCII_CHAR_MASK
+#  undef ASCII_CHAR_MASK
 
 #else /* STRINGLIB_SIZEOF_CHAR == 1 */
 
-#define MASK_ASCII 0xFFFFFF80
-#define MASK_UCS1 0xFFFFFF00
-#define MASK_UCS2 0xFFFF0000
+#  define MASK_ASCII 0xFFFFFF80
+#  define MASK_UCS1 0xFFFFFF00
+#  define MASK_UCS2 0xFFFF0000
 
-#define MAX_CHAR_ASCII 0x7f
-#define MAX_CHAR_UCS1  0xff
-#define MAX_CHAR_UCS2  0xffff
-#define MAX_CHAR_UCS4  0x10ffff
+#  define MAX_CHAR_ASCII 0x7f
+#  define MAX_CHAR_UCS1  0xff
+#  define MAX_CHAR_UCS2  0xffff
+#  define MAX_CHAR_UCS4  0x10ffff
 
 Py_LOCAL_INLINE(Py_UCS4)
 STRINGLIB(find_max_char)(const STRINGLIB_CHAR *begin, const STRINGLIB_CHAR *end)
 {
-#if STRINGLIB_SIZEOF_CHAR == 2
+#  if STRINGLIB_SIZEOF_CHAR == 2
     const Py_UCS4 mask_limit = MASK_UCS1;
     const Py_UCS4 max_char_limit = MAX_CHAR_UCS2;
-#elif STRINGLIB_SIZEOF_CHAR == 4
+#  elif STRINGLIB_SIZEOF_CHAR == 4
     const Py_UCS4 mask_limit = MASK_UCS2;
     const Py_UCS4 max_char_limit = MAX_CHAR_UCS4;
-#else
-#error Invalid STRINGLIB_SIZEOF_CHAR (must be 1, 2 or 4)
-#endif
+#  else
+#    error Invalid STRINGLIB_SIZEOF_CHAR (must be 1, 2 or 4)
+#  endif
     Py_UCS4 mask;
     Py_ssize_t n = end - begin;
     const STRINGLIB_CHAR *p = begin;
@@ -122,13 +122,13 @@ STRINGLIB(find_max_char)(const STRINGLIB_CHAR *begin, const STRINGLIB_CHAR *end)
     return max_char;
 }
 
-#undef MASK_ASCII
-#undef MASK_UCS1
-#undef MASK_UCS2
-#undef MAX_CHAR_ASCII
-#undef MAX_CHAR_UCS1
-#undef MAX_CHAR_UCS2
-#undef MAX_CHAR_UCS4
+#  undef MASK_ASCII
+#  undef MASK_UCS1
+#  undef MASK_UCS2
+#  undef MAX_CHAR_ASCII
+#  undef MAX_CHAR_UCS1
+#  undef MAX_CHAR_UCS2
+#  undef MAX_CHAR_UCS4
 
 #endif /* STRINGLIB_SIZEOF_CHAR == 1 */
 

@@ -1,16 +1,16 @@
 #ifndef Py_INTERNAL_CEVAL_H
-#define Py_INTERNAL_CEVAL_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_CEVAL_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pycore_atomic.h"
-#include "pycore_pystate.h"
-#include "pythread.h"
+#  include "pycore_atomic.h"
+#  include "pycore_pystate.h"
+#  include "pythread.h"
 
 PyAPI_FUNC(void) _Py_FinishPendingCalls(_PyRuntimeState *runtime);
 PyAPI_FUNC(void) _PyEval_Initialize(struct _ceval_runtime_state *);
@@ -34,7 +34,7 @@ PyAPI_FUNC(void) _PyEval_SetCoroutineOriginTrackingDepth(
 /* Private function */
 void _PyEval_Fini(void);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_CEVAL_H */

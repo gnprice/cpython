@@ -28,16 +28,16 @@
 #include <locale.h>
 
 #ifdef HAVE_SIGNAL_H
-#include <signal.h>
+#  include <signal.h>
 #endif
 
 #ifdef MS_WINDOWS
-#include "malloc.h" /* for alloca */
+#  include "malloc.h" /* for alloca */
 #endif
 
 #ifdef MS_WINDOWS
-#undef BYTE
-#include "windows.h"
+#  undef BYTE
+#  include "windows.h"
 #endif
 
 _Py_IDENTIFIER(builtins);
@@ -166,7 +166,7 @@ static int PARSER_FLAGS(PyCompilerFlags *flags)
 
 #if 0
 /* Keep an example of flags with future keyword support. */
-#define PARSER_FLAGS(flags) \
+#  define PARSER_FLAGS(flags) \
     ((flags) ? ((((flags)->cf_flags & PyCF_DONT_IMPLY_DEDENT) ? \
                   PyPARSE_DONT_IMPLY_DEDENT : 0) \
                 | ((flags)->cf_flags & CO_FUTURE_WITH_STATEMENT ? \
@@ -1609,12 +1609,12 @@ cleanup:
 
 
 #if defined(USE_STACKCHECK)
-#if defined(WIN32) && defined(_MSC_VER)
+#  if defined(WIN32) && defined(_MSC_VER)
 
 /* Stack checking for Microsoft C */
 
-#include <malloc.h>
-#include <excpt.h>
+#    include <malloc.h>
+#    include <excpt.h>
 
 /*
  * Return non-zero when we run out of memory on the stack; zero otherwise.
@@ -1639,7 +1639,7 @@ PyOS_CheckStack(void)
     return 1;
 }
 
-#endif /* WIN32 && _MSC_VER */
+#  endif /* WIN32 && _MSC_VER */
 
 /* Alternate implementations can be added here... */
 

@@ -38,13 +38,13 @@
 #include <architecture/ppc/mode_independent_asm.h>
 
 #if 0
-#if defined(POWERPC_DARWIN)
-#include <libkern/OSCacheControl.h>	// for sys_icache_invalidate()
-#endif
+#  if defined(POWERPC_DARWIN)
+#    include <libkern/OSCacheControl.h>	// for sys_icache_invalidate()
+#  endif
 
 #else
 
-#pragma weak sys_icache_invalidate
+#  pragma weak sys_icache_invalidate
 extern void sys_icache_invalidate(void *start, size_t len);
 
 #endif
@@ -113,7 +113,7 @@ ffi_prep_args(
 #elif defined(__ppc__)
 	unsigned long *const stacktop	= longStack + (bytes / sizeof(long));
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 
 	/* 'fpr_base' points at the space for fpr1, and grows upwards as
@@ -189,17 +189,17 @@ ffi_prep_args(
 
 #if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 			case FFI_TYPE_LONGDOUBLE:
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 				if (fparg_count < NUM_FPR_ARG_REGISTERS)
 					*(long double*)fpr_base	= *(long double*)*p_argv;
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 				if (fparg_count < NUM_FPR_ARG_REGISTERS - 1)
 					*(long double*)fpr_base	= *(long double*)*p_argv;
 				else if (fparg_count == NUM_FPR_ARG_REGISTERS - 1)
 					*(double*)fpr_base	= *(double*)*p_argv;
-#else
-#error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 
 				*(long double*)next_arg	= *(long double*)*p_argv;
 				fparg_count += 2;
@@ -220,7 +220,7 @@ ffi_prep_args(
 				next_arg += 2;
 				break;
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 
 			case FFI_TYPE_POINTER:
@@ -276,7 +276,7 @@ ffi_prep_args(
 				memcpy((char*)dest_cpy, (char*)*p_argv, size_al);
 				next_arg += (size_al + 3) / 4;
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 				break;
 			}
@@ -405,7 +405,7 @@ ffi_prep_cif_machdep(
 			intarg_count++;
 
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 			break;
 		}
@@ -444,13 +444,13 @@ ffi_prep_cif_machdep(
 					8-byte-aligned.  */
 
 				if (
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 					fparg_count > NUM_FPR_ARG_REGISTERS + 1
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 					fparg_count > NUM_FPR_ARG_REGISTERS
-#else
-#error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 					&& intarg_count % 2 != 0)
 					intarg_count++;
 
@@ -507,7 +507,7 @@ ffi_prep_cif_machdep(
 #elif defined(__ppc__)
 				intarg_count += (size_al + 3) / 4;
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 
 				break;
@@ -529,7 +529,7 @@ ffi_prep_cif_machdep(
 #elif defined(__ppc__)
 		bytes += NUM_FPR_ARG_REGISTERS * sizeof(double);
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 	}
 
@@ -541,7 +541,7 @@ ffi_prep_cif_machdep(
 	if ((intarg_count + 2 * fparg_count) > NUM_GPR_ARG_REGISTERS)
 		bytes += (intarg_count + 2 * fparg_count) * sizeof(long);
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 	else
 		bytes += NUM_GPR_ARG_REGISTERS * sizeof(long);
@@ -678,13 +678,13 @@ SP current -->    +---------------------------------------+ 176 <- parent frame
 
 #if !defined(POWERPC_DARWIN)
 
-#define MIN_LINE_SIZE 32
+#  define MIN_LINE_SIZE 32
 
 static void
 flush_icache(
 	char*	addr)
 {
-#ifndef _AIX
+#  ifndef _AIX
 	__asm__ volatile (
 		"dcbf 0,%0\n"
 		"sync\n"
@@ -692,7 +692,7 @@ flush_icache(
 		"sync\n"
 		"isync"
 		: : "r" (addr) : "memory");
-#endif
+#  endif
 }
 
 static void
@@ -748,7 +748,7 @@ ffi_prep_closure(
 			tramp[8] = (unsigned long)ffi_closure_ASM;
 			tramp[9] = (unsigned long)closure;
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 
 			closure->cif = cif;
@@ -842,7 +842,7 @@ ffi_closure_helper_DARWIN(
 #elif defined(__ppc__)
 	if (cif->rtype->type == FFI_TYPE_STRUCT)
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 	{
 		rvalue = (void*)*pgr;
@@ -914,7 +914,7 @@ ffi_closure_helper_DARWIN(
 					ng	+= (size_al + 3) / sizeof(long);
 					pgr += (size_al + 3) / sizeof(long);
 #else
-#error undefined architecture
+#  error undefined architecture
 #endif
 				}
 
@@ -970,13 +970,13 @@ ffi_closure_helper_DARWIN(
 #if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 
 			case FFI_TYPE_LONGDOUBLE:
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 				if (nf < NUM_FPR_ARG_REGISTERS)
 				{
 					avalue[i] = pfr;
 					pfr += 2;
 				}
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 				/*	A long double value consumes 2/4 GPRs and 2 FPRs.
 					There are 13 64bit floating point registers.  */
 				if (nf < NUM_FPR_ARG_REGISTERS - 1)
@@ -993,9 +993,9 @@ ffi_closure_helper_DARWIN(
 					memcpy (&temp_ld.lb[1], pgr + 2, sizeof(temp_ld.lb[1]));
 					avalue[i] = &temp_ld.ld;
 				}
-#else
-#error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 				else
 					avalue[i] = pgr;
 

@@ -1,5 +1,5 @@
 #if STRINGLIB_IS_UNICODE
-# error "ctype.h only compatible with byte-wise strings"
+#  error "ctype.h only compatible with byte-wise strings"
 #endif
 
 #include "bytes_methods.h"

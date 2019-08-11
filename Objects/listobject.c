@@ -7,9 +7,9 @@
 #include "pycore_accu.h"
 
 #ifdef STDC_HEADERS
-#include <stddef.h>
+#  include <stddef.h>
 #else
-#include <sys/types.h>          /* For size_t */
+#  include <sys/types.h>          /* For size_t */
 #endif
 
 /*[clinic input]
@@ -119,7 +119,7 @@ show_alloc(void)
 
 /* Empty list reuse scheme to save calls to malloc and free */
 #ifndef PyList_MAXFREELIST
-#define PyList_MAXFREELIST 80
+#  define PyList_MAXFREELIST 80
 #endif
 static PyListObject *free_list[PyList_MAXFREELIST];
 static int numfree = 0;

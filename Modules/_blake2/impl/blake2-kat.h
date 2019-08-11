@@ -12,12 +12,12 @@
 */
 #pragma once
 #ifndef __BLAKE2_KAT_H__
-#define __BLAKE2_KAT_H__
+#  define __BLAKE2_KAT_H__
 
 
-#include <stdint.h>
+#  include <stdint.h>
 
-#define KAT_LENGTH 256
+#  define KAT_LENGTH 256
 
 
 

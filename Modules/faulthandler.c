@@ -7,13 +7,13 @@
 #include <frameobject.h>
 #include <signal.h>
 #if defined(HAVE_PTHREAD_SIGMASK) && !defined(HAVE_BROKEN_PTHREAD_SIGMASK)
-#  include <pthread.h>
+#include <pthread.h>
 #endif
 #ifdef MS_WINDOWS
-#  include <windows.h>
+#include <windows.h>
 #endif
 #ifdef HAVE_SYS_RESOURCE_H
-#  include <sys/resource.h>
+#include <sys/resource.h>
 #endif
 
 /* Allocate at maximum 100 MiB of the stack to raise the stack overflow */
@@ -25,7 +25,7 @@
    /* register() is useless on Windows, because only SIGSEGV, SIGABRT and
       SIGILL can be handled by the process, and these signals can only be used
       with enable(), not using register() */
-#  define FAULTHANDLER_USER
+#define FAULTHANDLER_USER
 #endif
 
 #define PUTS(fd, str) _Py_write_noraise(fd, str, strlen(str))
@@ -94,15 +94,15 @@ static user_signal_t *user_signals;
 
 /* the following macros come from Python: Modules/signalmodule.c */
 #ifndef NSIG
-# if defined(_NSIG)
-#  define NSIG _NSIG            /* For BSD/SysV */
-# elif defined(_SIGMAX)
-#  define NSIG (_SIGMAX + 1)    /* For QNX */
-# elif defined(SIGMAX)
-#  define NSIG (SIGMAX + 1)     /* For djgpp */
-# else
-#  define NSIG 64               /* Use a reasonable default value */
-# endif
+#  if defined(_NSIG)
+#    define NSIG _NSIG            /* For BSD/SysV */
+#  elif defined(_SIGMAX)
+#    define NSIG (_SIGMAX + 1)    /* For QNX */
+#  elif defined(SIGMAX)
+#    define NSIG (SIGMAX + 1)     /* For djgpp */
+#  else
+#    define NSIG 64               /* Use a reasonable default value */
+#  endif
 #endif
 
 static void faulthandler_user(int signum);
@@ -745,13 +745,13 @@ faulthandler_register(int signum, int chain, _Py_sighandler_t *p_previous)
            own signal handler */
         action.sa_flags = SA_NODEFER;
     }
-#ifdef HAVE_SIGALTSTACK
+#  ifdef HAVE_SIGALTSTACK
     if (stack.ss_sp != NULL) {
         /* Call the signal handler on an alternate signal stack
            provided by sigaltstack() */
         action.sa_flags |= SA_ONSTACK;
     }
-#endif
+#  endif
     return sigaction(signum, &action, p_previous);
 #else
     _Py_sighandler_t previous;

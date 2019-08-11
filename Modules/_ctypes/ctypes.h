@@ -1,14 +1,14 @@
 #if defined (__SVR4) && defined (__sun)
-#   include <alloca.h>
+#  include <alloca.h>
 #endif
 
 #ifndef MS_WIN32
-#define max(a, b) ((a) > (b) ? (a) : (b))
-#define min(a, b) ((a) < (b) ? (a) : (b))
+#  define max(a, b) ((a) > (b) ? (a) : (b))
+#  define min(a, b) ((a) < (b) ? (a) : (b))
 
-#define PARAMFLAG_FIN 0x1
-#define PARAMFLAG_FOUT 0x2
-#define PARAMFLAG_FLCID 0x4
+#  define PARAMFLAG_FIN 0x1
+#  define PARAMFLAG_FOUT 0x2
+#  define PARAMFLAG_FLCID 0x4
 #endif
 
 typedef struct tagPyCArgObject PyCArgObject;

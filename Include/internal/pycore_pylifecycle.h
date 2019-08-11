@@ -1,15 +1,15 @@
 #ifndef Py_INTERNAL_LIFECYCLE_H
-#define Py_INTERNAL_LIFECYCLE_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_LIFECYCLE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pycore_initconfig.h"   /* _PyArgv */
-#include "pycore_pystate.h"      /* _PyRuntimeState */
+#  include "pycore_initconfig.h"   /* _PyArgv */
+#  include "pycore_pystate.h"      /* _PyRuntimeState */
 
 /* True if the main interpreter thread exited due to an unhandled
  * KeyboardInterrupt exception, suggesting the user pressed ^C. */
@@ -22,9 +22,9 @@ extern int _Py_SetFileSystemEncoding(
     const char *errors);
 extern void _Py_ClearFileSystemEncoding(void);
 extern PyStatus _PyUnicode_InitEncodings(PyThreadState *tstate);
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 extern int _PyUnicode_EnableLegacyWindowsFSEncoding(void);
-#endif
+#  endif
 
 PyAPI_FUNC(void) _Py_ClearStandardStreamEncoding(void);
 
@@ -109,7 +109,7 @@ PyAPI_FUNC(void) _PyErr_Print(PyThreadState *tstate);
 PyAPI_FUNC(void) _PyErr_Display(PyObject *file, PyObject *exception,
                                 PyObject *value, PyObject *tb);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_LIFECYCLE_H */

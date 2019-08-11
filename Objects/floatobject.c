@@ -21,7 +21,7 @@ class float "PyObject *" "&PyFloat_Type"
 */
 
 #ifndef PyFloat_MAXFREELIST
-#define PyFloat_MAXFREELIST    100
+#  define PyFloat_MAXFREELIST    100
 #endif
 static int numfree = 0;
 static PyFloatObject *free_list = NULL;
@@ -2428,15 +2428,15 @@ _PyFloat_Unpack2(const unsigned char *p, int le)
         }
         else {
             /* NaN */
-#ifdef Py_NAN
+#  ifdef Py_NAN
             return sign ? -Py_NAN : Py_NAN;
-#else
+#  else
             PyErr_SetString(
                 PyExc_ValueError,
                 "can't unpack IEEE 754 NaN "
                 "on platform that does not support NaNs");
             return -1;
-#endif  /* #ifdef Py_NAN */
+#  endif  /* #ifdef Py_NAN */
         }
 #else
         if (f == 0) {

@@ -1,9 +1,9 @@
 /* Descriptors */
 #ifndef Py_DESCROBJECT_H
-#define Py_DESCROBJECT_H
-#ifdef __cplusplus
+#  define Py_DESCROBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 typedef PyObject *(*getter)(PyObject *, void *);
 typedef int (*setter)(PyObject *, PyObject *, void *);
@@ -16,7 +16,7 @@ typedef struct PyGetSetDef {
     void *closure;
 } PyGetSetDef;
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef PyObject *(*wrapperfunc)(PyObject *self, PyObject *args,
                                  void *wrapped);
 
@@ -34,7 +34,7 @@ struct wrapperbase {
 };
 
 /* Flags for above struct */
-#define PyWrapperFlag_KEYWORDS 1 /* wrapper function takes keyword args */
+#    define PyWrapperFlag_KEYWORDS 1 /* wrapper function takes keyword args */
 
 /* Various kinds of descriptor objects */
 
@@ -45,10 +45,10 @@ typedef struct {
     PyObject *d_qualname;
 } PyDescrObject;
 
-#define PyDescr_COMMON PyDescrObject d_common
+#    define PyDescr_COMMON PyDescrObject d_common
 
-#define PyDescr_TYPE(x) (((PyDescrObject *)(x))->d_type)
-#define PyDescr_NAME(x) (((PyDescrObject *)(x))->d_name)
+#    define PyDescr_TYPE(x) (((PyDescrObject *)(x))->d_type)
+#    define PyDescr_NAME(x) (((PyDescrObject *)(x))->d_name)
 
 typedef struct {
     PyDescr_COMMON;
@@ -71,7 +71,7 @@ typedef struct {
     struct wrapperbase *d_base;
     void *d_wrapped; /* This can be any function pointer */
 } PyWrapperDescrObject;
-#endif /* Py_LIMITED_API */
+#  endif /* Py_LIMITED_API */
 
 PyAPI_DATA(PyTypeObject) PyClassMethodDescr_Type;
 PyAPI_DATA(PyTypeObject) PyGetSetDescr_Type;
@@ -79,9 +79,9 @@ PyAPI_DATA(PyTypeObject) PyMemberDescr_Type;
 PyAPI_DATA(PyTypeObject) PyMethodDescr_Type;
 PyAPI_DATA(PyTypeObject) PyWrapperDescr_Type;
 PyAPI_DATA(PyTypeObject) PyDictProxy_Type;
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_DATA(PyTypeObject) _PyMethodWrapper_Type;
-#endif /* Py_LIMITED_API */
+#  endif /* Py_LIMITED_API */
 
 PyAPI_FUNC(PyObject *) PyDescr_NewMethod(PyTypeObject *, PyMethodDef *);
 PyAPI_FUNC(PyObject *) PyDescr_NewClassMethod(PyTypeObject *, PyMethodDef *);
@@ -90,19 +90,19 @@ PyAPI_FUNC(PyObject *) PyDescr_NewMember(PyTypeObject *,
                                                struct PyMemberDef *);
 PyAPI_FUNC(PyObject *) PyDescr_NewGetSet(PyTypeObject *,
                                                struct PyGetSetDef *);
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) PyDescr_NewWrapper(PyTypeObject *,
                                                 struct wrapperbase *, void *);
-#define PyDescr_IsData(d) (Py_TYPE(d)->tp_descr_set != NULL)
-#endif
+#    define PyDescr_IsData(d) (Py_TYPE(d)->tp_descr_set != NULL)
+#  endif
 
 PyAPI_FUNC(PyObject *) PyDictProxy_New(PyObject *);
 PyAPI_FUNC(PyObject *) PyWrapper_New(PyObject *, PyObject *);
 
 
 PyAPI_DATA(PyTypeObject) PyProperty_Type;
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_DESCROBJECT_H */
 

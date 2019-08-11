@@ -2,16 +2,16 @@
 
 
 #ifndef Py_PYSTATE_H
-#define Py_PYSTATE_H
-#ifdef __cplusplus
+#  define Py_PYSTATE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#include "pythread.h"
+#  include "pythread.h"
 
 /* This limitation is for performance and simplicity. If needed it can be
 removed (with effort). */
-#define MAX_CO_EXTRA_USERS 255
+#  define MAX_CO_EXTRA_USERS 255
 
 /* Forward declarations for PyFrameObject, PyThreadState
    and PyInterpreterState */
@@ -28,23 +28,23 @@ PyAPI_FUNC(PyInterpreterState *) PyInterpreterState_New(void);
 PyAPI_FUNC(void) PyInterpreterState_Clear(PyInterpreterState *);
 PyAPI_FUNC(void) PyInterpreterState_Delete(PyInterpreterState *);
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03080000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03080000
 /* New in 3.8 */
 PyAPI_FUNC(PyObject *) PyInterpreterState_GetDict(PyInterpreterState *);
-#endif
+#  endif
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03070000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03070000
 /* New in 3.7 */
 PyAPI_FUNC(int64_t) PyInterpreterState_GetID(PyInterpreterState *);
-#endif
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  endif
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 
 /* State unique per thread */
 
 /* New in 3.3 */
 PyAPI_FUNC(int) PyState_AddModule(PyObject*, struct PyModuleDef*);
 PyAPI_FUNC(int) PyState_RemoveModule(struct PyModuleDef*);
-#endif
+#  endif
 PyAPI_FUNC(PyObject*) PyState_FindModule(struct PyModuleDef*);
 
 PyAPI_FUNC(PyThreadState *) PyThreadState_New(PyInterpreterState *);
@@ -71,7 +71,7 @@ PyAPI_FUNC(PyThreadState *) PyThreadState_Get(void);
    state is NULL.
 
    See also PyThreadState_Get() and _PyThreadState_GET(). */
-#define PyThreadState_GET() PyThreadState_Get()
+#  define PyThreadState_GET() PyThreadState_Get()
 
 PyAPI_FUNC(PyThreadState *) PyThreadState_Swap(PyThreadState *);
 PyAPI_FUNC(PyObject *) PyThreadState_GetDict(void);
@@ -124,13 +124,13 @@ PyAPI_FUNC(void) PyGILState_Release(PyGILState_STATE);
 PyAPI_FUNC(PyThreadState *) PyGILState_GetThisThreadState(void);
 
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_PYSTATE_H
-#  include  "cpython/pystate.h"
-#  undef Py_CPYTHON_PYSTATE_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_PYSTATE_H
+#    include  "cpython/pystate.h"
+#    undef Py_CPYTHON_PYSTATE_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_PYSTATE_H */

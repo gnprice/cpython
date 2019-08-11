@@ -91,14 +91,14 @@ static PyObject refchain = {&refchain, &refchain};
 void
 _Py_AddToAllObjects(PyObject *op, int force)
 {
-#ifdef  Py_DEBUG
+#  ifdef  Py_DEBUG
     if (!force) {
         /* If it's initialized memory, op must be in or out of
          * the list unambiguously.
          */
         _PyObject_ASSERT(op, (op->_ob_prev == NULL) == (op->_ob_next == NULL));
     }
-#endif
+#  endif
     if (force || op->_ob_prev == NULL) {
         op->_ob_next = refchain._ob_next;
         op->_ob_prev = &refchain;
@@ -193,12 +193,12 @@ _Py_inc_count(PyTypeObject *tp)
          */
         Py_INCREF(tp);
         type_list = tp;
-#ifdef Py_TRACE_REFS
+#  ifdef Py_TRACE_REFS
         /* Also insert in the doubly-linked list of all objects,
          * if not already there.
          */
         _Py_AddToAllObjects((PyObject *)tp, 0);
-#endif
+#  endif
     }
     tp->tp_allocs++;
     if (tp->tp_allocs - tp->tp_frees > tp->tp_maxalloc)
@@ -1862,9 +1862,9 @@ _Py_NewReference(PyObject *op)
 void
 _Py_ForgetReference(PyObject *op)
 {
-#ifdef SLOW_UNREF_CHECK
+#  ifdef SLOW_UNREF_CHECK
     PyObject *p;
-#endif
+#  endif
     if (op->ob_refcnt < 0)
         Py_FatalError("UNREF negative refcnt");
     if (op == &refchain ||
@@ -1877,14 +1877,14 @@ _Py_ForgetReference(PyObject *op)
         _PyObject_Dump(op->_ob_next->_ob_prev);
         Py_FatalError("UNREF invalid object");
     }
-#ifdef SLOW_UNREF_CHECK
+#  ifdef SLOW_UNREF_CHECK
     for (p = refchain._ob_next; p != &refchain; p = p->_ob_next) {
         if (p == op)
             break;
     }
     if (p == &refchain) /* Not found */
         Py_FatalError("UNREF unknown object");
-#endif
+#  endif
     op->_ob_next->_ob_prev = op->_ob_prev;
     op->_ob_prev->_ob_next = op->_ob_next;
     op->_ob_next = op->_ob_prev = NULL;

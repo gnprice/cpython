@@ -1,8 +1,8 @@
 #ifndef Py_CODECREGISTRY_H
-#define Py_CODECREGISTRY_H
-#ifdef __cplusplus
+#  define Py_CODECREGISTRY_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /* ------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ PyAPI_FUNC(int) PyCodec_Register(
 
  */
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_FUNC(PyObject *) _PyCodec_Lookup(
        const char *encoding
        );
@@ -53,7 +53,7 @@ PyAPI_FUNC(PyObject *) _PyCodec_Lookup(
 PyAPI_FUNC(int) _PyCodec_Forget(
        const char *encoding
        );
-#endif
+#  endif
 
 /* Codec registry encoding check API.
 
@@ -98,7 +98,7 @@ PyAPI_FUNC(PyObject *) PyCodec_Decode(
        const char *errors
        );
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 /* Text codec specific encoding and decoding API.
 
    Checks the encoding against a list of codecs which do not
@@ -141,7 +141,7 @@ PyAPI_FUNC(PyObject *) _PyCodecInfo_GetIncrementalEncoder(
        PyObject *codec_info,
        const char *errors
        );
-#endif
+#  endif
 
 
 
@@ -225,16 +225,16 @@ PyAPI_FUNC(PyObject *) PyCodec_XMLCharRefReplaceErrors(PyObject *exc);
 /* replace the unicode encode error with backslash escapes (\x, \u and \U) */
 PyAPI_FUNC(PyObject *) PyCodec_BackslashReplaceErrors(PyObject *exc);
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 /* replace the unicode encode error with backslash escapes (\N, \x, \u and \U) */
 PyAPI_FUNC(PyObject *) PyCodec_NameReplaceErrors(PyObject *exc);
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 PyAPI_DATA(const char *) Py_hexdigits;
-#endif
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_CODECREGISTRY_H */

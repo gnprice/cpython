@@ -9,20 +9,20 @@
  */
 
 #ifndef SRE_INCLUDED
-#define SRE_INCLUDED
+#  define SRE_INCLUDED
 
-#include "sre_constants.h"
+#  include "sre_constants.h"
 
 /* size of a code word (must be unsigned short or larger, and
    large enough to hold a UCS4 character) */
-#define SRE_CODE Py_UCS4
-#if SIZEOF_SIZE_T > 4
-# define SRE_MAXREPEAT (~(SRE_CODE)0)
-# define SRE_MAXGROUPS ((~(SRE_CODE)0) / 2)
-#else
-# define SRE_MAXREPEAT ((SRE_CODE)PY_SSIZE_T_MAX)
-# define SRE_MAXGROUPS ((SRE_CODE)PY_SSIZE_T_MAX / SIZEOF_SIZE_T / 2)
-#endif
+#  define SRE_CODE Py_UCS4
+#  if SIZEOF_SIZE_T > 4
+#    define SRE_MAXREPEAT (~(SRE_CODE)0)
+#    define SRE_MAXGROUPS ((~(SRE_CODE)0) / 2)
+#  else
+#    define SRE_MAXREPEAT ((SRE_CODE)PY_SSIZE_T_MAX)
+#    define SRE_MAXGROUPS ((SRE_CODE)PY_SSIZE_T_MAX / SIZEOF_SIZE_T / 2)
+#  endif
 
 typedef struct {
     PyObject_VAR_HEAD
@@ -39,7 +39,7 @@ typedef struct {
     SRE_CODE code[1];
 } PatternObject;
 
-#define PatternObject_GetCode(o) (((PatternObject*)(o))->code)
+#  define PatternObject_GetCode(o) (((PatternObject*)(o))->code)
 
 typedef struct {
     PyObject_VAR_HEAD

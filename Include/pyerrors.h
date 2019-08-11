@@ -1,8 +1,8 @@
 #ifndef Py_ERRORS_H
-#define Py_ERRORS_H
-#ifdef __cplusplus
+#  define Py_ERRORS_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /* Error handling definitions */
 
@@ -16,19 +16,19 @@ PyAPI_FUNC(PyObject *) PyErr_Occurred(void);
 PyAPI_FUNC(void) PyErr_Clear(void);
 PyAPI_FUNC(void) PyErr_Fetch(PyObject **, PyObject **, PyObject **);
 PyAPI_FUNC(void) PyErr_Restore(PyObject *, PyObject *, PyObject *);
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(void) PyErr_GetExcInfo(PyObject **, PyObject **, PyObject **);
 PyAPI_FUNC(void) PyErr_SetExcInfo(PyObject *, PyObject *, PyObject *);
-#endif
+#  endif
 
 /* Defined in Python/pylifecycle.c */
 PyAPI_FUNC(void) _Py_NO_RETURN Py_FatalError(const char *message);
 
-#if defined(Py_DEBUG) || defined(Py_LIMITED_API)
-#define _PyErr_OCCURRED() PyErr_Occurred()
-#else
-#define _PyErr_OCCURRED() (PyThreadState_GET()->curexc_type)
-#endif
+#  if defined(Py_DEBUG) || defined(Py_LIMITED_API)
+#    define _PyErr_OCCURRED() PyErr_Occurred()
+#  else
+#    define _PyErr_OCCURRED() (PyThreadState_GET()->curexc_type)
+#  endif
 
 /* Error testing and normalization */
 PyAPI_FUNC(int) PyErr_GivenExceptionMatches(PyObject *, PyObject *);
@@ -49,25 +49,25 @@ PyAPI_FUNC(void) PyException_SetContext(PyObject *, PyObject *);
 
 /* */
 
-#define PyExceptionClass_Check(x)                                       \
+#  define PyExceptionClass_Check(x)                                       \
     (PyType_Check((x)) &&                                               \
      PyType_FastSubclass((PyTypeObject*)(x), Py_TPFLAGS_BASE_EXC_SUBCLASS))
 
-#define PyExceptionInstance_Check(x)                    \
+#  define PyExceptionInstance_Check(x)                    \
     PyType_FastSubclass((x)->ob_type, Py_TPFLAGS_BASE_EXC_SUBCLASS)
 
 PyAPI_FUNC(const char *) PyExceptionClass_Name(PyObject *);
 
-#define PyExceptionInstance_Class(x) ((PyObject*)((x)->ob_type))
+#  define PyExceptionInstance_Class(x) ((PyObject*)((x)->ob_type))
 
 
 /* Predefined exceptions */
 
 PyAPI_DATA(PyObject *) PyExc_BaseException;
 PyAPI_DATA(PyObject *) PyExc_Exception;
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 PyAPI_DATA(PyObject *) PyExc_StopAsyncIteration;
-#endif
+#  endif
 PyAPI_DATA(PyObject *) PyExc_StopIteration;
 PyAPI_DATA(PyObject *) PyExc_GeneratorExit;
 PyAPI_DATA(PyObject *) PyExc_ArithmeticError;
@@ -80,9 +80,9 @@ PyAPI_DATA(PyObject *) PyExc_EOFError;
 PyAPI_DATA(PyObject *) PyExc_FloatingPointError;
 PyAPI_DATA(PyObject *) PyExc_OSError;
 PyAPI_DATA(PyObject *) PyExc_ImportError;
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
 PyAPI_DATA(PyObject *) PyExc_ModuleNotFoundError;
-#endif
+#  endif
 PyAPI_DATA(PyObject *) PyExc_IndexError;
 PyAPI_DATA(PyObject *) PyExc_KeyError;
 PyAPI_DATA(PyObject *) PyExc_KeyboardInterrupt;
@@ -90,9 +90,9 @@ PyAPI_DATA(PyObject *) PyExc_MemoryError;
 PyAPI_DATA(PyObject *) PyExc_NameError;
 PyAPI_DATA(PyObject *) PyExc_OverflowError;
 PyAPI_DATA(PyObject *) PyExc_RuntimeError;
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 PyAPI_DATA(PyObject *) PyExc_RecursionError;
-#endif
+#  endif
 PyAPI_DATA(PyObject *) PyExc_NotImplementedError;
 PyAPI_DATA(PyObject *) PyExc_SyntaxError;
 PyAPI_DATA(PyObject *) PyExc_IndentationError;
@@ -110,7 +110,7 @@ PyAPI_DATA(PyObject *) PyExc_UnicodeTranslateError;
 PyAPI_DATA(PyObject *) PyExc_ValueError;
 PyAPI_DATA(PyObject *) PyExc_ZeroDivisionError;
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_DATA(PyObject *) PyExc_BlockingIOError;
 PyAPI_DATA(PyObject *) PyExc_BrokenPipeError;
 PyAPI_DATA(PyObject *) PyExc_ChildProcessError;
@@ -126,15 +126,15 @@ PyAPI_DATA(PyObject *) PyExc_NotADirectoryError;
 PyAPI_DATA(PyObject *) PyExc_PermissionError;
 PyAPI_DATA(PyObject *) PyExc_ProcessLookupError;
 PyAPI_DATA(PyObject *) PyExc_TimeoutError;
-#endif
+#  endif
 
 
 /* Compatibility aliases */
 PyAPI_DATA(PyObject *) PyExc_EnvironmentError;
 PyAPI_DATA(PyObject *) PyExc_IOError;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 PyAPI_DATA(PyObject *) PyExc_WindowsError;
-#endif
+#  endif
 
 /* Predefined warning categories */
 PyAPI_DATA(PyObject *) PyExc_Warning;
@@ -157,10 +157,10 @@ PyAPI_FUNC(PyObject *) PyErr_NoMemory(void);
 PyAPI_FUNC(PyObject *) PyErr_SetFromErrno(PyObject *);
 PyAPI_FUNC(PyObject *) PyErr_SetFromErrnoWithFilenameObject(
     PyObject *, PyObject *);
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03040000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03040000
 PyAPI_FUNC(PyObject *) PyErr_SetFromErrnoWithFilenameObjects(
     PyObject *, PyObject *, PyObject *);
-#endif
+#  endif
 PyAPI_FUNC(PyObject *) PyErr_SetFromErrnoWithFilename(
     PyObject *exc,
     const char *filename   /* decoded from the filesystem encoding */
@@ -171,14 +171,14 @@ PyAPI_FUNC(PyObject *) PyErr_Format(
     const char *format,   /* ASCII-encoded string  */
     ...
     );
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03050000
 PyAPI_FUNC(PyObject *) PyErr_FormatV(
     PyObject *exception,
     const char *format,
     va_list vargs);
-#endif
+#  endif
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 PyAPI_FUNC(PyObject *) PyErr_SetFromWindowsErrWithFilename(
     int ierr,
     const char *filename        /* decoded from the filesystem encoding */
@@ -186,33 +186,33 @@ PyAPI_FUNC(PyObject *) PyErr_SetFromWindowsErrWithFilename(
 PyAPI_FUNC(PyObject *) PyErr_SetFromWindowsErr(int);
 PyAPI_FUNC(PyObject *) PyErr_SetExcFromWindowsErrWithFilenameObject(
     PyObject *,int, PyObject *);
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03040000
+#    if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03040000
 PyAPI_FUNC(PyObject *) PyErr_SetExcFromWindowsErrWithFilenameObjects(
     PyObject *,int, PyObject *, PyObject *);
-#endif
+#    endif
 PyAPI_FUNC(PyObject *) PyErr_SetExcFromWindowsErrWithFilename(
     PyObject *exc,
     int ierr,
     const char *filename        /* decoded from the filesystem encoding */
     );
 PyAPI_FUNC(PyObject *) PyErr_SetExcFromWindowsErr(PyObject *, int);
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03060000
 PyAPI_FUNC(PyObject *) PyErr_SetImportErrorSubclass(PyObject *, PyObject *,
     PyObject *, PyObject *);
-#endif
-#if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
+#  endif
+#  if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x03030000
 PyAPI_FUNC(PyObject *) PyErr_SetImportError(PyObject *, PyObject *,
     PyObject *);
-#endif
+#  endif
 
 /* Export the old function so that the existing API remains available: */
 PyAPI_FUNC(void) PyErr_BadInternalCall(void);
 PyAPI_FUNC(void) _PyErr_BadInternalCall(const char *filename, int lineno);
 /* Mask the old API with a call to the new API for code compiled under
    Python 2.0: */
-#define PyErr_BadInternalCall() _PyErr_BadInternalCall(__FILE__, __LINE__)
+#  define PyErr_BadInternalCall() _PyErr_BadInternalCall(__FILE__, __LINE__)
 
 /* Function to create a new exception */
 PyAPI_FUNC(PyObject *) PyErr_NewException(
@@ -312,25 +312,25 @@ PyAPI_FUNC(int) PyUnicodeTranslateError_SetReason(
    not rely on any particular behavior; eventually the C99 defn may
    be reliable.
 */
-#if defined(MS_WIN32) && !defined(HAVE_SNPRINTF)
-# define HAVE_SNPRINTF
-# define snprintf _snprintf
-# define vsnprintf _vsnprintf
-#endif
+#  if defined(MS_WIN32) && !defined(HAVE_SNPRINTF)
+#    define HAVE_SNPRINTF
+#    define snprintf _snprintf
+#    define vsnprintf _vsnprintf
+#  endif
 
-#include <stdarg.h>
+#  include <stdarg.h>
 PyAPI_FUNC(int) PyOS_snprintf(char *str, size_t size, const char  *format, ...)
                         Py_GCC_ATTRIBUTE((format(printf, 3, 4)));
 PyAPI_FUNC(int) PyOS_vsnprintf(char *str, size_t size, const char  *format, va_list va)
                         Py_GCC_ATTRIBUTE((format(printf, 3, 0)));
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_ERRORS_H
-#  include  "cpython/pyerrors.h"
-#  undef Py_CPYTHON_ERRORS_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_ERRORS_H
+#    include  "cpython/pyerrors.h"
+#    undef Py_CPYTHON_ERRORS_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_ERRORS_H */

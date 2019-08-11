@@ -1,24 +1,24 @@
 #ifndef Py_INTERNAL_GIL_H
-#define Py_INTERNAL_GIL_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_GIL_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "pycore_condvar.h"
-#include "pycore_atomic.h"
+#  include "pycore_condvar.h"
+#  include "pycore_atomic.h"
 
-#ifndef Py_HAVE_CONDVAR
-#  error You need either a POSIX-compatible or a Windows system!
-#endif
+#  ifndef Py_HAVE_CONDVAR
+#    error You need either a POSIX-compatible or a Windows system!
+#  endif
 
 /* Enable if you want to force the switching of threads at least
    every `interval`. */
-#undef FORCE_SWITCHING
-#define FORCE_SWITCHING
+#  undef FORCE_SWITCHING
+#  define FORCE_SWITCHING
 
 struct _gil_runtime_state {
     /* microseconds (the Python API uses seconds, though) */
@@ -36,15 +36,15 @@ struct _gil_runtime_state {
        the above variables. */
     PyCOND_T cond;
     PyMUTEX_T mutex;
-#ifdef FORCE_SWITCHING
+#  ifdef FORCE_SWITCHING
     /* This condition variable helps the GIL-releasing thread wait for
        a GIL-awaiting thread to be scheduled and take the GIL. */
     PyCOND_T switch_cond;
     PyMUTEX_T switch_mutex;
-#endif
+#  endif
 };
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_GIL_H */

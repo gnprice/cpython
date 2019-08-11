@@ -1,23 +1,23 @@
 #ifndef Py_INTERNAL_PYSTATE_H
-#define Py_INTERNAL_PYSTATE_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_PYSTATE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "cpython/initconfig.h"
-#include "fileobject.h"
-#include "pystate.h"
-#include "pythread.h"
-#include "sysmodule.h"
+#  include "cpython/initconfig.h"
+#  include "fileobject.h"
+#  include "pystate.h"
+#  include "pythread.h"
+#  include "sysmodule.h"
 
-#include "pycore_gil.h"   /* _gil_runtime_state  */
-#include "pycore_pathconfig.h"
-#include "pycore_pymem.h"
-#include "pycore_warnings.h"
+#  include "pycore_gil.h"   /* _gil_runtime_state  */
+#  include "pycore_pathconfig.h"
+#  include "pycore_pymem.h"
+#  include "pycore_warnings.h"
 
 
 /* ceval state */
@@ -31,7 +31,7 @@ struct _pending_calls {
        thread state.
        Guarded by the GIL. */
     int async_exc;
-#define NPENDINGCALLS 32
+#  define NPENDINGCALLS 32
     struct {
         int (*func)(void *);
         void *arg;
@@ -104,9 +104,9 @@ struct _is {
     } fs_codec;
 
     PyConfig config;
-#ifdef HAVE_DLOPEN
+#  ifdef HAVE_DLOPEN
     int dlopenflags;
-#endif
+#  endif
 
     PyObject *dict;  /* Stores per-interpreter state */
 
@@ -118,11 +118,11 @@ struct _is {
     Py_ssize_t co_extra_user_count;
     freefunc co_extra_freefuncs[MAX_CO_EXTRA_USERS];
 
-#ifdef HAVE_FORK
+#  ifdef HAVE_FORK
     PyObject *before_forkers;
     PyObject *after_forkers_parent;
     PyObject *after_forkers_child;
-#endif
+#  endif
     /* AtExit module */
     void (*pyexitfunc)(PyObject *);
     PyObject *pyexitmodule;
@@ -180,11 +180,11 @@ struct _gilstate_runtime_state {
 };
 
 /* hook for PyEval_GetFrame(), requested for Psyco */
-#define _PyThreadState_GetFrame _PyRuntime.gilstate.getframe
+#  define _PyThreadState_GetFrame _PyRuntime.gilstate.getframe
 
 /* Issue #26558: Flag to disable PyGILState_Check().
    If set to non-zero, PyGILState_Check() always return 1. */
-#define _PyGILState_check_enabled _PyRuntime.gilstate.check_enabled
+#  define _PyGILState_check_enabled _PyRuntime.gilstate.check_enabled
 
 
 /* Full Python runtime state */
@@ -223,7 +223,7 @@ typedef struct pyruntimestate {
 
     unsigned long main_thread;
 
-#define NEXITFUNCS 32
+#  define NEXITFUNCS 32
     void (*exitfuncs[NEXITFUNCS])(void);
     int nexitfuncs;
 
@@ -240,7 +240,7 @@ typedef struct pyruntimestate {
     // XXX Consolidate globals found via the check-c-globals script.
 } _PyRuntimeState;
 
-#define _PyRuntimeState_INIT \
+#  define _PyRuntimeState_INIT \
     {.pre_initialized = 0, .core_initialized = 0, .initialized = 0}
 /* Note: _PyRuntimeState_INIT sets other fields to 0/NULL */
 
@@ -255,14 +255,14 @@ PyAPI_FUNC(PyStatus) _PyRuntime_Initialize(void);
 
 PyAPI_FUNC(void) _PyRuntime_Finalize(void);
 
-#define _Py_CURRENTLY_FINALIZING(runtime, tstate) \
+#  define _Py_CURRENTLY_FINALIZING(runtime, tstate) \
     (runtime->finalizing == tstate)
 
 
 /* Variable and macro for in-line access to current thread
    and interpreter state */
 
-#define _PyRuntimeState_GetThreadState(runtime) \
+#  define _PyRuntimeState_GetThreadState(runtime) \
     ((PyThreadState*)_Py_atomic_load_relaxed(&(runtime)->gilstate.tstate_current))
 
 /* Get the current Python thread state.
@@ -274,11 +274,11 @@ PyAPI_FUNC(void) _PyRuntime_Finalize(void);
    The caller must hold the GIL.
 
    See also PyThreadState_Get() and PyThreadState_GET(). */
-#define _PyThreadState_GET() _PyRuntimeState_GetThreadState(&_PyRuntime)
+#  define _PyThreadState_GET() _PyRuntimeState_GetThreadState(&_PyRuntime)
 
 /* Redefine PyThreadState_GET() as an alias to _PyThreadState_GET() */
-#undef PyThreadState_GET
-#define PyThreadState_GET() _PyThreadState_GET()
+#  undef PyThreadState_GET
+#  define PyThreadState_GET() _PyThreadState_GET()
 
 /* Get the current interpreter state.
 
@@ -288,7 +288,7 @@ PyAPI_FUNC(void) _PyRuntime_Finalize(void);
 
    See also _PyInterpreterState_Get()
    and _PyGILState_GetInterpreterStateUnsafe(). */
-#define _PyInterpreterState_GET_UNSAFE() (_PyThreadState_GET()->interp)
+#  define _PyInterpreterState_GET_UNSAFE() (_PyThreadState_GET()->interp)
 
 
 /* Other */
@@ -312,7 +312,7 @@ extern void _PyInterpreterState_ClearModules(PyInterpreterState *interp);
 
 PyAPI_FUNC(void) _PyGILState_Reinit(_PyRuntimeState *runtime);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_PYSTATE_H */

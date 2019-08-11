@@ -387,10 +387,10 @@ _hamt_node_array_validate(void *obj_raw)
     assert(count == node->a_count);
 }
 
-#define VALIDATE_ARRAY_NODE(NODE) \
+#  define VALIDATE_ARRAY_NODE(NODE) \
     do { _hamt_node_array_validate(NODE); } while (0);
 #else
-#define VALIDATE_ARRAY_NODE(NODE)
+#  define VALIDATE_ARRAY_NODE(NODE)
 #endif
 
 
@@ -507,11 +507,11 @@ _hamt_dump_format(_PyUnicodeWriter *writer, const char *format, ...)
     int ret;
 
     va_list vargs;
-#ifdef HAVE_STDARG_PROTOTYPES
+#  ifdef HAVE_STDARG_PROTOTYPES
     va_start(vargs, format);
-#else
+#  else
     va_start(vargs);
-#endif
+#  endif
     msg = PyUnicode_FromFormatV(format, vargs);
     va_end(vargs);
 

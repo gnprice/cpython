@@ -1079,7 +1079,7 @@ config_init_program_name(PyConfig *config)
         }
         return _PyStatus_OK();
     }
-#ifdef WITH_NEXT_FRAMEWORK
+#  ifdef WITH_NEXT_FRAMEWORK
     else {
         const char* pyvenv_launcher = getenv("__PYVENV_LAUNCHER__");
         if (pyvenv_launcher && *pyvenv_launcher) {
@@ -1096,7 +1096,7 @@ config_init_program_name(PyConfig *config)
             return _PyStatus_OK();
         }
     }
-#endif   /* WITH_NEXT_FRAMEWORK */
+#  endif   /* WITH_NEXT_FRAMEWORK */
 #endif   /* __APPLE__ */
 
     /* Use argv[0] if available and non-empty */
@@ -1398,12 +1398,12 @@ config_get_stdio_errors(const PyConfig *config)
             return L"surrogateescape";
         }
 
-#ifdef PY_COERCE_C_LOCALE
+#  ifdef PY_COERCE_C_LOCALE
         /* surrogateescape is the default in locale coercion target locales */
         if (_Py_IsLocaleCoercionTarget(loc)) {
             return L"surrogateescape";
         }
-#endif
+#  endif
     }
 
     return L"strict";
@@ -1567,33 +1567,33 @@ config_init_fs_encoding(PyConfig *config, const PyPreConfig *preconfig)
         status = PyConfig_SetString(config, &config->filesystem_encoding, L"utf-8");
 #else
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
         if (preconfig->legacy_windows_fs_encoding) {
             /* Legacy Windows filesystem encoding: mbcs/replace */
             status = PyConfig_SetString(config, &config->filesystem_encoding,
                                         L"mbcs");
         }
         else
-#endif
+#  endif
         if (preconfig->utf8_mode) {
             status = PyConfig_SetString(config, &config->filesystem_encoding,
                                         L"utf-8");
         }
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
         else if (_Py_GetForceASCII()) {
             status = PyConfig_SetString(config, &config->filesystem_encoding,
                                         L"ascii");
         }
-#endif
+#  endif
         else {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
             /* Windows defaults to utf-8/surrogatepass (PEP 529). */
             status = PyConfig_SetString(config, &config->filesystem_encoding,
                                         L"utf-8");
-#else
+#  else
             status = config_get_locale_encoding(config,
                                                 &config->filesystem_encoding);
-#endif
+#  endif
         }
 #endif   /* !_Py_FORCE_UTF8_FS_ENCODING */
 
@@ -1750,10 +1750,10 @@ config_init_stdio(const PyConfig *config)
         /* Any set[v]buf(stdin, ...) screws up Tkinter :-( */
         setvbuf(stdout, (char *)NULL, _IONBF, BUFSIZ);
 #else /* !MS_WINDOWS */
-#ifdef HAVE_SETVBUF
+#  ifdef HAVE_SETVBUF
         setvbuf(stdin,  (char *)NULL, _IOLBF, BUFSIZ);
         setvbuf(stdout, (char *)NULL, _IOLBF, BUFSIZ);
-#endif /* HAVE_SETVBUF */
+#  endif /* HAVE_SETVBUF */
 #endif /* !MS_WINDOWS */
         /* Leave stderr alone - it should be unbuffered anyway. */
     }

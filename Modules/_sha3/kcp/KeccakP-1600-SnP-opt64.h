@@ -32,7 +32,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 #define KeccakP1600_StaticInitialize()
 void KeccakP1600_Initialize(void *state);
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-#define KeccakP1600_AddByte(state, byte, offset) \
+#  define KeccakP1600_AddByte(state, byte, offset) \
     ((unsigned char*)(state))[(offset)] ^= (byte)
 #else
 void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset);

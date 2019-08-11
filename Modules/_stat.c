@@ -44,7 +44,7 @@ typedef unsigned short mode_t;
 
 /* From Python's stat.py */
 #ifndef S_IMODE
-#  define S_IMODE 07777
+#define S_IMODE 07777
 #endif
 
 /* S_IFXXX constants (file types)
@@ -56,27 +56,27 @@ typedef unsigned short mode_t;
  */
 
 #ifndef S_IFBLK
-#  define S_IFBLK 0060000
+#define S_IFBLK 0060000
 #endif
 
 #ifndef S_IFIFO
-#  define S_IFIFO 0010000
+#define S_IFIFO 0010000
 #endif
 
 #ifndef S_IFSOCK
-#  define S_IFSOCK 0140000
+#define S_IFSOCK 0140000
 #endif
 
 #ifndef S_IFDOOR
-#  define S_IFDOOR 0
+#define S_IFDOOR 0
 #endif
 
 #ifndef S_IFPORT
-#  define S_IFPORT 0
+#define S_IFPORT 0
 #endif
 
 #ifndef S_IFWHT
-#  define S_IFWHT 0
+#define S_IFWHT 0
 #endif
 
 
@@ -85,31 +85,31 @@ typedef unsigned short mode_t;
  */
 
 #ifndef S_ISBLK
-#  define S_ISBLK(mode) (((mode) & S_IFMT) == S_IFBLK)
+#define S_ISBLK(mode) (((mode) & S_IFMT) == S_IFBLK)
 #endif
 
 #ifndef S_ISFIFO
-#  define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
+#define S_ISFIFO(mode) (((mode) & S_IFMT) == S_IFIFO)
 #endif
 
 #ifndef S_ISLNK
-#  define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
+#define S_ISLNK(mode) (((mode) & S_IFMT) == S_IFLNK)
 #endif
 
 #ifndef S_ISSOCK
-#  define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
+#define S_ISSOCK(mode) (((mode) & S_IFMT) == S_IFSOCK)
 #endif
 
 #ifndef S_ISDOOR
-#  define S_ISDOOR(mode) 0
+#define S_ISDOOR(mode) 0
 #endif
 
 #ifndef S_ISPORT
-#  define S_ISPORT(mode) 0
+#define S_ISPORT(mode) 0
 #endif
 
 #ifndef S_ISWHT
-#  define S_ISWHT(mode) 0
+#define S_ISWHT(mode) 0
 #endif
 
 
@@ -118,130 +118,130 @@ typedef unsigned short mode_t;
  * The permission bit value are defined by POSIX standards.
  */
 #ifndef S_ISUID
-#  define S_ISUID 04000
+#define S_ISUID 04000
 #endif
 
 #ifndef S_ISGID
-#  define S_ISGID 02000
+#define S_ISGID 02000
 #endif
 
 /* what is S_ENFMT? */
 #ifndef S_ENFMT
-#  define S_ENFMT S_ISGID
+#define S_ENFMT S_ISGID
 #endif
 
 #ifndef S_ISVTX
-#  define S_ISVTX 01000
+#define S_ISVTX 01000
 #endif
 
 #ifndef S_IREAD
-#  define S_IREAD 00400
+#define S_IREAD 00400
 #endif
 
 #ifndef S_IWRITE
-#  define S_IWRITE 00200
+#define S_IWRITE 00200
 #endif
 
 #ifndef S_IEXEC
-#  define S_IEXEC 00100
+#define S_IEXEC 00100
 #endif
 
 #ifndef S_IRWXU
-#  define S_IRWXU 00700
+#define S_IRWXU 00700
 #endif
 
 #ifndef S_IRUSR
-#  define S_IRUSR 00400
+#define S_IRUSR 00400
 #endif
 
 #ifndef S_IWUSR
-#  define S_IWUSR 00200
+#define S_IWUSR 00200
 #endif
 
 #ifndef S_IXUSR
-#  define S_IXUSR 00100
+#define S_IXUSR 00100
 #endif
 
 #ifndef S_IRWXG
-#  define S_IRWXG 00070
+#define S_IRWXG 00070
 #endif
 
 #ifndef S_IRGRP
-#  define S_IRGRP 00040
+#define S_IRGRP 00040
 #endif
 
 #ifndef S_IWGRP
-#  define S_IWGRP 00020
+#define S_IWGRP 00020
 #endif
 
 #ifndef S_IXGRP
-#  define S_IXGRP 00010
+#define S_IXGRP 00010
 #endif
 
 #ifndef S_IRWXO
-#  define S_IRWXO 00007
+#define S_IRWXO 00007
 #endif
 
 #ifndef S_IROTH
-#  define S_IROTH 00004
+#define S_IROTH 00004
 #endif
 
 #ifndef S_IWOTH
-#  define S_IWOTH 00002
+#define S_IWOTH 00002
 #endif
 
 #ifndef S_IXOTH
-#  define S_IXOTH 00001
+#define S_IXOTH 00001
 #endif
 
 
 /* Names for file flags */
 #ifndef UF_NODUMP
-#  define UF_NODUMP 0x00000001
+#define UF_NODUMP 0x00000001
 #endif
 
 #ifndef UF_IMMUTABLE
-#  define UF_IMMUTABLE 0x00000002
+#define UF_IMMUTABLE 0x00000002
 #endif
 
 #ifndef UF_APPEND
-#  define UF_APPEND 0x00000004
+#define UF_APPEND 0x00000004
 #endif
 
 #ifndef UF_OPAQUE
-#  define UF_OPAQUE 0x00000008
+#define UF_OPAQUE 0x00000008
 #endif
 
 #ifndef UF_NOUNLINK
-#  define UF_NOUNLINK 0x00000010
+#define UF_NOUNLINK 0x00000010
 #endif
 
 #ifndef UF_COMPRESSED
-#  define UF_COMPRESSED 0x00000020
+#define UF_COMPRESSED 0x00000020
 #endif
 
 #ifndef UF_HIDDEN
-#  define UF_HIDDEN 0x00008000
+#define UF_HIDDEN 0x00008000
 #endif
 
 #ifndef SF_ARCHIVED
-#  define SF_ARCHIVED 0x00010000
+#define SF_ARCHIVED 0x00010000
 #endif
 
 #ifndef SF_IMMUTABLE
-#  define SF_IMMUTABLE 0x00020000
+#define SF_IMMUTABLE 0x00020000
 #endif
 
 #ifndef SF_APPEND
-#  define SF_APPEND 0x00040000
+#define SF_APPEND 0x00040000
 #endif
 
 #ifndef SF_NOUNLINK
-#  define SF_NOUNLINK 0x00100000
+#define SF_NOUNLINK 0x00100000
 #endif
 
 #ifndef SF_SNAPSHOT
-#  define SF_SNAPSHOT 0x00200000
+#define SF_SNAPSHOT 0x00200000
 #endif
 
 static mode_t

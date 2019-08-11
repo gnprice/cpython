@@ -9,7 +9,7 @@
 #include "structmember.h"
 #include "osdefs.h"
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #endif
 
 #define OFF(x) offsetof(PyTracebackObject, x)

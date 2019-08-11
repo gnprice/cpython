@@ -11,9 +11,9 @@
 #include "patchlevel.h"
 #include <pythonnt_rc.h>
 #ifdef _DEBUG
-#   define PYTHON_DEBUG_EXT "_d"
+#  define PYTHON_DEBUG_EXT "_d"
 #else
-#   define PYTHON_DEBUG_EXT
+#  define PYTHON_DEBUG_EXT
 #endif
 
 /* e.g., 3.3.0a1
@@ -23,12 +23,12 @@
 
 /* 64-bit version number as comma-separated list of 4 16-bit ints */
 #if PY_MICRO_VERSION > 64
-#   error "PY_MICRO_VERSION > 64"
+#  error "PY_MICRO_VERSION > 64"
 #endif
 #if PY_RELEASE_LEVEL > 99
-#   error "PY_RELEASE_LEVEL > 99"
+#  error "PY_RELEASE_LEVEL > 99"
 #endif
 #if PY_RELEASE_SERIAL > 9
-#   error "PY_RELEASE_SERIAL > 9"
+#  error "PY_RELEASE_SERIAL > 9"
 #endif
 #define PYVERSION64 PY_MAJOR_VERSION, PY_MINOR_VERSION, FIELD3, PYTHON_API_VERSION

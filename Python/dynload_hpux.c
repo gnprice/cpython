@@ -9,9 +9,9 @@
 #include "pycore_pystate.h"
 
 #if defined(__hp9000s300)
-#define FUNCNAME_PATTERN "_%.20s_%.200s"
+#  define FUNCNAME_PATTERN "_%.20s_%.200s"
 #else
-#define FUNCNAME_PATTERN "%.20s_%.200s"
+#  define FUNCNAME_PATTERN "%.20s_%.200s"
 #endif
 
 const char *_PyImport_DynLoadFiletab[] = {SHLIB_EXT, NULL};

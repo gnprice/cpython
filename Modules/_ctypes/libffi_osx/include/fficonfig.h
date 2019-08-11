@@ -11,41 +11,41 @@
 #endif
 
 #if defined(__i386__)
-#	define	BYTEORDER 1234
-#	undef	HOST_WORDS_BIG_ENDIAN
-#	undef	WORDS_BIGENDIAN
-#	define	SIZEOF_DOUBLE 8
-#	define	HAVE_LONG_DOUBLE 1
-#	define	SIZEOF_LONG_DOUBLE 16
+#define	BYTEORDER 1234
+#undef	HOST_WORDS_BIG_ENDIAN
+#undef	WORDS_BIGENDIAN
+#define	SIZEOF_DOUBLE 8
+#define	HAVE_LONG_DOUBLE 1
+#define	SIZEOF_LONG_DOUBLE 16
 
 #elif defined(__x86_64__)
-#	define	BYTEORDER 1234
-#	undef	HOST_WORDS_BIG_ENDIAN
-#	undef	WORDS_BIGENDIAN
-#	define	SIZEOF_DOUBLE 8
-#	define	HAVE_LONG_DOUBLE 1
-#	define	SIZEOF_LONG_DOUBLE 16
+#define	BYTEORDER 1234
+#undef	HOST_WORDS_BIG_ENDIAN
+#undef	WORDS_BIGENDIAN
+#define	SIZEOF_DOUBLE 8
+#define	HAVE_LONG_DOUBLE 1
+#define	SIZEOF_LONG_DOUBLE 16
 
 #elif defined(__ppc__)
-#	define	BYTEORDER 4321
-#	define	HOST_WORDS_BIG_ENDIAN 1
-#	define	WORDS_BIGENDIAN 1
-#	define	SIZEOF_DOUBLE 8
-#	if __GNUC__ >= 4
-#		define	HAVE_LONG_DOUBLE 1
-#		define	SIZEOF_LONG_DOUBLE 16 
-#	else
-#		undef	HAVE_LONG_DOUBLE
-#		define	SIZEOF_LONG_DOUBLE 8 
-#	endif
+#define	BYTEORDER 4321
+#define	HOST_WORDS_BIG_ENDIAN 1
+#define	WORDS_BIGENDIAN 1
+#define	SIZEOF_DOUBLE 8
+#if __GNUC__ >= 4
+#  define	HAVE_LONG_DOUBLE 1
+#  define	SIZEOF_LONG_DOUBLE 16 
+#else
+#  undef	HAVE_LONG_DOUBLE
+#  define	SIZEOF_LONG_DOUBLE 8 
+#endif
 
 #elif defined(__ppc64__)
-#	define	BYTEORDER 4321
-#	define	HOST_WORDS_BIG_ENDIAN 1
-#	define	WORDS_BIGENDIAN 1
-#	define	SIZEOF_DOUBLE 8
-#	define	HAVE_LONG_DOUBLE 1
-#	define	SIZEOF_LONG_DOUBLE 16
+#define	BYTEORDER 4321
+#define	HOST_WORDS_BIG_ENDIAN 1
+#define	WORDS_BIGENDIAN 1
+#define	SIZEOF_DOUBLE 8
+#define	HAVE_LONG_DOUBLE 1
+#define	SIZEOF_LONG_DOUBLE 16
 
 #else
 #error "Unknown CPU type"
@@ -136,15 +136,15 @@
 #define VERSION "2.1-pyobjc"
 
 #ifdef HAVE_HIDDEN_VISIBILITY_ATTRIBUTE
-#	ifdef LIBFFI_ASM
-#		define FFI_HIDDEN(name) .hidden name
-#	else
-#		define FFI_HIDDEN __attribute__((visibility ("hidden")))
-#	endif
+#ifdef LIBFFI_ASM
+#  define FFI_HIDDEN(name) .hidden name
 #else
-#	ifdef LIBFFI_ASM
-#		define FFI_HIDDEN(name)
-#	else
-#		define FFI_HIDDEN
-#	endif
+#  define FFI_HIDDEN __attribute__((visibility ("hidden")))
+#endif
+#else
+#ifdef LIBFFI_ASM
+#  define FFI_HIDDEN(name)
+#else
+#  define FFI_HIDDEN
+#endif
 #endif

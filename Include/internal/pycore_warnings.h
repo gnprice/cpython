@@ -1,14 +1,14 @@
 #ifndef Py_INTERNAL_WARNINGS_H
-#define Py_INTERNAL_WARNINGS_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_WARNINGS_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "this header requires Py_BUILD_CORE define"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "this header requires Py_BUILD_CORE define"
+#  endif
 
-#include "object.h"
+#  include "object.h"
 
 struct _warnings_runtime_state {
     /* Both 'filters' and 'onceregistry' can be set in warnings.py;
@@ -19,7 +19,7 @@ struct _warnings_runtime_state {
     long filters_version;
 };
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_WARNINGS_H */

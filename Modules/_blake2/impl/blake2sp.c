@@ -16,7 +16,7 @@
 #include <stdio.h>
 
 #if defined(_OPENMP)
-#include <omp.h>
+#  include <omp.h>
 #endif
 
 #include "blake2.h"

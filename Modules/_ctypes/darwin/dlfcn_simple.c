@@ -42,28 +42,28 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #ifdef CTYPES_DARWIN_DLFCN
 
-#define ERR_STR_LEN 256
+#  define ERR_STR_LEN 256
 
-#ifndef MAC_OS_X_VERSION_10_3
-#define MAC_OS_X_VERSION_10_3 1030
-#endif
+#  ifndef MAC_OS_X_VERSION_10_3
+#    define MAC_OS_X_VERSION_10_3 1030
+#  endif
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-#define DARWIN_HAS_DLOPEN
+#  if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+#    define DARWIN_HAS_DLOPEN
 extern void * dlopen(const char *path, int mode) __attribute__((weak_import));
 extern void * dlsym(void * handle, const char *symbol) __attribute__((weak_import));
 extern const char * dlerror(void) __attribute__((weak_import));
 extern int dlclose(void * handle) __attribute__((weak_import));
 extern int dladdr(const void *, Dl_info *) __attribute__((weak_import));
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 */
+#  endif /* MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3 */
 
-#ifndef DARWIN_HAS_DLOPEN
-#define dlopen darwin_dlopen
-#define dlsym darwin_dlsym
-#define dlerror darwin_dlerror
-#define dlclose darwin_dlclose
-#define dladdr darwin_dladdr
-#endif
+#  ifndef DARWIN_HAS_DLOPEN
+#    define dlopen darwin_dlopen
+#    define dlsym darwin_dlsym
+#    define dlerror darwin_dlerror
+#    define dlclose darwin_dlclose
+#    define dladdr darwin_dladdr
+#  endif
 
 void * (*ctypes_dlopen)(const char *path, int mode);
 void * (*ctypes_dlsym)(void * handle, const char *symbol);
@@ -71,7 +71,7 @@ const char * (*ctypes_dlerror)(void);
 int (*ctypes_dlclose)(void * handle);
 int (*ctypes_dladdr)(const void *, Dl_info *);
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3
+#  if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3
 /* Mac OS X 10.3+ has dlopen, so strip all this dead code to avoid warnings */
 
 static void *dlsymIntern(void *handle, const char *symbol);
@@ -243,14 +243,14 @@ static void *darwin_dlsym(void *handle, const char *symbol)
 static int darwin_dladdr(const void *handle, Dl_info *info) {
     return 0;
 }
-#endif /* MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3 */
+#  endif /* MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3 */
 
-#if __GNUC__ < 4
-#pragma CALL_ON_LOAD ctypes_dlfcn_init
-#else
+#  if __GNUC__ < 4
+#    pragma CALL_ON_LOAD ctypes_dlfcn_init
+#  else
 static void __attribute__ ((constructor)) ctypes_dlfcn_init(void);
 static
-#endif
+#  endif
 void ctypes_dlfcn_init(void) {
     if (dlopen != NULL) {
         ctypes_dlsym = dlsym;
@@ -259,13 +259,13 @@ void ctypes_dlfcn_init(void) {
         ctypes_dlclose = dlclose;
         ctypes_dladdr = dladdr;
     } else {
-#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3
+#  if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3
         ctypes_dlsym = darwin_dlsym;
         ctypes_dlopen = darwin_dlopen;
         ctypes_dlerror = darwin_dlerror;
         ctypes_dlclose = darwin_dlclose;
         ctypes_dladdr = darwin_dladdr;
-#endif /* MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3 */
+#  endif /* MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_3 */
     }
 }
 

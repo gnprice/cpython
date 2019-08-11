@@ -1,24 +1,24 @@
 #ifndef Py_LIMITED_API
-#ifndef Py_PYTIME_H
-#define Py_PYTIME_H
+#  ifndef Py_PYTIME_H
+#    define Py_PYTIME_H
 
-#include "pyconfig.h" /* include for defines */
-#include "object.h"
+#    include "pyconfig.h" /* include for defines */
+#    include "object.h"
 
 /**************************************************************************
 Symbols and macros to supply platform-independent interfaces to time related
 functions and constants
 **************************************************************************/
-#ifdef __cplusplus
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
 /* _PyTime_t: Python timestamp with subsecond precision. It can be used to
    store a duration, and so indirectly a date (related to another date, like
    UNIX epoch). */
 typedef int64_t _PyTime_t;
-#define _PyTime_MIN PY_LLONG_MIN
-#define _PyTime_MAX PY_LLONG_MAX
+#    define _PyTime_MIN PY_LLONG_MIN
+#    define _PyTime_MAX PY_LLONG_MAX
 
 typedef enum {
     /* Round towards minus infinity (-inf).
@@ -81,7 +81,7 @@ PyAPI_FUNC(_PyTime_t) _PyTime_FromSeconds(int seconds);
 
 /* Macro to create a timestamp from a number of seconds, no integer overflow.
    Only use the macro for small values, prefer _PyTime_FromSeconds(). */
-#define _PYTIME_FROMSECONDS(seconds) \
+#    define _PYTIME_FROMSECONDS(seconds) \
             ((_PyTime_t)(seconds) * (1000 * 1000 * 1000))
 
 /* Create a timestamp from a number of nanoseconds. */
@@ -147,7 +147,7 @@ PyAPI_FUNC(int) _PyTime_AsTimevalTime_t(
     int *us,
     _PyTime_round_t round);
 
-#if defined(HAVE_CLOCK_GETTIME) || defined(HAVE_KQUEUE)
+#    if defined(HAVE_CLOCK_GETTIME) || defined(HAVE_KQUEUE)
 /* Create a timestamp from a timespec structure.
    Raise an exception and return -1 on overflow, return 0 on success. */
 PyAPI_FUNC(int) _PyTime_FromTimespec(_PyTime_t *tp, struct timespec *ts);
@@ -156,7 +156,7 @@ PyAPI_FUNC(int) _PyTime_FromTimespec(_PyTime_t *tp, struct timespec *ts);
    tv_nsec is always positive.
    Raise an exception and return -1 on error, return 0 on success. */
 PyAPI_FUNC(int) _PyTime_AsTimespec(_PyTime_t t, struct timespec *ts);
-#endif
+#    endif
 
 /* Compute ticks * mul / div.
    The caller must ensure that ((div - 1) * mul) cannot overflow. */
@@ -238,9 +238,9 @@ PyAPI_FUNC(int) _PyTime_GetPerfCounterWithInfo(
     _PyTime_t *t,
     _Py_clock_info_t *info);
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
+#    endif
 
-#endif /* Py_PYTIME_H */
+#  endif /* Py_PYTIME_H */
 #endif /* Py_LIMITED_API */

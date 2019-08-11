@@ -19,12 +19,12 @@ to avoid the expense of doing their own locking).
 -------------------------------------------------------------------------- */
 
 #ifdef HAVE_DLOPEN
-#ifdef HAVE_DLFCN_H
-#include <dlfcn.h>
-#endif
-#if !HAVE_DECL_RTLD_LAZY
-#define RTLD_LAZY 1
-#endif
+#  ifdef HAVE_DLFCN_H
+#    include <dlfcn.h>
+#  endif
+#  if !HAVE_DECL_RTLD_LAZY
+#    define RTLD_LAZY 1
+#  endif
 #endif
 
 #ifdef __cplusplus
@@ -215,11 +215,11 @@ PyInterpreterState_New(void)
 
     interp->eval_frame = _PyEval_EvalFrameDefault;
 #ifdef HAVE_DLOPEN
-#if HAVE_DECL_RTLD_NOW
+#  if HAVE_DECL_RTLD_NOW
     interp->dlopenflags = RTLD_NOW;
-#else
+#  else
     interp->dlopenflags = RTLD_LAZY;
-#endif
+#  endif
 #endif
 
     _PyRuntimeState *runtime = &_PyRuntime;

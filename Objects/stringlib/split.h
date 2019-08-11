@@ -1,7 +1,7 @@
 /* stringlib: split implementation */
 
 #ifndef STRINGLIB_FASTSEARCH_H
-#error must include "stringlib/fastsearch.h" before including this module
+#  error must include "stringlib/fastsearch.h" before including this module
 #endif
 
 /* Overallocate the initial list to reduce the number of reallocs for small

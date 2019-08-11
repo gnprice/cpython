@@ -18,7 +18,7 @@
 #include "pydtrace.h"
 
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #endif
 #ifdef __cplusplus
 extern "C" {

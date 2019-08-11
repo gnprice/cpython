@@ -1,7 +1,7 @@
 /* stringlib: partition implementation */
 
 #ifndef STRINGLIB_FASTSEARCH_H
-#error must include "stringlib/fastsearch.h" before including this module
+#  error must include "stringlib/fastsearch.h" before including this module
 #endif
 
 Py_LOCAL_INLINE(PyObject*)

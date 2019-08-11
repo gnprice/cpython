@@ -29,7 +29,7 @@
 
 #if (defined(POWERPC) && defined(__powerpc64__)) ||		\
 	(defined(POWERPC_DARWIN) && defined(__ppc64__))
-#define POWERPC64
+#  define POWERPC64
 #endif
 
 #ifndef LIBFFI_ASM
@@ -40,35 +40,35 @@ typedef signed long		ffi_sarg;
 typedef enum ffi_abi {
 	FFI_FIRST_ABI = 0,
 
-#ifdef POWERPC
+#  ifdef POWERPC
 	FFI_SYSV,
 	FFI_GCC_SYSV,
 	FFI_LINUX64,
-#	ifdef POWERPC64
+#    ifdef POWERPC64
 	FFI_DEFAULT_ABI = FFI_LINUX64,
-#	else
+#    else
 	FFI_DEFAULT_ABI = FFI_GCC_SYSV,
-#	endif
-#endif
+#    endif
+#  endif
 
-#ifdef POWERPC_AIX
+#  ifdef POWERPC_AIX
 	FFI_AIX,
 	FFI_DARWIN,
 	FFI_DEFAULT_ABI = FFI_AIX,
-#endif
+#  endif
 
-#ifdef POWERPC_DARWIN
+#  ifdef POWERPC_DARWIN
 	FFI_AIX,
 	FFI_DARWIN,
 	FFI_DEFAULT_ABI = FFI_DARWIN,
-#endif
+#  endif
 
-#ifdef POWERPC_FREEBSD
+#  ifdef POWERPC_FREEBSD
 	FFI_SYSV,
 	FFI_GCC_SYSV,
 	FFI_LINUX64,
 	FFI_DEFAULT_ABI = FFI_SYSV,
-#endif
+#  endif
 
 	FFI_LAST_ABI = FFI_DEFAULT_ABI + 1
 } ffi_abi;
@@ -84,21 +84,21 @@ typedef enum ffi_abi {
 #define FFI_SYSV_TYPE_SMALL_STRUCT  (FFI_TYPE_LAST)
 
 #if defined(POWERPC64) /*|| defined(POWERPC_AIX)*/
-#	define FFI_TRAMPOLINE_SIZE 48
+#  define FFI_TRAMPOLINE_SIZE 48
 #elif defined(POWERPC_AIX)
-#	define FFI_TRAMPOLINE_SIZE 24
+#  define FFI_TRAMPOLINE_SIZE 24
 #else
-#	define FFI_TRAMPOLINE_SIZE 40
+#  define FFI_TRAMPOLINE_SIZE 40
 #endif
 
 #ifndef LIBFFI_ASM
-#	if defined(POWERPC_DARWIN) || defined(POWERPC_AIX)
+#  if defined(POWERPC_DARWIN) || defined(POWERPC_AIX)
 typedef struct ffi_aix_trampoline_struct {
 	void*	code_pointer;	/* Pointer to ffi_closure_ASM */
 	void*	toc;			/* TOC */
 	void*	static_chain;	/* Pointer to closure */
 } ffi_aix_trampoline_struct;
-#	endif
+#  endif
 #endif	// #ifndef LIBFFI_ASM
 
 #endif	// #ifndef LIBFFI_TARGET_H

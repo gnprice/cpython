@@ -2,10 +2,10 @@
 /* System module interface */
 
 #ifndef Py_SYSMODULE_H
-#define Py_SYSMODULE_H
-#ifdef __cplusplus
+#  define Py_SYSMODULE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 PyAPI_FUNC(PyObject *) PySys_GetObject(const char *);
 PyAPI_FUNC(int) PySys_SetObject(const char *, PyObject *);
@@ -29,13 +29,13 @@ PyAPI_FUNC(int) PySys_HasWarnOptions(void);
 PyAPI_FUNC(void) PySys_AddXOption(const wchar_t *);
 PyAPI_FUNC(PyObject *) PySys_GetXOptions(void);
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_SYSMODULE_H
-#  include  "cpython/sysmodule.h"
-#  undef Py_CPYTHON_SYSMODULE_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_SYSMODULE_H
+#    include  "cpython/sysmodule.h"
+#    undef Py_CPYTHON_SYSMODULE_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_SYSMODULE_H */

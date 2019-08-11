@@ -2,12 +2,12 @@
  */
 
 #ifndef Py_LIMITED_API
-#ifndef Py_PYARENA_H
-#define Py_PYARENA_H
+#  ifndef Py_PYARENA_H
+#    define Py_PYARENA_H
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 extern "C" {
-#endif
+#    endif
 
   typedef struct _arena PyArena;
 
@@ -56,9 +56,9 @@ extern "C" {
    */
   PyAPI_FUNC(int) PyArena_AddPyObject(PyArena *, PyObject *);
 
-#ifdef __cplusplus
+#    ifdef __cplusplus
 }
-#endif
+#    endif
 
-#endif /* !Py_PYARENA_H */
+#  endif /* !Py_PYARENA_H */
 #endif /* Py_LIMITED_API */

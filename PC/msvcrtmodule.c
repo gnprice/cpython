@@ -25,11 +25,11 @@
 #include <windows.h>
 
 #ifdef _MSC_VER
-#if _MSC_VER >= 1500 && _MSC_VER < 1600
-#include <crtassem.h>
-#elif _MSC_VER >= 1600
-#include <crtversion.h>
-#endif
+#  if _MSC_VER >= 1500 && _MSC_VER < 1600
+#    include <crtassem.h>
+#  elif _MSC_VER >= 1600
+#    include <crtversion.h>
+#  endif
 #endif
 
 /*[python input]

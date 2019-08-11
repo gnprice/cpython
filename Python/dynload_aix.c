@@ -11,10 +11,10 @@
 
 
 #ifdef AIX_GENUINE_CPLUSPLUS
-#include <load.h>
-#define aix_load loadAndInit
+#  include <load.h>
+#  define aix_load loadAndInit
 #else
-#define aix_load load
+#  define aix_load load
 #endif
 
 

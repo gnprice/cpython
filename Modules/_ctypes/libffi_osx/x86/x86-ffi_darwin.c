@@ -389,11 +389,11 @@ extern void
 ffi_call_SYSV(void (*)(char *, extended_cif *), extended_cif *, unsigned, 
               unsigned, unsigned *, void (*fn)());
 
-#ifdef X86_WIN32
+#  ifdef X86_WIN32
 extern void
 ffi_call_STDCALL(void (*)(char *, extended_cif *), extended_cif *, unsigned,
                  unsigned, unsigned *, void (*fn)());
-#endif /* X86_WIN32 */
+#  endif /* X86_WIN32 */
 
 void
 ffi_raw_call(ffi_cif *cif, void (*fn)(), void *rvalue, ffi_raw *fake_avalue)
@@ -422,12 +422,12 @@ ffi_raw_call(ffi_cif *cif, void (*fn)(), void *rvalue, ffi_raw *fake_avalue)
             ffi_call_SYSV(ffi_prep_args_raw, &ecif, cif->bytes, cif->flags,
                           ecif.rvalue, fn);
             break;
-#ifdef X86_WIN32
+#  ifdef X86_WIN32
         case FFI_STDCALL:
             ffi_call_STDCALL(ffi_prep_args_raw, &ecif, cif->bytes, cif->flags,
                              ecif.rvalue, fn);
             break;
-#endif /* X86_WIN32 */
+#  endif /* X86_WIN32 */
         default:
             FFI_ASSERT(0);
             break;

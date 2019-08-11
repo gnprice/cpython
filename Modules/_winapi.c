@@ -155,7 +155,7 @@ def create_converter(type_, format_unit):
     # registered upon creation by CConverter's metaclass
     type(name, (CConverter,), {'type': type_, 'format_unit': format_unit})
 
-# format unit differs between platforms for these
+#format unit differs between platforms for these
 create_converter('HANDLE', '" F_HANDLE "')
 create_converter('HMODULE', '" F_HANDLE "')
 create_converter('LPSECURITY_ATTRIBUTES', '" F_POINTER "')

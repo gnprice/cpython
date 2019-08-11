@@ -2,7 +2,7 @@
 #include "Python.h"
 
 #if defined(__sgi) && !defined(_SGI_MP_SOURCE)
-#define _SGI_MP_SOURCE
+#  define _SGI_MP_SOURCE
 #endif
 
 /* strtol and strtoul, renamed to avoid conflicts */
@@ -10,7 +10,7 @@
 
 #include <ctype.h>
 #ifdef HAVE_ERRNO_H
-#include <errno.h>
+#  include <errno.h>
 #endif
 
 /* Static overflow check values for bases 2 through 36.
@@ -75,7 +75,7 @@ static const int digitlimit[] = {
     14,  14, 14, 14, 13, 13, 13, 13, 13, 13,  /* 20 - 29 */
     13,  12, 12, 12, 12, 12, 12};             /* 30 - 36 */
 #else
-#error "Need table for SIZEOF_LONG"
+#  error "Need table for SIZEOF_LONG"
 #endif
 
 /*

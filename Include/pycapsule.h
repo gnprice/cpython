@@ -13,16 +13,16 @@
 */
 
 #ifndef Py_CAPSULE_H
-#define Py_CAPSULE_H
-#ifdef __cplusplus
+#  define Py_CAPSULE_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 PyAPI_DATA(PyTypeObject) PyCapsule_Type;
 
 typedef void (*PyCapsule_Destructor)(PyObject *);
 
-#define PyCapsule_CheckExact(op) (Py_TYPE(op) == &PyCapsule_Type)
+#  define PyCapsule_CheckExact(op) (Py_TYPE(op) == &PyCapsule_Type)
 
 
 PyAPI_FUNC(PyObject *) PyCapsule_New(
@@ -53,7 +53,7 @@ PyAPI_FUNC(void *) PyCapsule_Import(
     int no_block);
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_CAPSULE_H */

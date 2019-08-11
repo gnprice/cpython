@@ -6,28 +6,28 @@ PyFloatObject represents a (double precision) floating point number.
 */
 
 #ifndef Py_FLOATOBJECT_H
-#define Py_FLOATOBJECT_H
-#ifdef __cplusplus
+#  define Py_FLOATOBJECT_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 typedef struct {
     PyObject_HEAD
     double ob_fval;
 } PyFloatObject;
-#endif
+#  endif
 
 PyAPI_DATA(PyTypeObject) PyFloat_Type;
 
-#define PyFloat_Check(op) PyObject_TypeCheck(op, &PyFloat_Type)
-#define PyFloat_CheckExact(op) (Py_TYPE(op) == &PyFloat_Type)
+#  define PyFloat_Check(op) PyObject_TypeCheck(op, &PyFloat_Type)
+#  define PyFloat_CheckExact(op) (Py_TYPE(op) == &PyFloat_Type)
 
-#ifdef Py_NAN
-#define Py_RETURN_NAN return PyFloat_FromDouble(Py_NAN)
-#endif
+#  ifdef Py_NAN
+#    define Py_RETURN_NAN return PyFloat_FromDouble(Py_NAN)
+#  endif
 
-#define Py_RETURN_INF(sign) do                     \
+#  define Py_RETURN_INF(sign) do                     \
     if (copysign(1., sign) == 1.) {                \
         return PyFloat_FromDouble(Py_HUGE_VAL);    \
     } else {                        \
@@ -47,11 +47,11 @@ PyAPI_FUNC(PyObject *) PyFloat_FromDouble(double);
 /* Extract C double from Python float.  The macro version trades safety for
    speed. */
 PyAPI_FUNC(double) PyFloat_AsDouble(PyObject *);
-#ifndef Py_LIMITED_API
-#define PyFloat_AS_DOUBLE(op) (((PyFloatObject *)(op))->ob_fval)
-#endif
+#  ifndef Py_LIMITED_API
+#    define PyFloat_AS_DOUBLE(op) (((PyFloatObject *)(op))->ob_fval)
+#  endif
 
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 /* _PyFloat_{Pack,Unpack}{4,8}
  *
  * The struct and pickle (at least) modules need an efficient platform-
@@ -122,9 +122,9 @@ PyAPI_FUNC(int) _PyFloat_FormatAdvancedWriter(
     PyObject *format_spec,
     Py_ssize_t start,
     Py_ssize_t end);
-#endif /* Py_LIMITED_API */
+#  endif /* Py_LIMITED_API */
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_FLOATOBJECT_H */

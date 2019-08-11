@@ -102,7 +102,7 @@ initialize_aggregate(
 /* Perform machine independent ffi_cif preparation, then call
    machine dependent routine. */
 
-#if defined(X86_DARWIN) && !defined __x86_64__
+#  if defined(X86_DARWIN) && !defined __x86_64__
 
 static inline bool
 struct_on_stack(
@@ -125,7 +125,7 @@ struct_on_stack(
 	}
 }
 
-#endif	// defined(X86_DARWIN) && !defined __x86_64__
+#  endif	// defined(X86_DARWIN) && !defined __x86_64__
 
 // Arguments' ffi_type->alignment must be nonzero.
 ffi_status
@@ -162,18 +162,18 @@ ffi_prep_cif(
 	FFI_ASSERT_VALID_TYPE(cif->rtype);
 
 	/* x86-64 and s390 stack space allocation is handled in prep_machdep.  */
-#if !defined M68K && !defined __x86_64__ && !defined S390 && !defined PA
+#  if !defined M68K && !defined __x86_64__ && !defined S390 && !defined PA
 	/* Make space for the return structure pointer */
 	if (cif->rtype->type == FFI_TYPE_STRUCT
-#ifdef SPARC
+#    ifdef SPARC
 		&& (cif->abi != FFI_V9 || cif->rtype->size > 32)
-#endif
-#ifdef X86_DARWIN
+#    endif
+#    ifdef X86_DARWIN
 		&& (struct_on_stack(cif->rtype->size))
-#endif
+#    endif
 		)
 		bytes = STACK_ARG_SIZE(sizeof(void*));
-#endif
+#  endif
 
 	for (ptr = cif->arg_types, i = cif->nargs; i > 0; i--, ptr++)
 	{
@@ -188,7 +188,7 @@ ffi_prep_cif(
 		check after the initialization.  */
 		FFI_ASSERT_VALID_TYPE(*ptr);
 
-#if defined(X86_DARWIN)
+#  if defined(X86_DARWIN)
 		{
 			int align = (*ptr)->alignment;
 
@@ -200,15 +200,15 @@ ffi_prep_cif(
 
 			bytes += STACK_ARG_SIZE((*ptr)->size);
 		}
-#elif !defined __x86_64__ && !defined S390 && !defined PA
-#ifdef SPARC
+#  elif !defined __x86_64__ && !defined S390 && !defined PA
+#    ifdef SPARC
 		if (((*ptr)->type == FFI_TYPE_STRUCT
 			&& ((*ptr)->size > 16 || cif->abi != FFI_V9))
 			|| ((*ptr)->type == FFI_TYPE_LONGDOUBLE
 			&& cif->abi != FFI_V9))
 				bytes += sizeof(void*);
 		else
-#endif
+#    endif
 		{
 			/* Add any padding if necessary */
 			if (((*ptr)->alignment - 1) & bytes)
@@ -216,7 +216,7 @@ ffi_prep_cif(
 
 			bytes += STACK_ARG_SIZE((*ptr)->size);
 		}
-#endif
+#  endif
 	}
 
 	cif->bytes = bytes;

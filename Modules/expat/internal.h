@@ -87,9 +87,9 @@
 
 #ifndef XML_MIN_SIZE
 #if !defined(__cplusplus) && !defined(inline)
-#ifdef __GNUC__
-#define inline __inline
-#endif /* __GNUC__ */
+#  ifdef __GNUC__
+#    define inline __inline
+#  endif /* __GNUC__ */
 #endif
 #endif /* XML_MIN_SIZE */
 
@@ -97,16 +97,16 @@
 #define inline inline
 #else
 #ifndef inline
-#define inline
+#  define inline
 #endif
 #endif
 
 #ifndef UNUSED_P
-# ifdef __GNUC__
+#ifdef __GNUC__
 #  define UNUSED_P(p) UNUSED_ ## p __attribute__((__unused__))
-# else
+#else
 #  define UNUSED_P(p) UNUSED_ ## p
-# endif
+#endif
 #endif
 
 

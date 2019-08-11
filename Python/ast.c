@@ -5367,7 +5367,7 @@ typedef struct {
 } ExprList;
 
 #ifdef NDEBUG
-#define ExprList_check_invariants(l)
+#  define ExprList_check_invariants(l)
 #else
 static void
 ExprList_check_invariants(ExprList *l)
@@ -5478,7 +5478,7 @@ typedef struct {
 } FstringParser;
 
 #ifdef NDEBUG
-#define FstringParser_check_invariants(state)
+#  define FstringParser_check_invariants(state)
 #else
 static void
 FstringParser_check_invariants(FstringParser *state)

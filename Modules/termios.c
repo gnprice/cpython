@@ -5,13 +5,13 @@
 /* Apparently, on SGI, termios.h won't define CTRL if _XOPEN_SOURCE
    is defined, so we define it here. */
 #if defined(__sgi)
-#define CTRL(c) ((c)&037)
+#  define CTRL(c) ((c)&037)
 #endif
 
 #if defined(__sun)
 /* We could do better. Check issue-32660 */
-#include <sys/filio.h>
-#include <sys/sockio.h>
+#  include <sys/filio.h>
+#  include <sys/sockio.h>
 #endif
 
 #include <termios.h>
@@ -22,11 +22,11 @@
  * defined as macros; these are not used here directly).
  */
 #ifdef HAVE_SYS_MODEM_H
-#include <sys/modem.h>
+#  include <sys/modem.h>
 #endif
 /* HP-UX requires that this be included to pick up TIOCGPGRP and friends */
 #ifdef HAVE_SYS_BSDTTY_H
-#include <sys/bsdtty.h>
+#  include <sys/bsdtty.h>
 #endif
 
 PyDoc_STRVAR(termios__doc__,
@@ -306,11 +306,11 @@ static PyMethodDef termios_methods[] =
 
 
 #if defined(VSWTCH) && !defined(VSWTC)
-#define VSWTC VSWTCH
+#  define VSWTC VSWTCH
 #endif
 
 #if defined(VSWTC) && !defined(VSWTCH)
-#define VSWTCH VSWTC
+#  define VSWTCH VSWTC
 #endif
 
 static struct constant {

@@ -32,8 +32,8 @@ Data members:
 #include <locale.h>
 
 #ifdef MS_WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
 #endif /* MS_WINDOWS */
 
 #ifdef MS_COREDLL
@@ -1377,8 +1377,8 @@ static PyStructSequence_Desc windows_version_desc = {
 /* Disable deprecation warnings about GetVersionEx as the result is
    being passed straight through to the caller, who is responsible for
    using it correctly. */
-#pragma warning(push)
-#pragma warning(disable:4996)
+#  pragma warning(push)
+#  pragma warning(disable:4996)
 
 /*[clinic input]
 sys.getwindowsversion
@@ -1467,7 +1467,7 @@ sys_getwindowsversion_impl(PyObject *module)
     return version;
 }
 
-#pragma warning(pop)
+#  pragma warning(pop)
 
 /*[clinic input]
 sys._enablelegacywindowsfsencoding
@@ -1542,7 +1542,7 @@ sys_getdlopenflags_impl(PyObject *module)
 
 #ifdef USE_MALLOPT
 /* Link with -lmalloc (or -lmpc) on an SGI */
-#include <malloc.h>
+#  include <malloc.h>
 
 /*[clinic input]
 sys.mdebug

@@ -9,22 +9,22 @@
 #include <sys/stat.h>
 
 #if defined(__NetBSD__)
-#include <sys/param.h>
-#if (NetBSD < 199712)
-#include <nlist.h>
-#include <link.h>
-#define dlerror() "error in dynamic linking"
-#endif
+#  include <sys/param.h>
+#  if (NetBSD < 199712)
+#    include <nlist.h>
+#    include <link.h>
+#    define dlerror() "error in dynamic linking"
+#  endif
 #endif /* NetBSD */
 
 #ifdef HAVE_DLFCN_H
-#include <dlfcn.h>
+#  include <dlfcn.h>
 #endif
 
 #if (defined(__OpenBSD__) || defined(__NetBSD__)) && !defined(__ELF__)
-#define LEAD_UNDERSCORE "_"
+#  define LEAD_UNDERSCORE "_"
 #else
-#define LEAD_UNDERSCORE ""
+#  define LEAD_UNDERSCORE ""
 #endif
 
 /* The .so extension module ABI tag, supplied by the Makefile via
@@ -38,9 +38,9 @@ const char *_PyImport_DynLoadFiletab[] = {
     ".dll",
 #else  /* !__CYGWIN__ */
     "." SOABI ".so",
-#ifdef ALT_SOABI
+#  ifdef ALT_SOABI
     "." ALT_SOABI ".so",
-#endif
+#  endif
     ".abi" PYTHON_ABI_STRING ".so",
     ".so",
 #endif  /* __CYGWIN__ */

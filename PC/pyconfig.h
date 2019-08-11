@@ -1,5 +1,5 @@
 #ifndef Py_CONFIG_H
-#define Py_CONFIG_H
+#  define Py_CONFIG_H
 
 /* pyconfig.h.  NOT Generated automatically by configure.
 
@@ -30,9 +30,9 @@ WIN32 is still required for the locale module.
 */
 
 /* Deprecated USE_DL_EXPORT macro - please use Py_BUILD_CORE */
-#ifdef USE_DL_EXPORT
-#       define Py_BUILD_CORE
-#endif /* USE_DL_EXPORT */
+#  ifdef USE_DL_EXPORT
+#    define Py_BUILD_CORE
+#  endif /* USE_DL_EXPORT */
 
 /* Visual Studio 2005 introduces deprecation warnings for
    "insecure" and POSIX functions. The insecure functions should
@@ -41,47 +41,47 @@ WIN32 is still required for the locale module.
    would be ISO C conforming). Neither renaming is feasible, so
    we just silence the warnings. */
 
-#ifndef _CRT_SECURE_NO_DEPRECATE
-#define _CRT_SECURE_NO_DEPRECATE 1
-#endif
-#ifndef _CRT_NONSTDC_NO_DEPRECATE
-#define _CRT_NONSTDC_NO_DEPRECATE 1
-#endif
+#  ifndef _CRT_SECURE_NO_DEPRECATE
+#    define _CRT_SECURE_NO_DEPRECATE 1
+#  endif
+#  ifndef _CRT_NONSTDC_NO_DEPRECATE
+#    define _CRT_NONSTDC_NO_DEPRECATE 1
+#  endif
 
-#define HAVE_IO_H
-#define HAVE_SYS_UTIME_H
-#define HAVE_TEMPNAM
-#define HAVE_TMPFILE
-#define HAVE_TMPNAM
-#define HAVE_CLOCK
-#define HAVE_STRERROR
+#  define HAVE_IO_H
+#  define HAVE_SYS_UTIME_H
+#  define HAVE_TEMPNAM
+#  define HAVE_TMPFILE
+#  define HAVE_TMPNAM
+#  define HAVE_CLOCK
+#  define HAVE_STRERROR
 
-#include <io.h>
+#  include <io.h>
 
-#define HAVE_HYPOT
-#define HAVE_STRFTIME
-#define DONT_HAVE_SIG_ALARM
-#define DONT_HAVE_SIG_PAUSE
-#define LONG_BIT        32
-#define WORD_BIT 32
+#  define HAVE_HYPOT
+#  define HAVE_STRFTIME
+#  define DONT_HAVE_SIG_ALARM
+#  define DONT_HAVE_SIG_PAUSE
+#  define LONG_BIT        32
+#  define WORD_BIT 32
 
-#define MS_WIN32 /* only support win32 and greater. */
-#define MS_WINDOWS
-#ifndef PYTHONPATH
-#       define PYTHONPATH L".\\DLLs;.\\lib"
-#endif
-#define NT_THREADS
-#define WITH_THREAD
-#ifndef NETSCAPE_PI
-#define USE_SOCKET
-#endif
+#  define MS_WIN32 /* only support win32 and greater. */
+#  define MS_WINDOWS
+#  ifndef PYTHONPATH
+#    define PYTHONPATH L".\\DLLs;.\\lib"
+#  endif
+#  define NT_THREADS
+#  define WITH_THREAD
+#  ifndef NETSCAPE_PI
+#    define USE_SOCKET
+#  endif
 
 
 /* Compiler specific defines */
 
 /* ------------------------------------------------------------------------*/
 /* Microsoft C defines _MSC_VER */
-#ifdef _MSC_VER
+#  ifdef _MSC_VER
 
 /* We want COMPILER to expand to a string containing _MSC_VER's *value*.
  * This is horridly tricky, because the stringization operator only works
@@ -89,7 +89,7 @@ WIN32 is still required for the locale module.
  * Attempts simpler than the following appear doomed to produce "_MSC_VER"
  * literally in the string.
  */
-#define _Py_PASTE_VERSION(SUFFIX) \
+#    define _Py_PASTE_VERSION(SUFFIX) \
         ("[MSC v." _Py_STRINGIZE(_MSC_VER) " " SUFFIX "]")
 /* e.g., this produces, after compile-time string catenation,
  *      ("[MSC v.1200 32 bit (Intel)]")
@@ -101,9 +101,9 @@ WIN32 is still required for the locale module.
  * _Py_STRINGIZE2(1200) which then expands to
  * "1200"
  */
-#define _Py_STRINGIZE(X) _Py_STRINGIZE1((X))
-#define _Py_STRINGIZE1(X) _Py_STRINGIZE2 ## X
-#define _Py_STRINGIZE2(X) #X
+#    define _Py_STRINGIZE(X) _Py_STRINGIZE1((X))
+#    define _Py_STRINGIZE1(X) _Py_STRINGIZE2 ## X
+#    define _Py_STRINGIZE2(X) #X
 
 /* MSVC defines _WINxx to differentiate the windows platform types
 
@@ -113,31 +113,31 @@ WIN32 is still required for the locale module.
    guarded as follows:
         #if defined(MS_WIN32) && !defined(MS_WIN64)
 */
-#ifdef _WIN64
-#define MS_WIN64
-#endif
+#    ifdef _WIN64
+#      define MS_WIN64
+#    endif
 
 /* set the COMPILER */
-#ifdef MS_WIN64
-#if defined(_M_X64) || defined(_M_AMD64)
-#if defined(__INTEL_COMPILER)
-#define COMPILER ("[ICC v." _Py_STRINGIZE(__INTEL_COMPILER) " 64 bit (amd64) with MSC v." _Py_STRINGIZE(_MSC_VER) " CRT]")
-#else
-#define COMPILER _Py_PASTE_VERSION("64 bit (AMD64)")
-#endif /* __INTEL_COMPILER */
-#define PYD_PLATFORM_TAG "win_amd64"
-#elif defined(_M_ARM64)
-#define COMPILER _Py_PASTE_VERSION("64 bit (ARM64)")
-#define PYD_PLATFORM_TAG "win_arm64"
-#else
-#define COMPILER _Py_PASTE_VERSION("64 bit (Unknown)")
-#endif
-#endif /* MS_WIN64 */
+#    ifdef MS_WIN64
+#      if defined(_M_X64) || defined(_M_AMD64)
+#        if defined(__INTEL_COMPILER)
+#          define COMPILER ("[ICC v." _Py_STRINGIZE(__INTEL_COMPILER) " 64 bit (amd64) with MSC v." _Py_STRINGIZE(_MSC_VER) " CRT]")
+#        else
+#          define COMPILER _Py_PASTE_VERSION("64 bit (AMD64)")
+#        endif /* __INTEL_COMPILER */
+#        define PYD_PLATFORM_TAG "win_amd64"
+#      elif defined(_M_ARM64)
+#        define COMPILER _Py_PASTE_VERSION("64 bit (ARM64)")
+#        define PYD_PLATFORM_TAG "win_arm64"
+#      else
+#        define COMPILER _Py_PASTE_VERSION("64 bit (Unknown)")
+#      endif
+#    endif /* MS_WIN64 */
 
 /* set the version macros for the windows headers */
 /* Python 3.5+ requires Windows Vista or greater */
-#define Py_WINVER 0x0600 /* _WIN32_WINNT_VISTA */
-#define Py_NTDDI NTDDI_VISTA
+#    define Py_WINVER 0x0600 /* _WIN32_WINNT_VISTA */
+#    define Py_NTDDI NTDDI_VISTA
 
 /* We only set these values when building Python - we don't want to force
    these values on extensions, as that will affect the prototypes and
@@ -146,249 +146,249 @@ WIN32 is still required for the locale module.
    structures etc so it can optionally use new Windows features if it
    determines at runtime they are available.
 */
-#if defined(Py_BUILD_CORE) || defined(Py_BUILD_CORE_BUILTIN) || defined(Py_BUILD_CORE_MODULE)
-#ifndef NTDDI_VERSION
-#define NTDDI_VERSION Py_NTDDI
-#endif
-#ifndef WINVER
-#define WINVER Py_WINVER
-#endif
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT Py_WINVER
-#endif
-#endif
+#    if defined(Py_BUILD_CORE) || defined(Py_BUILD_CORE_BUILTIN) || defined(Py_BUILD_CORE_MODULE)
+#      ifndef NTDDI_VERSION
+#        define NTDDI_VERSION Py_NTDDI
+#      endif
+#      ifndef WINVER
+#        define WINVER Py_WINVER
+#      endif
+#      ifndef _WIN32_WINNT
+#        define _WIN32_WINNT Py_WINVER
+#      endif
+#    endif
 
 /* _W64 is not defined for VC6 or eVC4 */
-#ifndef _W64
-#define _W64
-#endif
+#    ifndef _W64
+#      define _W64
+#    endif
 
 /* Define like size_t, omitting the "unsigned" */
-#ifdef MS_WIN64
+#    ifdef MS_WIN64
 typedef __int64 ssize_t;
-#else
+#    else
 typedef _W64 int ssize_t;
-#endif
-#define HAVE_SSIZE_T 1
+#    endif
+#    define HAVE_SSIZE_T 1
 
-#if defined(MS_WIN32) && !defined(MS_WIN64)
-#if defined(_M_IX86)
-#if defined(__INTEL_COMPILER)
-#define COMPILER ("[ICC v." _Py_STRINGIZE(__INTEL_COMPILER) " 32 bit (Intel) with MSC v." _Py_STRINGIZE(_MSC_VER) " CRT]")
-#else
-#define COMPILER _Py_PASTE_VERSION("32 bit (Intel)")
-#endif /* __INTEL_COMPILER */
-#define PYD_PLATFORM_TAG "win32"
-#elif defined(_M_ARM)
-#define COMPILER _Py_PASTE_VERSION("32 bit (ARM)")
-#define PYD_PLATFORM_TAG "win_arm32"
-#else
-#define COMPILER _Py_PASTE_VERSION("32 bit (Unknown)")
-#endif
-#endif /* MS_WIN32 && !MS_WIN64 */
+#    if defined(MS_WIN32) && !defined(MS_WIN64)
+#      if defined(_M_IX86)
+#        if defined(__INTEL_COMPILER)
+#          define COMPILER ("[ICC v." _Py_STRINGIZE(__INTEL_COMPILER) " 32 bit (Intel) with MSC v." _Py_STRINGIZE(_MSC_VER) " CRT]")
+#        else
+#          define COMPILER _Py_PASTE_VERSION("32 bit (Intel)")
+#        endif /* __INTEL_COMPILER */
+#        define PYD_PLATFORM_TAG "win32"
+#      elif defined(_M_ARM)
+#        define COMPILER _Py_PASTE_VERSION("32 bit (ARM)")
+#        define PYD_PLATFORM_TAG "win_arm32"
+#      else
+#        define COMPILER _Py_PASTE_VERSION("32 bit (Unknown)")
+#      endif
+#    endif /* MS_WIN32 && !MS_WIN64 */
 
 typedef int pid_t;
 
-#include <float.h>
-#define Py_IS_NAN _isnan
-#define Py_IS_INFINITY(X) (!_finite(X) && !_isnan(X))
-#define Py_IS_FINITE(X) _finite(X)
-#define copysign _copysign
+#    include <float.h>
+#    define Py_IS_NAN _isnan
+#    define Py_IS_INFINITY(X) (!_finite(X) && !_isnan(X))
+#    define Py_IS_FINITE(X) _finite(X)
+#    define copysign _copysign
 
 /* Side by Side assemblies supported in VS 2005 and VS 2008 but not 2010*/
-#if _MSC_VER >= 1400 && _MSC_VER < 1600
-#define HAVE_SXS 1
-#endif
+#    if _MSC_VER >= 1400 && _MSC_VER < 1600
+#      define HAVE_SXS 1
+#    endif
 
 /* define some ANSI types that are not defined in earlier Win headers */
-#if _MSC_VER >= 1200
+#    if _MSC_VER >= 1200
 /* This file only exists in VC 6.0 or higher */
-#include <basetsd.h>
-#endif
+#      include <basetsd.h>
+#    endif
 
-#endif /* _MSC_VER */
+#  endif /* _MSC_VER */
 
 /* ------------------------------------------------------------------------*/
 /* egcs/gnu-win32 defines __GNUC__ and _WIN32 */
-#if defined(__GNUC__) && defined(_WIN32)
+#  if defined(__GNUC__) && defined(_WIN32)
 /* XXX These defines are likely incomplete, but should be easy to fix.
    They should be complete enough to build extension modules. */
 /* Suggested by Rene Liebscher <R.Liebscher@gmx.de> to avoid a GCC 2.91.*
    bug that requires structure imports.  More recent versions of the
    compiler don't exhibit this bug.
 */
-#if (__GNUC__==2) && (__GNUC_MINOR__<=91)
-#warning "Please use an up-to-date version of gcc! (>2.91 recommended)"
-#endif
+#    if (__GNUC__==2) && (__GNUC_MINOR__<=91)
+#      warning "Please use an up-to-date version of gcc! (>2.91 recommended)"
+#    endif
 
-#define COMPILER "[gcc]"
-#define PY_LONG_LONG long long
-#define PY_LLONG_MIN LLONG_MIN
-#define PY_LLONG_MAX LLONG_MAX
-#define PY_ULLONG_MAX ULLONG_MAX
-#endif /* GNUC */
+#    define COMPILER "[gcc]"
+#    define PY_LONG_LONG long long
+#    define PY_LLONG_MIN LLONG_MIN
+#    define PY_LLONG_MAX LLONG_MAX
+#    define PY_ULLONG_MAX ULLONG_MAX
+#  endif /* GNUC */
 
 /* ------------------------------------------------------------------------*/
 /* lcc-win32 defines __LCC__ */
-#if defined(__LCC__)
+#  if defined(__LCC__)
 /* XXX These defines are likely incomplete, but should be easy to fix.
    They should be complete enough to build extension modules. */
 
-#define COMPILER "[lcc-win32]"
+#    define COMPILER "[lcc-win32]"
 typedef int pid_t;
 /* __declspec() is supported here too - do nothing to get the defaults */
 
-#endif /* LCC */
+#  endif /* LCC */
 
 /* ------------------------------------------------------------------------*/
 /* End of compilers - finish up */
 
-#ifndef NO_STDIO_H
-#       include <stdio.h>
-#endif
+#  ifndef NO_STDIO_H
+#    include <stdio.h>
+#  endif
 
 /* 64 bit ints are usually spelt __int64 unless compiler has overridden */
-#ifndef PY_LONG_LONG
-#       define PY_LONG_LONG __int64
-#       define PY_LLONG_MAX _I64_MAX
-#       define PY_LLONG_MIN _I64_MIN
-#       define PY_ULLONG_MAX _UI64_MAX
-#endif
+#  ifndef PY_LONG_LONG
+#    define PY_LONG_LONG __int64
+#    define PY_LLONG_MAX _I64_MAX
+#    define PY_LLONG_MIN _I64_MIN
+#    define PY_ULLONG_MAX _UI64_MAX
+#  endif
 
 /* For Windows the Python core is in a DLL by default.  Test
 Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
-#if !defined(MS_NO_COREDLL) && !defined(Py_NO_ENABLE_SHARED)
-#       define Py_ENABLE_SHARED 1 /* standard symbol for shared library */
-#       define MS_COREDLL       /* deprecated old symbol */
-#endif /* !MS_NO_COREDLL && ... */
+#  if !defined(MS_NO_COREDLL) && !defined(Py_NO_ENABLE_SHARED)
+#    define Py_ENABLE_SHARED 1 /* standard symbol for shared library */
+#    define MS_COREDLL       /* deprecated old symbol */
+#  endif /* !MS_NO_COREDLL && ... */
 
 /*  All windows compilers that use this header support __declspec */
-#define HAVE_DECLSPEC_DLL
+#  define HAVE_DECLSPEC_DLL
 
 /* For an MSVC DLL, we can nominate the .lib files used by extensions */
-#ifdef MS_COREDLL
-#       if !defined(Py_BUILD_CORE) && !defined(Py_BUILD_CORE_BUILTIN)
+#  ifdef MS_COREDLL
+#    if !defined(Py_BUILD_CORE) && !defined(Py_BUILD_CORE_BUILTIN)
                 /* not building the core - must be an ext */
-#               if defined(_MSC_VER)
+#      if defined(_MSC_VER)
                         /* So MSVC users need not specify the .lib
                         file in their Makefile (other compilers are
                         generally taken care of by distutils.) */
-#                       if defined(_DEBUG)
-#                               pragma comment(lib,"python39_d.lib")
-#                       elif defined(Py_LIMITED_API)
-#                               pragma comment(lib,"python3.lib")
-#                       else
-#                               pragma comment(lib,"python39.lib")
-#                       endif /* _DEBUG */
-#               endif /* _MSC_VER */
-#       endif /* Py_BUILD_CORE */
-#endif /* MS_COREDLL */
+#        if defined(_DEBUG)
+#          pragma comment(lib,"python39_d.lib")
+#        elif defined(Py_LIMITED_API)
+#          pragma comment(lib,"python3.lib")
+#        else
+#          pragma comment(lib,"python39.lib")
+#        endif /* _DEBUG */
+#      endif /* _MSC_VER */
+#    endif /* Py_BUILD_CORE */
+#  endif /* MS_COREDLL */
 
-#if defined(MS_WIN64)
+#  if defined(MS_WIN64)
 /* maintain "win32" sys.platform for backward compatibility of Python code,
    the Win64 API should be close enough to the Win32 API to make this
    preferable */
-#       define PLATFORM "win32"
-#       define SIZEOF_VOID_P 8
-#       define SIZEOF_TIME_T 8
-#       define SIZEOF_OFF_T 4
-#       define SIZEOF_FPOS_T 8
-#       define SIZEOF_HKEY 8
-#       define SIZEOF_SIZE_T 8
+#    define PLATFORM "win32"
+#    define SIZEOF_VOID_P 8
+#    define SIZEOF_TIME_T 8
+#    define SIZEOF_OFF_T 4
+#    define SIZEOF_FPOS_T 8
+#    define SIZEOF_HKEY 8
+#    define SIZEOF_SIZE_T 8
 /* configure.ac defines HAVE_LARGEFILE_SUPPORT iff HAVE_LONG_LONG,
    sizeof(off_t) > sizeof(long), and sizeof(PY_LONG_LONG) >= sizeof(off_t).
    On Win64 the second condition is not true, but if fpos_t replaces off_t
    then this is true. The uses of HAVE_LARGEFILE_SUPPORT imply that Win64
    should define this. */
-#       define HAVE_LARGEFILE_SUPPORT
-#elif defined(MS_WIN32)
-#       define PLATFORM "win32"
-#       define HAVE_LARGEFILE_SUPPORT
-#       define SIZEOF_VOID_P 4
-#       define SIZEOF_OFF_T 4
-#       define SIZEOF_FPOS_T 8
-#       define SIZEOF_HKEY 4
-#       define SIZEOF_SIZE_T 4
+#    define HAVE_LARGEFILE_SUPPORT
+#  elif defined(MS_WIN32)
+#    define PLATFORM "win32"
+#    define HAVE_LARGEFILE_SUPPORT
+#    define SIZEOF_VOID_P 4
+#    define SIZEOF_OFF_T 4
+#    define SIZEOF_FPOS_T 8
+#    define SIZEOF_HKEY 4
+#    define SIZEOF_SIZE_T 4
         /* MS VS2005 changes time_t to a 64-bit type on all platforms */
-#       if defined(_MSC_VER) && _MSC_VER >= 1400
-#       define SIZEOF_TIME_T 8
-#       else
-#       define SIZEOF_TIME_T 4
-#       endif
-#endif
+#    if defined(_MSC_VER) && _MSC_VER >= 1400
+#      define SIZEOF_TIME_T 8
+#    else
+#      define SIZEOF_TIME_T 4
+#    endif
+#  endif
 
-#ifdef _DEBUG
-#       define Py_DEBUG
-#endif
+#  ifdef _DEBUG
+#    define Py_DEBUG
+#  endif
 
 
-#ifdef MS_WIN32
+#  ifdef MS_WIN32
 
-#define SIZEOF_SHORT 2
-#define SIZEOF_INT 4
-#define SIZEOF_LONG 4
-#define SIZEOF_LONG_LONG 8
-#define SIZEOF_DOUBLE 8
-#define SIZEOF_FLOAT 4
+#    define SIZEOF_SHORT 2
+#    define SIZEOF_INT 4
+#    define SIZEOF_LONG 4
+#    define SIZEOF_LONG_LONG 8
+#    define SIZEOF_DOUBLE 8
+#    define SIZEOF_FLOAT 4
 
 /* VC 7.1 has them and VC 6.0 does not.  VC 6.0 has a version number of 1200.
    Microsoft eMbedded Visual C++ 4.0 has a version number of 1201 and doesn't
    define these.
    If some compiler does not provide them, modify the #if appropriately. */
-#if defined(_MSC_VER)
-#if _MSC_VER > 1300
-#define HAVE_UINTPTR_T 1
-#define HAVE_INTPTR_T 1
-#else
+#    if defined(_MSC_VER)
+#      if _MSC_VER > 1300
+#        define HAVE_UINTPTR_T 1
+#        define HAVE_INTPTR_T 1
+#      else
 /* VC6, VS 2002 and eVC4 don't support the C99 LL suffix for 64-bit integer literals */
-#define Py_LL(x) x##I64
-#endif  /* _MSC_VER > 1300  */
-#endif  /* _MSC_VER */
+#        define Py_LL(x) x##I64
+#      endif  /* _MSC_VER > 1300  */
+#    endif  /* _MSC_VER */
 
-#endif
+#  endif
 
 /* define signed and unsigned exact-width 32-bit and 64-bit types, used in the
    implementation of Python integers. */
-#define PY_UINT32_T uint32_t
-#define PY_UINT64_T uint64_t
-#define PY_INT32_T int32_t
-#define PY_INT64_T int64_t
+#  define PY_UINT32_T uint32_t
+#  define PY_UINT64_T uint64_t
+#  define PY_INT32_T int32_t
+#  define PY_INT64_T int64_t
 
 /* Fairly standard from here! */
 
 /* Define to 1 if you have the `copysign' function. */
-#define HAVE_COPYSIGN 1
+#  define HAVE_COPYSIGN 1
 
 /* Define to 1 if you have the `round' function. */
-#if _MSC_VER >= 1800
-#define HAVE_ROUND 1
-#endif
+#  if _MSC_VER >= 1800
+#    define HAVE_ROUND 1
+#  endif
 
 /* Define to 1 if you have the `isinf' macro. */
-#define HAVE_DECL_ISINF 1
+#  define HAVE_DECL_ISINF 1
 
 /* Define to 1 if you have the `isnan' function. */
-#define HAVE_DECL_ISNAN 1
+#  define HAVE_DECL_ISNAN 1
 
 /* Define if on AIX 3.
    System headers sometimes define this.
    We just want to avoid a redefinition error message.  */
-#ifndef _ALL_SOURCE
+#  ifndef _ALL_SOURCE
 /* #undef _ALL_SOURCE */
-#endif
+#  endif
 
 /* Define to empty if the keyword does not work.  */
 /* #define const  */
 
 /* Define to 1 if you have the <conio.h> header file. */
-#define HAVE_CONIO_H 1
+#  define HAVE_CONIO_H 1
 
 /* Define to 1 if you have the <direct.h> header file. */
-#define HAVE_DIRECT_H 1
+#  define HAVE_DIRECT_H 1
 
 /* Define to 1 if you have the declaration of `tzname', and to 0 if you don't.
    */
-#define HAVE_DECL_TZNAME 1
+#  define HAVE_DECL_TZNAME 1
 
 /* Define if you have dirent.h.  */
 /* #define DIRENT 1 */
@@ -405,7 +405,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 
 /* Define if you don't have tm_zone but do have the external array
    tzname.  */
-#define HAVE_TZNAME
+#  define HAVE_TZNAME
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 /* #undef mode_t */
@@ -427,13 +427,13 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #undef _POSIX_SOURCE */
 
 /* Define as the return type of signal handlers (int or void).  */
-#define RETSIGTYPE void
+#  define RETSIGTYPE void
 
 /* Define to `unsigned' if <sys/types.h> doesn't define.  */
 /* #undef size_t */
 
 /* Define if you have the ANSI C header files.  */
-#define STDC_HEADERS 1
+#  define STDC_HEADERS 1
 
 /* Define if you don't have dirent.h, but have sys/dir.h.  */
 /* #undef SYSDIR */
@@ -461,17 +461,17 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #define HAVE_ALTZONE */
 
 /* Define if you have the putenv function.  */
-#define HAVE_PUTENV
+#  define HAVE_PUTENV
 
 /* Define if your compiler supports function prototypes */
-#define HAVE_PROTOTYPES
+#  define HAVE_PROTOTYPES
 
 /* Define if  you can safely include both <sys/select.h> and <sys/time.h>
    (which you can't on SCO ODT 3.0). */
 /* #undef SYS_SELECT_WITH_SYS_TIME */
 
 /* Define if you want documentation strings in extension modules */
-#define WITH_DOC_STRINGS 1
+#  define WITH_DOC_STRINGS 1
 
 /* Define if you want to compile in rudimentary thread support */
 /* #undef WITH_THREAD */
@@ -480,25 +480,25 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #define WITH_READLINE 1 */
 
 /* Use Python's own small-block memory-allocator. */
-#define WITH_PYMALLOC 1
+#  define WITH_PYMALLOC 1
 
 /* Define if you have clock.  */
 /* #define HAVE_CLOCK */
 
 /* Define when any dynamic module loading is enabled */
-#define HAVE_DYNAMIC_LOADING
+#  define HAVE_DYNAMIC_LOADING
 
 /* Define if you have ftime.  */
-#define HAVE_FTIME
+#  define HAVE_FTIME
 
 /* Define if you have getpeername.  */
-#define HAVE_GETPEERNAME
+#  define HAVE_GETPEERNAME
 
 /* Define if you have getpgrp.  */
 /* #undef HAVE_GETPGRP */
 
 /* Define if you have getpid.  */
-#define HAVE_GETPID
+#  define HAVE_GETPID
 
 /* Define if you have gettimeofday.  */
 /* #undef HAVE_GETTIMEOFDAY */
@@ -510,7 +510,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #undef HAVE_LSTAT */
 
 /* Define if you have the mktime function.  */
-#define HAVE_MKTIME
+#  define HAVE_MKTIME
 
 /* Define if you have nice.  */
 /* #undef HAVE_NICE */
@@ -528,7 +528,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #undef HAVE_SETSID */
 
 /* Define if you have setvbuf.  */
-#define HAVE_SETVBUF
+#  define HAVE_SETVBUF
 
 /* Define if you have siginterrupt.  */
 /* #undef HAVE_SIGINTERRUPT */
@@ -552,39 +552,39 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #undef HAVE_WAITPID */
 
 /* Define to 1 if you have the `wcsftime' function. */
-#if defined(_MSC_VER) && _MSC_VER >= 1310
-#define HAVE_WCSFTIME 1
-#endif
+#  if defined(_MSC_VER) && _MSC_VER >= 1310
+#    define HAVE_WCSFTIME 1
+#  endif
 
 /* Define to 1 if you have the `wcscoll' function. */
-#define HAVE_WCSCOLL 1
+#  define HAVE_WCSCOLL 1
 
 /* Define to 1 if you have the `wcsxfrm' function. */
-#define HAVE_WCSXFRM 1
+#  define HAVE_WCSXFRM 1
 
 /* Define if the zlib library has inflateCopy */
-#define HAVE_ZLIB_COPY 1
+#  define HAVE_ZLIB_COPY 1
 
 /* Define if you have the <dlfcn.h> header file.  */
 /* #undef HAVE_DLFCN_H */
 
 /* Define to 1 if you have the <errno.h> header file. */
-#define HAVE_ERRNO_H 1
+#  define HAVE_ERRNO_H 1
 
 /* Define if you have the <fcntl.h> header file.  */
-#define HAVE_FCNTL_H 1
+#  define HAVE_FCNTL_H 1
 
 /* Define to 1 if you have the <process.h> header file. */
-#define HAVE_PROCESS_H 1
+#  define HAVE_PROCESS_H 1
 
 /* Define to 1 if you have the <signal.h> header file. */
-#define HAVE_SIGNAL_H 1
+#  define HAVE_SIGNAL_H 1
 
 /* Define if you have the <stdarg.h> prototypes.  */
-#define HAVE_STDARG_PROTOTYPES
+#  define HAVE_STDARG_PROTOTYPES
 
 /* Define if you have the <stddef.h> header file.  */
-#define HAVE_STDDEF_H 1
+#  define HAVE_STDDEF_H 1
 
 /* Define if you have the <sys/audioio.h> header file.  */
 /* #undef HAVE_SYS_AUDIOIO_H */
@@ -596,7 +596,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #define HAVE_SYS_SELECT_H 1 */
 
 /* Define to 1 if you have the <sys/stat.h> header file.  */
-#define HAVE_SYS_STAT_H 1
+#  define HAVE_SYS_STAT_H 1
 
 /* Define if you have the <sys/time.h> header file.  */
 /* #define HAVE_SYS_TIME_H 1 */
@@ -605,7 +605,7 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #define HAVE_SYS_TIMES_H 1 */
 
 /* Define to 1 if you have the <sys/types.h> header file.  */
-#define HAVE_SYS_TYPES_H 1
+#  define HAVE_SYS_TYPES_H 1
 
 /* Define if you have the <sys/un.h> header file.  */
 /* #define HAVE_SYS_UN_H 1 */
@@ -623,16 +623,16 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #define HAVE_UTIME_H 1 */
 
 /* Define if the compiler provides a wchar.h header file. */
-#define HAVE_WCHAR_H 1
+#  define HAVE_WCHAR_H 1
 
 /* The size of `wchar_t', as computed by sizeof. */
-#define SIZEOF_WCHAR_T 2
+#  define SIZEOF_WCHAR_T 2
 
 /* The size of `_Bool', as computed by sizeof. */
-#define SIZEOF__BOOL 1
+#  define SIZEOF__BOOL 1
 
 /* The size of `pid_t', as computed by sizeof. */
-#define SIZEOF_PID_T SIZEOF_INT
+#  define SIZEOF_PID_T SIZEOF_INT
 
 /* Define if you have the dl library (-ldl).  */
 /* #undef HAVE_LIBDL */
@@ -641,13 +641,13 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 /* #undef HAVE_LIBMPC */
 
 /* Define if you have the nsl library (-lnsl).  */
-#define HAVE_LIBNSL 1
+#  define HAVE_LIBNSL 1
 
 /* Define if you have the seq library (-lseq).  */
 /* #undef HAVE_LIBSEQ */
 
 /* Define if you have the socket library (-lsocket).  */
-#define HAVE_LIBSOCKET 1
+#  define HAVE_LIBSOCKET 1
 
 /* Define if you have the sun library (-lsun).  */
 /* #undef HAVE_LIBSUN */
@@ -663,25 +663,25 @@ Py_NO_ENABLE_SHARED to find out.  Also support MS_NO_COREDLL for b/w compat */
 
 /* WinSock does not use a bitmask in select, and uses
    socket handles greater than FD_SETSIZE */
-#define Py_SOCKET_FD_CAN_BE_GE_FD_SETSIZE
+#  define Py_SOCKET_FD_CAN_BE_GE_FD_SETSIZE
 
 /* Define if C doubles are 64-bit IEEE 754 binary format, stored with the
    least significant byte first */
-#define DOUBLE_IS_LITTLE_ENDIAN_IEEE754 1
+#  define DOUBLE_IS_LITTLE_ENDIAN_IEEE754 1
 
 /* Define to 1 if you have the `erf' function. */
-#define HAVE_ERF 1
+#  define HAVE_ERF 1
 
 /* Define to 1 if you have the `erfc' function. */
-#define HAVE_ERFC 1
+#  define HAVE_ERFC 1
 
 /* Define if you have the 'inet_pton' function. */
-#define HAVE_INET_PTON 1
+#  define HAVE_INET_PTON 1
 
 /* framework name */
-#define _PYTHONFRAMEWORK ""
+#  define _PYTHONFRAMEWORK ""
 
 /* Define if libssl has X509_VERIFY_PARAM_set1_host and related function */
-#define HAVE_X509_VERIFY_PARAM_SET1_HOST 1
+#  define HAVE_X509_VERIFY_PARAM_SET1_HOST 1
 
 #endif /* !Py_CONFIG_H */

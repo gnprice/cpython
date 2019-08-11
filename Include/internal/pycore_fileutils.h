@@ -1,14 +1,14 @@
 #ifndef Py_INTERNAL_FILEUTILS_H
-#define Py_INTERNAL_FILEUTILS_H
-#ifdef __cplusplus
+#  define Py_INTERNAL_FILEUTILS_H
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifndef Py_BUILD_CORE
-#  error "Py_BUILD_CORE must be defined to include this header"
-#endif
+#  ifndef Py_BUILD_CORE
+#    error "Py_BUILD_CORE must be defined to include this header"
+#  endif
 
-#include <locale.h>   /* struct lconv */
+#  include <locale.h>   /* struct lconv */
 
 PyAPI_DATA(int) _Py_HasFileSystemDefaultEncodeErrors;
 
@@ -48,7 +48,7 @@ PyAPI_FUNC(int) _Py_GetLocaleconvNumeric(
     PyObject **decimal_point,
     PyObject **thousands_sep);
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif /* !Py_INTERNAL_FILEUTILS_H */

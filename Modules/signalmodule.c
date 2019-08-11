@@ -9,27 +9,27 @@
 #include "pycore_pystate.h"
 
 #ifndef MS_WINDOWS
-#include "posixmodule.h"
+#  include "posixmodule.h"
 #endif
 #ifdef MS_WINDOWS
-#include "socketmodule.h"   /* needed for SOCKET_T */
+#  include "socketmodule.h"   /* needed for SOCKET_T */
 #endif
 
 #ifdef MS_WINDOWS
-#include <windows.h>
-#ifdef HAVE_PROCESS_H
-#include <process.h>
-#endif
+#  include <windows.h>
+#  ifdef HAVE_PROCESS_H
+#    include <process.h>
+#  endif
 #endif
 
 #ifdef HAVE_SIGNAL_H
-#include <signal.h>
+#  include <signal.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif
 #ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
+#  include <sys/time.h>
 #endif
 
 #if defined(HAVE_PTHREAD_SIGMASK) && !defined(HAVE_BROKEN_PTHREAD_SIGMASK)
@@ -41,19 +41,19 @@
 #endif
 
 #ifndef SIG_ERR
-#define SIG_ERR ((PyOS_sighandler_t)(-1))
+#  define SIG_ERR ((PyOS_sighandler_t)(-1))
 #endif
 
 #ifndef NSIG
-# if defined(_NSIG)
-#  define NSIG _NSIG            /* For BSD/SysV */
-# elif defined(_SIGMAX)
-#  define NSIG (_SIGMAX + 1)    /* For QNX */
-# elif defined(SIGMAX)
-#  define NSIG (SIGMAX + 1)     /* For djgpp */
-# else
-#  define NSIG 64               /* Use a reasonable default value */
-# endif
+#  if defined(_NSIG)
+#    define NSIG _NSIG            /* For BSD/SysV */
+#  elif defined(_SIGMAX)
+#    define NSIG (_SIGMAX + 1)    /* For QNX */
+#  elif defined(SIGMAX)
+#    define NSIG (SIGMAX + 1)     /* For djgpp */
+#  else
+#    define NSIG 64               /* Use a reasonable default value */
+#  endif
 #endif
 
 #include "clinic/signalmodule.c.h"
@@ -107,7 +107,7 @@ static volatile struct {
 } Handlers[NSIG];
 
 #ifdef MS_WINDOWS
-#define INVALID_FD ((SOCKET_T)-1)
+#  define INVALID_FD ((SOCKET_T)-1)
 
 static volatile struct {
     SOCKET_T fd;
@@ -115,7 +115,7 @@ static volatile struct {
     int use_send;
 } wakeup = {.fd = INVALID_FD, .warn_on_full_buffer = 1, .use_send = 0};
 #else
-#define INVALID_FD (-1)
+#  define INVALID_FD (-1)
 static volatile struct {
     sig_atomic_t fd;
     int warn_on_full_buffer;
@@ -335,13 +335,13 @@ signal_handler(int sig_num)
     trip_signal(sig_num);
 
 #ifndef HAVE_SIGACTION
-#ifdef SIGCHLD
+#  ifdef SIGCHLD
     /* To avoid infinite recursion, this signal remains
        reset until explicit re-instated.
        Don't clear the 'func' field as it is our pointer
        to the Python handler... */
     if (sig_num != SIGCHLD)
-#endif
+#  endif
     /* If the handler was not set up with sigaction, reinstall it.  See
      * Python/pylifecycle.c for the implementation of PyOS_setsig which
      * makes this true.  See also issue8354. */
@@ -459,11 +459,11 @@ signal_signal_impl(PyObject *module, int signalnum, PyObject *handler)
     /* Validate that signalnum is one of the allowable signals */
     switch (signalnum) {
         case SIGABRT: break;
-#ifdef SIGBREAK
+#  ifdef SIGBREAK
         /* Issue #10003: SIGBREAK is not documented as permitted, but works
            and corresponds to CTRL_BREAK_EVENT. */
         case SIGBREAK: break;
-#endif
+#  endif
         case SIGFPE: break;
         case SIGILL: break;
         case SIGINT: break;
@@ -578,7 +578,7 @@ signal_strsignal_impl(PyObject *module, int signalnum)
 #ifndef HAVE_STRSIGNAL
     switch (signalnum) {
         /* Though being a UNIX, HP-UX does not provide strsignal(3). */
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
         case SIGHUP:
             res = "Hangup";
             break;
@@ -594,7 +594,7 @@ signal_strsignal_impl(PyObject *module, int signalnum)
         case SIGCHLD:
             res = "Child exited";
             break;
-#endif
+#  endif
         /* Custom redefinition of POSIX signals allowed on Windows. */
         case SIGINT:
             res = "Interrupt";
@@ -1021,27 +1021,27 @@ static PyObject *
 signal_valid_signals_impl(PyObject *module)
 /*[clinic end generated code: output=1609cffbcfcf1314 input=86a3717ff25288f2]*/
 {
-#ifdef MS_WINDOWS
-#ifdef SIGBREAK
+#  ifdef MS_WINDOWS
+#    ifdef SIGBREAK
     PyObject *tup = Py_BuildValue("(iiiiiii)", SIGABRT, SIGBREAK, SIGFPE,
                                   SIGILL, SIGINT, SIGSEGV, SIGTERM);
-#else
+#    else
     PyObject *tup = Py_BuildValue("(iiiiii)", SIGABRT, SIGFPE, SIGILL,
                                   SIGINT, SIGSEGV, SIGTERM);
-#endif
+#    endif
     if (tup == NULL) {
         return NULL;
     }
     PyObject *set = PySet_New(tup);
     Py_DECREF(tup);
     return set;
-#else
+#  else
     sigset_t mask;
     if (sigemptyset(&mask) || sigfillset(&mask)) {
         return PyErr_SetFromErrno(PyExc_OSError);
     }
     return sigset_to_set(mask);
-#endif
+#  endif
 }
 
 #endif   /* #if defined(HAVE_SIGFILLSET) || defined(MS_WINDOWS) */
@@ -1084,23 +1084,23 @@ fill_siginfo(siginfo_t *si)
 
     PyStructSequence_SET_ITEM(result, 0, PyLong_FromLong((long)(si->si_signo)));
     PyStructSequence_SET_ITEM(result, 1, PyLong_FromLong((long)(si->si_code)));
-#ifdef __VXWORKS__
+#  ifdef __VXWORKS__
     PyStructSequence_SET_ITEM(result, 2, PyLong_FromLong(0L));
     PyStructSequence_SET_ITEM(result, 3, PyLong_FromLong(0L));
     PyStructSequence_SET_ITEM(result, 4, PyLong_FromLong(0L));
     PyStructSequence_SET_ITEM(result, 5, PyLong_FromLong(0L));
-#else
+#  else
     PyStructSequence_SET_ITEM(result, 2, PyLong_FromLong((long)(si->si_errno)));
     PyStructSequence_SET_ITEM(result, 3, PyLong_FromPid(si->si_pid));
     PyStructSequence_SET_ITEM(result, 4, _PyLong_FromUid(si->si_uid));
     PyStructSequence_SET_ITEM(result, 5,
                                 PyLong_FromLong((long)(si->si_status)));
-#endif
-#ifdef HAVE_SIGINFO_T_SI_BAND
+#  endif
+#  ifdef HAVE_SIGINFO_T_SI_BAND
     PyStructSequence_SET_ITEM(result, 6, PyLong_FromLong(si->si_band));
-#else
+#  else
     PyStructSequence_SET_ITEM(result, 6, PyLong_FromLong(0L));
-#endif
+#  endif
     if (PyErr_Occurred()) {
         Py_DECREF(result);
         return NULL;

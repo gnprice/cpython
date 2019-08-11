@@ -38,12 +38,12 @@
  */
 
 #ifndef _CONDVAR_IMPL_H_
-#define _CONDVAR_IMPL_H_
+#  define _CONDVAR_IMPL_H_
 
-#include "Python.h"
-#include "pycore_condvar.h"
+#  include "Python.h"
+#  include "pycore_condvar.h"
 
-#ifdef _POSIX_THREADS
+#  ifdef _POSIX_THREADS
 /*
  * POSIX support
  */
@@ -53,16 +53,16 @@ int _PyThread_cond_init(PyCOND_T *cond);
 void _PyThread_cond_after(long long us, struct timespec *abs);
 
 /* The following functions return 0 on success, nonzero on error */
-#define PyMUTEX_INIT(mut)       pthread_mutex_init((mut), NULL)
-#define PyMUTEX_FINI(mut)       pthread_mutex_destroy(mut)
-#define PyMUTEX_LOCK(mut)       pthread_mutex_lock(mut)
-#define PyMUTEX_UNLOCK(mut)     pthread_mutex_unlock(mut)
+#    define PyMUTEX_INIT(mut)       pthread_mutex_init((mut), NULL)
+#    define PyMUTEX_FINI(mut)       pthread_mutex_destroy(mut)
+#    define PyMUTEX_LOCK(mut)       pthread_mutex_lock(mut)
+#    define PyMUTEX_UNLOCK(mut)     pthread_mutex_unlock(mut)
 
-#define PyCOND_INIT(cond)       _PyThread_cond_init(cond)
-#define PyCOND_FINI(cond)       pthread_cond_destroy(cond)
-#define PyCOND_SIGNAL(cond)     pthread_cond_signal(cond)
-#define PyCOND_BROADCAST(cond)  pthread_cond_broadcast(cond)
-#define PyCOND_WAIT(cond, mut)  pthread_cond_wait((cond), (mut))
+#    define PyCOND_INIT(cond)       _PyThread_cond_init(cond)
+#    define PyCOND_FINI(cond)       pthread_cond_destroy(cond)
+#    define PyCOND_SIGNAL(cond)     pthread_cond_signal(cond)
+#    define PyCOND_BROADCAST(cond)  pthread_cond_broadcast(cond)
+#    define PyCOND_WAIT(cond, mut)  pthread_cond_wait((cond), (mut))
 
 /* return 0 for success, 1 on timeout, -1 on error */
 Py_LOCAL_INLINE(int)
@@ -80,7 +80,7 @@ PyCOND_TIMEDWAIT(PyCOND_T *cond, PyMUTEX_T *mut, long long us)
     return 0;
 }
 
-#elif defined(NT_THREADS)
+#  elif defined(NT_THREADS)
 /*
  * Windows (XP, 2003 server and later, as well as (hopefully) CE) support
  *
@@ -88,7 +88,7 @@ PyCOND_TIMEDWAIT(PyCOND_T *cond, PyMUTEX_T *mut, long long us)
  * example native support on VISTA and onwards.
  */
 
-#if _PY_EMULATED_WIN_CV
+#    if _PY_EMULATED_WIN_CV
 
 /* The mutex is a CriticalSection object and
    The condition variables is emulated with the help of a semaphore.
@@ -230,7 +230,7 @@ PyCOND_BROADCAST(PyCOND_T *cv)
     return 0;
 }
 
-#else /* !_PY_EMULATED_WIN_CV */
+#    else /* !_PY_EMULATED_WIN_CV */
 
 Py_LOCAL_INLINE(int)
 PyMUTEX_INIT(PyMUTEX_T *cs)
@@ -302,8 +302,8 @@ PyCOND_BROADCAST(PyCOND_T *cv)
 }
 
 
-#endif /* _PY_EMULATED_WIN_CV */
+#    endif /* _PY_EMULATED_WIN_CV */
 
-#endif /* _POSIX_THREADS, NT_THREADS */
+#  endif /* _POSIX_THREADS, NT_THREADS */
 
 #endif /* _CONDVAR_IMPL_H_ */

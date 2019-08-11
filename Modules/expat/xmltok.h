@@ -112,20 +112,20 @@ extern "C" {
 #define XML_TOK_PREFIXED_NAME 41
 
 #ifdef XML_DTD
-#define XML_TOK_IGNORE_SECT 42
+#  define XML_TOK_IGNORE_SECT 42
 #endif /* XML_DTD */
 
 #ifdef XML_DTD
-#define XML_N_STATES 4
+#  define XML_N_STATES 4
 #else /* not XML_DTD */
-#define XML_N_STATES 3
+#  define XML_N_STATES 3
 #endif /* not XML_DTD */
 
 #define XML_PROLOG_STATE 0
 #define XML_CONTENT_STATE 1
 #define XML_CDATA_SECTION_STATE 2
 #ifdef XML_DTD
-#define XML_IGNORE_SECTION_STATE 3
+#  define XML_IGNORE_SECTION_STATE 3
 #endif /* XML_DTD */
 
 #define XML_N_LITERAL_TYPES 2
@@ -240,7 +240,7 @@ struct encoding {
 
 #ifdef XML_DTD
 
-#define XmlIgnoreSectionTok(enc, ptr, end, nextTokPtr) \
+#  define XmlIgnoreSectionTok(enc, ptr, end, nextTokPtr) \
    XmlTok(enc, XML_IGNORE_SECTION_STATE, ptr, end, nextTokPtr)
 
 #endif /* XML_DTD */

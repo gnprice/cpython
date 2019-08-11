@@ -29,23 +29,23 @@
 #include <locale.h>
 
 #ifdef HAVE_SIGNAL_H
-#include <signal.h>
+#  include <signal.h>
 #endif
 
 #ifdef MS_WINDOWS
-#include "malloc.h" /* for alloca */
+#  include "malloc.h" /* for alloca */
 #endif
 
 #ifdef HAVE_LANGINFO_H
-#include <langinfo.h>
+#  include <langinfo.h>
 #endif
 
 #ifdef MS_WINDOWS
-#undef BYTE
-#include "windows.h"
+#  undef BYTE
+#  include "windows.h"
 
 extern PyTypeObject PyWindowsConsoleIO_Type;
-#define PyWindowsConsoleIO_Check(op) (PyObject_TypeCheck((op), &PyWindowsConsoleIO_Type))
+#  define PyWindowsConsoleIO_Check(op) (PyObject_TypeCheck((op), &PyWindowsConsoleIO_Type))
 #endif
 
 _Py_IDENTIFIER(flush);
@@ -348,7 +348,7 @@ _Py_CoerceLegacyLocale(int warn)
             const char *new_locale = setlocale(LC_CTYPE,
                                                target->locale_name);
             if (new_locale != NULL) {
-#if !defined(_Py_FORCE_UTF8_LOCALE) && defined(HAVE_LANGINFO_H) && defined(CODESET)
+#  if !defined(_Py_FORCE_UTF8_LOCALE) && defined(HAVE_LANGINFO_H) && defined(CODESET)
                 /* Also ensure that nl_langinfo works in this locale */
                 char *codeset = nl_langinfo(CODESET);
                 if (!codeset || *codeset == '\0') {
@@ -357,7 +357,7 @@ _Py_CoerceLegacyLocale(int warn)
                     _Py_SetLocaleFromEnv(LC_CTYPE);
                     continue;
                 }
-#endif
+#  endif
                 /* Successfully configured locale, so make it the default */
                 coerced = _coerce_default_locale_settings(warn, target);
                 goto done;
@@ -385,9 +385,9 @@ _Py_SetLocaleFromEnv(int category)
 #ifdef __ANDROID__
     const char *locale;
     const char **pvar;
-#ifdef PY_COERCE_C_LOCALE
+#  ifdef PY_COERCE_C_LOCALE
     const char *coerce_c_locale;
-#endif
+#  endif
     const char *utf8_locale = "C.UTF-8";
     const char *env_var_set[] = {
         "LC_ALL",
@@ -416,7 +416,7 @@ _Py_SetLocaleFromEnv(int category)
      * "4. If the LANG environment variable is not set or is set to the empty
      * string, the implementation-defined default locale shall be used." */
 
-#ifdef PY_COERCE_C_LOCALE
+#  ifdef PY_COERCE_C_LOCALE
     coerce_c_locale = getenv("PYTHONCOERCECLOCALE");
     if (coerce_c_locale == NULL || strcmp(coerce_c_locale, "0") != 0) {
         /* Some other ported code may check the environment variables (e.g. in
@@ -427,7 +427,7 @@ _Py_SetLocaleFromEnv(int category)
                             "environment variable to %s\n", utf8_locale);
         }
     }
-#endif
+#  endif
     res = setlocale(category, utf8_locale);
 #else /* !defined(__ANDROID__) */
     res = setlocale(category, "");
@@ -2178,7 +2178,7 @@ Py_ExitStatusException(PyStatus status)
 
 /* Clean up and exit */
 
-#  include "pythread.h"
+#include "pythread.h"
 
 /* For the atexit module. */
 void _Py_PyAtExit(void (*func)(PyObject *), PyObject *module)
@@ -2338,7 +2338,7 @@ PyOS_getsig(int sig)
 #else
     PyOS_sighandler_t handler;
 /* Special signal handling for the secure CRT in Visual Studio 2005 */
-#if defined(_MSC_VER) && _MSC_VER >= 1400
+#  if defined(_MSC_VER) && _MSC_VER >= 1400
     switch (sig) {
     /* Only these signals are valid */
     case SIGINT:
@@ -2353,7 +2353,7 @@ PyOS_getsig(int sig)
     default:
         return SIG_ERR;
     }
-#endif /* _MSC_VER && _MSC_VER >= 1400 */
+#  endif /* _MSC_VER && _MSC_VER >= 1400 */
     handler = signal(sig, SIG_IGN);
     if (handler != SIG_ERR)
         signal(sig, handler);
@@ -2384,9 +2384,9 @@ PyOS_setsig(int sig, PyOS_sighandler_t handler)
 #else
     PyOS_sighandler_t oldhandler;
     oldhandler = signal(sig, handler);
-#ifdef HAVE_SIGINTERRUPT
+#  ifdef HAVE_SIGINTERRUPT
     siginterrupt(sig, 1);
-#endif
+#  endif
     return oldhandler;
 #endif
 }

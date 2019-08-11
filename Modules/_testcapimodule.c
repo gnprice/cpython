@@ -21,7 +21,7 @@
 #include <signal.h>
 
 #ifdef MS_WINDOWS
-#  include <winsock2.h>         /* struct timeval */
+#include <winsock2.h>         /* struct timeval */
 #endif
 
 #ifdef HAVE_SYS_WAIT_H
@@ -29,7 +29,7 @@
 #endif
 
 #ifdef Py_BUILD_CORE
-#  error "_testcapi must test the public Python C API, not CPython internal C API"
+#error "_testcapi must test the public Python C API, not CPython internal C API"
 #endif
 
 static PyObject *TestError;     /* set to exception object in init */

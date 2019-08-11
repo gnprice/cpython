@@ -3,13 +3,13 @@
 */
 
 #ifndef Py_PYMEM_H
-#define Py_PYMEM_H
+#  define Py_PYMEM_H
 
-#include "pyport.h"
+#  include "pyport.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 /* BEWARE:
 
@@ -61,9 +61,9 @@ PyAPI_FUNC(void) PyMem_Free(void *ptr);
    pymalloc. To solve these problems, allocate an extra byte. */
 /* Returns NULL to indicate error if a negative size or size larger than
    Py_ssize_t can represent is supplied.  Helps prevents security holes. */
-#define PyMem_MALLOC(n)         PyMem_Malloc(n)
-#define PyMem_REALLOC(p, n)     PyMem_Realloc(p, n)
-#define PyMem_FREE(p)           PyMem_Free(p)
+#  define PyMem_MALLOC(n)         PyMem_Malloc(n)
+#  define PyMem_REALLOC(p, n)     PyMem_Realloc(p, n)
+#  define PyMem_FREE(p)           PyMem_Free(p)
 
 /*
  * Type-oriented memory interface
@@ -75,10 +75,10 @@ PyAPI_FUNC(void) PyMem_Free(void *ptr);
  * overflow checking is always done.
  */
 
-#define PyMem_New(type, n) \
+#  define PyMem_New(type, n) \
   ( ((size_t)(n) > PY_SSIZE_T_MAX / sizeof(type)) ? NULL :      \
         ( (type *) PyMem_Malloc((n) * sizeof(type)) ) )
-#define PyMem_NEW(type, n) \
+#  define PyMem_NEW(type, n) \
   ( ((size_t)(n) > PY_SSIZE_T_MAX / sizeof(type)) ? NULL :      \
         ( (type *) PyMem_MALLOC((n) * sizeof(type)) ) )
 
@@ -88,18 +88,18 @@ PyAPI_FUNC(void) PyMem_Free(void *ptr);
  * error if so.  This means the original value of (p) MUST be saved for the
  * caller's memory error handler to not lose track of it.
  */
-#define PyMem_Resize(p, type, n) \
+#  define PyMem_Resize(p, type, n) \
   ( (p) = ((size_t)(n) > PY_SSIZE_T_MAX / sizeof(type)) ? NULL :        \
         (type *) PyMem_Realloc((p), (n) * sizeof(type)) )
-#define PyMem_RESIZE(p, type, n) \
+#  define PyMem_RESIZE(p, type, n) \
   ( (p) = ((size_t)(n) > PY_SSIZE_T_MAX / sizeof(type)) ? NULL :        \
         (type *) PyMem_REALLOC((p), (n) * sizeof(type)) )
 
 /* PyMem{Del,DEL} are left over from ancient days, and shouldn't be used
  * anymore.  They're just confusing aliases for PyMem_{Free,FREE} now.
  */
-#define PyMem_Del               PyMem_Free
-#define PyMem_DEL               PyMem_FREE
+#  define PyMem_Del               PyMem_Free
+#  define PyMem_DEL               PyMem_FREE
 
 /* bpo-35053: expose _Py_tracemalloc_config for performance:
    _Py_NewReference() needs an efficient check to test if tracemalloc is
@@ -130,21 +130,21 @@ struct _PyTraceMalloc_Config {
 
 PyAPI_DATA(struct _PyTraceMalloc_Config) _Py_tracemalloc_config;
 
-#define _PyTraceMalloc_Config_INIT \
+#  define _PyTraceMalloc_Config_INIT \
     {.initialized = TRACEMALLOC_NOT_INITIALIZED, \
      .tracing = 0, \
      .max_nframe = 1, \
      .use_domain = 0}
 
 
-#ifndef Py_LIMITED_API
-#  define Py_CPYTHON_PYMEM_H
-#  include  "cpython/pymem.h"
-#  undef Py_CPYTHON_PYMEM_H
-#endif
+#  ifndef Py_LIMITED_API
+#    define Py_CPYTHON_PYMEM_H
+#    include  "cpython/pymem.h"
+#    undef Py_CPYTHON_PYMEM_H
+#  endif
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif /* !Py_PYMEM_H */

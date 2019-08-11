@@ -33,7 +33,7 @@
 #ifdef XML_TOK_IMPL_C
 
 #ifndef IS_INVALID_CHAR
-#define IS_INVALID_CHAR(enc, ptr, n) (0)
+#  define IS_INVALID_CHAR(enc, ptr, n) (0)
 #endif
 
 #define INVALID_LEAD_CASE(n, ptr, nextTokPtr) \
@@ -113,7 +113,7 @@
   CHECK_NMSTRT_CASE(4, enc, ptr, end, nextTokPtr)
 
 #ifndef PREFIX
-#define PREFIX(ident) ident
+#  define PREFIX(ident) ident
 #endif
 
 
