@@ -49,7 +49,7 @@
 /* On android API level 21, 'AT_EACCESS' is not declared although
  * HAVE_FACCESSAT is defined. */
 #ifdef __ANDROID__
-#undef HAVE_FACCESSAT
+#  undef HAVE_FACCESSAT
 #endif
 
 #include <stdio.h>  /* needed for ctermid() */
@@ -66,86 +66,86 @@ corresponding Unix manual entries for more information on calls.");
 
 
 #ifdef HAVE_SYS_UIO_H
-#include <sys/uio.h>
+#  include <sys/uio.h>
 #endif
 
 #ifdef HAVE_SYS_SYSMACROS_H
 /* GNU C Library: major(), minor(), makedev() */
-#include <sys/sysmacros.h>
+#  include <sys/sysmacros.h>
 #endif
 
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */
 
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif /* HAVE_SYS_STAT_H */
 
 #ifdef HAVE_SYS_WAIT_H
-#include <sys/wait.h>           /* For WNOHANG */
+#  include <sys/wait.h>           /* For WNOHANG */
 #endif
 
 #ifdef HAVE_SIGNAL_H
-#include <signal.h>
+#  include <signal.h>
 #endif
 
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #endif /* HAVE_FCNTL_H */
 
 #ifdef HAVE_GRP_H
-#include <grp.h>
+#  include <grp.h>
 #endif
 
 #ifdef HAVE_SYSEXITS_H
-#include <sysexits.h>
+#  include <sysexits.h>
 #endif /* HAVE_SYSEXITS_H */
 
 #ifdef HAVE_SYS_LOADAVG_H
-#include <sys/loadavg.h>
+#  include <sys/loadavg.h>
 #endif
 
 #ifdef HAVE_SYS_SENDFILE_H
-#include <sys/sendfile.h>
+#  include <sys/sendfile.h>
 #endif
 
 #if defined(__APPLE__)
-#include <copyfile.h>
+#  include <copyfile.h>
 #endif
 
 #ifdef HAVE_SCHED_H
-#include <sched.h>
+#  include <sched.h>
 #endif
 
 #ifdef HAVE_COPY_FILE_RANGE
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
 #if !defined(CPU_ALLOC) && defined(HAVE_SCHED_SETAFFINITY)
-#undef HAVE_SCHED_SETAFFINITY
+#  undef HAVE_SCHED_SETAFFINITY
 #endif
 
 #if defined(HAVE_SYS_XATTR_H) && defined(__GLIBC__) && !defined(__FreeBSD_kernel__) && !defined(__GNU__)
-#define USE_XATTRS
+#  define USE_XATTRS
 #endif
 
 #ifdef USE_XATTRS
-#include <sys/xattr.h>
+#  include <sys/xattr.h>
 #endif
 
 #if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__APPLE__)
-#ifdef HAVE_SYS_SOCKET_H
-#include <sys/socket.h>
-#endif
+#  ifdef HAVE_SYS_SOCKET_H
+#    include <sys/socket.h>
+#  endif
 #endif
 
 #ifdef HAVE_DLFCN_H
-#include <dlfcn.h>
+#  include <dlfcn.h>
 #endif
 
 #ifdef __hpux
-#include <sys/mpctl.h>
+#  include <sys/mpctl.h>
 #endif
 
 #if defined(__DragonFly__) || \
@@ -153,7 +153,7 @@ corresponding Unix manual entries for more information on calls.");
     defined(__FreeBSD__)   || \
     defined(__NetBSD__)    || \
     defined(__APPLE__)
-#include <sys/sysctl.h>
+#  include <sys/sysctl.h>
 #endif
 
 #ifdef HAVE_LINUX_RANDOM_H
@@ -178,180 +178,180 @@ corresponding Unix manual entries for more information on calls.");
 /* Various compilers have only certain posix functions */
 /* XXX Gosh I wish these were all moved into pyconfig.h */
 #if defined(__WATCOMC__) && !defined(__QNX__)           /* Watcom compiler */
-#define HAVE_OPENDIR    1
-#define HAVE_SYSTEM     1
-#include <process.h>
+#  define HAVE_OPENDIR    1
+#  define HAVE_SYSTEM     1
+#  include <process.h>
 #else
-#ifdef _MSC_VER         /* Microsoft compiler */
-#define HAVE_GETPPID    1
-#define HAVE_GETLOGIN   1
-#define HAVE_SPAWNV     1
-#define HAVE_EXECV      1
-#define HAVE_WSPAWNV    1
-#define HAVE_WEXECV     1
-#define HAVE_PIPE       1
-#define HAVE_SYSTEM     1
-#define HAVE_CWAIT      1
-#define HAVE_FSYNC      1
-#define fsync _commit
-#else
+#  ifdef _MSC_VER         /* Microsoft compiler */
+#    define HAVE_GETPPID    1
+#    define HAVE_GETLOGIN   1
+#    define HAVE_SPAWNV     1
+#    define HAVE_EXECV      1
+#    define HAVE_WSPAWNV    1
+#    define HAVE_WEXECV     1
+#    define HAVE_PIPE       1
+#    define HAVE_SYSTEM     1
+#    define HAVE_CWAIT      1
+#    define HAVE_FSYNC      1
+#    define fsync _commit
+#  else
 /* Unix functions that the configure script doesn't check for */
-#ifndef __VXWORKS__
-#define HAVE_EXECV      1
-#define HAVE_FORK       1
-#if defined(__USLC__) && defined(__SCO_VERSION__)       /* SCO UDK Compiler */
-#define HAVE_FORK1      1
-#endif
-#endif
-#define HAVE_GETEGID    1
-#define HAVE_GETEUID    1
-#define HAVE_GETGID     1
-#define HAVE_GETPPID    1
-#define HAVE_GETUID     1
-#define HAVE_KILL       1
-#define HAVE_OPENDIR    1
-#define HAVE_PIPE       1
-#define HAVE_SYSTEM     1
-#define HAVE_WAIT       1
-#define HAVE_TTYNAME    1
-#endif  /* _MSC_VER */
+#    ifndef __VXWORKS__
+#      define HAVE_EXECV      1
+#      define HAVE_FORK       1
+#      if defined(__USLC__) && defined(__SCO_VERSION__)       /* SCO UDK Compiler */
+#        define HAVE_FORK1      1
+#      endif
+#    endif
+#    define HAVE_GETEGID    1
+#    define HAVE_GETEUID    1
+#    define HAVE_GETGID     1
+#    define HAVE_GETPPID    1
+#    define HAVE_GETUID     1
+#    define HAVE_KILL       1
+#    define HAVE_OPENDIR    1
+#    define HAVE_PIPE       1
+#    define HAVE_SYSTEM     1
+#    define HAVE_WAIT       1
+#    define HAVE_TTYNAME    1
+#  endif  /* _MSC_VER */
 #endif  /* ! __WATCOMC__ || __QNX__ */
 
 
 /*[clinic input]
-# one of the few times we lie about this name!
+#one of the few times we lie about this name!
 module os
 [clinic start generated code]*/
 /*[clinic end generated code: output=da39a3ee5e6b4b0d input=94a0f0f978acae17]*/
 
 #ifndef _MSC_VER
 
-#if defined(__sgi)&&_COMPILER_VERSION>=700
+#  if defined(__sgi)&&_COMPILER_VERSION>=700
 /* declare ctermid_r if compiling with MIPSPro 7.x in ANSI C mode
    (default) */
 extern char        *ctermid_r(char *);
-#endif
+#  endif
 
 #endif /* !_MSC_VER */
 
 #if defined(__VXWORKS__)
-#include <vxCpuLib.h>
-#include <rtpLib.h>
-#include <wait.h>
-#include <taskLib.h>
-#ifndef _P_WAIT
-#define _P_WAIT          0
-#define _P_NOWAIT        1
-#define _P_NOWAITO       1
-#endif
+#  include <vxCpuLib.h>
+#  include <rtpLib.h>
+#  include <wait.h>
+#  include <taskLib.h>
+#  ifndef _P_WAIT
+#    define _P_WAIT          0
+#    define _P_NOWAIT        1
+#    define _P_NOWAITO       1
+#  endif
 #endif /* __VXWORKS__ */
 
 #ifdef HAVE_POSIX_SPAWN
-#include <spawn.h>
+#  include <spawn.h>
 #endif
 
 #ifdef HAVE_UTIME_H
-#include <utime.h>
+#  include <utime.h>
 #endif /* HAVE_UTIME_H */
 
 #ifdef HAVE_SYS_UTIME_H
-#include <sys/utime.h>
-#define HAVE_UTIME_H /* pretend we do for the rest of this file */
+#  include <sys/utime.h>
+#  define HAVE_UTIME_H /* pretend we do for the rest of this file */
 #endif /* HAVE_SYS_UTIME_H */
 
 #ifdef HAVE_SYS_TIMES_H
-#include <sys/times.h>
+#  include <sys/times.h>
 #endif /* HAVE_SYS_TIMES_H */
 
 #ifdef HAVE_SYS_PARAM_H
-#include <sys/param.h>
+#  include <sys/param.h>
 #endif /* HAVE_SYS_PARAM_H */
 
 #ifdef HAVE_SYS_UTSNAME_H
-#include <sys/utsname.h>
+#  include <sys/utsname.h>
 #endif /* HAVE_SYS_UTSNAME_H */
 
 #ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
+#  include <dirent.h>
+#  define NAMLEN(dirent) strlen((dirent)->d_name)
 #else
-#if defined(__WATCOMC__) && !defined(__QNX__)
-#include <direct.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
-#else
-#define dirent direct
-#define NAMLEN(dirent) (dirent)->d_namlen
-#endif
-#ifdef HAVE_SYS_NDIR_H
-#include <sys/ndir.h>
-#endif
-#ifdef HAVE_SYS_DIR_H
-#include <sys/dir.h>
-#endif
-#ifdef HAVE_NDIR_H
-#include <ndir.h>
-#endif
+#  if defined(__WATCOMC__) && !defined(__QNX__)
+#    include <direct.h>
+#    define NAMLEN(dirent) strlen((dirent)->d_name)
+#  else
+#    define dirent direct
+#    define NAMLEN(dirent) (dirent)->d_namlen
+#  endif
+#  ifdef HAVE_SYS_NDIR_H
+#    include <sys/ndir.h>
+#  endif
+#  ifdef HAVE_SYS_DIR_H
+#    include <sys/dir.h>
+#  endif
+#  ifdef HAVE_NDIR_H
+#    include <ndir.h>
+#  endif
 #endif
 
 #ifdef _MSC_VER
-#ifdef HAVE_DIRECT_H
-#include <direct.h>
-#endif
-#ifdef HAVE_IO_H
-#include <io.h>
-#endif
-#ifdef HAVE_PROCESS_H
-#include <process.h>
-#endif
-#ifndef IO_REPARSE_TAG_SYMLINK
-#define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
-#endif
-#ifndef IO_REPARSE_TAG_MOUNT_POINT
-#define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
-#endif
-#include "osdefs.h"
-#include <malloc.h>
-#include <windows.h>
-#include <shellapi.h>   /* for ShellExecute() */
-#include <lmcons.h>     /* for UNLEN */
-#define HAVE_SYMLINK
+#  ifdef HAVE_DIRECT_H
+#    include <direct.h>
+#  endif
+#  ifdef HAVE_IO_H
+#    include <io.h>
+#  endif
+#  ifdef HAVE_PROCESS_H
+#    include <process.h>
+#  endif
+#  ifndef IO_REPARSE_TAG_SYMLINK
+#    define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
+#  endif
+#  ifndef IO_REPARSE_TAG_MOUNT_POINT
+#    define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
+#  endif
+#  include "osdefs.h"
+#  include <malloc.h>
+#  include <windows.h>
+#  include <shellapi.h>   /* for ShellExecute() */
+#  include <lmcons.h>     /* for UNLEN */
+#  define HAVE_SYMLINK
 #endif /* _MSC_VER */
 
 #ifndef MAXPATHLEN
-#if defined(PATH_MAX) && PATH_MAX > 1024
-#define MAXPATHLEN PATH_MAX
-#else
-#define MAXPATHLEN 1024
-#endif
+#  if defined(PATH_MAX) && PATH_MAX > 1024
+#    define MAXPATHLEN PATH_MAX
+#  else
+#    define MAXPATHLEN 1024
+#  endif
 #endif /* MAXPATHLEN */
 
 #ifdef UNION_WAIT
 /* Emulate some macros on systems that have a union instead of macros */
 
-#ifndef WIFEXITED
-#define WIFEXITED(u_wait) (!(u_wait).w_termsig && !(u_wait).w_coredump)
-#endif
+#  ifndef WIFEXITED
+#    define WIFEXITED(u_wait) (!(u_wait).w_termsig && !(u_wait).w_coredump)
+#  endif
 
-#ifndef WEXITSTATUS
-#define WEXITSTATUS(u_wait) (WIFEXITED(u_wait)?((u_wait).w_retcode):-1)
-#endif
+#  ifndef WEXITSTATUS
+#    define WEXITSTATUS(u_wait) (WIFEXITED(u_wait)?((u_wait).w_retcode):-1)
+#  endif
 
-#ifndef WTERMSIG
-#define WTERMSIG(u_wait) ((u_wait).w_termsig)
-#endif
+#  ifndef WTERMSIG
+#    define WTERMSIG(u_wait) ((u_wait).w_termsig)
+#  endif
 
-#define WAIT_TYPE union wait
-#define WAIT_STATUS_INT(s) (s.w_status)
+#  define WAIT_TYPE union wait
+#  define WAIT_STATUS_INT(s) (s.w_status)
 
 #else /* !UNION_WAIT */
-#define WAIT_TYPE int
-#define WAIT_STATUS_INT(s) (s)
+#  define WAIT_TYPE int
+#  define WAIT_STATUS_INT(s) (s)
 #endif /* UNION_WAIT */
 
 /* Don't use the "_r" form if we don't need it (also, won't have a
    prototype for it, at least on Solaris -- maybe others as well?). */
 #if defined(HAVE_CTERMID_R)
-#define USE_CTERMID_R
+#  define USE_CTERMID_R
 #endif
 
 /* choose the appropriate stat and fstat functions and return structs */
@@ -359,56 +359,56 @@ extern char        *ctermid_r(char *);
 #undef FSTAT
 #undef STRUCT_STAT
 #ifdef MS_WINDOWS
-#       define STAT win32_stat
-#       define LSTAT win32_lstat
-#       define FSTAT _Py_fstat_noraise
-#       define STRUCT_STAT struct _Py_stat_struct
+#  define STAT win32_stat
+#  define LSTAT win32_lstat
+#  define FSTAT _Py_fstat_noraise
+#  define STRUCT_STAT struct _Py_stat_struct
 #else
-#       define STAT stat
-#       define LSTAT lstat
-#       define FSTAT fstat
-#       define STRUCT_STAT struct stat
+#  define STAT stat
+#  define LSTAT lstat
+#  define FSTAT fstat
+#  define STRUCT_STAT struct stat
 #endif
 
 #if defined(MAJOR_IN_MKDEV)
-#include <sys/mkdev.h>
+#  include <sys/mkdev.h>
 #else
-#if defined(MAJOR_IN_SYSMACROS)
-#include <sys/sysmacros.h>
-#endif
-#if defined(HAVE_MKNOD) && defined(HAVE_SYS_MKDEV_H)
-#include <sys/mkdev.h>
-#endif
+#  if defined(MAJOR_IN_SYSMACROS)
+#    include <sys/sysmacros.h>
+#  endif
+#  if defined(HAVE_MKNOD) && defined(HAVE_SYS_MKDEV_H)
+#    include <sys/mkdev.h>
+#  endif
 #endif
 
 #ifdef MS_WINDOWS
-#define INITFUNC PyInit_nt
-#define MODNAME "nt"
+#  define INITFUNC PyInit_nt
+#  define MODNAME "nt"
 #else
-#define INITFUNC PyInit_posix
-#define MODNAME "posix"
+#  define INITFUNC PyInit_posix
+#  define MODNAME "posix"
 #endif
 
 #if defined(__sun)
 /* Something to implement in autoconf, not present in autoconf 2.69 */
-#define HAVE_STRUCT_STAT_ST_FSTYPE 1
+#  define HAVE_STRUCT_STAT_ST_FSTYPE 1
 #endif
 
 /* memfd_create is either defined in sys/mman.h or sys/memfd.h
  * linux/memfd.h defines additional flags
  */
 #ifdef HAVE_SYS_MMAN_H
-#include <sys/mman.h>
+#  include <sys/mman.h>
 #endif
 #ifdef HAVE_SYS_MEMFD_H
-#include <sys/memfd.h>
+#  include <sys/memfd.h>
 #endif
 #ifdef HAVE_LINUX_MEMFD_H
-#include <linux/memfd.h>
+#  include <linux/memfd.h>
 #endif
 
 #ifdef _Py_MEMORY_SANITIZER
-# include <sanitizer/msan_interface.h>
+#  include <sanitizer/msan_interface.h>
 #endif
 
 #ifdef HAVE_FORK
@@ -762,9 +762,9 @@ _Py_Dev_Converter(PyObject *obj, void *p)
  * look like this:
  *      int dir_fd = DEFAULT_DIR_FD;
  */
-#define DEFAULT_DIR_FD (int)AT_FDCWD
+#  define DEFAULT_DIR_FD (int)AT_FDCWD
 #else
-#define DEFAULT_DIR_FD (-100)
+#  define DEFAULT_DIR_FD (-100)
 #endif
 
 static int
@@ -920,10 +920,10 @@ typedef struct {
 } path_t;
 
 #ifdef MS_WINDOWS
-#define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
+#  define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
     {function_name, argument_name, nullable, allow_fd, NULL, FALSE, -1, 0, NULL, NULL}
 #else
-#define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
+#  define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
     {function_name, argument_name, nullable, allow_fd, NULL, NULL, -1, 0, NULL, NULL}
 #endif
 
@@ -1372,7 +1372,7 @@ win32_get_reparse_tag(HANDLE reparse_point_handle, ULONG *reparse_tag)
 ** environ directly, we must obtain it with _NSGetEnviron(). See also
 ** man environ(7).
 */
-#include <crt_externs.h>
+#  include <crt_externs.h>
 static char **environ;
 #elif !defined(_MSC_VER) && (!defined(__WATCOMC__) || defined(__QNX__) || defined(__VXWORKS__))
 extern char **environ;
@@ -1623,8 +1623,8 @@ win32_wchdir(LPCWSTR path)
      UTC and local time
    Therefore, we implement our own stat, based on the Win32 API directly.
 */
-#define HAVE_STAT_NSEC 1
-#define HAVE_STRUCT_STAT_ST_FILE_ATTRIBUTES 1
+#  define HAVE_STAT_NSEC 1
+#  define HAVE_STRUCT_STAT_ST_FILE_ATTRIBUTES 1
 
 static void
 find_data_to_file_info(WIN32_FIND_DATAW *pFileData,
@@ -1881,51 +1881,51 @@ static PyStructSequence_Field stat_result_fields[] = {
 };
 
 #ifdef HAVE_STRUCT_STAT_ST_BLKSIZE
-#define ST_BLKSIZE_IDX 16
+#  define ST_BLKSIZE_IDX 16
 #else
-#define ST_BLKSIZE_IDX 15
+#  define ST_BLKSIZE_IDX 15
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_BLOCKS
-#define ST_BLOCKS_IDX (ST_BLKSIZE_IDX+1)
+#  define ST_BLOCKS_IDX (ST_BLKSIZE_IDX+1)
 #else
-#define ST_BLOCKS_IDX ST_BLKSIZE_IDX
+#  define ST_BLOCKS_IDX ST_BLKSIZE_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_RDEV
-#define ST_RDEV_IDX (ST_BLOCKS_IDX+1)
+#  define ST_RDEV_IDX (ST_BLOCKS_IDX+1)
 #else
-#define ST_RDEV_IDX ST_BLOCKS_IDX
+#  define ST_RDEV_IDX ST_BLOCKS_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_FLAGS
-#define ST_FLAGS_IDX (ST_RDEV_IDX+1)
+#  define ST_FLAGS_IDX (ST_RDEV_IDX+1)
 #else
-#define ST_FLAGS_IDX ST_RDEV_IDX
+#  define ST_FLAGS_IDX ST_RDEV_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_GEN
-#define ST_GEN_IDX (ST_FLAGS_IDX+1)
+#  define ST_GEN_IDX (ST_FLAGS_IDX+1)
 #else
-#define ST_GEN_IDX ST_FLAGS_IDX
+#  define ST_GEN_IDX ST_FLAGS_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_BIRTHTIME
-#define ST_BIRTHTIME_IDX (ST_GEN_IDX+1)
+#  define ST_BIRTHTIME_IDX (ST_GEN_IDX+1)
 #else
-#define ST_BIRTHTIME_IDX ST_GEN_IDX
+#  define ST_BIRTHTIME_IDX ST_GEN_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_FILE_ATTRIBUTES
-#define ST_FILE_ATTRIBUTES_IDX (ST_BIRTHTIME_IDX+1)
+#  define ST_FILE_ATTRIBUTES_IDX (ST_BIRTHTIME_IDX+1)
 #else
-#define ST_FILE_ATTRIBUTES_IDX ST_BIRTHTIME_IDX
+#  define ST_FILE_ATTRIBUTES_IDX ST_BIRTHTIME_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_FSTYPE
-#define ST_FSTYPE_IDX (ST_FILE_ATTRIBUTES_IDX+1)
+#  define ST_FSTYPE_IDX (ST_FILE_ATTRIBUTES_IDX+1)
 #else
-#define ST_FSTYPE_IDX ST_FILE_ATTRIBUTES_IDX
+#  define ST_FSTYPE_IDX ST_FILE_ATTRIBUTES_IDX
 #endif
 
 static PyStructSequence_Desc stat_result_desc = {
@@ -2133,11 +2133,11 @@ _pystat_fromstructstat(STRUCT_STAT *st)
       PyObject *val;
       unsigned long bsec,bnsec;
       bsec = (long)st->st_birthtime;
-#ifdef HAVE_STAT_TV_NSEC2
+#  ifdef HAVE_STAT_TV_NSEC2
       bnsec = st->st_birthtimespec.tv_nsec;
-#else
+#  else
       bnsec = 0;
-#endif
+#  endif
       val = PyFloat_FromDouble(bsec + 1e-9*bnsec);
       PyStructSequence_SET_ITEM(v, ST_BIRTHTIME_IDX,
                                 val);
@@ -2194,17 +2194,17 @@ posix_do_stat(const char *function_name, path_t *path,
         result = win32_lstat(path->wide, &st);
 #else
     else
-#if defined(HAVE_LSTAT)
+#  if defined(HAVE_LSTAT)
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = LSTAT(path->narrow, &st);
     else
-#endif /* HAVE_LSTAT */
-#ifdef HAVE_FSTATAT
+#  endif /* HAVE_LSTAT */
+#  ifdef HAVE_FSTATAT
     if ((dir_fd != DEFAULT_DIR_FD) || !follow_symlinks)
         result = fstatat(dir_fd, path->narrow, &st,
                          follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW);
     else
-#endif /* HAVE_FSTATAT */
+#  endif /* HAVE_FSTATAT */
         result = STAT(path->narrow, &st);
 #endif /* MS_WINDOWS */
     Py_END_ALLOW_THREADS
@@ -2661,7 +2661,7 @@ os_access_impl(PyObject *module, path_t *path, int mode, int dir_fd,
 #else
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FACCESSAT
+#  ifdef HAVE_FACCESSAT
     if ((dir_fd != DEFAULT_DIR_FD) ||
         effective_ids ||
         !follow_symlinks) {
@@ -2673,7 +2673,7 @@ os_access_impl(PyObject *module, path_t *path, int mode, int dir_fd,
         result = faccessat(dir_fd, path->narrow, mode, flags);
     }
     else
-#endif
+#  endif
         result = access(path->narrow, mode);
     Py_END_ALLOW_THREADS
     return_value = !result;
@@ -2683,16 +2683,16 @@ os_access_impl(PyObject *module, path_t *path, int mode, int dir_fd,
 }
 
 #ifndef F_OK
-#define F_OK 0
+#  define F_OK 0
 #endif
 #ifndef R_OK
-#define R_OK 4
+#  define R_OK 4
 #endif
 #ifndef W_OK
-#define W_OK 2
+#  define W_OK 2
 #endif
 #ifndef X_OK
-#define X_OK 1
+#  define X_OK 1
 #endif
 
 
@@ -2736,11 +2736,11 @@ os_ctermid_impl(PyObject *module)
     char *ret;
     char buffer[L_ctermid];
 
-#ifdef USE_CTERMID_R
+#  ifdef USE_CTERMID_R
     ret = ctermid_r(buffer);
-#else
+#  else
     ret = ctermid(buffer);
-#endif
+#  endif
     if (ret == NULL)
         return posix_error();
     return PyUnicode_DecodeFSDefault(buffer);
@@ -2771,11 +2771,11 @@ os_chdir_impl(PyObject *module, path_t *path)
     /* on unix, success = 0, on windows, success = !0 */
     result = !win32_wchdir(path->wide);
 #else
-#ifdef HAVE_FCHDIR
+#  ifdef HAVE_FCHDIR
     if (path->fd != -1)
         result = fchdir(path->fd);
     else
-#endif
+#  endif
         result = chdir(path->narrow);
 #endif
     Py_END_ALLOW_THREADS
@@ -2881,17 +2881,17 @@ os_chmod_impl(PyObject *module, path_t *path, int mode, int dir_fd,
     }
 #else /* MS_WINDOWS */
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FCHMOD
+#  ifdef HAVE_FCHMOD
     if (path->fd != -1)
         result = fchmod(path->fd, mode);
     else
-#endif
-#ifdef HAVE_LCHMOD
+#  endif
+#  ifdef HAVE_LCHMOD
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = lchmod(path->narrow, mode);
     else
-#endif
-#ifdef HAVE_FCHMODAT
+#  endif
+#  ifdef HAVE_FCHMODAT
     if ((dir_fd != DEFAULT_DIR_FD) || !follow_symlinks) {
         /*
          * fchmodat() doesn't currently support AT_SYMLINK_NOFOLLOW!
@@ -2915,12 +2915,12 @@ os_chmod_impl(PyObject *module, path_t *path, int mode, int dir_fd,
                          !follow_symlinks;
     }
     else
-#endif
+#  endif
         result = chmod(path->narrow, mode);
     Py_END_ALLOW_THREADS
 
     if (result) {
-#ifdef HAVE_FCHMODAT
+#  ifdef HAVE_FCHMODAT
         if (fchmodat_nofollow_unsupported) {
             if (dir_fd != DEFAULT_DIR_FD)
                 dir_fd_and_follow_symlinks_invalid("chmod",
@@ -2930,7 +2930,7 @@ os_chmod_impl(PyObject *module, path_t *path, int mode, int dir_fd,
             return NULL;
         }
         else
-#endif
+#  endif
         return path_error(path);
     }
 #endif
@@ -3026,17 +3026,17 @@ os_chflags_impl(PyObject *module, path_t *path, unsigned long flags,
 {
     int result;
 
-#ifndef HAVE_LCHFLAGS
+#  ifndef HAVE_LCHFLAGS
     if (follow_symlinks_specified("chflags", follow_symlinks))
         return NULL;
-#endif
+#  endif
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_LCHFLAGS
+#  ifdef HAVE_LCHFLAGS
     if (!follow_symlinks)
         result = lchflags(path->narrow, flags);
     else
-#endif
+#  endif
         result = chflags(path->narrow, flags);
     Py_END_ALLOW_THREADS
 
@@ -3139,9 +3139,9 @@ os_sync_impl(PyObject *module)
 
 
 #ifdef HAVE_FDATASYNC
-#ifdef __hpux
+#  ifdef __hpux
 extern int fdatasync(int); /* On HP-UX, in libc but not in unistd.h */
-#endif
+#  endif
 
 /*[clinic input]
 os.fdatasync
@@ -3207,15 +3207,15 @@ os_chown_impl(PyObject *module, path_t *path, uid_t uid, gid_t gid,
 {
     int result;
 
-#if !(defined(HAVE_LCHOWN) || defined(HAVE_FCHOWNAT))
+#  if !(defined(HAVE_LCHOWN) || defined(HAVE_FCHOWNAT))
     if (follow_symlinks_specified("chown", follow_symlinks))
         return NULL;
-#endif
+#  endif
     if (dir_fd_and_fd_invalid("chown", dir_fd, path->fd) ||
         fd_and_follow_symlinks_invalid("chown", path->fd, follow_symlinks))
         return NULL;
 
-#ifdef __APPLE__
+#  ifdef __APPLE__
     /*
      * This is for Mac OS X 10.3, which doesn't have lchown.
      * (But we still have an lchown symbol because of weak-linking.)
@@ -3226,25 +3226,25 @@ os_chown_impl(PyObject *module, path_t *path, uid_t uid, gid_t gid,
         follow_symlinks_specified("chown", follow_symlinks);
         return NULL;
     }
-#endif
+#  endif
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FCHOWN
+#  ifdef HAVE_FCHOWN
     if (path->fd != -1)
         result = fchown(path->fd, uid, gid);
     else
-#endif
-#ifdef HAVE_LCHOWN
+#  endif
+#  ifdef HAVE_LCHOWN
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = lchown(path->narrow, uid, gid);
     else
-#endif
-#ifdef HAVE_FCHOWNAT
+#  endif
+#  ifdef HAVE_FCHOWNAT
     if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
         result = fchownat(dir_fd, path->narrow, uid, gid,
                           follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW);
     else
-#endif
+#  endif
         result = chown(path->narrow, uid, gid);
     Py_END_ALLOW_THREADS
 
@@ -3448,7 +3448,7 @@ os_getcwdb_impl(PyObject *module)
 
 
 #if ((!defined(HAVE_LINK)) && defined(MS_WINDOWS))
-#define HAVE_LINK 1
+#  define HAVE_LINK 1
 #endif
 
 #ifdef HAVE_LINK
@@ -3481,37 +3481,37 @@ os_link_impl(PyObject *module, path_t *src, path_t *dst, int src_dir_fd,
              int dst_dir_fd, int follow_symlinks)
 /*[clinic end generated code: output=7f00f6007fd5269a input=b0095ebbcbaa7e04]*/
 {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     BOOL result = FALSE;
-#else
+#  else
     int result;
-#endif
+#  endif
 
-#ifndef HAVE_LINKAT
+#  ifndef HAVE_LINKAT
     if ((src_dir_fd != DEFAULT_DIR_FD) || (dst_dir_fd != DEFAULT_DIR_FD)) {
         argument_unavailable_error("link", "src_dir_fd and dst_dir_fd");
         return NULL;
     }
-#endif
+#  endif
 
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     if ((src->narrow && dst->wide) || (src->wide && dst->narrow)) {
         PyErr_SetString(PyExc_NotImplementedError,
                         "link: src and dst must be the same type");
         return NULL;
     }
-#endif
+#  endif
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     Py_BEGIN_ALLOW_THREADS
     result = CreateHardLinkW(dst->wide, src->wide, NULL);
     Py_END_ALLOW_THREADS
 
     if (!result)
         return path_error2(src, dst);
-#else
+#  else
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_LINKAT
+#    ifdef HAVE_LINKAT
     if ((src_dir_fd != DEFAULT_DIR_FD) ||
         (dst_dir_fd != DEFAULT_DIR_FD) ||
         (!follow_symlinks))
@@ -3519,13 +3519,13 @@ os_link_impl(PyObject *module, path_t *src, path_t *dst, int src_dir_fd,
             dst_dir_fd, dst->narrow,
             follow_symlinks ? AT_SYMLINK_FOLLOW : 0);
     else
-#endif /* HAVE_LINKAT */
+#    endif /* HAVE_LINKAT */
         result = link(src->narrow, dst->narrow);
     Py_END_ALLOW_THREADS
 
     if (result)
         return path_error2(src, dst);
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
     Py_RETURN_NONE;
 }
@@ -3638,12 +3638,12 @@ _posix_listdir(path_t *path, PyObject *list)
     DIR *dirp = NULL;
     struct dirent *ep;
     int return_str; /* if false, return bytes */
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
     int fd = -1;
-#endif
+#  endif
 
     errno = 0;
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
     if (path->fd != -1) {
         /* closedir() closes the FD, so we duplicate it */
         fd = _Py_dup(path->fd);
@@ -3657,7 +3657,7 @@ _posix_listdir(path_t *path, PyObject *list)
         Py_END_ALLOW_THREADS
     }
     else
-#endif
+#  endif
     {
         const char *name;
         if (path->narrow) {
@@ -3677,13 +3677,13 @@ _posix_listdir(path_t *path, PyObject *list)
 
     if (dirp == NULL) {
         list = path_error(path);
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
         if (fd != -1) {
             Py_BEGIN_ALLOW_THREADS
             close(fd);
             Py_END_ALLOW_THREADS
         }
-#endif
+#  endif
         goto exit;
     }
     if ((list = PyList_New(0)) == NULL) {
@@ -3726,10 +3726,10 @@ _posix_listdir(path_t *path, PyObject *list)
 exit:
     if (dirp != NULL) {
         Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
         if (fd > -1)
             rewinddir(dirp);
-#endif
+#  endif
         closedir(dirp);
         Py_END_ALLOW_THREADS
     }
@@ -3988,7 +3988,7 @@ os.mkdir
 
     dir_fd : dir_fd(requires='mkdirat') = None
 
-# "mkdir(path, mode=0o777, *, dir_fd=None)\n\n\
+#"mkdir(path, mode=0o777, *, dir_fd=None)\n\n\
 
 Create a directory.
 
@@ -4015,16 +4015,16 @@ os_mkdir_impl(PyObject *module, path_t *path, int mode, int dir_fd)
         return path_error(path);
 #else
     Py_BEGIN_ALLOW_THREADS
-#if HAVE_MKDIRAT
+#  if HAVE_MKDIRAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = mkdirat(dir_fd, path->narrow, mode);
     else
-#endif
-#if defined(__WATCOMC__) && !defined(__QNX__)
+#  endif
+#  if defined(__WATCOMC__) && !defined(__QNX__)
         result = mkdir(path->narrow);
-#else
+#  else
         result = mkdir(path->narrow, mode);
-#endif
+#  endif
     Py_END_ALLOW_THREADS
     if (result < 0)
         return path_error(path);
@@ -4035,7 +4035,7 @@ os_mkdir_impl(PyObject *module, path_t *path, int mode, int dir_fd)
 
 /* sys/resource.h is needed for at least: wait3(), wait4(), broken nice. */
 #if defined(HAVE_SYS_RESOURCE_H)
-#include <sys/resource.h>
+#  include <sys/resource.h>
 #endif
 
 
@@ -4067,10 +4067,10 @@ os_nice_impl(PyObject *module, int increment)
 
     errno = 0;
     value = nice(increment);
-#if defined(HAVE_BROKEN_NICE) && defined(HAVE_GETPRIORITY)
+#  if defined(HAVE_BROKEN_NICE) && defined(HAVE_GETPRIORITY)
     if (value == 0)
         value = getpriority(PRIO_PROCESS, 0);
-#endif
+#  endif
     if (value == -1 && errno != 0)
         /* either nice() or getpriority() returned an error */
         return posix_error();
@@ -4167,11 +4167,11 @@ internal_rename(path_t *src, path_t *dst, int src_dir_fd, int dst_dir_fd, int is
     }
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_RENAMEAT
+#  ifdef HAVE_RENAMEAT
     if (dir_fd_specified)
         result = renameat(src_dir_fd, src->narrow, dst_dir_fd, dst->narrow);
     else
-#endif
+#  endif
     result = rename(src->narrow, dst->narrow);
     Py_END_ALLOW_THREADS
 
@@ -4256,11 +4256,11 @@ os_rmdir_impl(PyObject *module, path_t *path, int dir_fd)
     /* Windows, success=1, UNIX, success=0 */
     result = !RemoveDirectoryW(path->wide);
 #else
-#ifdef HAVE_UNLINKAT
+#  ifdef HAVE_UNLINKAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = unlinkat(dir_fd, path->narrow, AT_REMOVEDIR);
     else
-#endif
+#  endif
         result = rmdir(path->narrow);
 #endif
     Py_END_ALLOW_THREADS
@@ -4273,7 +4273,7 @@ os_rmdir_impl(PyObject *module, path_t *path, int dir_fd)
 
 
 #ifdef HAVE_SYSTEM
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 /*[clinic input]
 os.system -> long
 
@@ -4299,7 +4299,7 @@ os_system_impl(PyObject *module, const Py_UNICODE *command)
     Py_END_ALLOW_THREADS
     return result;
 }
-#else /* MS_WINDOWS */
+#  else /* MS_WINDOWS */
 /*[clinic input]
 os.system -> long
 
@@ -4324,7 +4324,7 @@ os_system_impl(PyObject *module, PyObject *command)
     Py_END_ALLOW_THREADS
     return result;
 }
-#endif
+#  endif
 #endif /* HAVE_SYSTEM */
 
 
@@ -4415,11 +4415,11 @@ os_unlink_impl(PyObject *module, path_t *path, int dir_fd)
     /* Windows, success=1, UNIX, success=0 */
     result = !Py_DeleteFileW(path->wide);
 #else
-#ifdef HAVE_UNLINKAT
+#  ifdef HAVE_UNLINKAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = unlinkat(dir_fd, path->narrow, 0);
     else
-#endif /* HAVE_UNLINKAT */
+#  endif /* HAVE_UNLINKAT */
         result = unlink(path->narrow);
 #endif
     _Py_END_SUPPRESS_IPH
@@ -4507,7 +4507,7 @@ os_uname_impl(PyObject *module)
     if (value == NULL)
         return NULL;
 
-#define SET(i, field) \
+#  define SET(i, field) \
     { \
     PyObject *o = PyUnicode_DecodeFSDefault(field); \
     if (!o) { \
@@ -4523,7 +4523,7 @@ os_uname_impl(PyObject *module)
     SET(3, u.version);
     SET(4, u.machine);
 
-#undef SET
+#  undef SET
 
     return value;
 }
@@ -4597,11 +4597,11 @@ typedef struct {
 static int
 utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 {
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     int flags = follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW;
     UTIME_TO_TIMESPEC;
     return utimensat(dir_fd, path, time, flags);
-#elif defined(HAVE_FUTIMESAT)
+#  elif defined(HAVE_FUTIMESAT)
     UTIME_TO_TIMEVAL;
     /*
      * follow_symlinks will never be false here;
@@ -4610,7 +4610,7 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
      */
     assert(follow_symlinks);
     return futimesat(dir_fd, path, time);
-#endif
+#  endif
 }
 
     #define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_converter
@@ -4623,13 +4623,13 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 static int
 utime_fd(utime_t *ut, int fd)
 {
-#ifdef HAVE_FUTIMENS
+#  ifdef HAVE_FUTIMENS
     UTIME_TO_TIMESPEC;
     return futimens(fd, time);
-#else
+#  else
     UTIME_TO_TIMEVAL;
     return futimes(fd, time);
-#endif
+#  endif
 }
 
     #define PATH_UTIME_HAVE_FD 1
@@ -4646,13 +4646,13 @@ utime_fd(utime_t *ut, int fd)
 static int
 utime_nofollow_symlinks(utime_t *ut, const char *path)
 {
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     UTIME_TO_TIMESPEC;
     return utimensat(DEFAULT_DIR_FD, path, time, AT_SYMLINK_NOFOLLOW);
-#else
+#  else
     UTIME_TO_TIMEVAL;
     return lutimes(path, time);
-#endif
+#  endif
 }
 
 #endif
@@ -4662,19 +4662,19 @@ utime_nofollow_symlinks(utime_t *ut, const char *path)
 static int
 utime_default(utime_t *ut, const char *path)
 {
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     UTIME_TO_TIMESPEC;
     return utimensat(DEFAULT_DIR_FD, path, time, 0);
-#elif defined(HAVE_UTIMES)
+#  elif defined(HAVE_UTIMES)
     UTIME_TO_TIMEVAL;
     return utimes(path, time);
-#elif defined(HAVE_UTIME_H)
+#  elif defined(HAVE_UTIME_H)
     UTIME_TO_UTIMBUF;
     return utime(path, time);
-#else
+#  else
     UTIME_TO_TIME_T;
     return utime(path, time);
-#endif
+#  endif
 }
 
 #endif
@@ -4717,7 +4717,7 @@ os.utime
     dir_fd: dir_fd(requires='futimensat') = None
     follow_symlinks: bool=True
 
-# "utime(path, times=None, *[, ns], dir_fd=None, follow_symlinks=True)\n\
+#"utime(path, times=None, *[, ns], dir_fd=None, follow_symlinks=True)\n\
 
 Set the access and modified time of path.
 
@@ -4859,23 +4859,23 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
 #else /* MS_WINDOWS */
     Py_BEGIN_ALLOW_THREADS
 
-#ifdef UTIME_HAVE_NOFOLLOW_SYMLINKS
+#  ifdef UTIME_HAVE_NOFOLLOW_SYMLINKS
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = utime_nofollow_symlinks(&utime, path->narrow);
     else
-#endif
+#  endif
 
-#if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
+#  if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
     if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
     else
-#endif
+#  endif
 
-#if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
+#  if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
     if (path->fd != -1)
         result = utime_fd(&utime, path->fd);
     else
-#endif
+#  endif
 
     result = utime_default(&utime, path->narrow);
 
@@ -4912,9 +4912,9 @@ os__exit_impl(PyObject *module, int status)
 }
 
 #if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
-#define EXECV_CHAR wchar_t
+#  define EXECV_CHAR wchar_t
 #else
-#define EXECV_CHAR char
+#  define EXECV_CHAR char
 #endif
 
 #if defined(HAVE_EXECV) || defined(HAVE_SPAWNV) || defined(HAVE_RTPSPAWN)
@@ -4933,13 +4933,13 @@ fsconvert_strdup(PyObject *o, EXECV_CHAR **out)
     Py_ssize_t size;
     PyObject *ub;
     int result = 0;
-#if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
+#  if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
     if (!PyUnicode_FSDecoder(o, &ub))
         return 0;
     *out = PyUnicode_AsWideCharString(ub, &size);
     if (*out)
         result = 1;
-#else
+#  else
     if (!PyUnicode_FSConverter(o, &ub))
         return 0;
     size = PyBytes_GET_SIZE(ub);
@@ -4949,7 +4949,7 @@ fsconvert_strdup(PyObject *o, EXECV_CHAR **out)
         result = 1;
     } else
         PyErr_NoMemory();
-#endif
+#  endif
     Py_DECREF(ub);
     return result;
 }
@@ -4991,7 +4991,7 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
         if (!key || !val)
             goto error;
 
-#if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
+#  if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
         if (!PyUnicode_FSDecoder(key, &key2))
             goto error;
         if (!PyUnicode_FSDecoder(val, &val2)) {
@@ -5009,7 +5009,7 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
             goto error;
         }
         keyval = PyUnicode_FromFormat("%U=%U", key2, val2);
-#else
+#  else
         if (!PyUnicode_FSConverter(key, &key2))
             goto error;
         if (!PyUnicode_FSConverter(val, &val2)) {
@@ -5026,7 +5026,7 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
         }
         keyval = PyBytes_FromFormat("%s=%s", PyBytes_AS_STRING(key2),
                                              PyBytes_AS_STRING(val2));
-#endif
+#  endif
         Py_DECREF(key2);
         Py_DECREF(val2);
         if (!keyval)
@@ -5129,11 +5129,11 @@ os_execv_impl(PyObject *module, path_t *path, PyObject *argv)
     }
 
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_WEXECV
+#  ifdef HAVE_WEXECV
     _wexecv(path->wide, argvlist);
-#else
+#  else
     execv(path->narrow, argvlist);
-#endif
+#  endif
     _Py_END_SUPPRESS_IPH
 
     /* If we get here it's definitely an error */
@@ -5200,16 +5200,16 @@ os_execve_impl(PyObject *module, path_t *path, PyObject *argv, PyObject *env)
         goto fail;
 
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_FEXECVE
+#  ifdef HAVE_FEXECVE
     if (path->fd > -1)
         fexecve(path->fd, argvlist, envlist);
     else
-#endif
-#ifdef HAVE_WEXECV
+#  endif
+#  ifdef HAVE_WEXECV
         _wexecve(path->wide, argvlist, envlist);
-#else
+#  else
         execve(path->narrow, argvlist, envlist);
-#endif
+#  endif
     _Py_END_SUPPRESS_IPH
 
     /* If we get here it's definitely an error */
@@ -5233,10 +5233,10 @@ enum posix_spawn_file_actions_identifier {
     POSIX_SPAWN_DUP2
 };
 
-#if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
+#  if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
 static int
 convert_sched_param(PyObject *param, struct sched_param *res);
-#endif
+#  endif
 
 static int
 parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
@@ -5270,14 +5270,14 @@ parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
     }
 
     if (setsid) {
-#ifdef POSIX_SPAWN_SETSID
+#  ifdef POSIX_SPAWN_SETSID
         all_flags |= POSIX_SPAWN_SETSID;
-#elif defined(POSIX_SPAWN_SETSID_NP)
+#  elif defined(POSIX_SPAWN_SETSID_NP)
         all_flags |= POSIX_SPAWN_SETSID_NP;
-#else
+#  else
         argument_unavailable_error(func_name, "setsid");
         return -1;
-#endif
+#  endif
     }
 
    if (setsigmask) {
@@ -5307,7 +5307,7 @@ parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
     }
 
     if (scheduler) {
-#ifdef POSIX_SPAWN_SETSCHEDULER
+#  ifdef POSIX_SPAWN_SETSCHEDULER
         PyObject *py_schedpolicy;
         struct sched_param schedparam;
 
@@ -5335,11 +5335,11 @@ parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
             goto fail;
         }
         all_flags |= POSIX_SPAWN_SETSCHEDPARAM;
-#else
+#  else
         PyErr_SetString(PyExc_NotImplementedError,
                 "The scheduler option is not supported in this system.");
         goto fail;
-#endif
+#  endif
     }
 
     errno = posix_spawnattr_setflags(attrp, all_flags);
@@ -5549,13 +5549,13 @@ py_posix_spawn(int use_posix_spawnp, PyObject *module, path_t *path, PyObject *a
     attrp = &attr;
 
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_POSIX_SPAWNP
+#  ifdef HAVE_POSIX_SPAWNP
     if (use_posix_spawnp) {
         err_code = posix_spawnp(&pid, path->narrow,
                                 file_actionsp, attrp, argvlist, envlist);
     }
     else
-#endif /* HAVE_POSIX_SPAWNP */
+#  endif /* HAVE_POSIX_SPAWNP */
     {
         err_code = posix_spawn(&pid, path->narrow,
                                file_actionsp, attrp, argvlist, envlist);
@@ -5567,9 +5567,9 @@ py_posix_spawn(int use_posix_spawnp, PyObject *module, path_t *path, PyObject *a
         PyErr_SetFromErrnoWithFilenameObject(PyExc_OSError, path->object);
         goto exit;
     }
-#ifdef _Py_MEMORY_SANITIZER
+#  ifdef _Py_MEMORY_SANITIZER
     __msan_unpoison(&pid, sizeof(pid));
-#endif
+#  endif
     result = PyLong_FromPid(pid);
 
 exit:
@@ -5635,7 +5635,7 @@ os_posix_spawn_impl(PyObject *module, path_t *path, PyObject *argv,
 
 
 
-#ifdef HAVE_POSIX_SPAWNP
+#  ifdef HAVE_POSIX_SPAWNP
 /*[clinic input]
 
 os.posix_spawnp
@@ -5677,9 +5677,9 @@ os_posix_spawnp_impl(PyObject *module, path_t *path, PyObject *argv,
                           setpgroup, resetids, setsid, setsigmask, setsigdef,
                           scheduler);
 }
-#endif /* HAVE_POSIX_SPAWNP */
+#  endif /* HAVE_POSIX_SPAWNP */
 
-#ifdef HAVE_RTPSPAWN
+#  ifdef HAVE_RTPSPAWN
 static intptr_t
 _rtp_spawn(int mode, const char *rtpFileName, const char *argv[],
                const char  *envp[])
@@ -5711,9 +5711,9 @@ _rtp_spawn(int mode, const char *rtpFileName, const char *argv[],
      }
      return ((intptr_t)rtpid);
 }
-#endif
+#  endif
 
-#if defined(HAVE_SPAWNV) || defined(HAVE_WSPAWNV) || defined(HAVE_RTPSPAWN)
+#  if defined(HAVE_SPAWNV) || defined(HAVE_WSPAWNV) || defined(HAVE_RTPSPAWN)
 /*[clinic input]
 os.spawnv
 
@@ -5783,20 +5783,20 @@ os_spawnv_impl(PyObject *module, int mode, path_t *path, PyObject *argv)
     }
     argvlist[argc] = NULL;
 
-#if !defined(HAVE_RTPSPAWN)
+#    if !defined(HAVE_RTPSPAWN)
     if (mode == _OLD_P_OVERLAY)
         mode = _P_OVERLAY;
-#endif
+#    endif
 
     Py_BEGIN_ALLOW_THREADS
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_WSPAWNV
+#    ifdef HAVE_WSPAWNV
     spawnval = _wspawnv(mode, path->wide, argvlist);
-#elif defined(HAVE_RTPSPAWN)
+#    elif defined(HAVE_RTPSPAWN)
     spawnval = _rtp_spawn(mode, path->narrow, (const char **)argvlist, NULL);
-#else
+#    else
     spawnval = _spawnv(mode, path->narrow, argvlist);
-#endif
+#    endif
     _Py_END_SUPPRESS_IPH
     Py_END_ALLOW_THREADS
 
@@ -5892,21 +5892,21 @@ os_spawnve_impl(PyObject *module, int mode, path_t *path, PyObject *argv,
     if (envlist == NULL)
         goto fail_1;
 
-#if !defined(HAVE_RTPSPAWN)
+#    if !defined(HAVE_RTPSPAWN)
     if (mode == _OLD_P_OVERLAY)
         mode = _P_OVERLAY;
-#endif
+#    endif
 
     Py_BEGIN_ALLOW_THREADS
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_WSPAWNV
+#    ifdef HAVE_WSPAWNV
     spawnval = _wspawnve(mode, path->wide, argvlist, envlist);
-#elif defined(HAVE_RTPSPAWN)
+#    elif defined(HAVE_RTPSPAWN)
     spawnval = _rtp_spawn(mode, path->narrow, (const char **)argvlist,
                            (const char **)envlist);
-#else
+#    else
     spawnval = _spawnve(mode, path->narrow, argvlist, envlist);
-#endif
+#    endif
     _Py_END_SUPPRESS_IPH
     Py_END_ALLOW_THREADS
 
@@ -5924,10 +5924,10 @@ os_spawnve_impl(PyObject *module, int mode, path_t *path, PyObject *argv,
     return res;
 }
 
-#endif /* HAVE_SPAWNV */
+#  endif /* HAVE_SPAWNV */
 
 
-#ifdef HAVE_FORK
+#  ifdef HAVE_FORK
 
 /* Helper function to validate arguments.
    Returns 0 on success.  non-zero on failure with a TypeError raised.
@@ -5990,10 +5990,10 @@ os_register_at_fork_impl(PyObject *module, PyObject *before,
     }
     Py_RETURN_NONE;
 }
-#endif /* HAVE_FORK */
+#  endif /* HAVE_FORK */
 
 
-#ifdef HAVE_FORK1
+#  ifdef HAVE_FORK1
 /*[clinic input]
 os.fork1
 
@@ -6025,10 +6025,10 @@ os_fork1_impl(PyObject *module)
         return posix_error();
     return PyLong_FromPid(pid);
 }
-#endif /* HAVE_FORK1 */
+#  endif /* HAVE_FORK1 */
 
 
-#ifdef HAVE_FORK
+#  ifdef HAVE_FORK
 /*[clinic input]
 os.fork
 
@@ -6060,11 +6060,11 @@ os_fork_impl(PyObject *module)
         return posix_error();
     return PyLong_FromPid(pid);
 }
-#endif /* HAVE_FORK */
+#  endif /* HAVE_FORK */
 
 
-#ifdef HAVE_SCHED_H
-#ifdef HAVE_SCHED_GET_PRIORITY_MAX
+#  ifdef HAVE_SCHED_H
+#    ifdef HAVE_SCHED_GET_PRIORITY_MAX
 /*[clinic input]
 os.sched_get_priority_max
 
@@ -6103,10 +6103,10 @@ os_sched_get_priority_min_impl(PyObject *module, int policy)
         return posix_error();
     return PyLong_FromLong(min);
 }
-#endif /* HAVE_SCHED_GET_PRIORITY_MAX */
+#    endif /* HAVE_SCHED_GET_PRIORITY_MAX */
 
 
-#ifdef HAVE_SCHED_SETSCHEDULER
+#    ifdef HAVE_SCHED_SETSCHEDULER
 /*[clinic input]
 os.sched_getscheduler
     pid: pid_t
@@ -6128,10 +6128,10 @@ os_sched_getscheduler_impl(PyObject *module, pid_t pid)
         return posix_error();
     return PyLong_FromLong(policy);
 }
-#endif /* HAVE_SCHED_SETSCHEDULER */
+#    endif /* HAVE_SCHED_SETSCHEDULER */
 
 
-#if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
+#    if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
 /*[clinic input]
 class os.sched_param "PyObject *" "SchedParamType"
 
@@ -6192,10 +6192,10 @@ convert_sched_param(PyObject *param, struct sched_param *res)
     res->sched_priority = Py_SAFE_DOWNCAST(priority, long, int);
     return 1;
 }
-#endif /* defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM) */
+#    endif /* defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM) */
 
 
-#ifdef HAVE_SCHED_SETSCHEDULER
+#    ifdef HAVE_SCHED_SETSCHEDULER
 /*[clinic input]
 os.sched_setscheduler
 
@@ -6224,10 +6224,10 @@ os_sched_setscheduler_impl(PyObject *module, pid_t pid, int policy,
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif  /* HAVE_SCHED_SETSCHEDULER*/
+#    endif  /* HAVE_SCHED_SETSCHEDULER*/
 
 
-#ifdef HAVE_SCHED_SETPARAM
+#    ifdef HAVE_SCHED_SETPARAM
 /*[clinic input]
 os.sched_getparam
     pid: pid_t
@@ -6283,10 +6283,10 @@ os_sched_setparam_impl(PyObject *module, pid_t pid,
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SCHED_SETPARAM */
+#    endif /* HAVE_SCHED_SETPARAM */
 
 
-#ifdef HAVE_SCHED_RR_GET_INTERVAL
+#    ifdef HAVE_SCHED_RR_GET_INTERVAL
 /*[clinic input]
 os.sched_rr_get_interval -> double
     pid: pid_t
@@ -6306,12 +6306,12 @@ os_sched_rr_get_interval_impl(PyObject *module, pid_t pid)
         posix_error();
         return -1.0;
     }
-#ifdef _Py_MEMORY_SANITIZER
+#      ifdef _Py_MEMORY_SANITIZER
     __msan_unpoison(&interval, sizeof(interval));
-#endif
+#      endif
     return (double)interval.tv_sec + 1e-9*interval.tv_nsec;
 }
-#endif /* HAVE_SCHED_RR_GET_INTERVAL */
+#    endif /* HAVE_SCHED_RR_GET_INTERVAL */
 
 
 /*[clinic input]
@@ -6329,7 +6329,7 @@ os_sched_yield_impl(PyObject *module)
     Py_RETURN_NONE;
 }
 
-#ifdef HAVE_SCHED_SETAFFINITY
+#    ifdef HAVE_SCHED_SETAFFINITY
 /* The minimum number of CPUs allocated in a cpu_set_t */
 static const int NCPUS_START = sizeof(unsigned long) * CHAR_BIT;
 
@@ -6497,39 +6497,39 @@ error:
     return NULL;
 }
 
-#endif /* HAVE_SCHED_SETAFFINITY */
+#    endif /* HAVE_SCHED_SETAFFINITY */
 
-#endif /* HAVE_SCHED_H */
+#  endif /* HAVE_SCHED_H */
 
 
 /* AIX uses /dev/ptc but is otherwise the same as /dev/ptmx */
 /* IRIX has both /dev/ptc and /dev/ptmx, use ptmx */
-#if defined(HAVE_DEV_PTC) && !defined(HAVE_DEV_PTMX)
-#define DEV_PTY_FILE "/dev/ptc"
-#define HAVE_DEV_PTMX
-#else
-#define DEV_PTY_FILE "/dev/ptmx"
-#endif
+#  if defined(HAVE_DEV_PTC) && !defined(HAVE_DEV_PTMX)
+#    define DEV_PTY_FILE "/dev/ptc"
+#    define HAVE_DEV_PTMX
+#  else
+#    define DEV_PTY_FILE "/dev/ptmx"
+#  endif
 
-#if defined(HAVE_OPENPTY) || defined(HAVE_FORKPTY) || defined(HAVE_DEV_PTMX)
-#ifdef HAVE_PTY_H
-#include <pty.h>
-#else
-#ifdef HAVE_LIBUTIL_H
-#include <libutil.h>
-#else
-#ifdef HAVE_UTIL_H
-#include <util.h>
-#endif /* HAVE_UTIL_H */
-#endif /* HAVE_LIBUTIL_H */
-#endif /* HAVE_PTY_H */
-#ifdef HAVE_STROPTS_H
-#include <stropts.h>
-#endif
-#endif /* defined(HAVE_OPENPTY) || defined(HAVE_FORKPTY) || defined(HAVE_DEV_PTMX) */
+#  if defined(HAVE_OPENPTY) || defined(HAVE_FORKPTY) || defined(HAVE_DEV_PTMX)
+#    ifdef HAVE_PTY_H
+#      include <pty.h>
+#    else
+#      ifdef HAVE_LIBUTIL_H
+#        include <libutil.h>
+#      else
+#        ifdef HAVE_UTIL_H
+#          include <util.h>
+#        endif /* HAVE_UTIL_H */
+#      endif /* HAVE_LIBUTIL_H */
+#    endif /* HAVE_PTY_H */
+#    ifdef HAVE_STROPTS_H
+#      include <stropts.h>
+#    endif
+#  endif /* defined(HAVE_OPENPTY) || defined(HAVE_FORKPTY) || defined(HAVE_DEV_PTMX) */
 
 
-#if defined(HAVE_OPENPTY) || defined(HAVE__GETPTY) || defined(HAVE_DEV_PTMX)
+#  if defined(HAVE_OPENPTY) || defined(HAVE__GETPTY) || defined(HAVE_DEV_PTMX)
 /*[clinic input]
 os.openpty
 
@@ -6544,17 +6544,17 @@ os_openpty_impl(PyObject *module)
 /*[clinic end generated code: output=98841ce5ec9cef3c input=f3d99fd99e762907]*/
 {
     int master_fd = -1, slave_fd = -1;
-#ifndef HAVE_OPENPTY
+#    ifndef HAVE_OPENPTY
     char * slave_name;
-#endif
-#if defined(HAVE_DEV_PTMX) && !defined(HAVE_OPENPTY) && !defined(HAVE__GETPTY)
+#    endif
+#    if defined(HAVE_DEV_PTMX) && !defined(HAVE_OPENPTY) && !defined(HAVE__GETPTY)
     PyOS_sighandler_t sig_saved;
-#if defined(__sun) && defined(__SVR4)
+#      if defined(__sun) && defined(__SVR4)
     extern char *ptsname(int fildes);
-#endif
-#endif
+#      endif
+#    endif
 
-#ifdef HAVE_OPENPTY
+#    ifdef HAVE_OPENPTY
     if (openpty(&master_fd, &slave_fd, NULL, NULL, NULL) != 0)
         goto posix_error;
 
@@ -6563,7 +6563,7 @@ os_openpty_impl(PyObject *module)
     if (_Py_set_inheritable(slave_fd, 0, NULL) < 0)
         goto error;
 
-#elif defined(HAVE__GETPTY)
+#    elif defined(HAVE__GETPTY)
     slave_name = _getpty(&master_fd, O_RDWR, 0666, 0);
     if (slave_name == NULL)
         goto posix_error;
@@ -6574,7 +6574,7 @@ os_openpty_impl(PyObject *module)
     if (slave_fd < 0)
         goto error;
 
-#else
+#    else
     master_fd = open(DEV_PTY_FILE, O_RDWR | O_NOCTTY); /* open master */
     if (master_fd < 0)
         goto posix_error;
@@ -6606,14 +6606,14 @@ os_openpty_impl(PyObject *module)
     if (_Py_set_inheritable(master_fd, 0, NULL) < 0)
         goto posix_error;
 
-#if !defined(__CYGWIN__) && !defined(__ANDROID__) && !defined(HAVE_DEV_PTC)
+#      if !defined(__CYGWIN__) && !defined(__ANDROID__) && !defined(HAVE_DEV_PTC)
     ioctl(slave_fd, I_PUSH, "ptem"); /* push ptem */
     ioctl(slave_fd, I_PUSH, "ldterm"); /* push ldterm */
-#ifndef __hpux
+#        ifndef __hpux
     ioctl(slave_fd, I_PUSH, "ttcompat"); /* push ttcompat */
-#endif /* __hpux */
-#endif /* HAVE_CYGWIN */
-#endif /* HAVE_OPENPTY */
+#        endif /* __hpux */
+#      endif /* HAVE_CYGWIN */
+#    endif /* HAVE_OPENPTY */
 
     return Py_BuildValue("(ii)", master_fd, slave_fd);
 
@@ -6626,10 +6626,10 @@ error:
         close(slave_fd);
     return NULL;
 }
-#endif /* defined(HAVE_OPENPTY) || defined(HAVE__GETPTY) || defined(HAVE_DEV_PTMX) */
+#  endif /* defined(HAVE_OPENPTY) || defined(HAVE__GETPTY) || defined(HAVE_DEV_PTMX) */
 
 
-#ifdef HAVE_FORKPTY
+#  ifdef HAVE_FORKPTY
 /*[clinic input]
 os.forkpty
 
@@ -6665,10 +6665,10 @@ os_forkpty_impl(PyObject *module)
         return posix_error();
     return Py_BuildValue("(Ni)", PyLong_FromPid(pid), master_fd);
 }
-#endif /* HAVE_FORKPTY */
+#  endif /* HAVE_FORKPTY */
 
 
-#ifdef HAVE_GETEGID
+#  ifdef HAVE_GETEGID
 /*[clinic input]
 os.getegid
 
@@ -6681,10 +6681,10 @@ os_getegid_impl(PyObject *module)
 {
     return _PyLong_FromGid(getegid());
 }
-#endif /* HAVE_GETEGID */
+#  endif /* HAVE_GETEGID */
 
 
-#ifdef HAVE_GETEUID
+#  ifdef HAVE_GETEUID
 /*[clinic input]
 os.geteuid
 
@@ -6697,10 +6697,10 @@ os_geteuid_impl(PyObject *module)
 {
     return _PyLong_FromUid(geteuid());
 }
-#endif /* HAVE_GETEUID */
+#  endif /* HAVE_GETEUID */
 
 
-#ifdef HAVE_GETGID
+#  ifdef HAVE_GETGID
 /*[clinic input]
 os.getgid
 
@@ -6713,10 +6713,10 @@ os_getgid_impl(PyObject *module)
 {
     return _PyLong_FromGid(getgid());
 }
-#endif /* HAVE_GETGID */
+#  endif /* HAVE_GETGID */
 
 
-#ifdef HAVE_GETPID
+#  ifdef HAVE_GETPID
 /*[clinic input]
 os.getpid
 
@@ -6729,16 +6729,16 @@ os_getpid_impl(PyObject *module)
 {
     return PyLong_FromPid(getpid());
 }
-#endif /* HAVE_GETPID */
+#  endif /* HAVE_GETPID */
 
-#ifdef NGROUPS_MAX
-#define MAX_GROUPS NGROUPS_MAX
-#else
+#  ifdef NGROUPS_MAX
+#    define MAX_GROUPS NGROUPS_MAX
+#  else
     /* defined to be 16 on Solaris7, so this should be a small number */
-#define MAX_GROUPS 64
-#endif
+#    define MAX_GROUPS 64
+#  endif
 
-#ifdef HAVE_GETGROUPLIST
+#  ifdef HAVE_GETGROUPLIST
 
 /* AC 3.5: funny apple logic below */
 PyDoc_STRVAR(posix_getgrouplist__doc__,
@@ -6753,11 +6753,11 @@ posix_getgrouplist(PyObject *self, PyObject *args)
     const char *user;
     int i, ngroups;
     PyObject *list;
-#ifdef __APPLE__
+#    ifdef __APPLE__
     int *groups, basegid;
-#else
+#    else
     gid_t *groups, basegid;
-#endif
+#    endif
 
     /*
      * NGROUPS_MAX is defined by POSIX.1 as the maximum
@@ -6769,20 +6769,20 @@ posix_getgrouplist(PyObject *self, PyObject *args)
      */
     ngroups = 1 + MAX_GROUPS;
 
-#ifdef __APPLE__
+#    ifdef __APPLE__
     if (!PyArg_ParseTuple(args, "si:getgrouplist", &user, &basegid))
         return NULL;
-#else
+#    else
     if (!PyArg_ParseTuple(args, "sO&:getgrouplist", &user,
                           _Py_Gid_Converter, &basegid))
         return NULL;
-#endif
+#    endif
 
-#ifdef __APPLE__
+#    ifdef __APPLE__
     groups = PyMem_New(int, ngroups);
-#else
+#    else
     groups = PyMem_New(gid_t, ngroups);
-#endif
+#    endif
     if (groups == NULL)
         return PyErr_NoMemory();
 
@@ -6791,11 +6791,11 @@ posix_getgrouplist(PyObject *self, PyObject *args)
         return posix_error();
     }
 
-#ifdef _Py_MEMORY_SANITIZER
+#    ifdef _Py_MEMORY_SANITIZER
     /* Clang memory sanitizer libc intercepts don't know getgrouplist. */
     __msan_unpoison(&ngroups, sizeof(ngroups));
     __msan_unpoison(groups, ngroups*sizeof(*groups));
-#endif
+#    endif
 
     list = PyList_New(ngroups);
     if (list == NULL) {
@@ -6804,11 +6804,11 @@ posix_getgrouplist(PyObject *self, PyObject *args)
     }
 
     for (i = 0; i < ngroups; i++) {
-#ifdef __APPLE__
+#    ifdef __APPLE__
         PyObject *o = PyLong_FromUnsignedLong((unsigned long)groups[i]);
-#else
+#    else
         PyObject *o = _PyLong_FromGid(groups[i]);
-#endif
+#    endif
         if (o == NULL) {
             Py_DECREF(list);
             PyMem_Del(groups);
@@ -6821,10 +6821,10 @@ posix_getgrouplist(PyObject *self, PyObject *args)
 
     return list;
 }
-#endif /* HAVE_GETGROUPLIST */
+#  endif /* HAVE_GETGROUPLIST */
 
 
-#ifdef HAVE_GETGROUPS
+#  ifdef HAVE_GETGROUPS
 /*[clinic input]
 os.getgroups
 
@@ -6849,7 +6849,7 @@ os_getgroups_impl(PyObject *module)
     gid_t* alt_grouplist = grouplist;
     int n;
 
-#ifdef __APPLE__
+#    ifdef __APPLE__
     /* Issue #17557: As of OS X 10.8, getgroups(2) no longer raises EINVAL if
      * there are more groups than can fit in grouplist.  Therefore, on OS X
      * always first call getgroups with length 0 to get the actual number
@@ -6875,7 +6875,7 @@ os_getgroups_impl(PyObject *module)
         }
         return posix_error();
     }
-#else
+#    else
     n = getgroups(MAX_GROUPS, grouplist);
     if (n < 0) {
         if (errno == EINVAL) {
@@ -6901,7 +6901,7 @@ os_getgroups_impl(PyObject *module)
             return posix_error();
         }
     }
-#endif
+#    endif
 
     result = PyList_New(n);
     if (result != NULL) {
@@ -6923,9 +6923,9 @@ os_getgroups_impl(PyObject *module)
 
     return result;
 }
-#endif /* HAVE_GETGROUPS */
+#  endif /* HAVE_GETGROUPS */
 
-#ifdef HAVE_INITGROUPS
+#  ifdef HAVE_INITGROUPS
 PyDoc_STRVAR(posix_initgroups__doc__,
 "initgroups(username, gid) -> None\n\n\
 Call the system initgroups() to initialize the group access list with all of\n\
@@ -6939,21 +6939,21 @@ posix_initgroups(PyObject *self, PyObject *args)
     PyObject *oname;
     const char *username;
     int res;
-#ifdef __APPLE__
+#    ifdef __APPLE__
     int gid;
-#else
+#    else
     gid_t gid;
-#endif
+#    endif
 
-#ifdef __APPLE__
+#    ifdef __APPLE__
     if (!PyArg_ParseTuple(args, "O&i:initgroups",
                           PyUnicode_FSConverter, &oname,
                           &gid))
-#else
+#    else
     if (!PyArg_ParseTuple(args, "O&O&:initgroups",
                           PyUnicode_FSConverter, &oname,
                           _Py_Gid_Converter, &gid))
-#endif
+#    endif
         return NULL;
     username = PyBytes_AS_STRING(oname);
 
@@ -6964,10 +6964,10 @@ posix_initgroups(PyObject *self, PyObject *args)
 
     Py_RETURN_NONE;
 }
-#endif /* HAVE_INITGROUPS */
+#  endif /* HAVE_INITGROUPS */
 
 
-#ifdef HAVE_GETPGID
+#  ifdef HAVE_GETPGID
 /*[clinic input]
 os.getpgid
 
@@ -6985,10 +6985,10 @@ os_getpgid_impl(PyObject *module, pid_t pid)
         return posix_error();
     return PyLong_FromPid(pgid);
 }
-#endif /* HAVE_GETPGID */
+#  endif /* HAVE_GETPGID */
 
 
-#ifdef HAVE_GETPGRP
+#  ifdef HAVE_GETPGRP
 /*[clinic input]
 os.getpgrp
 
@@ -6999,16 +6999,16 @@ static PyObject *
 os_getpgrp_impl(PyObject *module)
 /*[clinic end generated code: output=c4fc381e51103cf3 input=6846fb2bb9a3705e]*/
 {
-#ifdef GETPGRP_HAVE_ARG
+#    ifdef GETPGRP_HAVE_ARG
     return PyLong_FromPid(getpgrp(0));
-#else /* GETPGRP_HAVE_ARG */
+#    else /* GETPGRP_HAVE_ARG */
     return PyLong_FromPid(getpgrp());
-#endif /* GETPGRP_HAVE_ARG */
+#    endif /* GETPGRP_HAVE_ARG */
 }
-#endif /* HAVE_GETPGRP */
+#  endif /* HAVE_GETPGRP */
 
 
-#ifdef HAVE_SETPGRP
+#  ifdef HAVE_SETPGRP
 /*[clinic input]
 os.setpgrp
 
@@ -7019,20 +7019,20 @@ static PyObject *
 os_setpgrp_impl(PyObject *module)
 /*[clinic end generated code: output=2554735b0a60f0a0 input=1f0619fcb5731e7e]*/
 {
-#ifdef SETPGRP_HAVE_ARG
+#    ifdef SETPGRP_HAVE_ARG
     if (setpgrp(0, 0) < 0)
-#else /* SETPGRP_HAVE_ARG */
+#    else /* SETPGRP_HAVE_ARG */
     if (setpgrp() < 0)
-#endif /* SETPGRP_HAVE_ARG */
+#    endif /* SETPGRP_HAVE_ARG */
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETPGRP */
+#  endif /* HAVE_SETPGRP */
 
-#ifdef HAVE_GETPPID
+#  ifdef HAVE_GETPPID
 
-#ifdef MS_WINDOWS
-#include <tlhelp32.h>
+#    ifdef MS_WINDOWS
+#      include <tlhelp32.h>
 
 static PyObject*
 win32_getppid()
@@ -7071,7 +7071,7 @@ win32_getppid()
 
     return result;
 }
-#endif /*MS_WINDOWS*/
+#    endif /*MS_WINDOWS*/
 
 
 /*[clinic input]
@@ -7087,16 +7087,16 @@ static PyObject *
 os_getppid_impl(PyObject *module)
 /*[clinic end generated code: output=43b2a946a8c603b4 input=e637cb87539c030e]*/
 {
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     return win32_getppid();
-#else
+#    else
     return PyLong_FromPid(getppid());
-#endif
+#    endif
 }
-#endif /* HAVE_GETPPID */
+#  endif /* HAVE_GETPPID */
 
 
-#ifdef HAVE_GETLOGIN
+#  ifdef HAVE_GETLOGIN
 /*[clinic input]
 os.getlogin
 
@@ -7108,7 +7108,7 @@ os_getlogin_impl(PyObject *module)
 /*[clinic end generated code: output=a32e66a7e5715dac input=2a21ab1e917163df]*/
 {
     PyObject *result = NULL;
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     wchar_t user_name[UNLEN + 1];
     DWORD num_chars = Py_ARRAY_LENGTH(user_name);
 
@@ -7118,7 +7118,7 @@ os_getlogin_impl(PyObject *module)
     }
     else
         result = PyErr_SetFromWindowsErr(GetLastError());
-#else
+#    else
     char *name;
     int old_errno = errno;
 
@@ -7133,13 +7133,13 @@ os_getlogin_impl(PyObject *module)
     else
         result = PyUnicode_DecodeFSDefault(name);
     errno = old_errno;
-#endif
+#    endif
     return result;
 }
-#endif /* HAVE_GETLOGIN */
+#  endif /* HAVE_GETLOGIN */
 
 
-#ifdef HAVE_GETUID
+#  ifdef HAVE_GETUID
 /*[clinic input]
 os.getuid
 
@@ -7152,14 +7152,14 @@ os_getuid_impl(PyObject *module)
 {
     return _PyLong_FromUid(getuid());
 }
-#endif /* HAVE_GETUID */
+#  endif /* HAVE_GETUID */
 
 
-#ifdef MS_WINDOWS
-#define HAVE_KILL
-#endif /* MS_WINDOWS */
+#  ifdef MS_WINDOWS
+#    define HAVE_KILL
+#  endif /* MS_WINDOWS */
 
-#ifdef HAVE_KILL
+#  ifdef HAVE_KILL
 /*[clinic input]
 os.kill
 
@@ -7173,13 +7173,13 @@ Kill a process with a signal.
 static PyObject *
 os_kill_impl(PyObject *module, pid_t pid, Py_ssize_t signal)
 /*[clinic end generated code: output=8e346a6701c88568 input=61a36b86ca275ab9]*/
-#ifndef MS_WINDOWS
+#    ifndef MS_WINDOWS
 {
     if (kill(pid, (int)signal) == -1)
         return posix_error();
     Py_RETURN_NONE;
 }
-#else /* !MS_WINDOWS */
+#    else /* !MS_WINDOWS */
 {
     PyObject *result;
     DWORD sig = (DWORD)signal;
@@ -7216,11 +7216,11 @@ os_kill_impl(PyObject *module, pid_t pid, Py_ssize_t signal)
     CloseHandle(handle);
     return result;
 }
-#endif /* !MS_WINDOWS */
-#endif /* HAVE_KILL */
+#    endif /* !MS_WINDOWS */
+#  endif /* HAVE_KILL */
 
 
-#ifdef HAVE_KILLPG
+#  ifdef HAVE_KILLPG
 /*[clinic input]
 os.killpg
 
@@ -7243,13 +7243,13 @@ os_killpg_impl(PyObject *module, pid_t pgid, int signal)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_KILLPG */
+#  endif /* HAVE_KILLPG */
 
 
-#ifdef HAVE_PLOCK
-#ifdef HAVE_SYS_LOCK_H
-#include <sys/lock.h>
-#endif
+#  ifdef HAVE_PLOCK
+#    ifdef HAVE_SYS_LOCK_H
+#      include <sys/lock.h>
+#    endif
 
 /*[clinic input]
 os.plock
@@ -7267,10 +7267,10 @@ os_plock_impl(PyObject *module, int op)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_PLOCK */
+#  endif /* HAVE_PLOCK */
 
 
-#ifdef HAVE_SETUID
+#  ifdef HAVE_SETUID
 /*[clinic input]
 os.setuid
 
@@ -7288,10 +7288,10 @@ os_setuid_impl(PyObject *module, uid_t uid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETUID */
+#  endif /* HAVE_SETUID */
 
 
-#ifdef HAVE_SETEUID
+#  ifdef HAVE_SETEUID
 /*[clinic input]
 os.seteuid
 
@@ -7309,10 +7309,10 @@ os_seteuid_impl(PyObject *module, uid_t euid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETEUID */
+#  endif /* HAVE_SETEUID */
 
 
-#ifdef HAVE_SETEGID
+#  ifdef HAVE_SETEGID
 /*[clinic input]
 os.setegid
 
@@ -7330,10 +7330,10 @@ os_setegid_impl(PyObject *module, gid_t egid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETEGID */
+#  endif /* HAVE_SETEGID */
 
 
-#ifdef HAVE_SETREUID
+#  ifdef HAVE_SETREUID
 /*[clinic input]
 os.setreuid
 
@@ -7354,10 +7354,10 @@ os_setreuid_impl(PyObject *module, uid_t ruid, uid_t euid)
         Py_RETURN_NONE;
     }
 }
-#endif /* HAVE_SETREUID */
+#  endif /* HAVE_SETREUID */
 
 
-#ifdef HAVE_SETREGID
+#  ifdef HAVE_SETREGID
 /*[clinic input]
 os.setregid
 
@@ -7376,10 +7376,10 @@ os_setregid_impl(PyObject *module, gid_t rgid, gid_t egid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETREGID */
+#  endif /* HAVE_SETREGID */
 
 
-#ifdef HAVE_SETGID
+#  ifdef HAVE_SETGID
 /*[clinic input]
 os.setgid
     gid: gid_t
@@ -7396,10 +7396,10 @@ os_setgid_impl(PyObject *module, gid_t gid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETGID */
+#  endif /* HAVE_SETGID */
 
 
-#ifdef HAVE_SETGROUPS
+#  ifdef HAVE_SETGROUPS
 /*[clinic input]
 os.setgroups
 
@@ -7451,9 +7451,9 @@ os_setgroups(PyObject *module, PyObject *groups)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETGROUPS */
+#  endif /* HAVE_SETGROUPS */
 
-#if defined(HAVE_WAIT3) || defined(HAVE_WAIT4)
+#  if defined(HAVE_WAIT3) || defined(HAVE_WAIT4)
 static PyObject *
 wait_helper(pid_t pid, int status, struct rusage *ru)
 {
@@ -7479,15 +7479,15 @@ wait_helper(pid_t pid, int status, struct rusage *ru)
     if (!result)
         return NULL;
 
-#ifndef doubletime
-#define doubletime(TV) ((double)(TV).tv_sec + (TV).tv_usec * 0.000001)
-#endif
+#    ifndef doubletime
+#      define doubletime(TV) ((double)(TV).tv_sec + (TV).tv_usec * 0.000001)
+#    endif
 
     PyStructSequence_SET_ITEM(result, 0,
                               PyFloat_FromDouble(doubletime(ru->ru_utime)));
     PyStructSequence_SET_ITEM(result, 1,
                               PyFloat_FromDouble(doubletime(ru->ru_stime)));
-#define SET_INT(result, index, value)\
+#    define SET_INT(result, index, value)\
         PyStructSequence_SET_ITEM(result, index, PyLong_FromLong(value))
     SET_INT(result, 2, ru->ru_maxrss);
     SET_INT(result, 3, ru->ru_ixrss);
@@ -7503,7 +7503,7 @@ wait_helper(pid_t pid, int status, struct rusage *ru)
     SET_INT(result, 13, ru->ru_nsignals);
     SET_INT(result, 14, ru->ru_nvcsw);
     SET_INT(result, 15, ru->ru_nivcsw);
-#undef SET_INT
+#    undef SET_INT
 
     if (PyErr_Occurred()) {
         Py_DECREF(result);
@@ -7512,10 +7512,10 @@ wait_helper(pid_t pid, int status, struct rusage *ru)
 
     return Py_BuildValue("NiN", PyLong_FromPid(pid), status, result);
 }
-#endif /* HAVE_WAIT3 || HAVE_WAIT4 */
+#  endif /* HAVE_WAIT3 || HAVE_WAIT4 */
 
 
-#ifdef HAVE_WAIT3
+#  ifdef HAVE_WAIT3
 /*[clinic input]
 os.wait3
 
@@ -7546,10 +7546,10 @@ os_wait3_impl(PyObject *module, int options)
 
     return wait_helper(pid, WAIT_STATUS_INT(status), &ru);
 }
-#endif /* HAVE_WAIT3 */
+#  endif /* HAVE_WAIT3 */
 
 
-#ifdef HAVE_WAIT4
+#  ifdef HAVE_WAIT4
 /*[clinic input]
 
 os.wait4
@@ -7583,10 +7583,10 @@ os_wait4_impl(PyObject *module, pid_t pid, int options)
 
     return wait_helper(res, WAIT_STATUS_INT(status), &ru);
 }
-#endif /* HAVE_WAIT4 */
+#  endif /* HAVE_WAIT4 */
 
 
-#if defined(HAVE_WAITID) && !defined(__APPLE__)
+#  if defined(HAVE_WAITID) && !defined(__APPLE__)
 /*[clinic input]
 os.waitid
 
@@ -7642,10 +7642,10 @@ os_waitid_impl(PyObject *module, idtype_t idtype, id_t id, int options)
 
     return result;
 }
-#endif /* defined(HAVE_WAITID) && !defined(__APPLE__) */
+#  endif /* defined(HAVE_WAITID) && !defined(__APPLE__) */
 
 
-#if defined(HAVE_WAITPID)
+#  if defined(HAVE_WAITPID)
 /*[clinic input]
 os.waitpid
     pid: pid_t
@@ -7679,7 +7679,7 @@ os_waitpid_impl(PyObject *module, pid_t pid, int options)
 
     return Py_BuildValue("Ni", PyLong_FromPid(res), WAIT_STATUS_INT(status));
 }
-#elif defined(HAVE_CWAIT)
+#  elif defined(HAVE_CWAIT)
 /* MS C has a variant of waitpid() that's usable for most purposes. */
 /*[clinic input]
 os.waitpid
@@ -7716,10 +7716,10 @@ os_waitpid_impl(PyObject *module, intptr_t pid, int options)
     /* shift the status left a byte so this is more like the POSIX waitpid */
     return Py_BuildValue(_Py_PARSE_INTPTR "i", res, status << 8);
 }
-#endif
+#  endif
 
 
-#ifdef HAVE_WAIT
+#  ifdef HAVE_WAIT
 /*[clinic input]
 os.wait
 
@@ -7748,10 +7748,10 @@ os_wait_impl(PyObject *module)
 
     return Py_BuildValue("Ni", PyLong_FromPid(pid), WAIT_STATUS_INT(status));
 }
-#endif /* HAVE_WAIT */
+#  endif /* HAVE_WAIT */
 
 
-#if defined(HAVE_READLINK) || defined(MS_WINDOWS)
+#  if defined(HAVE_READLINK) || defined(MS_WINDOWS)
 /*[clinic input]
 os.readlink
 
@@ -7772,16 +7772,16 @@ static PyObject *
 os_readlink_impl(PyObject *module, path_t *path, int dir_fd)
 /*[clinic end generated code: output=d21b732a2e814030 input=113c87e0db1ecaf2]*/
 {
-#if defined(HAVE_READLINK)
+#    if defined(HAVE_READLINK)
     char buffer[MAXPATHLEN+1];
     ssize_t length;
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_READLINKAT
+#      ifdef HAVE_READLINKAT
     if (dir_fd != DEFAULT_DIR_FD)
         length = readlinkat(dir_fd, path->narrow, buffer, MAXPATHLEN);
     else
-#endif
+#      endif
         length = readlink(path->narrow, buffer, MAXPATHLEN);
     Py_END_ALLOW_THREADS
 
@@ -7794,7 +7794,7 @@ os_readlink_impl(PyObject *module, path_t *path, int dir_fd)
         return PyUnicode_DecodeFSDefaultAndSize(buffer, length);
     else
         return PyBytes_FromStringAndSize(buffer, length);
-#elif defined(MS_WINDOWS)
+#    elif defined(MS_WINDOWS)
     DWORD n_bytes_returned;
     DWORD io_result;
     HANDLE reparse_point_handle;
@@ -7851,13 +7851,13 @@ os_readlink_impl(PyObject *module, path_t *path, int dir_fd)
         Py_SETREF(result, PyUnicode_EncodeFSDefault(result));
     }
     return result;
-#endif
+#    endif
 }
-#endif /* defined(HAVE_READLINK) || defined(MS_WINDOWS) */
+#  endif /* defined(HAVE_READLINK) || defined(MS_WINDOWS) */
 
-#ifdef HAVE_SYMLINK
+#  ifdef HAVE_SYMLINK
 
-#if defined(MS_WINDOWS)
+#    if defined(MS_WINDOWS)
 
 /* Remove the last portion of the path - return 0 on success */
 static int
@@ -7928,7 +7928,7 @@ _check_dirW(LPCWSTR src, LPCWSTR dest)
         && src_info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY
     );
 }
-#endif
+#    endif
 
 
 /*[clinic input]
@@ -7939,7 +7939,7 @@ os.symlink
     *
     dir_fd: dir_fd(requires='symlinkat')=None
 
-# "symlink(src, dst, target_is_directory=False, *, dir_fd=None)\n\n\
+#    "symlink(src, dst, target_is_directory=False, *, dir_fd=None)\n\n\
 
 Create a symbolic link pointing to src named dst.
 
@@ -7960,17 +7960,17 @@ os_symlink_impl(PyObject *module, path_t *src, path_t *dst,
                 int target_is_directory, int dir_fd)
 /*[clinic end generated code: output=08ca9f3f3cf960f6 input=e820ec4472547bc3]*/
 {
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     DWORD result;
     DWORD flags = 0;
 
     /* Assumed true, set to false if detected to not be available. */
     static int windows_has_symlink_unprivileged_flag = TRUE;
-#else
+#    else
     int result;
-#endif
+#    endif
 
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
 
     if (windows_has_symlink_unprivileged_flag) {
         /* Allow non-admin symlinks if system allows it. */
@@ -8016,7 +8016,7 @@ os_symlink_impl(PyObject *module, path_t *src, path_t *dst,
     if (!result)
         return path_error2(src, dst);
 
-#else
+#    else
 
     if ((src->narrow && dst->wide) || (src->wide && dst->narrow)) {
         PyErr_SetString(PyExc_ValueError,
@@ -8025,21 +8025,21 @@ os_symlink_impl(PyObject *module, path_t *src, path_t *dst,
     }
 
     Py_BEGIN_ALLOW_THREADS
-#if HAVE_SYMLINKAT
+#      if HAVE_SYMLINKAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = symlinkat(src->narrow, dir_fd, dst->narrow);
     else
-#endif
+#      endif
         result = symlink(src->narrow, dst->narrow);
     Py_END_ALLOW_THREADS
 
     if (result)
         return path_error2(src, dst);
-#endif
+#    endif
 
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SYMLINK */
+#  endif /* HAVE_SYMLINK */
 
 
 
@@ -8071,11 +8071,11 @@ static PyStructSequence_Desc times_result_desc = {
 
 static PyTypeObject* TimesResultType;
 
-#ifdef MS_WINDOWS
-#define HAVE_TIMES  /* mandatory, for the method table */
-#endif
+#  ifdef MS_WINDOWS
+#    define HAVE_TIMES  /* mandatory, for the method table */
+#  endif
 
-#ifdef HAVE_TIMES
+#  ifdef HAVE_TIMES
 
 static PyObject *
 build_times_result(double user, double system,
@@ -8086,7 +8086,7 @@ build_times_result(double user, double system,
     if (value == NULL)
         return NULL;
 
-#define SET(i, field) \
+#    define SET(i, field) \
     { \
     PyObject *o = PyFloat_FromDouble(field); \
     if (!o) { \
@@ -8102,16 +8102,16 @@ build_times_result(double user, double system,
     SET(3, children_system);
     SET(4, elapsed);
 
-#undef SET
+#    undef SET
 
     return value;
 }
 
 
-#ifndef MS_WINDOWS
-#define NEED_TICKS_PER_SECOND
+#    ifndef MS_WINDOWS
+#      define NEED_TICKS_PER_SECOND
 static long ticks_per_second = -1;
-#endif /* MS_WINDOWS */
+#    endif /* MS_WINDOWS */
 
 /*[clinic input]
 os.times
@@ -8126,7 +8126,7 @@ All fields are floating point numbers.
 static PyObject *
 os_times_impl(PyObject *module)
 /*[clinic end generated code: output=35f640503557d32a input=2bf9df3d6ab2e48b]*/
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
 {
     FILETIME create, exit, kernel, user;
     HANDLE hProc;
@@ -8146,7 +8146,7 @@ os_times_impl(PyObject *module)
         (double)0,
         (double)0);
 }
-#else /* MS_WINDOWS */
+#    else /* MS_WINDOWS */
 {
 
 
@@ -8163,11 +8163,11 @@ os_times_impl(PyObject *module)
                          (double)t.tms_cstime / ticks_per_second,
                          (double)c / ticks_per_second);
 }
-#endif /* MS_WINDOWS */
-#endif /* HAVE_TIMES */
+#    endif /* MS_WINDOWS */
+#  endif /* HAVE_TIMES */
 
 
-#ifdef HAVE_GETSID
+#  ifdef HAVE_GETSID
 /*[clinic input]
 os.getsid
 
@@ -8187,10 +8187,10 @@ os_getsid_impl(PyObject *module, pid_t pid)
         return posix_error();
     return PyLong_FromLong((long)sid);
 }
-#endif /* HAVE_GETSID */
+#  endif /* HAVE_GETSID */
 
 
-#ifdef HAVE_SETSID
+#  ifdef HAVE_SETSID
 /*[clinic input]
 os.setsid
 
@@ -8205,10 +8205,10 @@ os_setsid_impl(PyObject *module)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETSID */
+#  endif /* HAVE_SETSID */
 
 
-#ifdef HAVE_SETPGID
+#  ifdef HAVE_SETPGID
 /*[clinic input]
 os.setpgid
 
@@ -8227,10 +8227,10 @@ os_setpgid_impl(PyObject *module, pid_t pid, pid_t pgrp)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETPGID */
+#  endif /* HAVE_SETPGID */
 
 
-#ifdef HAVE_TCGETPGRP
+#  ifdef HAVE_TCGETPGRP
 /*[clinic input]
 os.tcgetpgrp
 
@@ -8249,10 +8249,10 @@ os_tcgetpgrp_impl(PyObject *module, int fd)
         return posix_error();
     return PyLong_FromPid(pgid);
 }
-#endif /* HAVE_TCGETPGRP */
+#  endif /* HAVE_TCGETPGRP */
 
 
-#ifdef HAVE_TCSETPGRP
+#  ifdef HAVE_TCSETPGRP
 /*[clinic input]
 os.tcsetpgrp
 
@@ -8271,13 +8271,13 @@ os_tcsetpgrp_impl(PyObject *module, int fd, pid_t pgid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_TCSETPGRP */
+#  endif /* HAVE_TCSETPGRP */
 
 /* Functions acting on file descriptors */
 
-#ifdef O_CLOEXEC
+#  ifdef O_CLOEXEC
 extern int _Py_open_cloexec_works;
-#endif
+#  endif
 
 
 /*[clinic input]
@@ -8288,7 +8288,7 @@ os.open -> int
     *
     dir_fd: dir_fd(requires='openat') = None
 
-# "open(path, flags, mode=0o777, *, dir_fd=None)\n\n\
+#  "open(path, flags, mode=0o777, *, dir_fd=None)\n\n\
 
 Open a file for low level IO.  Returns a file descriptor (integer).
 
@@ -8305,17 +8305,17 @@ os_open_impl(PyObject *module, path_t *path, int flags, int mode, int dir_fd)
     int fd;
     int async_err = 0;
 
-#ifdef O_CLOEXEC
+#  ifdef O_CLOEXEC
     int *atomic_flag_works = &_Py_open_cloexec_works;
-#elif !defined(MS_WINDOWS)
+#  elif !defined(MS_WINDOWS)
     int *atomic_flag_works = NULL;
-#endif
+#  endif
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     flags |= O_NOINHERIT;
-#elif defined(O_CLOEXEC)
+#  elif defined(O_CLOEXEC)
     flags |= O_CLOEXEC;
-#endif
+#  endif
 
     if (PySys_Audit("open", "OOi", path->object, Py_None, flags) < 0) {
         return -1;
@@ -8324,16 +8324,16 @@ os_open_impl(PyObject *module, path_t *path, int flags, int mode, int dir_fd)
     _Py_BEGIN_SUPPRESS_IPH
     do {
         Py_BEGIN_ALLOW_THREADS
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
         fd = _wopen(path->wide, flags, mode);
-#else
-#ifdef HAVE_OPENAT
+#  else
+#    ifdef HAVE_OPENAT
         if (dir_fd != DEFAULT_DIR_FD)
             fd = openat(dir_fd, path->narrow, flags, mode);
         else
-#endif /* HAVE_OPENAT */
+#    endif /* HAVE_OPENAT */
             fd = open(path->narrow, flags, mode);
-#endif /* !MS_WINDOWS */
+#  endif /* !MS_WINDOWS */
         Py_END_ALLOW_THREADS
     } while (fd < 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
     _Py_END_SUPPRESS_IPH
@@ -8344,12 +8344,12 @@ os_open_impl(PyObject *module, path_t *path, int flags, int mode, int dir_fd)
         return -1;
     }
 
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     if (_Py_set_inheritable(fd, 0, atomic_flag_works) < 0) {
         close(fd);
         return -1;
     }
-#endif
+#  endif
 
     return fd;
 }
@@ -8439,11 +8439,11 @@ os_dup2_impl(PyObject *module, int fd, int fd2, int inheritable)
 /*[clinic end generated code: output=bc059d34a73404d1 input=c3cddda8922b038d]*/
 {
     int res = 0;
-#if defined(HAVE_DUP3) && \
+#  if defined(HAVE_DUP3) && \
     !(defined(HAVE_FCNTL_H) && defined(F_DUP2FD_CLOEXEC))
     /* dup3() is available on Linux 2.6.27+ and glibc 2.9 */
     static int dup3_works = -1;
-#endif
+#  endif
 
     if (fd < 0 || fd2 < 0) {
         posix_error();
@@ -8454,7 +8454,7 @@ os_dup2_impl(PyObject *module, int fd, int fd2, int inheritable)
      * then has to be closed. See os_close_impl() for why we don't handle EINTR
      * upon close(), and therefore below.
      */
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     Py_BEGIN_ALLOW_THREADS
     _Py_BEGIN_SUPPRESS_IPH
     res = dup2(fd, fd2);
@@ -8472,7 +8472,7 @@ os_dup2_impl(PyObject *module, int fd, int fd2, int inheritable)
         return -1;
     }
 
-#elif defined(HAVE_FCNTL_H) && defined(F_DUP2FD_CLOEXEC)
+#  elif defined(HAVE_FCNTL_H) && defined(F_DUP2FD_CLOEXEC)
     Py_BEGIN_ALLOW_THREADS
     if (!inheritable)
         res = fcntl(fd, F_DUP2FD_CLOEXEC, fd2);
@@ -8484,9 +8484,9 @@ os_dup2_impl(PyObject *module, int fd, int fd2, int inheritable)
         return -1;
     }
 
-#else
+#  else
 
-#ifdef HAVE_DUP3
+#    ifdef HAVE_DUP3
     if (!inheritable && dup3_works != 0) {
         Py_BEGIN_ALLOW_THREADS
         res = dup3(fd, fd2, O_CLOEXEC);
@@ -8503,7 +8503,7 @@ os_dup2_impl(PyObject *module, int fd, int fd2, int inheritable)
 
     if (inheritable || dup3_works == 0)
     {
-#endif
+#    endif
         Py_BEGIN_ALLOW_THREADS
         res = dup2(fd, fd2);
         Py_END_ALLOW_THREADS
@@ -8516,17 +8516,17 @@ os_dup2_impl(PyObject *module, int fd, int fd2, int inheritable)
             close(fd2);
             return -1;
         }
-#ifdef HAVE_DUP3
+#    ifdef HAVE_DUP3
     }
-#endif
+#    endif
 
-#endif
+#  endif
 
     return res;
 }
 
 
-#ifdef HAVE_LOCKF
+#  ifdef HAVE_LOCKF
 /*[clinic input]
 os.lockf
 
@@ -8557,7 +8557,7 @@ os_lockf_impl(PyObject *module, int fd, int command, Py_off_t length)
 
     Py_RETURN_NONE;
 }
-#endif /* HAVE_LOCKF */
+#  endif /* HAVE_LOCKF */
 
 
 /*[clinic input]
@@ -8580,22 +8580,22 @@ os_lseek_impl(PyObject *module, int fd, Py_off_t position, int how)
 {
     Py_off_t result;
 
-#ifdef SEEK_SET
+#  ifdef SEEK_SET
     /* Turn 0, 1, 2 into SEEK_{SET,CUR,END} */
     switch (how) {
         case 0: how = SEEK_SET; break;
         case 1: how = SEEK_CUR; break;
         case 2: how = SEEK_END; break;
     }
-#endif /* SEEK_END */
+#  endif /* SEEK_END */
 
     Py_BEGIN_ALLOW_THREADS
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     result = _lseeki64(fd, position, how);
-#else
+#  else
     result = lseek(fd, position, how);
-#endif
+#  endif
     _Py_END_SUPPRESS_IPH
     Py_END_ALLOW_THREADS
     if (result < 0)
@@ -8644,7 +8644,7 @@ os_read_impl(PyObject *module, int fd, Py_ssize_t length)
     return buffer;
 }
 
-#if (defined(HAVE_SENDFILE) && (defined(__FreeBSD__) || defined(__DragonFly__) \
+#  if (defined(HAVE_SENDFILE) && (defined(__FreeBSD__) || defined(__DragonFly__) \
                                 || defined(__APPLE__))) \
     || defined(HAVE_READV) || defined(HAVE_PREADV) || defined (HAVE_PREADV2) \
     || defined(HAVE_WRITEV) || defined(HAVE_PWRITEV) || defined (HAVE_PWRITEV2)
@@ -8699,10 +8699,10 @@ iov_cleanup(struct iovec *iov, Py_buffer *buf, int cnt)
     }
     PyMem_Del(buf);
 }
-#endif
+#  endif
 
 
-#ifdef HAVE_READV
+#  ifdef HAVE_READV
 /*[clinic input]
 os.readv -> Py_ssize_t
 
@@ -8758,12 +8758,12 @@ os_readv_impl(PyObject *module, int fd, PyObject *buffers)
 
     return n;
 }
-#endif /* HAVE_READV */
+#  endif /* HAVE_READV */
 
 
-#ifdef HAVE_PREAD
+#  ifdef HAVE_PREAD
 /*[clinic input]
-# TODO length should be size_t!  but Python doesn't support parsing size_t yet.
+#    TODO length should be size_t!  but Python doesn't support parsing size_t yet.
 os.pread
 
     fd: int
@@ -8809,9 +8809,9 @@ os_pread_impl(PyObject *module, int fd, int length, Py_off_t offset)
         _PyBytes_Resize(&buffer, n);
     return buffer;
 }
-#endif /* HAVE_PREAD */
+#  endif /* HAVE_PREAD */
 
-#if defined(HAVE_PREADV) || defined (HAVE_PREADV2)
+#  if defined(HAVE_PREADV) || defined (HAVE_PREADV2)
 /*[clinic input]
 os.preadv -> Py_ssize_t
 
@@ -8859,17 +8859,17 @@ os_preadv_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
         return -1;
     }
 
-#ifndef HAVE_PREADV2
+#    ifndef HAVE_PREADV2
     if(flags != 0) {
         argument_unavailable_error("preadv2", "flags");
         return -1;
     }
-#endif
+#    endif
 
     if (iov_setup(&iov, &buf, buffers, cnt, PyBUF_WRITABLE) < 0) {
         return -1;
     }
-#ifdef HAVE_PREADV2
+#    ifdef HAVE_PREADV2
     do {
         Py_BEGIN_ALLOW_THREADS
         _Py_BEGIN_SUPPRESS_IPH
@@ -8877,7 +8877,7 @@ os_preadv_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
         _Py_END_SUPPRESS_IPH
         Py_END_ALLOW_THREADS
     } while (n < 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
-#else
+#    else
     do {
         Py_BEGIN_ALLOW_THREADS
         _Py_BEGIN_SUPPRESS_IPH
@@ -8885,7 +8885,7 @@ os_preadv_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
         _Py_END_SUPPRESS_IPH
         Py_END_ALLOW_THREADS
     } while (n < 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
-#endif
+#    endif
 
     iov_cleanup(iov, buf, cnt);
     if (n < 0) {
@@ -8897,7 +8897,7 @@ os_preadv_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
 
     return n;
 }
-#endif /* HAVE_PREADV */
+#  endif /* HAVE_PREADV */
 
 
 /*[clinic input]
@@ -8917,7 +8917,7 @@ os_write_impl(PyObject *module, int fd, Py_buffer *data)
     return _Py_write(fd, data->buf, data->len);
 }
 
-#ifdef HAVE_SENDFILE
+#  ifdef HAVE_SENDFILE
 PyDoc_STRVAR(posix_sendfile__doc__,
 "sendfile(out, in, offset, count) -> byteswritten\n\
 sendfile(out, in, offset, count[, headers][, trailers], flags=0)\n\
@@ -8933,10 +8933,10 @@ posix_sendfile(PyObject *self, PyObject *args, PyObject *kwdict)
     int async_err = 0;
     off_t offset;
 
-#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__APPLE__)
-#ifndef __APPLE__
+#    if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__APPLE__)
+#      ifndef __APPLE__
     Py_ssize_t len;
-#endif
+#      endif
     PyObject *headers = NULL, *trailers = NULL;
     Py_buffer *hbuf, *tbuf;
     off_t sbytes;
@@ -8950,13 +8950,13 @@ posix_sendfile(PyObject *self, PyObject *args, PyObject *kwdict)
     sf.headers = NULL;
     sf.trailers = NULL;
 
-#ifdef __APPLE__
+#      ifdef __APPLE__
     if (!PyArg_ParseTupleAndKeywords(args, kwdict, "iiO&O&|OOi:sendfile",
         keywords, &out, &in, Py_off_t_converter, &offset, Py_off_t_converter, &sbytes,
-#else
+#      else
     if (!PyArg_ParseTupleAndKeywords(args, kwdict, "iiO&n|OOi:sendfile",
         keywords, &out, &in, Py_off_t_converter, &offset, &len,
-#endif
+#      endif
                 &headers, &trailers, &flags))
             return NULL;
     if (headers != NULL) {
@@ -8978,10 +8978,10 @@ posix_sendfile(PyObject *self, PyObject *args, PyObject *kwdict)
                 if (iov_setup(&(sf.headers), &hbuf,
                               headers, sf.hdr_cnt, PyBUF_SIMPLE) < 0)
                     return NULL;
-#ifdef __APPLE__
+#      ifdef __APPLE__
                 for (i = 0; i < sf.hdr_cnt; i++) {
                     Py_ssize_t blen = sf.headers[i].iov_len;
-# define OFF_T_MAX 0x7fffffffffffffff
+#        define OFF_T_MAX 0x7fffffffffffffff
                     if (sbytes >= OFF_T_MAX - blen) {
                         PyErr_SetString(PyExc_OverflowError,
                             "sendfile() header is too large");
@@ -8989,7 +8989,7 @@ posix_sendfile(PyObject *self, PyObject *args, PyObject *kwdict)
                     }
                     sbytes += blen;
                 }
-#endif
+#      endif
             }
         }
     }
@@ -9019,11 +9019,11 @@ posix_sendfile(PyObject *self, PyObject *args, PyObject *kwdict)
     _Py_BEGIN_SUPPRESS_IPH
     do {
         Py_BEGIN_ALLOW_THREADS
-#ifdef __APPLE__
+#      ifdef __APPLE__
         ret = sendfile(in, out, offset, &sbytes, &sf, flags);
-#else
+#      else
         ret = sendfile(in, out, offset, len, &sf, &sbytes, flags);
-#endif
+#      endif
         Py_END_ALLOW_THREADS
     } while (ret < 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
     _Py_END_SUPPRESS_IPH
@@ -9056,7 +9056,7 @@ done:
         return Py_BuildValue("L", sbytes);
     #endif
 
-#else
+#    else
     Py_ssize_t count;
     PyObject *offobj;
     static char *keywords[] = {"out", "in",
@@ -9064,7 +9064,7 @@ done:
     if (!PyArg_ParseTupleAndKeywords(args, kwdict, "iiOn:sendfile",
             keywords, &out, &in, &offobj, &count))
         return NULL;
-#ifdef __linux__
+#      ifdef __linux__
     if (offobj == Py_None) {
         do {
             Py_BEGIN_ALLOW_THREADS
@@ -9075,7 +9075,7 @@ done:
             return (!async_err) ? posix_error() : NULL;
         return Py_BuildValue("n", ret);
     }
-#endif
+#      endif
     if (!Py_off_t_converter(offobj, &offset))
         return NULL;
 
@@ -9087,12 +9087,12 @@ done:
     if (ret < 0)
         return (!async_err) ? posix_error() : NULL;
     return Py_BuildValue("n", ret);
-#endif
+#    endif
 }
-#endif /* HAVE_SENDFILE */
+#  endif /* HAVE_SENDFILE */
 
 
-#if defined(__APPLE__)
+#  if defined(__APPLE__)
 /*[clinic input]
 os._fcopyfile
 
@@ -9117,7 +9117,7 @@ os__fcopyfile_impl(PyObject *module, int infd, int outfd, int flags)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif
+#  endif
 
 
 /*[clinic input]
@@ -9145,11 +9145,11 @@ os_fstat_impl(PyObject *module, int fd)
         Py_END_ALLOW_THREADS
     } while (res != 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
     if (res != 0) {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
         return PyErr_SetFromWindowsErr(0);
-#else
+#  else
         return (!async_err) ? posix_error() : NULL;
-#endif
+#  endif
     }
 
     return _pystat_fromstructstat(&st);
@@ -9179,7 +9179,7 @@ os_isatty_impl(PyObject *module, int fd)
 }
 
 
-#ifdef HAVE_PIPE
+#  ifdef HAVE_PIPE
 /*[clinic input]
 os.pipe
 
@@ -9194,15 +9194,15 @@ os_pipe_impl(PyObject *module)
 /*[clinic end generated code: output=ff9b76255793b440 input=02535e8c8fa6c4d4]*/
 {
     int fds[2];
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     HANDLE read, write;
     SECURITY_ATTRIBUTES attr;
     BOOL ok;
-#else
+#    else
     int res;
-#endif
+#    endif
 
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     attr.nLength = sizeof(attr);
     attr.lpSecurityDescriptor = NULL;
     attr.bInheritHandle = FALSE;
@@ -9224,16 +9224,16 @@ os_pipe_impl(PyObject *module)
 
     if (!ok)
         return PyErr_SetFromWindowsErr(0);
-#else
+#    else
 
-#ifdef HAVE_PIPE2
+#      ifdef HAVE_PIPE2
     Py_BEGIN_ALLOW_THREADS
     res = pipe2(fds, O_CLOEXEC);
     Py_END_ALLOW_THREADS
 
     if (res != 0 && errno == ENOSYS)
     {
-#endif
+#      endif
         Py_BEGIN_ALLOW_THREADS
         res = pipe(fds);
         Py_END_ALLOW_THREADS
@@ -9250,19 +9250,19 @@ os_pipe_impl(PyObject *module)
                 return NULL;
             }
         }
-#ifdef HAVE_PIPE2
+#      ifdef HAVE_PIPE2
     }
-#endif
+#      endif
 
     if (res != 0)
         return PyErr_SetFromErrno(PyExc_OSError);
-#endif /* !MS_WINDOWS */
+#    endif /* !MS_WINDOWS */
     return Py_BuildValue("(ii)", fds[0], fds[1]);
 }
-#endif  /* HAVE_PIPE */
+#  endif  /* HAVE_PIPE */
 
 
-#ifdef HAVE_PIPE2
+#  ifdef HAVE_PIPE2
 /*[clinic input]
 os.pipe2
 
@@ -9290,10 +9290,10 @@ os_pipe2_impl(PyObject *module, int flags)
         return posix_error();
     return Py_BuildValue("(ii)", fds[0], fds[1]);
 }
-#endif /* HAVE_PIPE2 */
+#  endif /* HAVE_PIPE2 */
 
 
-#ifdef HAVE_WRITEV
+#  ifdef HAVE_WRITEV
 /*[clinic input]
 os.writev -> Py_ssize_t
     fd: int
@@ -9341,10 +9341,10 @@ os_writev_impl(PyObject *module, int fd, PyObject *buffers)
 
     return result;
 }
-#endif /* HAVE_WRITEV */
+#  endif /* HAVE_WRITEV */
 
 
-#ifdef HAVE_PWRITE
+#  ifdef HAVE_PWRITE
 /*[clinic input]
 os.pwrite -> Py_ssize_t
 
@@ -9379,9 +9379,9 @@ os_pwrite_impl(PyObject *module, int fd, Py_buffer *buffer, Py_off_t offset)
         posix_error();
     return size;
 }
-#endif /* HAVE_PWRITE */
+#  endif /* HAVE_PWRITE */
 
-#if defined(HAVE_PWRITEV) || defined (HAVE_PWRITEV2)
+#  if defined(HAVE_PWRITEV) || defined (HAVE_PWRITEV2)
 /*[clinic input]
 os.pwritev -> Py_ssize_t
 
@@ -9430,17 +9430,17 @@ os_pwritev_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
         return -1;
     }
 
-#ifndef HAVE_PWRITEV2
+#    ifndef HAVE_PWRITEV2
     if(flags != 0) {
         argument_unavailable_error("pwritev2", "flags");
         return -1;
     }
-#endif
+#    endif
 
     if (iov_setup(&iov, &buf, buffers, cnt, PyBUF_SIMPLE) < 0) {
         return -1;
     }
-#ifdef HAVE_PWRITEV2
+#    ifdef HAVE_PWRITEV2
     do {
         Py_BEGIN_ALLOW_THREADS
         _Py_BEGIN_SUPPRESS_IPH
@@ -9448,7 +9448,7 @@ os_pwritev_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
         _Py_END_SUPPRESS_IPH
         Py_END_ALLOW_THREADS
     } while (result < 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
-#else
+#    else
     do {
         Py_BEGIN_ALLOW_THREADS
         _Py_BEGIN_SUPPRESS_IPH
@@ -9456,7 +9456,7 @@ os_pwritev_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
         _Py_END_SUPPRESS_IPH
         Py_END_ALLOW_THREADS
     } while (result < 0 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
-#endif
+#    endif
 
     iov_cleanup(iov, buf, cnt);
     if (result < 0) {
@@ -9468,9 +9468,9 @@ os_pwritev_impl(PyObject *module, int fd, PyObject *buffers, Py_off_t offset,
 
     return result;
 }
-#endif /* HAVE_PWRITEV */
+#  endif /* HAVE_PWRITEV */
 
-#ifdef HAVE_COPY_FILE_RANGE
+#  ifdef HAVE_COPY_FILE_RANGE
 /*[clinic input]
 
 os.copy_file_range
@@ -9537,9 +9537,9 @@ os_copy_file_range_impl(PyObject *module, int src, int dst, Py_ssize_t count,
 
     return PyLong_FromSsize_t(ret);
 }
-#endif /* HAVE_COPY_FILE_RANGE*/
+#  endif /* HAVE_COPY_FILE_RANGE*/
 
-#ifdef HAVE_MKFIFO
+#  ifdef HAVE_MKFIFO
 /*[clinic input]
 os.mkfifo
 
@@ -9565,11 +9565,11 @@ os_mkfifo_impl(PyObject *module, path_t *path, int mode, int dir_fd)
 
     do {
         Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_MKFIFOAT
+#    ifdef HAVE_MKFIFOAT
         if (dir_fd != DEFAULT_DIR_FD)
             result = mkfifoat(dir_fd, path->narrow, mode);
         else
-#endif
+#    endif
             result = mkfifo(path->narrow, mode);
         Py_END_ALLOW_THREADS
     } while (result != 0 && errno == EINTR &&
@@ -9579,10 +9579,10 @@ os_mkfifo_impl(PyObject *module, path_t *path, int mode, int dir_fd)
 
     Py_RETURN_NONE;
 }
-#endif /* HAVE_MKFIFO */
+#  endif /* HAVE_MKFIFO */
 
 
-#if defined(HAVE_MKNOD) && defined(HAVE_MAKEDEV)
+#  if defined(HAVE_MKNOD) && defined(HAVE_MAKEDEV)
 /*[clinic input]
 os.mknod
 
@@ -9617,11 +9617,11 @@ os_mknod_impl(PyObject *module, path_t *path, int mode, dev_t device,
 
     do {
         Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_MKNODAT
+#    ifdef HAVE_MKNODAT
         if (dir_fd != DEFAULT_DIR_FD)
             result = mknodat(dir_fd, path->narrow, mode, device);
         else
-#endif
+#    endif
             result = mknod(path->narrow, mode, device);
         Py_END_ALLOW_THREADS
     } while (result != 0 && errno == EINTR &&
@@ -9631,10 +9631,10 @@ os_mknod_impl(PyObject *module, path_t *path, int mode, dev_t device,
 
     Py_RETURN_NONE;
 }
-#endif /* defined(HAVE_MKNOD) && defined(HAVE_MAKEDEV) */
+#  endif /* defined(HAVE_MKNOD) && defined(HAVE_MAKEDEV) */
 
 
-#ifdef HAVE_DEVICE_MACROS
+#  ifdef HAVE_DEVICE_MACROS
 /*[clinic input]
 os.major -> unsigned_int
 
@@ -9685,10 +9685,10 @@ os_makedev_impl(PyObject *module, int major, int minor)
 {
     return makedev(major, minor);
 }
-#endif /* HAVE_DEVICE_MACROS */
+#  endif /* HAVE_DEVICE_MACROS */
 
 
-#if defined HAVE_FTRUNCATE || defined MS_WINDOWS
+#  if defined HAVE_FTRUNCATE || defined MS_WINDOWS
 /*[clinic input]
 os.ftruncate
 
@@ -9713,11 +9713,11 @@ os_ftruncate_impl(PyObject *module, int fd, Py_off_t length)
     do {
         Py_BEGIN_ALLOW_THREADS
         _Py_BEGIN_SUPPRESS_IPH
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
         result = _chsize_s(fd, length);
-#else
+#    else
         result = ftruncate(fd, length);
-#endif
+#    endif
         _Py_END_SUPPRESS_IPH
         Py_END_ALLOW_THREADS
     } while (result != 0 && errno == EINTR &&
@@ -9726,10 +9726,10 @@ os_ftruncate_impl(PyObject *module, int fd, Py_off_t length)
         return (!async_err) ? posix_error() : NULL;
     Py_RETURN_NONE;
 }
-#endif /* HAVE_FTRUNCATE || MS_WINDOWS */
+#  endif /* HAVE_FTRUNCATE || MS_WINDOWS */
 
 
-#if defined HAVE_TRUNCATE || defined MS_WINDOWS
+#  if defined HAVE_TRUNCATE || defined MS_WINDOWS
 /*[clinic input]
 os.truncate
     path: path_t(allow_fd='PATH_HAVE_FTRUNCATE')
@@ -9746,9 +9746,9 @@ os_truncate_impl(PyObject *module, path_t *path, Py_off_t length)
 /*[clinic end generated code: output=43009c8df5c0a12b input=77229cf0b50a9b77]*/
 {
     int result;
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     int fd;
-#endif
+#    endif
 
     if (path->fd != -1)
         return os_ftruncate_impl(module, path->fd, length);
@@ -9759,7 +9759,7 @@ os_truncate_impl(PyObject *module, path_t *path, Py_off_t length)
 
     Py_BEGIN_ALLOW_THREADS
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
     fd = _wopen(path->wide, _O_WRONLY | _O_BINARY | _O_NOINHERIT);
     if (fd < 0)
         result = -1;
@@ -9769,9 +9769,9 @@ os_truncate_impl(PyObject *module, path_t *path, Py_off_t length)
         if (result < 0)
             errno = result;
     }
-#else
+#    else
     result = truncate(path->narrow, length);
-#endif
+#    endif
     _Py_END_SUPPRESS_IPH
     Py_END_ALLOW_THREADS
     if (result < 0)
@@ -9779,19 +9779,19 @@ os_truncate_impl(PyObject *module, path_t *path, Py_off_t length)
 
     Py_RETURN_NONE;
 }
-#endif /* HAVE_TRUNCATE || MS_WINDOWS */
+#  endif /* HAVE_TRUNCATE || MS_WINDOWS */
 
 
 /* Issue #22396: On 32-bit AIX platform, the prototypes of os.posix_fadvise()
    and os.posix_fallocate() in system headers are wrong if _LARGE_FILES is
    defined, which is the case in Python on AIX. AIX bug report:
    http://www-01.ibm.com/support/docview.wss?uid=isg1IV56170 */
-#if defined(_AIX) && defined(_LARGE_FILES) && !defined(__64BIT__)
-#  define POSIX_FADVISE_AIX_BUG
-#endif
+#  if defined(_AIX) && defined(_LARGE_FILES) && !defined(__64BIT__)
+#    define POSIX_FADVISE_AIX_BUG
+#  endif
 
 
-#if defined(HAVE_POSIX_FALLOCATE) && !defined(POSIX_FADVISE_AIX_BUG)
+#  if defined(HAVE_POSIX_FALLOCATE) && !defined(POSIX_FADVISE_AIX_BUG)
 /*[clinic input]
 os.posix_fallocate
 
@@ -9829,10 +9829,10 @@ os_posix_fallocate_impl(PyObject *module, int fd, Py_off_t offset,
     errno = result;
     return posix_error();
 }
-#endif /* HAVE_POSIX_FALLOCATE) && !POSIX_FADVISE_AIX_BUG */
+#  endif /* HAVE_POSIX_FALLOCATE) && !POSIX_FADVISE_AIX_BUG */
 
 
-#if defined(HAVE_POSIX_FADVISE) && !defined(POSIX_FADVISE_AIX_BUG)
+#  if defined(HAVE_POSIX_FADVISE) && !defined(POSIX_FADVISE_AIX_BUG)
 /*[clinic input]
 os.posix_fadvise
 
@@ -9876,9 +9876,9 @@ os_posix_fadvise_impl(PyObject *module, int fd, Py_off_t offset,
     errno = result;
     return posix_error();
 }
-#endif /* HAVE_POSIX_FADVISE && !POSIX_FADVISE_AIX_BUG */
+#  endif /* HAVE_POSIX_FADVISE && !POSIX_FADVISE_AIX_BUG */
 
-#ifdef HAVE_PUTENV
+#  ifdef HAVE_PUTENV
 
 /* Save putenv() parameters as values here, so we can collect them when they
  * get re-set with another call for the same key. */
@@ -9899,7 +9899,7 @@ posix_putenv_garbage_setitem(PyObject *name, PyObject *value)
 }
 
 
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
 /*[clinic input]
 os.putenv
 
@@ -9956,7 +9956,7 @@ error:
     Py_DECREF(unicode);
     return NULL;
 }
-#else /* MS_WINDOWS */
+#    else /* MS_WINDOWS */
 /*[clinic input]
 os.putenv
 
@@ -9994,11 +9994,11 @@ os_putenv_impl(PyObject *module, PyObject *name, PyObject *value)
     posix_putenv_garbage_setitem(name, bytes);
     Py_RETURN_NONE;
 }
-#endif /* MS_WINDOWS */
-#endif /* HAVE_PUTENV */
+#    endif /* MS_WINDOWS */
+#  endif /* HAVE_PUTENV */
 
 
-#ifdef HAVE_UNSETENV
+#  ifdef HAVE_UNSETENV
 /*[clinic input]
 os.unsetenv
     name: FSConverter
@@ -10011,17 +10011,17 @@ static PyObject *
 os_unsetenv_impl(PyObject *module, PyObject *name)
 /*[clinic end generated code: output=54c4137ab1834f02 input=2bb5288a599c7107]*/
 {
-#ifndef HAVE_BROKEN_UNSETENV
+#    ifndef HAVE_BROKEN_UNSETENV
     int err;
-#endif
+#    endif
 
-#ifdef HAVE_BROKEN_UNSETENV
+#    ifdef HAVE_BROKEN_UNSETENV
     unsetenv(PyBytes_AS_STRING(name));
-#else
+#    else
     err = unsetenv(PyBytes_AS_STRING(name));
     if (err)
         return posix_error();
-#endif
+#    endif
 
     /* Remove the key from posix_putenv_garbage;
      * this will cause it to be collected.  This has to
@@ -10037,7 +10037,7 @@ os_unsetenv_impl(PyObject *module, PyObject *name)
     }
     Py_RETURN_NONE;
 }
-#endif /* HAVE_UNSETENV */
+#  endif /* HAVE_UNSETENV */
 
 
 /*[clinic input]
@@ -10063,8 +10063,8 @@ os_strerror_impl(PyObject *module, int code)
 }
 
 
-#ifdef HAVE_SYS_WAIT_H
-#ifdef WCOREDUMP
+#  ifdef HAVE_SYS_WAIT_H
+#    ifdef WCOREDUMP
 /*[clinic input]
 os.WCOREDUMP -> bool
 
@@ -10082,10 +10082,10 @@ os_WCOREDUMP_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WCOREDUMP(wait_status);
 }
-#endif /* WCOREDUMP */
+#    endif /* WCOREDUMP */
 
 
-#ifdef WIFCONTINUED
+#    ifdef WIFCONTINUED
 /*[clinic input]
 os.WIFCONTINUED -> bool
 
@@ -10105,10 +10105,10 @@ os_WIFCONTINUED_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WIFCONTINUED(wait_status);
 }
-#endif /* WIFCONTINUED */
+#    endif /* WIFCONTINUED */
 
 
-#ifdef WIFSTOPPED
+#    ifdef WIFSTOPPED
 /*[clinic input]
 os.WIFSTOPPED -> bool
 
@@ -10125,10 +10125,10 @@ os_WIFSTOPPED_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WIFSTOPPED(wait_status);
 }
-#endif /* WIFSTOPPED */
+#    endif /* WIFSTOPPED */
 
 
-#ifdef WIFSIGNALED
+#    ifdef WIFSIGNALED
 /*[clinic input]
 os.WIFSIGNALED -> bool
 
@@ -10145,10 +10145,10 @@ os_WIFSIGNALED_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WIFSIGNALED(wait_status);
 }
-#endif /* WIFSIGNALED */
+#    endif /* WIFSIGNALED */
 
 
-#ifdef WIFEXITED
+#    ifdef WIFEXITED
 /*[clinic input]
 os.WIFEXITED -> bool
 
@@ -10165,10 +10165,10 @@ os_WIFEXITED_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WIFEXITED(wait_status);
 }
-#endif /* WIFEXITED */
+#    endif /* WIFEXITED */
 
 
-#ifdef WEXITSTATUS
+#    ifdef WEXITSTATUS
 /*[clinic input]
 os.WEXITSTATUS -> int
 
@@ -10185,10 +10185,10 @@ os_WEXITSTATUS_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WEXITSTATUS(wait_status);
 }
-#endif /* WEXITSTATUS */
+#    endif /* WEXITSTATUS */
 
 
-#ifdef WTERMSIG
+#    ifdef WTERMSIG
 /*[clinic input]
 os.WTERMSIG -> int
 
@@ -10205,10 +10205,10 @@ os_WTERMSIG_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WTERMSIG(wait_status);
 }
-#endif /* WTERMSIG */
+#    endif /* WTERMSIG */
 
 
-#ifdef WSTOPSIG
+#    ifdef WSTOPSIG
 /*[clinic input]
 os.WSTOPSIG -> int
 
@@ -10225,17 +10225,17 @@ os_WSTOPSIG_impl(PyObject *module, int status)
     WAIT_STATUS_INT(wait_status) = status;
     return WSTOPSIG(wait_status);
 }
-#endif /* WSTOPSIG */
-#endif /* HAVE_SYS_WAIT_H */
+#    endif /* WSTOPSIG */
+#  endif /* HAVE_SYS_WAIT_H */
 
 
-#if defined(HAVE_FSTATVFS) && defined(HAVE_SYS_STATVFS_H)
-#ifdef _SCO_DS
+#  if defined(HAVE_FSTATVFS) && defined(HAVE_SYS_STATVFS_H)
+#    ifdef _SCO_DS
 /* SCO OpenServer 5.0 and later requires _SVID3 before it reveals the
    needed definitions in sys/statvfs.h */
-#define _SVID3
-#endif
-#include <sys/statvfs.h>
+#      define _SVID3
+#    endif
+#    include <sys/statvfs.h>
 
 static PyObject*
 _pystatvfs_fromstructstatvfs(struct statvfs st) {
@@ -10243,7 +10243,7 @@ _pystatvfs_fromstructstatvfs(struct statvfs st) {
     if (v == NULL)
         return NULL;
 
-#if !defined(HAVE_LARGEFILE_SUPPORT)
+#    if !defined(HAVE_LARGEFILE_SUPPORT)
     PyStructSequence_SET_ITEM(v, 0, PyLong_FromLong((long) st.f_bsize));
     PyStructSequence_SET_ITEM(v, 1, PyLong_FromLong((long) st.f_frsize));
     PyStructSequence_SET_ITEM(v, 2, PyLong_FromLong((long) st.f_blocks));
@@ -10254,7 +10254,7 @@ _pystatvfs_fromstructstatvfs(struct statvfs st) {
     PyStructSequence_SET_ITEM(v, 7, PyLong_FromLong((long) st.f_favail));
     PyStructSequence_SET_ITEM(v, 8, PyLong_FromLong((long) st.f_flag));
     PyStructSequence_SET_ITEM(v, 9, PyLong_FromLong((long) st.f_namemax));
-#else
+#    else
     PyStructSequence_SET_ITEM(v, 0, PyLong_FromLong((long) st.f_bsize));
     PyStructSequence_SET_ITEM(v, 1, PyLong_FromLong((long) st.f_frsize));
     PyStructSequence_SET_ITEM(v, 2,
@@ -10271,14 +10271,14 @@ _pystatvfs_fromstructstatvfs(struct statvfs st) {
                               PyLong_FromLongLong((long long) st.f_favail));
     PyStructSequence_SET_ITEM(v, 8, PyLong_FromLong((long) st.f_flag));
     PyStructSequence_SET_ITEM(v, 9, PyLong_FromLong((long) st.f_namemax));
-#endif
+#    endif
 /* The _ALL_SOURCE feature test macro defines f_fsid as a structure
  * (issue #32390). */
-#if defined(_AIX) && defined(_ALL_SOURCE)
+#    if defined(_AIX) && defined(_ALL_SOURCE)
     PyStructSequence_SET_ITEM(v, 10, PyLong_FromUnsignedLong(st.f_fsid.val[0]));
-#else
+#    else
     PyStructSequence_SET_ITEM(v, 10, PyLong_FromUnsignedLong(st.f_fsid));
-#endif
+#    endif
     if (PyErr_Occurred()) {
         Py_DECREF(v);
         return NULL;
@@ -10317,11 +10317,11 @@ os_fstatvfs_impl(PyObject *module, int fd)
 
     return _pystatvfs_fromstructstatvfs(st);
 }
-#endif /* defined(HAVE_FSTATVFS) && defined(HAVE_SYS_STATVFS_H) */
+#  endif /* defined(HAVE_FSTATVFS) && defined(HAVE_SYS_STATVFS_H) */
 
 
-#if defined(HAVE_STATVFS) && defined(HAVE_SYS_STATVFS_H)
-#include <sys/statvfs.h>
+#  if defined(HAVE_STATVFS) && defined(HAVE_SYS_STATVFS_H)
+#    include <sys/statvfs.h>
 /*[clinic input]
 os.statvfs
 
@@ -10342,19 +10342,19 @@ os_statvfs_impl(PyObject *module, path_t *path)
     struct statvfs st;
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FSTATVFS
+#    ifdef HAVE_FSTATVFS
     if (path->fd != -1) {
-#ifdef __APPLE__
+#      ifdef __APPLE__
         /* handle weak-linking on Mac OS X 10.3 */
         if (fstatvfs == NULL) {
             fd_specified("statvfs", path->fd);
             return NULL;
         }
-#endif
+#      endif
         result = fstatvfs(path->fd, &st);
     }
     else
-#endif
+#    endif
         result = statvfs(path->narrow, &st);
     Py_END_ALLOW_THREADS
 
@@ -10364,10 +10364,10 @@ os_statvfs_impl(PyObject *module, path_t *path)
 
     return _pystatvfs_fromstructstatvfs(st);
 }
-#endif /* defined(HAVE_STATVFS) && defined(HAVE_SYS_STATVFS_H) */
+#  endif /* defined(HAVE_STATVFS) && defined(HAVE_SYS_STATVFS_H) */
 
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 /*[clinic input]
 os._getdiskusage
 
@@ -10416,7 +10416,7 @@ os__getdiskusage_impl(PyObject *module, path_t *path)
 success:
     return Py_BuildValue("(LL)", total.QuadPart, free.QuadPart);
 }
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
 
 /* This is used for fpathconf(), pathconf(), confstr() and sysconf().
@@ -10479,92 +10479,92 @@ conv_confname(PyObject *arg, int *valuep, struct constdef *table,
 }
 
 
-#if defined(HAVE_FPATHCONF) || defined(HAVE_PATHCONF)
+#  if defined(HAVE_FPATHCONF) || defined(HAVE_PATHCONF)
 static struct constdef  posix_constants_pathconf[] = {
-#ifdef _PC_ABI_AIO_XFER_MAX
+#    ifdef _PC_ABI_AIO_XFER_MAX
     {"PC_ABI_AIO_XFER_MAX",     _PC_ABI_AIO_XFER_MAX},
-#endif
-#ifdef _PC_ABI_ASYNC_IO
+#    endif
+#    ifdef _PC_ABI_ASYNC_IO
     {"PC_ABI_ASYNC_IO", _PC_ABI_ASYNC_IO},
-#endif
-#ifdef _PC_ASYNC_IO
+#    endif
+#    ifdef _PC_ASYNC_IO
     {"PC_ASYNC_IO",     _PC_ASYNC_IO},
-#endif
-#ifdef _PC_CHOWN_RESTRICTED
+#    endif
+#    ifdef _PC_CHOWN_RESTRICTED
     {"PC_CHOWN_RESTRICTED",     _PC_CHOWN_RESTRICTED},
-#endif
-#ifdef _PC_FILESIZEBITS
+#    endif
+#    ifdef _PC_FILESIZEBITS
     {"PC_FILESIZEBITS", _PC_FILESIZEBITS},
-#endif
-#ifdef _PC_LAST
+#    endif
+#    ifdef _PC_LAST
     {"PC_LAST", _PC_LAST},
-#endif
-#ifdef _PC_LINK_MAX
+#    endif
+#    ifdef _PC_LINK_MAX
     {"PC_LINK_MAX",     _PC_LINK_MAX},
-#endif
-#ifdef _PC_MAX_CANON
+#    endif
+#    ifdef _PC_MAX_CANON
     {"PC_MAX_CANON",    _PC_MAX_CANON},
-#endif
-#ifdef _PC_MAX_INPUT
+#    endif
+#    ifdef _PC_MAX_INPUT
     {"PC_MAX_INPUT",    _PC_MAX_INPUT},
-#endif
-#ifdef _PC_NAME_MAX
+#    endif
+#    ifdef _PC_NAME_MAX
     {"PC_NAME_MAX",     _PC_NAME_MAX},
-#endif
-#ifdef _PC_NO_TRUNC
+#    endif
+#    ifdef _PC_NO_TRUNC
     {"PC_NO_TRUNC",     _PC_NO_TRUNC},
-#endif
-#ifdef _PC_PATH_MAX
+#    endif
+#    ifdef _PC_PATH_MAX
     {"PC_PATH_MAX",     _PC_PATH_MAX},
-#endif
-#ifdef _PC_PIPE_BUF
+#    endif
+#    ifdef _PC_PIPE_BUF
     {"PC_PIPE_BUF",     _PC_PIPE_BUF},
-#endif
-#ifdef _PC_PRIO_IO
+#    endif
+#    ifdef _PC_PRIO_IO
     {"PC_PRIO_IO",      _PC_PRIO_IO},
-#endif
-#ifdef _PC_SOCK_MAXBUF
+#    endif
+#    ifdef _PC_SOCK_MAXBUF
     {"PC_SOCK_MAXBUF",  _PC_SOCK_MAXBUF},
-#endif
-#ifdef _PC_SYNC_IO
+#    endif
+#    ifdef _PC_SYNC_IO
     {"PC_SYNC_IO",      _PC_SYNC_IO},
-#endif
-#ifdef _PC_VDISABLE
+#    endif
+#    ifdef _PC_VDISABLE
     {"PC_VDISABLE",     _PC_VDISABLE},
-#endif
-#ifdef _PC_ACL_ENABLED
+#    endif
+#    ifdef _PC_ACL_ENABLED
     {"PC_ACL_ENABLED",  _PC_ACL_ENABLED},
-#endif
-#ifdef _PC_MIN_HOLE_SIZE
+#    endif
+#    ifdef _PC_MIN_HOLE_SIZE
     {"PC_MIN_HOLE_SIZE",    _PC_MIN_HOLE_SIZE},
-#endif
-#ifdef _PC_ALLOC_SIZE_MIN
+#    endif
+#    ifdef _PC_ALLOC_SIZE_MIN
     {"PC_ALLOC_SIZE_MIN",   _PC_ALLOC_SIZE_MIN},
-#endif
-#ifdef _PC_REC_INCR_XFER_SIZE
+#    endif
+#    ifdef _PC_REC_INCR_XFER_SIZE
     {"PC_REC_INCR_XFER_SIZE",   _PC_REC_INCR_XFER_SIZE},
-#endif
-#ifdef _PC_REC_MAX_XFER_SIZE
+#    endif
+#    ifdef _PC_REC_MAX_XFER_SIZE
     {"PC_REC_MAX_XFER_SIZE",    _PC_REC_MAX_XFER_SIZE},
-#endif
-#ifdef _PC_REC_MIN_XFER_SIZE
+#    endif
+#    ifdef _PC_REC_MIN_XFER_SIZE
     {"PC_REC_MIN_XFER_SIZE",    _PC_REC_MIN_XFER_SIZE},
-#endif
-#ifdef _PC_REC_XFER_ALIGN
+#    endif
+#    ifdef _PC_REC_XFER_ALIGN
     {"PC_REC_XFER_ALIGN",   _PC_REC_XFER_ALIGN},
-#endif
-#ifdef _PC_SYMLINK_MAX
+#    endif
+#    ifdef _PC_SYMLINK_MAX
     {"PC_SYMLINK_MAX",  _PC_SYMLINK_MAX},
-#endif
-#ifdef _PC_XATTR_ENABLED
+#    endif
+#    ifdef _PC_XATTR_ENABLED
     {"PC_XATTR_ENABLED",    _PC_XATTR_ENABLED},
-#endif
-#ifdef _PC_XATTR_EXISTS
+#    endif
+#    ifdef _PC_XATTR_EXISTS
     {"PC_XATTR_EXISTS", _PC_XATTR_EXISTS},
-#endif
-#ifdef _PC_TIMESTAMP_RESOLUTION
+#    endif
+#    ifdef _PC_TIMESTAMP_RESOLUTION
     {"PC_TIMESTAMP_RESOLUTION", _PC_TIMESTAMP_RESOLUTION},
-#endif
+#    endif
 };
 
 static int
@@ -10574,10 +10574,10 @@ conv_path_confname(PyObject *arg, int *valuep)
                          sizeof(posix_constants_pathconf)
                            / sizeof(struct constdef));
 }
-#endif
+#  endif
 
 
-#ifdef HAVE_FPATHCONF
+#  ifdef HAVE_FPATHCONF
 /*[clinic input]
 os.fpathconf -> long
 
@@ -10603,10 +10603,10 @@ os_fpathconf_impl(PyObject *module, int fd, int name)
 
     return limit;
 }
-#endif /* HAVE_FPATHCONF */
+#  endif /* HAVE_FPATHCONF */
 
 
-#ifdef HAVE_PATHCONF
+#  ifdef HAVE_PATHCONF
 /*[clinic input]
 os.pathconf -> long
     path: path_t(allow_fd='PATH_HAVE_FPATHCONF')
@@ -10626,11 +10626,11 @@ os_pathconf_impl(PyObject *module, path_t *path, int name)
     long limit;
 
     errno = 0;
-#ifdef HAVE_FPATHCONF
+#    ifdef HAVE_FPATHCONF
     if (path->fd != -1)
         limit = fpathconf(path->fd, name);
     else
-#endif
+#    endif
         limit = pathconf(path->narrow, name);
     if (limit == -1 && errno != 0) {
         if (errno == EINVAL)
@@ -10642,160 +10642,160 @@ os_pathconf_impl(PyObject *module, path_t *path, int name)
 
     return limit;
 }
-#endif /* HAVE_PATHCONF */
+#  endif /* HAVE_PATHCONF */
 
-#ifdef HAVE_CONFSTR
+#  ifdef HAVE_CONFSTR
 static struct constdef posix_constants_confstr[] = {
-#ifdef _CS_ARCHITECTURE
+#    ifdef _CS_ARCHITECTURE
     {"CS_ARCHITECTURE", _CS_ARCHITECTURE},
-#endif
-#ifdef _CS_GNU_LIBC_VERSION
+#    endif
+#    ifdef _CS_GNU_LIBC_VERSION
     {"CS_GNU_LIBC_VERSION",     _CS_GNU_LIBC_VERSION},
-#endif
-#ifdef _CS_GNU_LIBPTHREAD_VERSION
+#    endif
+#    ifdef _CS_GNU_LIBPTHREAD_VERSION
     {"CS_GNU_LIBPTHREAD_VERSION",       _CS_GNU_LIBPTHREAD_VERSION},
-#endif
-#ifdef _CS_HOSTNAME
+#    endif
+#    ifdef _CS_HOSTNAME
     {"CS_HOSTNAME",     _CS_HOSTNAME},
-#endif
-#ifdef _CS_HW_PROVIDER
+#    endif
+#    ifdef _CS_HW_PROVIDER
     {"CS_HW_PROVIDER",  _CS_HW_PROVIDER},
-#endif
-#ifdef _CS_HW_SERIAL
+#    endif
+#    ifdef _CS_HW_SERIAL
     {"CS_HW_SERIAL",    _CS_HW_SERIAL},
-#endif
-#ifdef _CS_INITTAB_NAME
+#    endif
+#    ifdef _CS_INITTAB_NAME
     {"CS_INITTAB_NAME", _CS_INITTAB_NAME},
-#endif
-#ifdef _CS_LFS64_CFLAGS
+#    endif
+#    ifdef _CS_LFS64_CFLAGS
     {"CS_LFS64_CFLAGS", _CS_LFS64_CFLAGS},
-#endif
-#ifdef _CS_LFS64_LDFLAGS
+#    endif
+#    ifdef _CS_LFS64_LDFLAGS
     {"CS_LFS64_LDFLAGS",        _CS_LFS64_LDFLAGS},
-#endif
-#ifdef _CS_LFS64_LIBS
+#    endif
+#    ifdef _CS_LFS64_LIBS
     {"CS_LFS64_LIBS",   _CS_LFS64_LIBS},
-#endif
-#ifdef _CS_LFS64_LINTFLAGS
+#    endif
+#    ifdef _CS_LFS64_LINTFLAGS
     {"CS_LFS64_LINTFLAGS",      _CS_LFS64_LINTFLAGS},
-#endif
-#ifdef _CS_LFS_CFLAGS
+#    endif
+#    ifdef _CS_LFS_CFLAGS
     {"CS_LFS_CFLAGS",   _CS_LFS_CFLAGS},
-#endif
-#ifdef _CS_LFS_LDFLAGS
+#    endif
+#    ifdef _CS_LFS_LDFLAGS
     {"CS_LFS_LDFLAGS",  _CS_LFS_LDFLAGS},
-#endif
-#ifdef _CS_LFS_LIBS
+#    endif
+#    ifdef _CS_LFS_LIBS
     {"CS_LFS_LIBS",     _CS_LFS_LIBS},
-#endif
-#ifdef _CS_LFS_LINTFLAGS
+#    endif
+#    ifdef _CS_LFS_LINTFLAGS
     {"CS_LFS_LINTFLAGS",        _CS_LFS_LINTFLAGS},
-#endif
-#ifdef _CS_MACHINE
+#    endif
+#    ifdef _CS_MACHINE
     {"CS_MACHINE",      _CS_MACHINE},
-#endif
-#ifdef _CS_PATH
+#    endif
+#    ifdef _CS_PATH
     {"CS_PATH", _CS_PATH},
-#endif
-#ifdef _CS_RELEASE
+#    endif
+#    ifdef _CS_RELEASE
     {"CS_RELEASE",      _CS_RELEASE},
-#endif
-#ifdef _CS_SRPC_DOMAIN
+#    endif
+#    ifdef _CS_SRPC_DOMAIN
     {"CS_SRPC_DOMAIN",  _CS_SRPC_DOMAIN},
-#endif
-#ifdef _CS_SYSNAME
+#    endif
+#    ifdef _CS_SYSNAME
     {"CS_SYSNAME",      _CS_SYSNAME},
-#endif
-#ifdef _CS_VERSION
+#    endif
+#    ifdef _CS_VERSION
     {"CS_VERSION",      _CS_VERSION},
-#endif
-#ifdef _CS_XBS5_ILP32_OFF32_CFLAGS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFF32_CFLAGS
     {"CS_XBS5_ILP32_OFF32_CFLAGS",      _CS_XBS5_ILP32_OFF32_CFLAGS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFF32_LDFLAGS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFF32_LDFLAGS
     {"CS_XBS5_ILP32_OFF32_LDFLAGS",     _CS_XBS5_ILP32_OFF32_LDFLAGS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFF32_LIBS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFF32_LIBS
     {"CS_XBS5_ILP32_OFF32_LIBS",        _CS_XBS5_ILP32_OFF32_LIBS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFF32_LINTFLAGS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFF32_LINTFLAGS
     {"CS_XBS5_ILP32_OFF32_LINTFLAGS",   _CS_XBS5_ILP32_OFF32_LINTFLAGS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFFBIG_CFLAGS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFFBIG_CFLAGS
     {"CS_XBS5_ILP32_OFFBIG_CFLAGS",     _CS_XBS5_ILP32_OFFBIG_CFLAGS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFFBIG_LDFLAGS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFFBIG_LDFLAGS
     {"CS_XBS5_ILP32_OFFBIG_LDFLAGS",    _CS_XBS5_ILP32_OFFBIG_LDFLAGS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFFBIG_LIBS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFFBIG_LIBS
     {"CS_XBS5_ILP32_OFFBIG_LIBS",       _CS_XBS5_ILP32_OFFBIG_LIBS},
-#endif
-#ifdef _CS_XBS5_ILP32_OFFBIG_LINTFLAGS
+#    endif
+#    ifdef _CS_XBS5_ILP32_OFFBIG_LINTFLAGS
     {"CS_XBS5_ILP32_OFFBIG_LINTFLAGS",  _CS_XBS5_ILP32_OFFBIG_LINTFLAGS},
-#endif
-#ifdef _CS_XBS5_LP64_OFF64_CFLAGS
+#    endif
+#    ifdef _CS_XBS5_LP64_OFF64_CFLAGS
     {"CS_XBS5_LP64_OFF64_CFLAGS",       _CS_XBS5_LP64_OFF64_CFLAGS},
-#endif
-#ifdef _CS_XBS5_LP64_OFF64_LDFLAGS
+#    endif
+#    ifdef _CS_XBS5_LP64_OFF64_LDFLAGS
     {"CS_XBS5_LP64_OFF64_LDFLAGS",      _CS_XBS5_LP64_OFF64_LDFLAGS},
-#endif
-#ifdef _CS_XBS5_LP64_OFF64_LIBS
+#    endif
+#    ifdef _CS_XBS5_LP64_OFF64_LIBS
     {"CS_XBS5_LP64_OFF64_LIBS", _CS_XBS5_LP64_OFF64_LIBS},
-#endif
-#ifdef _CS_XBS5_LP64_OFF64_LINTFLAGS
+#    endif
+#    ifdef _CS_XBS5_LP64_OFF64_LINTFLAGS
     {"CS_XBS5_LP64_OFF64_LINTFLAGS",    _CS_XBS5_LP64_OFF64_LINTFLAGS},
-#endif
-#ifdef _CS_XBS5_LPBIG_OFFBIG_CFLAGS
+#    endif
+#    ifdef _CS_XBS5_LPBIG_OFFBIG_CFLAGS
     {"CS_XBS5_LPBIG_OFFBIG_CFLAGS",     _CS_XBS5_LPBIG_OFFBIG_CFLAGS},
-#endif
-#ifdef _CS_XBS5_LPBIG_OFFBIG_LDFLAGS
+#    endif
+#    ifdef _CS_XBS5_LPBIG_OFFBIG_LDFLAGS
     {"CS_XBS5_LPBIG_OFFBIG_LDFLAGS",    _CS_XBS5_LPBIG_OFFBIG_LDFLAGS},
-#endif
-#ifdef _CS_XBS5_LPBIG_OFFBIG_LIBS
+#    endif
+#    ifdef _CS_XBS5_LPBIG_OFFBIG_LIBS
     {"CS_XBS5_LPBIG_OFFBIG_LIBS",       _CS_XBS5_LPBIG_OFFBIG_LIBS},
-#endif
-#ifdef _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS
+#    endif
+#    ifdef _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS
     {"CS_XBS5_LPBIG_OFFBIG_LINTFLAGS",  _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS},
-#endif
-#ifdef _MIPS_CS_AVAIL_PROCESSORS
+#    endif
+#    ifdef _MIPS_CS_AVAIL_PROCESSORS
     {"MIPS_CS_AVAIL_PROCESSORS",        _MIPS_CS_AVAIL_PROCESSORS},
-#endif
-#ifdef _MIPS_CS_BASE
+#    endif
+#    ifdef _MIPS_CS_BASE
     {"MIPS_CS_BASE",    _MIPS_CS_BASE},
-#endif
-#ifdef _MIPS_CS_HOSTID
+#    endif
+#    ifdef _MIPS_CS_HOSTID
     {"MIPS_CS_HOSTID",  _MIPS_CS_HOSTID},
-#endif
-#ifdef _MIPS_CS_HW_NAME
+#    endif
+#    ifdef _MIPS_CS_HW_NAME
     {"MIPS_CS_HW_NAME", _MIPS_CS_HW_NAME},
-#endif
-#ifdef _MIPS_CS_NUM_PROCESSORS
+#    endif
+#    ifdef _MIPS_CS_NUM_PROCESSORS
     {"MIPS_CS_NUM_PROCESSORS",  _MIPS_CS_NUM_PROCESSORS},
-#endif
-#ifdef _MIPS_CS_OSREL_MAJ
+#    endif
+#    ifdef _MIPS_CS_OSREL_MAJ
     {"MIPS_CS_OSREL_MAJ",       _MIPS_CS_OSREL_MAJ},
-#endif
-#ifdef _MIPS_CS_OSREL_MIN
+#    endif
+#    ifdef _MIPS_CS_OSREL_MIN
     {"MIPS_CS_OSREL_MIN",       _MIPS_CS_OSREL_MIN},
-#endif
-#ifdef _MIPS_CS_OSREL_PATCH
+#    endif
+#    ifdef _MIPS_CS_OSREL_PATCH
     {"MIPS_CS_OSREL_PATCH",     _MIPS_CS_OSREL_PATCH},
-#endif
-#ifdef _MIPS_CS_OS_NAME
+#    endif
+#    ifdef _MIPS_CS_OS_NAME
     {"MIPS_CS_OS_NAME", _MIPS_CS_OS_NAME},
-#endif
-#ifdef _MIPS_CS_OS_PROVIDER
+#    endif
+#    ifdef _MIPS_CS_OS_PROVIDER
     {"MIPS_CS_OS_PROVIDER",     _MIPS_CS_OS_PROVIDER},
-#endif
-#ifdef _MIPS_CS_PROCESSORS
+#    endif
+#    ifdef _MIPS_CS_PROCESSORS
     {"MIPS_CS_PROCESSORS",      _MIPS_CS_PROCESSORS},
-#endif
-#ifdef _MIPS_CS_SERIAL
+#    endif
+#    ifdef _MIPS_CS_SERIAL
     {"MIPS_CS_SERIAL",  _MIPS_CS_SERIAL},
-#endif
-#ifdef _MIPS_CS_VENDOR
+#    endif
+#    ifdef _MIPS_CS_VENDOR
     {"MIPS_CS_VENDOR",  _MIPS_CS_VENDOR},
-#endif
+#    endif
 };
 
 static int
@@ -10850,503 +10850,503 @@ os_confstr_impl(PyObject *module, int name)
         result = PyUnicode_DecodeFSDefaultAndSize(buffer, len-1);
     return result;
 }
-#endif /* HAVE_CONFSTR */
+#  endif /* HAVE_CONFSTR */
 
 
-#ifdef HAVE_SYSCONF
+#  ifdef HAVE_SYSCONF
 static struct constdef posix_constants_sysconf[] = {
-#ifdef _SC_2_CHAR_TERM
+#    ifdef _SC_2_CHAR_TERM
     {"SC_2_CHAR_TERM",  _SC_2_CHAR_TERM},
-#endif
-#ifdef _SC_2_C_BIND
+#    endif
+#    ifdef _SC_2_C_BIND
     {"SC_2_C_BIND",     _SC_2_C_BIND},
-#endif
-#ifdef _SC_2_C_DEV
+#    endif
+#    ifdef _SC_2_C_DEV
     {"SC_2_C_DEV",      _SC_2_C_DEV},
-#endif
-#ifdef _SC_2_C_VERSION
+#    endif
+#    ifdef _SC_2_C_VERSION
     {"SC_2_C_VERSION",  _SC_2_C_VERSION},
-#endif
-#ifdef _SC_2_FORT_DEV
+#    endif
+#    ifdef _SC_2_FORT_DEV
     {"SC_2_FORT_DEV",   _SC_2_FORT_DEV},
-#endif
-#ifdef _SC_2_FORT_RUN
+#    endif
+#    ifdef _SC_2_FORT_RUN
     {"SC_2_FORT_RUN",   _SC_2_FORT_RUN},
-#endif
-#ifdef _SC_2_LOCALEDEF
+#    endif
+#    ifdef _SC_2_LOCALEDEF
     {"SC_2_LOCALEDEF",  _SC_2_LOCALEDEF},
-#endif
-#ifdef _SC_2_SW_DEV
+#    endif
+#    ifdef _SC_2_SW_DEV
     {"SC_2_SW_DEV",     _SC_2_SW_DEV},
-#endif
-#ifdef _SC_2_UPE
+#    endif
+#    ifdef _SC_2_UPE
     {"SC_2_UPE",        _SC_2_UPE},
-#endif
-#ifdef _SC_2_VERSION
+#    endif
+#    ifdef _SC_2_VERSION
     {"SC_2_VERSION",    _SC_2_VERSION},
-#endif
-#ifdef _SC_ABI_ASYNCHRONOUS_IO
+#    endif
+#    ifdef _SC_ABI_ASYNCHRONOUS_IO
     {"SC_ABI_ASYNCHRONOUS_IO",  _SC_ABI_ASYNCHRONOUS_IO},
-#endif
-#ifdef _SC_ACL
+#    endif
+#    ifdef _SC_ACL
     {"SC_ACL",  _SC_ACL},
-#endif
-#ifdef _SC_AIO_LISTIO_MAX
+#    endif
+#    ifdef _SC_AIO_LISTIO_MAX
     {"SC_AIO_LISTIO_MAX",       _SC_AIO_LISTIO_MAX},
-#endif
-#ifdef _SC_AIO_MAX
+#    endif
+#    ifdef _SC_AIO_MAX
     {"SC_AIO_MAX",      _SC_AIO_MAX},
-#endif
-#ifdef _SC_AIO_PRIO_DELTA_MAX
+#    endif
+#    ifdef _SC_AIO_PRIO_DELTA_MAX
     {"SC_AIO_PRIO_DELTA_MAX",   _SC_AIO_PRIO_DELTA_MAX},
-#endif
-#ifdef _SC_ARG_MAX
+#    endif
+#    ifdef _SC_ARG_MAX
     {"SC_ARG_MAX",      _SC_ARG_MAX},
-#endif
-#ifdef _SC_ASYNCHRONOUS_IO
+#    endif
+#    ifdef _SC_ASYNCHRONOUS_IO
     {"SC_ASYNCHRONOUS_IO",      _SC_ASYNCHRONOUS_IO},
-#endif
-#ifdef _SC_ATEXIT_MAX
+#    endif
+#    ifdef _SC_ATEXIT_MAX
     {"SC_ATEXIT_MAX",   _SC_ATEXIT_MAX},
-#endif
-#ifdef _SC_AUDIT
+#    endif
+#    ifdef _SC_AUDIT
     {"SC_AUDIT",        _SC_AUDIT},
-#endif
-#ifdef _SC_AVPHYS_PAGES
+#    endif
+#    ifdef _SC_AVPHYS_PAGES
     {"SC_AVPHYS_PAGES", _SC_AVPHYS_PAGES},
-#endif
-#ifdef _SC_BC_BASE_MAX
+#    endif
+#    ifdef _SC_BC_BASE_MAX
     {"SC_BC_BASE_MAX",  _SC_BC_BASE_MAX},
-#endif
-#ifdef _SC_BC_DIM_MAX
+#    endif
+#    ifdef _SC_BC_DIM_MAX
     {"SC_BC_DIM_MAX",   _SC_BC_DIM_MAX},
-#endif
-#ifdef _SC_BC_SCALE_MAX
+#    endif
+#    ifdef _SC_BC_SCALE_MAX
     {"SC_BC_SCALE_MAX", _SC_BC_SCALE_MAX},
-#endif
-#ifdef _SC_BC_STRING_MAX
+#    endif
+#    ifdef _SC_BC_STRING_MAX
     {"SC_BC_STRING_MAX",        _SC_BC_STRING_MAX},
-#endif
-#ifdef _SC_CAP
+#    endif
+#    ifdef _SC_CAP
     {"SC_CAP",  _SC_CAP},
-#endif
-#ifdef _SC_CHARCLASS_NAME_MAX
+#    endif
+#    ifdef _SC_CHARCLASS_NAME_MAX
     {"SC_CHARCLASS_NAME_MAX",   _SC_CHARCLASS_NAME_MAX},
-#endif
-#ifdef _SC_CHAR_BIT
+#    endif
+#    ifdef _SC_CHAR_BIT
     {"SC_CHAR_BIT",     _SC_CHAR_BIT},
-#endif
-#ifdef _SC_CHAR_MAX
+#    endif
+#    ifdef _SC_CHAR_MAX
     {"SC_CHAR_MAX",     _SC_CHAR_MAX},
-#endif
-#ifdef _SC_CHAR_MIN
+#    endif
+#    ifdef _SC_CHAR_MIN
     {"SC_CHAR_MIN",     _SC_CHAR_MIN},
-#endif
-#ifdef _SC_CHILD_MAX
+#    endif
+#    ifdef _SC_CHILD_MAX
     {"SC_CHILD_MAX",    _SC_CHILD_MAX},
-#endif
-#ifdef _SC_CLK_TCK
+#    endif
+#    ifdef _SC_CLK_TCK
     {"SC_CLK_TCK",      _SC_CLK_TCK},
-#endif
-#ifdef _SC_COHER_BLKSZ
+#    endif
+#    ifdef _SC_COHER_BLKSZ
     {"SC_COHER_BLKSZ",  _SC_COHER_BLKSZ},
-#endif
-#ifdef _SC_COLL_WEIGHTS_MAX
+#    endif
+#    ifdef _SC_COLL_WEIGHTS_MAX
     {"SC_COLL_WEIGHTS_MAX",     _SC_COLL_WEIGHTS_MAX},
-#endif
-#ifdef _SC_DCACHE_ASSOC
+#    endif
+#    ifdef _SC_DCACHE_ASSOC
     {"SC_DCACHE_ASSOC", _SC_DCACHE_ASSOC},
-#endif
-#ifdef _SC_DCACHE_BLKSZ
+#    endif
+#    ifdef _SC_DCACHE_BLKSZ
     {"SC_DCACHE_BLKSZ", _SC_DCACHE_BLKSZ},
-#endif
-#ifdef _SC_DCACHE_LINESZ
+#    endif
+#    ifdef _SC_DCACHE_LINESZ
     {"SC_DCACHE_LINESZ",        _SC_DCACHE_LINESZ},
-#endif
-#ifdef _SC_DCACHE_SZ
+#    endif
+#    ifdef _SC_DCACHE_SZ
     {"SC_DCACHE_SZ",    _SC_DCACHE_SZ},
-#endif
-#ifdef _SC_DCACHE_TBLKSZ
+#    endif
+#    ifdef _SC_DCACHE_TBLKSZ
     {"SC_DCACHE_TBLKSZ",        _SC_DCACHE_TBLKSZ},
-#endif
-#ifdef _SC_DELAYTIMER_MAX
+#    endif
+#    ifdef _SC_DELAYTIMER_MAX
     {"SC_DELAYTIMER_MAX",       _SC_DELAYTIMER_MAX},
-#endif
-#ifdef _SC_EQUIV_CLASS_MAX
+#    endif
+#    ifdef _SC_EQUIV_CLASS_MAX
     {"SC_EQUIV_CLASS_MAX",      _SC_EQUIV_CLASS_MAX},
-#endif
-#ifdef _SC_EXPR_NEST_MAX
+#    endif
+#    ifdef _SC_EXPR_NEST_MAX
     {"SC_EXPR_NEST_MAX",        _SC_EXPR_NEST_MAX},
-#endif
-#ifdef _SC_FSYNC
+#    endif
+#    ifdef _SC_FSYNC
     {"SC_FSYNC",        _SC_FSYNC},
-#endif
-#ifdef _SC_GETGR_R_SIZE_MAX
+#    endif
+#    ifdef _SC_GETGR_R_SIZE_MAX
     {"SC_GETGR_R_SIZE_MAX",     _SC_GETGR_R_SIZE_MAX},
-#endif
-#ifdef _SC_GETPW_R_SIZE_MAX
+#    endif
+#    ifdef _SC_GETPW_R_SIZE_MAX
     {"SC_GETPW_R_SIZE_MAX",     _SC_GETPW_R_SIZE_MAX},
-#endif
-#ifdef _SC_ICACHE_ASSOC
+#    endif
+#    ifdef _SC_ICACHE_ASSOC
     {"SC_ICACHE_ASSOC", _SC_ICACHE_ASSOC},
-#endif
-#ifdef _SC_ICACHE_BLKSZ
+#    endif
+#    ifdef _SC_ICACHE_BLKSZ
     {"SC_ICACHE_BLKSZ", _SC_ICACHE_BLKSZ},
-#endif
-#ifdef _SC_ICACHE_LINESZ
+#    endif
+#    ifdef _SC_ICACHE_LINESZ
     {"SC_ICACHE_LINESZ",        _SC_ICACHE_LINESZ},
-#endif
-#ifdef _SC_ICACHE_SZ
+#    endif
+#    ifdef _SC_ICACHE_SZ
     {"SC_ICACHE_SZ",    _SC_ICACHE_SZ},
-#endif
-#ifdef _SC_INF
+#    endif
+#    ifdef _SC_INF
     {"SC_INF",  _SC_INF},
-#endif
-#ifdef _SC_INT_MAX
+#    endif
+#    ifdef _SC_INT_MAX
     {"SC_INT_MAX",      _SC_INT_MAX},
-#endif
-#ifdef _SC_INT_MIN
+#    endif
+#    ifdef _SC_INT_MIN
     {"SC_INT_MIN",      _SC_INT_MIN},
-#endif
-#ifdef _SC_IOV_MAX
+#    endif
+#    ifdef _SC_IOV_MAX
     {"SC_IOV_MAX",      _SC_IOV_MAX},
-#endif
-#ifdef _SC_IP_SECOPTS
+#    endif
+#    ifdef _SC_IP_SECOPTS
     {"SC_IP_SECOPTS",   _SC_IP_SECOPTS},
-#endif
-#ifdef _SC_JOB_CONTROL
+#    endif
+#    ifdef _SC_JOB_CONTROL
     {"SC_JOB_CONTROL",  _SC_JOB_CONTROL},
-#endif
-#ifdef _SC_KERN_POINTERS
+#    endif
+#    ifdef _SC_KERN_POINTERS
     {"SC_KERN_POINTERS",        _SC_KERN_POINTERS},
-#endif
-#ifdef _SC_KERN_SIM
+#    endif
+#    ifdef _SC_KERN_SIM
     {"SC_KERN_SIM",     _SC_KERN_SIM},
-#endif
-#ifdef _SC_LINE_MAX
+#    endif
+#    ifdef _SC_LINE_MAX
     {"SC_LINE_MAX",     _SC_LINE_MAX},
-#endif
-#ifdef _SC_LOGIN_NAME_MAX
+#    endif
+#    ifdef _SC_LOGIN_NAME_MAX
     {"SC_LOGIN_NAME_MAX",       _SC_LOGIN_NAME_MAX},
-#endif
-#ifdef _SC_LOGNAME_MAX
+#    endif
+#    ifdef _SC_LOGNAME_MAX
     {"SC_LOGNAME_MAX",  _SC_LOGNAME_MAX},
-#endif
-#ifdef _SC_LONG_BIT
+#    endif
+#    ifdef _SC_LONG_BIT
     {"SC_LONG_BIT",     _SC_LONG_BIT},
-#endif
-#ifdef _SC_MAC
+#    endif
+#    ifdef _SC_MAC
     {"SC_MAC",  _SC_MAC},
-#endif
-#ifdef _SC_MAPPED_FILES
+#    endif
+#    ifdef _SC_MAPPED_FILES
     {"SC_MAPPED_FILES", _SC_MAPPED_FILES},
-#endif
-#ifdef _SC_MAXPID
+#    endif
+#    ifdef _SC_MAXPID
     {"SC_MAXPID",       _SC_MAXPID},
-#endif
-#ifdef _SC_MB_LEN_MAX
+#    endif
+#    ifdef _SC_MB_LEN_MAX
     {"SC_MB_LEN_MAX",   _SC_MB_LEN_MAX},
-#endif
-#ifdef _SC_MEMLOCK
+#    endif
+#    ifdef _SC_MEMLOCK
     {"SC_MEMLOCK",      _SC_MEMLOCK},
-#endif
-#ifdef _SC_MEMLOCK_RANGE
+#    endif
+#    ifdef _SC_MEMLOCK_RANGE
     {"SC_MEMLOCK_RANGE",        _SC_MEMLOCK_RANGE},
-#endif
-#ifdef _SC_MEMORY_PROTECTION
+#    endif
+#    ifdef _SC_MEMORY_PROTECTION
     {"SC_MEMORY_PROTECTION",    _SC_MEMORY_PROTECTION},
-#endif
-#ifdef _SC_MESSAGE_PASSING
+#    endif
+#    ifdef _SC_MESSAGE_PASSING
     {"SC_MESSAGE_PASSING",      _SC_MESSAGE_PASSING},
-#endif
-#ifdef _SC_MMAP_FIXED_ALIGNMENT
+#    endif
+#    ifdef _SC_MMAP_FIXED_ALIGNMENT
     {"SC_MMAP_FIXED_ALIGNMENT", _SC_MMAP_FIXED_ALIGNMENT},
-#endif
-#ifdef _SC_MQ_OPEN_MAX
+#    endif
+#    ifdef _SC_MQ_OPEN_MAX
     {"SC_MQ_OPEN_MAX",  _SC_MQ_OPEN_MAX},
-#endif
-#ifdef _SC_MQ_PRIO_MAX
+#    endif
+#    ifdef _SC_MQ_PRIO_MAX
     {"SC_MQ_PRIO_MAX",  _SC_MQ_PRIO_MAX},
-#endif
-#ifdef _SC_NACLS_MAX
+#    endif
+#    ifdef _SC_NACLS_MAX
     {"SC_NACLS_MAX",    _SC_NACLS_MAX},
-#endif
-#ifdef _SC_NGROUPS_MAX
+#    endif
+#    ifdef _SC_NGROUPS_MAX
     {"SC_NGROUPS_MAX",  _SC_NGROUPS_MAX},
-#endif
-#ifdef _SC_NL_ARGMAX
+#    endif
+#    ifdef _SC_NL_ARGMAX
     {"SC_NL_ARGMAX",    _SC_NL_ARGMAX},
-#endif
-#ifdef _SC_NL_LANGMAX
+#    endif
+#    ifdef _SC_NL_LANGMAX
     {"SC_NL_LANGMAX",   _SC_NL_LANGMAX},
-#endif
-#ifdef _SC_NL_MSGMAX
+#    endif
+#    ifdef _SC_NL_MSGMAX
     {"SC_NL_MSGMAX",    _SC_NL_MSGMAX},
-#endif
-#ifdef _SC_NL_NMAX
+#    endif
+#    ifdef _SC_NL_NMAX
     {"SC_NL_NMAX",      _SC_NL_NMAX},
-#endif
-#ifdef _SC_NL_SETMAX
+#    endif
+#    ifdef _SC_NL_SETMAX
     {"SC_NL_SETMAX",    _SC_NL_SETMAX},
-#endif
-#ifdef _SC_NL_TEXTMAX
+#    endif
+#    ifdef _SC_NL_TEXTMAX
     {"SC_NL_TEXTMAX",   _SC_NL_TEXTMAX},
-#endif
-#ifdef _SC_NPROCESSORS_CONF
+#    endif
+#    ifdef _SC_NPROCESSORS_CONF
     {"SC_NPROCESSORS_CONF",     _SC_NPROCESSORS_CONF},
-#endif
-#ifdef _SC_NPROCESSORS_ONLN
+#    endif
+#    ifdef _SC_NPROCESSORS_ONLN
     {"SC_NPROCESSORS_ONLN",     _SC_NPROCESSORS_ONLN},
-#endif
-#ifdef _SC_NPROC_CONF
+#    endif
+#    ifdef _SC_NPROC_CONF
     {"SC_NPROC_CONF",   _SC_NPROC_CONF},
-#endif
-#ifdef _SC_NPROC_ONLN
+#    endif
+#    ifdef _SC_NPROC_ONLN
     {"SC_NPROC_ONLN",   _SC_NPROC_ONLN},
-#endif
-#ifdef _SC_NZERO
+#    endif
+#    ifdef _SC_NZERO
     {"SC_NZERO",        _SC_NZERO},
-#endif
-#ifdef _SC_OPEN_MAX
+#    endif
+#    ifdef _SC_OPEN_MAX
     {"SC_OPEN_MAX",     _SC_OPEN_MAX},
-#endif
-#ifdef _SC_PAGESIZE
+#    endif
+#    ifdef _SC_PAGESIZE
     {"SC_PAGESIZE",     _SC_PAGESIZE},
-#endif
-#ifdef _SC_PAGE_SIZE
+#    endif
+#    ifdef _SC_PAGE_SIZE
     {"SC_PAGE_SIZE",    _SC_PAGE_SIZE},
-#endif
-#ifdef _SC_PASS_MAX
+#    endif
+#    ifdef _SC_PASS_MAX
     {"SC_PASS_MAX",     _SC_PASS_MAX},
-#endif
-#ifdef _SC_PHYS_PAGES
+#    endif
+#    ifdef _SC_PHYS_PAGES
     {"SC_PHYS_PAGES",   _SC_PHYS_PAGES},
-#endif
-#ifdef _SC_PII
+#    endif
+#    ifdef _SC_PII
     {"SC_PII",  _SC_PII},
-#endif
-#ifdef _SC_PII_INTERNET
+#    endif
+#    ifdef _SC_PII_INTERNET
     {"SC_PII_INTERNET", _SC_PII_INTERNET},
-#endif
-#ifdef _SC_PII_INTERNET_DGRAM
+#    endif
+#    ifdef _SC_PII_INTERNET_DGRAM
     {"SC_PII_INTERNET_DGRAM",   _SC_PII_INTERNET_DGRAM},
-#endif
-#ifdef _SC_PII_INTERNET_STREAM
+#    endif
+#    ifdef _SC_PII_INTERNET_STREAM
     {"SC_PII_INTERNET_STREAM",  _SC_PII_INTERNET_STREAM},
-#endif
-#ifdef _SC_PII_OSI
+#    endif
+#    ifdef _SC_PII_OSI
     {"SC_PII_OSI",      _SC_PII_OSI},
-#endif
-#ifdef _SC_PII_OSI_CLTS
+#    endif
+#    ifdef _SC_PII_OSI_CLTS
     {"SC_PII_OSI_CLTS", _SC_PII_OSI_CLTS},
-#endif
-#ifdef _SC_PII_OSI_COTS
+#    endif
+#    ifdef _SC_PII_OSI_COTS
     {"SC_PII_OSI_COTS", _SC_PII_OSI_COTS},
-#endif
-#ifdef _SC_PII_OSI_M
+#    endif
+#    ifdef _SC_PII_OSI_M
     {"SC_PII_OSI_M",    _SC_PII_OSI_M},
-#endif
-#ifdef _SC_PII_SOCKET
+#    endif
+#    ifdef _SC_PII_SOCKET
     {"SC_PII_SOCKET",   _SC_PII_SOCKET},
-#endif
-#ifdef _SC_PII_XTI
+#    endif
+#    ifdef _SC_PII_XTI
     {"SC_PII_XTI",      _SC_PII_XTI},
-#endif
-#ifdef _SC_POLL
+#    endif
+#    ifdef _SC_POLL
     {"SC_POLL", _SC_POLL},
-#endif
-#ifdef _SC_PRIORITIZED_IO
+#    endif
+#    ifdef _SC_PRIORITIZED_IO
     {"SC_PRIORITIZED_IO",       _SC_PRIORITIZED_IO},
-#endif
-#ifdef _SC_PRIORITY_SCHEDULING
+#    endif
+#    ifdef _SC_PRIORITY_SCHEDULING
     {"SC_PRIORITY_SCHEDULING",  _SC_PRIORITY_SCHEDULING},
-#endif
-#ifdef _SC_REALTIME_SIGNALS
+#    endif
+#    ifdef _SC_REALTIME_SIGNALS
     {"SC_REALTIME_SIGNALS",     _SC_REALTIME_SIGNALS},
-#endif
-#ifdef _SC_RE_DUP_MAX
+#    endif
+#    ifdef _SC_RE_DUP_MAX
     {"SC_RE_DUP_MAX",   _SC_RE_DUP_MAX},
-#endif
-#ifdef _SC_RTSIG_MAX
+#    endif
+#    ifdef _SC_RTSIG_MAX
     {"SC_RTSIG_MAX",    _SC_RTSIG_MAX},
-#endif
-#ifdef _SC_SAVED_IDS
+#    endif
+#    ifdef _SC_SAVED_IDS
     {"SC_SAVED_IDS",    _SC_SAVED_IDS},
-#endif
-#ifdef _SC_SCHAR_MAX
+#    endif
+#    ifdef _SC_SCHAR_MAX
     {"SC_SCHAR_MAX",    _SC_SCHAR_MAX},
-#endif
-#ifdef _SC_SCHAR_MIN
+#    endif
+#    ifdef _SC_SCHAR_MIN
     {"SC_SCHAR_MIN",    _SC_SCHAR_MIN},
-#endif
-#ifdef _SC_SELECT
+#    endif
+#    ifdef _SC_SELECT
     {"SC_SELECT",       _SC_SELECT},
-#endif
-#ifdef _SC_SEMAPHORES
+#    endif
+#    ifdef _SC_SEMAPHORES
     {"SC_SEMAPHORES",   _SC_SEMAPHORES},
-#endif
-#ifdef _SC_SEM_NSEMS_MAX
+#    endif
+#    ifdef _SC_SEM_NSEMS_MAX
     {"SC_SEM_NSEMS_MAX",        _SC_SEM_NSEMS_MAX},
-#endif
-#ifdef _SC_SEM_VALUE_MAX
+#    endif
+#    ifdef _SC_SEM_VALUE_MAX
     {"SC_SEM_VALUE_MAX",        _SC_SEM_VALUE_MAX},
-#endif
-#ifdef _SC_SHARED_MEMORY_OBJECTS
+#    endif
+#    ifdef _SC_SHARED_MEMORY_OBJECTS
     {"SC_SHARED_MEMORY_OBJECTS",        _SC_SHARED_MEMORY_OBJECTS},
-#endif
-#ifdef _SC_SHRT_MAX
+#    endif
+#    ifdef _SC_SHRT_MAX
     {"SC_SHRT_MAX",     _SC_SHRT_MAX},
-#endif
-#ifdef _SC_SHRT_MIN
+#    endif
+#    ifdef _SC_SHRT_MIN
     {"SC_SHRT_MIN",     _SC_SHRT_MIN},
-#endif
-#ifdef _SC_SIGQUEUE_MAX
+#    endif
+#    ifdef _SC_SIGQUEUE_MAX
     {"SC_SIGQUEUE_MAX", _SC_SIGQUEUE_MAX},
-#endif
-#ifdef _SC_SIGRT_MAX
+#    endif
+#    ifdef _SC_SIGRT_MAX
     {"SC_SIGRT_MAX",    _SC_SIGRT_MAX},
-#endif
-#ifdef _SC_SIGRT_MIN
+#    endif
+#    ifdef _SC_SIGRT_MIN
     {"SC_SIGRT_MIN",    _SC_SIGRT_MIN},
-#endif
-#ifdef _SC_SOFTPOWER
+#    endif
+#    ifdef _SC_SOFTPOWER
     {"SC_SOFTPOWER",    _SC_SOFTPOWER},
-#endif
-#ifdef _SC_SPLIT_CACHE
+#    endif
+#    ifdef _SC_SPLIT_CACHE
     {"SC_SPLIT_CACHE",  _SC_SPLIT_CACHE},
-#endif
-#ifdef _SC_SSIZE_MAX
+#    endif
+#    ifdef _SC_SSIZE_MAX
     {"SC_SSIZE_MAX",    _SC_SSIZE_MAX},
-#endif
-#ifdef _SC_STACK_PROT
+#    endif
+#    ifdef _SC_STACK_PROT
     {"SC_STACK_PROT",   _SC_STACK_PROT},
-#endif
-#ifdef _SC_STREAM_MAX
+#    endif
+#    ifdef _SC_STREAM_MAX
     {"SC_STREAM_MAX",   _SC_STREAM_MAX},
-#endif
-#ifdef _SC_SYNCHRONIZED_IO
+#    endif
+#    ifdef _SC_SYNCHRONIZED_IO
     {"SC_SYNCHRONIZED_IO",      _SC_SYNCHRONIZED_IO},
-#endif
-#ifdef _SC_THREADS
+#    endif
+#    ifdef _SC_THREADS
     {"SC_THREADS",      _SC_THREADS},
-#endif
-#ifdef _SC_THREAD_ATTR_STACKADDR
+#    endif
+#    ifdef _SC_THREAD_ATTR_STACKADDR
     {"SC_THREAD_ATTR_STACKADDR",        _SC_THREAD_ATTR_STACKADDR},
-#endif
-#ifdef _SC_THREAD_ATTR_STACKSIZE
+#    endif
+#    ifdef _SC_THREAD_ATTR_STACKSIZE
     {"SC_THREAD_ATTR_STACKSIZE",        _SC_THREAD_ATTR_STACKSIZE},
-#endif
-#ifdef _SC_THREAD_DESTRUCTOR_ITERATIONS
+#    endif
+#    ifdef _SC_THREAD_DESTRUCTOR_ITERATIONS
     {"SC_THREAD_DESTRUCTOR_ITERATIONS", _SC_THREAD_DESTRUCTOR_ITERATIONS},
-#endif
-#ifdef _SC_THREAD_KEYS_MAX
+#    endif
+#    ifdef _SC_THREAD_KEYS_MAX
     {"SC_THREAD_KEYS_MAX",      _SC_THREAD_KEYS_MAX},
-#endif
-#ifdef _SC_THREAD_PRIORITY_SCHEDULING
+#    endif
+#    ifdef _SC_THREAD_PRIORITY_SCHEDULING
     {"SC_THREAD_PRIORITY_SCHEDULING",   _SC_THREAD_PRIORITY_SCHEDULING},
-#endif
-#ifdef _SC_THREAD_PRIO_INHERIT
+#    endif
+#    ifdef _SC_THREAD_PRIO_INHERIT
     {"SC_THREAD_PRIO_INHERIT",  _SC_THREAD_PRIO_INHERIT},
-#endif
-#ifdef _SC_THREAD_PRIO_PROTECT
+#    endif
+#    ifdef _SC_THREAD_PRIO_PROTECT
     {"SC_THREAD_PRIO_PROTECT",  _SC_THREAD_PRIO_PROTECT},
-#endif
-#ifdef _SC_THREAD_PROCESS_SHARED
+#    endif
+#    ifdef _SC_THREAD_PROCESS_SHARED
     {"SC_THREAD_PROCESS_SHARED",        _SC_THREAD_PROCESS_SHARED},
-#endif
-#ifdef _SC_THREAD_SAFE_FUNCTIONS
+#    endif
+#    ifdef _SC_THREAD_SAFE_FUNCTIONS
     {"SC_THREAD_SAFE_FUNCTIONS",        _SC_THREAD_SAFE_FUNCTIONS},
-#endif
-#ifdef _SC_THREAD_STACK_MIN
+#    endif
+#    ifdef _SC_THREAD_STACK_MIN
     {"SC_THREAD_STACK_MIN",     _SC_THREAD_STACK_MIN},
-#endif
-#ifdef _SC_THREAD_THREADS_MAX
+#    endif
+#    ifdef _SC_THREAD_THREADS_MAX
     {"SC_THREAD_THREADS_MAX",   _SC_THREAD_THREADS_MAX},
-#endif
-#ifdef _SC_TIMERS
+#    endif
+#    ifdef _SC_TIMERS
     {"SC_TIMERS",       _SC_TIMERS},
-#endif
-#ifdef _SC_TIMER_MAX
+#    endif
+#    ifdef _SC_TIMER_MAX
     {"SC_TIMER_MAX",    _SC_TIMER_MAX},
-#endif
-#ifdef _SC_TTY_NAME_MAX
+#    endif
+#    ifdef _SC_TTY_NAME_MAX
     {"SC_TTY_NAME_MAX", _SC_TTY_NAME_MAX},
-#endif
-#ifdef _SC_TZNAME_MAX
+#    endif
+#    ifdef _SC_TZNAME_MAX
     {"SC_TZNAME_MAX",   _SC_TZNAME_MAX},
-#endif
-#ifdef _SC_T_IOV_MAX
+#    endif
+#    ifdef _SC_T_IOV_MAX
     {"SC_T_IOV_MAX",    _SC_T_IOV_MAX},
-#endif
-#ifdef _SC_UCHAR_MAX
+#    endif
+#    ifdef _SC_UCHAR_MAX
     {"SC_UCHAR_MAX",    _SC_UCHAR_MAX},
-#endif
-#ifdef _SC_UINT_MAX
+#    endif
+#    ifdef _SC_UINT_MAX
     {"SC_UINT_MAX",     _SC_UINT_MAX},
-#endif
-#ifdef _SC_UIO_MAXIOV
+#    endif
+#    ifdef _SC_UIO_MAXIOV
     {"SC_UIO_MAXIOV",   _SC_UIO_MAXIOV},
-#endif
-#ifdef _SC_ULONG_MAX
+#    endif
+#    ifdef _SC_ULONG_MAX
     {"SC_ULONG_MAX",    _SC_ULONG_MAX},
-#endif
-#ifdef _SC_USHRT_MAX
+#    endif
+#    ifdef _SC_USHRT_MAX
     {"SC_USHRT_MAX",    _SC_USHRT_MAX},
-#endif
-#ifdef _SC_VERSION
+#    endif
+#    ifdef _SC_VERSION
     {"SC_VERSION",      _SC_VERSION},
-#endif
-#ifdef _SC_WORD_BIT
+#    endif
+#    ifdef _SC_WORD_BIT
     {"SC_WORD_BIT",     _SC_WORD_BIT},
-#endif
-#ifdef _SC_XBS5_ILP32_OFF32
+#    endif
+#    ifdef _SC_XBS5_ILP32_OFF32
     {"SC_XBS5_ILP32_OFF32",     _SC_XBS5_ILP32_OFF32},
-#endif
-#ifdef _SC_XBS5_ILP32_OFFBIG
+#    endif
+#    ifdef _SC_XBS5_ILP32_OFFBIG
     {"SC_XBS5_ILP32_OFFBIG",    _SC_XBS5_ILP32_OFFBIG},
-#endif
-#ifdef _SC_XBS5_LP64_OFF64
+#    endif
+#    ifdef _SC_XBS5_LP64_OFF64
     {"SC_XBS5_LP64_OFF64",      _SC_XBS5_LP64_OFF64},
-#endif
-#ifdef _SC_XBS5_LPBIG_OFFBIG
+#    endif
+#    ifdef _SC_XBS5_LPBIG_OFFBIG
     {"SC_XBS5_LPBIG_OFFBIG",    _SC_XBS5_LPBIG_OFFBIG},
-#endif
-#ifdef _SC_XOPEN_CRYPT
+#    endif
+#    ifdef _SC_XOPEN_CRYPT
     {"SC_XOPEN_CRYPT",  _SC_XOPEN_CRYPT},
-#endif
-#ifdef _SC_XOPEN_ENH_I18N
+#    endif
+#    ifdef _SC_XOPEN_ENH_I18N
     {"SC_XOPEN_ENH_I18N",       _SC_XOPEN_ENH_I18N},
-#endif
-#ifdef _SC_XOPEN_LEGACY
+#    endif
+#    ifdef _SC_XOPEN_LEGACY
     {"SC_XOPEN_LEGACY", _SC_XOPEN_LEGACY},
-#endif
-#ifdef _SC_XOPEN_REALTIME
+#    endif
+#    ifdef _SC_XOPEN_REALTIME
     {"SC_XOPEN_REALTIME",       _SC_XOPEN_REALTIME},
-#endif
-#ifdef _SC_XOPEN_REALTIME_THREADS
+#    endif
+#    ifdef _SC_XOPEN_REALTIME_THREADS
     {"SC_XOPEN_REALTIME_THREADS",       _SC_XOPEN_REALTIME_THREADS},
-#endif
-#ifdef _SC_XOPEN_SHM
+#    endif
+#    ifdef _SC_XOPEN_SHM
     {"SC_XOPEN_SHM",    _SC_XOPEN_SHM},
-#endif
-#ifdef _SC_XOPEN_UNIX
+#    endif
+#    ifdef _SC_XOPEN_UNIX
     {"SC_XOPEN_UNIX",   _SC_XOPEN_UNIX},
-#endif
-#ifdef _SC_XOPEN_VERSION
+#    endif
+#    ifdef _SC_XOPEN_VERSION
     {"SC_XOPEN_VERSION",        _SC_XOPEN_VERSION},
-#endif
-#ifdef _SC_XOPEN_XCU_VERSION
+#    endif
+#    ifdef _SC_XOPEN_XCU_VERSION
     {"SC_XOPEN_XCU_VERSION",    _SC_XOPEN_XCU_VERSION},
-#endif
-#ifdef _SC_XOPEN_XPG2
+#    endif
+#    ifdef _SC_XOPEN_XPG2
     {"SC_XOPEN_XPG2",   _SC_XOPEN_XPG2},
-#endif
-#ifdef _SC_XOPEN_XPG3
+#    endif
+#    ifdef _SC_XOPEN_XPG3
     {"SC_XOPEN_XPG3",   _SC_XOPEN_XPG3},
-#endif
-#ifdef _SC_XOPEN_XPG4
+#    endif
+#    ifdef _SC_XOPEN_XPG4
     {"SC_XOPEN_XPG4",   _SC_XOPEN_XPG4},
-#endif
+#    endif
 };
 
 static int
@@ -11378,7 +11378,7 @@ os_sysconf_impl(PyObject *module, int name)
         posix_error();
     return value;
 }
-#endif /* HAVE_SYSCONF */
+#  endif /* HAVE_SYSCONF */
 
 
 /* This code is used to ensure that the tables of configuration value names
@@ -11430,27 +11430,27 @@ setup_confname_table(struct constdef *table, size_t tablesize,
 static int
 setup_confname_tables(PyObject *module)
 {
-#if defined(HAVE_FPATHCONF) || defined(HAVE_PATHCONF)
+#  if defined(HAVE_FPATHCONF) || defined(HAVE_PATHCONF)
     if (setup_confname_table(posix_constants_pathconf,
                              sizeof(posix_constants_pathconf)
                                / sizeof(struct constdef),
                              "pathconf_names", module))
         return -1;
-#endif
-#ifdef HAVE_CONFSTR
+#  endif
+#  ifdef HAVE_CONFSTR
     if (setup_confname_table(posix_constants_confstr,
                              sizeof(posix_constants_confstr)
                                / sizeof(struct constdef),
                              "confstr_names", module))
         return -1;
-#endif
-#ifdef HAVE_SYSCONF
+#  endif
+#  ifdef HAVE_SYSCONF
     if (setup_confname_table(posix_constants_sysconf,
                              sizeof(posix_constants_sysconf)
                                / sizeof(struct constdef),
                              "sysconf_names", module))
         return -1;
-#endif
+#  endif
     return 0;
 }
 
@@ -11470,16 +11470,16 @@ os_abort_impl(PyObject *module)
 {
     abort();
     /*NOTREACHED*/
-#ifndef __clang__
+#  ifndef __clang__
     /* Issue #28152: abort() is declared with __attribute__((__noreturn__)).
        GCC emits a warning without "return NULL;" (compiler bug?), but Clang
        is smarter and emits a warning on the return. */
     Py_FatalError("abort() called from Python code didn't abort!");
     return NULL;
-#endif
+#  endif
 }
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 /* Grab ShellExecute dynamically from shell32 */
 static int has_ShellExecute = -1;
 static HINSTANCE (CALLBACK *Py_ShellExecuteW)(HWND, LPCWSTR, LPCWSTR, LPCWSTR,
@@ -11560,10 +11560,10 @@ os_startfile_impl(PyObject *module, path_t *filepath,
     }
     Py_RETURN_NONE;
 }
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
 
-#ifdef HAVE_GETLOADAVG
+#  ifdef HAVE_GETLOADAVG
 /*[clinic input]
 os.getloadavg
 
@@ -11585,7 +11585,7 @@ os_getloadavg_impl(PyObject *module)
     } else
         return Py_BuildValue("ddd", loadavg[0], loadavg[1], loadavg[2]);
 }
-#endif /* HAVE_GETLOADAVG */
+#  endif /* HAVE_GETLOADAVG */
 
 
 /*[clinic input]
@@ -11606,7 +11606,7 @@ os_device_encoding_impl(PyObject *module, int fd)
 }
 
 
-#ifdef HAVE_SETRESUID
+#  ifdef HAVE_SETRESUID
 /*[clinic input]
 os.setresuid
 
@@ -11626,10 +11626,10 @@ os_setresuid_impl(PyObject *module, uid_t ruid, uid_t euid, uid_t suid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETRESUID */
+#  endif /* HAVE_SETRESUID */
 
 
-#ifdef HAVE_SETRESGID
+#  ifdef HAVE_SETRESGID
 /*[clinic input]
 os.setresgid
 
@@ -11649,10 +11649,10 @@ os_setresgid_impl(PyObject *module, gid_t rgid, gid_t egid, gid_t sgid)
         return posix_error();
     Py_RETURN_NONE;
 }
-#endif /* HAVE_SETRESGID */
+#  endif /* HAVE_SETRESGID */
 
 
-#ifdef HAVE_GETRESUID
+#  ifdef HAVE_GETRESUID
 /*[clinic input]
 os.getresuid
 
@@ -11670,10 +11670,10 @@ os_getresuid_impl(PyObject *module)
                                   _PyLong_FromUid(euid),
                                   _PyLong_FromUid(suid));
 }
-#endif /* HAVE_GETRESUID */
+#  endif /* HAVE_GETRESUID */
 
 
-#ifdef HAVE_GETRESGID
+#  ifdef HAVE_GETRESGID
 /*[clinic input]
 os.getresgid
 
@@ -11691,10 +11691,10 @@ os_getresgid_impl(PyObject *module)
                                   _PyLong_FromGid(egid),
                                   _PyLong_FromGid(sgid));
 }
-#endif /* HAVE_GETRESGID */
+#  endif /* HAVE_GETRESGID */
 
 
-#ifdef USE_XATTRS
+#  ifdef USE_XATTRS
 /*[clinic input]
 os.getxattr
 
@@ -11957,7 +11957,7 @@ exit:
         PyMem_FREE(buffer);
     return result;
 }
-#endif /* USE_XATTRS */
+#  endif /* USE_XATTRS */
 
 
 /*[clinic input]
@@ -11991,7 +11991,7 @@ os_urandom_impl(PyObject *module, Py_ssize_t size)
     return bytes;
 }
 
-#ifdef HAVE_MEMFD_CREATE
+#  ifdef HAVE_MEMFD_CREATE
 /*[clinic input]
 os.memfd_create
 
@@ -12014,7 +12014,7 @@ os_memfd_create_impl(PyObject *module, PyObject *name, unsigned int flags)
     }
     return PyLong_FromLong(fd);
 }
-#endif
+#  endif
 
 /* Terminal size querying */
 
@@ -12036,7 +12036,7 @@ static PyStructSequence_Desc TerminalSize_desc = {
     2,
 };
 
-#if defined(TERMSIZE_USE_CONIO) || defined(TERMSIZE_USE_IOCTL)
+#  if defined(TERMSIZE_USE_CONIO) || defined(TERMSIZE_USE_IOCTL)
 /* AC 3.5: fd should accept None */
 PyDoc_STRVAR(termsize__doc__,
     "Return the size of the terminal window as (columns, lines).\n"        \
@@ -12071,7 +12071,7 @@ get_terminal_size(PyObject *self, PyObject *args)
     if (!PyArg_ParseTuple(args, "|i", &fd))
         return NULL;
 
-#ifdef TERMSIZE_USE_IOCTL
+#    ifdef TERMSIZE_USE_IOCTL
     {
         struct winsize w;
         if (ioctl(fd, TIOCGWINSZ, &w))
@@ -12079,9 +12079,9 @@ get_terminal_size(PyObject *self, PyObject *args)
         columns = w.ws_col;
         lines = w.ws_row;
     }
-#endif /* TERMSIZE_USE_IOCTL */
+#    endif /* TERMSIZE_USE_IOCTL */
 
-#ifdef TERMSIZE_USE_CONIO
+#    ifdef TERMSIZE_USE_CONIO
     {
         DWORD nhandle;
         HANDLE handle;
@@ -12108,7 +12108,7 @@ get_terminal_size(PyObject *self, PyObject *args)
         columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
         lines = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
     }
-#endif /* TERMSIZE_USE_CONIO */
+#    endif /* TERMSIZE_USE_CONIO */
 
     termsize = PyStructSequence_New(TerminalSizeType);
     if (termsize == NULL)
@@ -12121,7 +12121,7 @@ get_terminal_size(PyObject *self, PyObject *args)
     }
     return termsize;
 }
-#endif /* defined(TERMSIZE_USE_CONIO) || defined(TERMSIZE_USE_IOCTL) */
+#  endif /* defined(TERMSIZE_USE_CONIO) || defined(TERMSIZE_USE_IOCTL) */
 
 
 /*[clinic input]
@@ -12139,7 +12139,7 @@ os_cpu_count_impl(PyObject *module)
 /*[clinic end generated code: output=5fc29463c3936a9c input=e7c8f4ba6dbbadd3]*/
 {
     int ncpu = 0;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     /* Vista is supported and the GetMaximumProcessorCount API is Win7+
        Need to fallback to Vista behavior if this call isn't present */
     HINSTANCE hKernel32;
@@ -12157,11 +12157,11 @@ os_cpu_count_impl(PyObject *module)
         GetSystemInfo(&sysinfo);
         ncpu = sysinfo.dwNumberOfProcessors;
     }
-#elif defined(__hpux)
+#  elif defined(__hpux)
     ncpu = mpctl(MPC_GETNUMSPUS, NULL, NULL);
-#elif defined(HAVE_SYSCONF) && defined(_SC_NPROCESSORS_ONLN)
+#  elif defined(HAVE_SYSCONF) && defined(_SC_NPROCESSORS_ONLN)
     ncpu = sysconf(_SC_NPROCESSORS_ONLN);
-#elif defined(__DragonFly__) || \
+#  elif defined(__DragonFly__) || \
       defined(__OpenBSD__)   || \
       defined(__FreeBSD__)   || \
       defined(__NetBSD__)    || \
@@ -12172,7 +12172,7 @@ os_cpu_count_impl(PyObject *module)
     mib[1] = HW_NCPU;
     if (sysctl(mib, 2, &ncpu, &len, NULL, 0) != 0)
         ncpu = 0;
-#endif
+#  endif
     if (ncpu >= 1)
         return PyLong_FromLong(ncpu);
     else
@@ -12225,7 +12225,7 @@ os_set_inheritable_impl(PyObject *module, int fd, int inheritable)
 }
 
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 /*[clinic input]
 os.get_handle_inheritable -> bool
     handle: intptr_t
@@ -12270,9 +12270,9 @@ os_set_handle_inheritable_impl(PyObject *module, intptr_t handle,
     }
     Py_RETURN_NONE;
 }
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
 /*[clinic input]
 os.get_blocking -> bool
     fd: int
@@ -12320,7 +12320,7 @@ os_set_blocking_impl(PyObject *module, int fd, int blocking)
         return NULL;
     Py_RETURN_NONE;
 }
-#endif   /* !MS_WINDOWS */
+#  endif   /* !MS_WINDOWS */
 
 
 /*[clinic input]
@@ -12334,17 +12334,17 @@ typedef struct {
     PyObject *path;
     PyObject *stat;
     PyObject *lstat;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     struct _Py_stat_struct win32_lstat;
     uint64_t win32_file_index;
     int got_file_index;
-#else /* POSIX */
-#ifdef HAVE_DIRENT_D_TYPE
+#  else /* POSIX */
+#    ifdef HAVE_DIRENT_D_TYPE
     unsigned char d_type;
-#endif
+#    endif
     ino_t d_ino;
     int dir_fd;
-#endif
+#  endif
 } DirEntry;
 
 static void
@@ -12371,18 +12371,18 @@ static int
 os_DirEntry_is_symlink_impl(DirEntry *self)
 /*[clinic end generated code: output=42244667d7bcfc25 input=1605a1b4b96976c3]*/
 {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     return (self->win32_lstat.st_mode & S_IFMT) == S_IFLNK;
-#elif defined(HAVE_DIRENT_D_TYPE)
+#  elif defined(HAVE_DIRENT_D_TYPE)
     /* POSIX */
     if (self->d_type != DT_UNKNOWN)
         return self->d_type == DT_LNK;
     else
         return DirEntry_test_mode(self, 0, S_IFLNK);
-#else
+#  else
     /* POSIX without d_type */
     return DirEntry_test_mode(self, 0, S_IFLNK);
-#endif
+#  endif
 }
 
 static PyObject *
@@ -12392,25 +12392,25 @@ DirEntry_fetch_stat(DirEntry *self, int follow_symlinks)
     STRUCT_STAT st;
     PyObject *ub;
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     if (!PyUnicode_FSDecoder(self->path, &ub))
         return NULL;
     const wchar_t *path = PyUnicode_AsUnicode(ub);
-#else /* POSIX */
+#  else /* POSIX */
     if (!PyUnicode_FSConverter(self->path, &ub))
         return NULL;
     const char *path = PyBytes_AS_STRING(ub);
     if (self->dir_fd != DEFAULT_DIR_FD) {
-#ifdef HAVE_FSTATAT
+#    ifdef HAVE_FSTATAT
         result = fstatat(self->dir_fd, path, &st,
                          follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW);
-#else
+#    else
         PyErr_SetString(PyExc_NotImplementedError, "can't fetch stat");
         return NULL;
-#endif /* HAVE_FSTATAT */
+#    endif /* HAVE_FSTATAT */
     }
     else
-#endif
+#  endif
     {
         if (follow_symlinks)
             result = STAT(path, &st);
@@ -12429,11 +12429,11 @@ static PyObject *
 DirEntry_get_lstat(DirEntry *self)
 {
     if (!self->lstat) {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
         self->lstat = _pystat_fromstructstat(&self->win32_lstat);
-#else /* POSIX */
+#  else /* POSIX */
         self->lstat = DirEntry_fetch_stat(self, 0);
-#endif
+#  endif
     }
     Py_XINCREF(self->lstat);
     return self->lstat;
@@ -12476,26 +12476,26 @@ DirEntry_test_mode(DirEntry *self, int follow_symlinks, unsigned short mode_bits
     PyObject *st_mode = NULL;
     long mode;
     int result;
-#if defined(MS_WINDOWS) || defined(HAVE_DIRENT_D_TYPE)
+#  if defined(MS_WINDOWS) || defined(HAVE_DIRENT_D_TYPE)
     int is_symlink;
     int need_stat;
-#endif
-#ifdef MS_WINDOWS
+#  endif
+#  ifdef MS_WINDOWS
     unsigned long dir_bits;
-#endif
+#  endif
     _Py_IDENTIFIER(st_mode);
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     is_symlink = (self->win32_lstat.st_mode & S_IFMT) == S_IFLNK;
     need_stat = follow_symlinks && is_symlink;
-#elif defined(HAVE_DIRENT_D_TYPE)
+#  elif defined(HAVE_DIRENT_D_TYPE)
     is_symlink = self->d_type == DT_LNK;
     need_stat = self->d_type == DT_UNKNOWN || (follow_symlinks && is_symlink);
-#endif
+#  endif
 
-#if defined(MS_WINDOWS) || defined(HAVE_DIRENT_D_TYPE)
+#  if defined(MS_WINDOWS) || defined(HAVE_DIRENT_D_TYPE)
     if (need_stat) {
-#endif
+#  endif
         stat = os_DirEntry_stat_impl(self, follow_symlinks);
         if (!stat) {
             if (PyErr_ExceptionMatches(PyExc_FileNotFoundError)) {
@@ -12516,7 +12516,7 @@ DirEntry_test_mode(DirEntry *self, int follow_symlinks, unsigned short mode_bits
         Py_CLEAR(st_mode);
         Py_CLEAR(stat);
         result = (mode & S_IFMT) == mode_bits;
-#if defined(MS_WINDOWS) || defined(HAVE_DIRENT_D_TYPE)
+#  if defined(MS_WINDOWS) || defined(HAVE_DIRENT_D_TYPE)
     }
     else if (is_symlink) {
         assert(mode_bits != S_IFLNK);
@@ -12524,20 +12524,20 @@ DirEntry_test_mode(DirEntry *self, int follow_symlinks, unsigned short mode_bits
     }
     else {
         assert(mode_bits == S_IFDIR || mode_bits == S_IFREG);
-#ifdef MS_WINDOWS
+#    ifdef MS_WINDOWS
         dir_bits = self->win32_lstat.st_file_attributes & FILE_ATTRIBUTE_DIRECTORY;
         if (mode_bits == S_IFDIR)
             result = dir_bits != 0;
         else
             result = dir_bits == 0;
-#else /* POSIX */
+#    else /* POSIX */
         if (mode_bits == S_IFDIR)
             result = self->d_type == DT_DIR;
         else
             result = self->d_type == DT_REG;
-#endif
+#    endif
     }
-#endif
+#  endif
 
     return result;
 
@@ -12587,7 +12587,7 @@ static PyObject *
 os_DirEntry_inode_impl(DirEntry *self)
 /*[clinic end generated code: output=156bb3a72162440e input=3ee7b872ae8649f0]*/
 {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     if (!self->got_file_index) {
         PyObject *unicode;
         const wchar_t *path;
@@ -12608,10 +12608,10 @@ os_DirEntry_inode_impl(DirEntry *self)
     }
     Py_BUILD_ASSERT(sizeof(unsigned long long) >= sizeof(self->win32_file_index));
     return PyLong_FromUnsignedLongLong(self->win32_file_index);
-#else /* POSIX */
+#  else /* POSIX */
     Py_BUILD_ASSERT(sizeof(unsigned long long) >= sizeof(self->d_ino));
     return PyLong_FromUnsignedLongLong(self->d_ino);
-#endif
+#  endif
 }
 
 static PyObject *
@@ -12642,7 +12642,7 @@ static PyMemberDef DirEntry_members[] = {
     {NULL}
 };
 
-#include "clinic/posixmodule.c.h"
+#  include "clinic/posixmodule.c.h"
 
 static PyMethodDef DirEntry_methods[] = {
     OS_DIRENTRY_IS_DIR_METHODDEF
@@ -12687,7 +12687,7 @@ static PyTypeObject DirEntryType = {
     DirEntry_members,                       /* tp_members */
 };
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 
 static wchar_t *
 join_path_filenameW(const wchar_t *path_wide, const wchar_t *filename)
@@ -12772,7 +12772,7 @@ error:
     return NULL;
 }
 
-#else /* POSIX */
+#  else /* POSIX */
 
 static char *
 join_path_filename(const char *path_narrow, const char* filename, Py_ssize_t filename_len)
@@ -12809,9 +12809,9 @@ join_path_filename(const char *path_narrow, const char* filename, Py_ssize_t fil
 static PyObject *
 DirEntry_from_posix_info(path_t *path, const char *name, Py_ssize_t name_len,
                          ino_t d_ino
-#ifdef HAVE_DIRENT_D_TYPE
+#    ifdef HAVE_DIRENT_D_TYPE
                          , unsigned char d_type
-#endif
+#    endif
                          )
 {
     DirEntry *entry;
@@ -12857,9 +12857,9 @@ DirEntry_from_posix_info(path_t *path, const char *name, Py_ssize_t name_len,
     else if (!entry->path)
         goto error;
 
-#ifdef HAVE_DIRENT_D_TYPE
+#    ifdef HAVE_DIRENT_D_TYPE
     entry->d_type = d_type;
-#endif
+#    endif
     entry->d_ino = d_ino;
 
     return (PyObject *)entry;
@@ -12869,25 +12869,25 @@ error:
     return NULL;
 }
 
-#endif
+#  endif
 
 
 typedef struct {
     PyObject_HEAD
     path_t path;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     HANDLE handle;
     WIN32_FIND_DATAW file_data;
     int first_time;
-#else /* POSIX */
+#  else /* POSIX */
     DIR *dirp;
-#endif
-#ifdef HAVE_FDOPENDIR
+#  endif
+#  ifdef HAVE_FDOPENDIR
     int fd;
-#endif
+#  endif
 } ScandirIterator;
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 
 static int
 ScandirIterator_is_closed(ScandirIterator *iterator)
@@ -12951,7 +12951,7 @@ ScandirIterator_iternext(ScandirIterator *iterator)
     return NULL;
 }
 
-#else /* POSIX */
+#  else /* POSIX */
 
 static int
 ScandirIterator_is_closed(ScandirIterator *iterator)
@@ -12969,10 +12969,10 @@ ScandirIterator_closedir(ScandirIterator *iterator)
 
     iterator->dirp = NULL;
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FDOPENDIR
+#    ifdef HAVE_FDOPENDIR
     if (iterator->path.fd != -1)
         rewinddir(dirp);
-#endif
+#    endif
     closedir(dirp);
     Py_END_ALLOW_THREADS
     return;
@@ -13010,9 +13010,9 @@ ScandirIterator_iternext(ScandirIterator *iterator)
         if (!is_dot) {
             entry = DirEntry_from_posix_info(&iterator->path, direntp->d_name,
                                             name_len, direntp->d_ino
-#ifdef HAVE_DIRENT_D_TYPE
+#    ifdef HAVE_DIRENT_D_TYPE
                                             , direntp->d_type
-#endif
+#    endif
                                             );
             if (!entry)
                 break;
@@ -13027,7 +13027,7 @@ ScandirIterator_iternext(ScandirIterator *iterator)
     return NULL;
 }
 
-#endif
+#  endif
 
 static PyObject *
 ScandirIterator_close(ScandirIterator *self, PyObject *args)
@@ -13163,14 +13163,14 @@ os_scandir_impl(PyObject *module, path_t *path)
 /*[clinic end generated code: output=6eb2668b675ca89e input=6bdd312708fc3bb0]*/
 {
     ScandirIterator *iterator;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     wchar_t *path_strW;
-#else
+#  else
     const char *path_str;
-#ifdef HAVE_FDOPENDIR
+#    ifdef HAVE_FDOPENDIR
     int fd = -1;
-#endif
-#endif
+#    endif
+#  endif
 
     if (PySys_Audit("os.scandir", "O",
                     path->object ? path->object : Py_None) < 0) {
@@ -13181,18 +13181,18 @@ os_scandir_impl(PyObject *module, path_t *path)
     if (!iterator)
         return NULL;
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     iterator->handle = INVALID_HANDLE_VALUE;
-#else
+#  else
     iterator->dirp = NULL;
-#endif
+#  endif
 
     memcpy(&iterator->path, path, sizeof(path_t));
     /* Move the ownership to iterator->path */
     path->object = NULL;
     path->cleanup = NULL;
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     iterator->first_time = 1;
 
     path_strW = join_path_filenameW(iterator->path.wide, L"*.*");
@@ -13209,9 +13209,9 @@ os_scandir_impl(PyObject *module, path_t *path)
         path_error(&iterator->path);
         goto error;
     }
-#else /* POSIX */
+#  else /* POSIX */
     errno = 0;
-#ifdef HAVE_FDOPENDIR
+#    ifdef HAVE_FDOPENDIR
     if (path->fd != -1) {
         /* closedir() closes the FD, so we duplicate it */
         fd = _Py_dup(path->fd);
@@ -13223,7 +13223,7 @@ os_scandir_impl(PyObject *module, path_t *path)
         Py_END_ALLOW_THREADS
     }
     else
-#endif
+#    endif
     {
         if (iterator->path.narrow)
             path_str = iterator->path.narrow;
@@ -13237,16 +13237,16 @@ os_scandir_impl(PyObject *module, path_t *path)
 
     if (!iterator->dirp) {
         path_error(&iterator->path);
-#ifdef HAVE_FDOPENDIR
+#    ifdef HAVE_FDOPENDIR
         if (fd != -1) {
             Py_BEGIN_ALLOW_THREADS
             close(fd);
             Py_END_ALLOW_THREADS
         }
-#endif
+#    endif
         goto error;
     }
-#endif
+#  endif
 
     return (PyObject *)iterator;
 
@@ -13321,7 +13321,7 @@ os_fspath_impl(PyObject *module, PyObject *path)
     return PyOS_FSPath(path);
 }
 
-#ifdef HAVE_GETRANDOM_SYSCALL
+#  ifdef HAVE_GETRANDOM_SYSCALL
 /*[clinic input]
 os.getrandom
 
@@ -13380,9 +13380,9 @@ error:
     Py_DECREF(bytes);
     return NULL;
 }
-#endif   /* HAVE_GETRANDOM_SYSCALL */
+#  endif   /* HAVE_GETRANDOM_SYSCALL */
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 /* bpo-36085: Helper functions for managing DLL search directories
  * on win32
  */
@@ -13488,7 +13488,7 @@ os__remove_dll_directory_impl(PyObject *module, PyObject *cookie)
     Py_RETURN_NONE;
 }
 
-#endif
+#  endif
 
 static PyMethodDef posix_methods[] = {
 
@@ -13554,9 +13554,9 @@ static PyMethodDef posix_methods[] = {
     OS_GETEGID_METHODDEF
     OS_GETEUID_METHODDEF
     OS_GETGID_METHODDEF
-#ifdef HAVE_GETGROUPLIST
+#  ifdef HAVE_GETGROUPLIST
     {"getgrouplist",    posix_getgrouplist, METH_VARARGS, posix_getgrouplist__doc__},
-#endif
+#  endif
     OS_GETGROUPS_METHODDEF
     OS_GETPID_METHODDEF
     OS_GETPGRP_METHODDEF
@@ -13566,9 +13566,9 @@ static PyMethodDef posix_methods[] = {
     OS_KILL_METHODDEF
     OS_KILLPG_METHODDEF
     OS_PLOCK_METHODDEF
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     OS_STARTFILE_METHODDEF
-#endif
+#  endif
     OS_SETUID_METHODDEF
     OS_SETEUID_METHODDEF
     OS_SETREUID_METHODDEF
@@ -13576,9 +13576,9 @@ static PyMethodDef posix_methods[] = {
     OS_SETEGID_METHODDEF
     OS_SETREGID_METHODDEF
     OS_SETGROUPS_METHODDEF
-#ifdef HAVE_INITGROUPS
+#  ifdef HAVE_INITGROUPS
     {"initgroups",      posix_initgroups, METH_VARARGS, posix_initgroups__doc__},
-#endif /* HAVE_INITGROUPS */
+#  endif /* HAVE_INITGROUPS */
     OS_GETPGID_METHODDEF
     OS_SETPGRP_METHODDEF
     OS_WAIT_METHODDEF
@@ -13607,10 +13607,10 @@ static PyMethodDef posix_methods[] = {
     OS_WRITEV_METHODDEF
     OS_PWRITE_METHODDEF
     OS_PWRITEV_METHODDEF
-#ifdef HAVE_SENDFILE
+#  ifdef HAVE_SENDFILE
     {"sendfile",        (PyCFunction)(void(*)(void))posix_sendfile, METH_VARARGS | METH_KEYWORDS,
                             posix_sendfile__doc__},
-#endif
+#  endif
     OS_FSTAT_METHODDEF
     OS_ISATTY_METHODDEF
     OS_PIPE_METHODDEF
@@ -13663,532 +13663,532 @@ static PyMethodDef posix_methods[] = {
     OS_REMOVEXATTR_METHODDEF
     OS_LISTXATTR_METHODDEF
 
-#if defined(TERMSIZE_USE_CONIO) || defined(TERMSIZE_USE_IOCTL)
+#  if defined(TERMSIZE_USE_CONIO) || defined(TERMSIZE_USE_IOCTL)
     {"get_terminal_size", get_terminal_size, METH_VARARGS, termsize__doc__},
-#endif
+#  endif
     OS_CPU_COUNT_METHODDEF
     OS_GET_INHERITABLE_METHODDEF
     OS_SET_INHERITABLE_METHODDEF
     OS_GET_HANDLE_INHERITABLE_METHODDEF
     OS_SET_HANDLE_INHERITABLE_METHODDEF
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     OS_GET_BLOCKING_METHODDEF
     OS_SET_BLOCKING_METHODDEF
-#endif
+#  endif
     OS_SCANDIR_METHODDEF
     OS_FSPATH_METHODDEF
     OS_GETRANDOM_METHODDEF
     OS_MEMFD_CREATE_METHODDEF
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     OS__ADD_DLL_DIRECTORY_METHODDEF
     OS__REMOVE_DLL_DIRECTORY_METHODDEF
-#endif
+#  endif
     {NULL,              NULL}            /* Sentinel */
 };
 
 static int
 all_ins(PyObject *m)
 {
-#ifdef F_OK
+#  ifdef F_OK
     if (PyModule_AddIntMacro(m, F_OK)) return -1;
-#endif
-#ifdef R_OK
+#  endif
+#  ifdef R_OK
     if (PyModule_AddIntMacro(m, R_OK)) return -1;
-#endif
-#ifdef W_OK
+#  endif
+#  ifdef W_OK
     if (PyModule_AddIntMacro(m, W_OK)) return -1;
-#endif
-#ifdef X_OK
+#  endif
+#  ifdef X_OK
     if (PyModule_AddIntMacro(m, X_OK)) return -1;
-#endif
-#ifdef NGROUPS_MAX
+#  endif
+#  ifdef NGROUPS_MAX
     if (PyModule_AddIntMacro(m, NGROUPS_MAX)) return -1;
-#endif
-#ifdef TMP_MAX
+#  endif
+#  ifdef TMP_MAX
     if (PyModule_AddIntMacro(m, TMP_MAX)) return -1;
-#endif
-#ifdef WCONTINUED
+#  endif
+#  ifdef WCONTINUED
     if (PyModule_AddIntMacro(m, WCONTINUED)) return -1;
-#endif
-#ifdef WNOHANG
+#  endif
+#  ifdef WNOHANG
     if (PyModule_AddIntMacro(m, WNOHANG)) return -1;
-#endif
-#ifdef WUNTRACED
+#  endif
+#  ifdef WUNTRACED
     if (PyModule_AddIntMacro(m, WUNTRACED)) return -1;
-#endif
-#ifdef O_RDONLY
+#  endif
+#  ifdef O_RDONLY
     if (PyModule_AddIntMacro(m, O_RDONLY)) return -1;
-#endif
-#ifdef O_WRONLY
+#  endif
+#  ifdef O_WRONLY
     if (PyModule_AddIntMacro(m, O_WRONLY)) return -1;
-#endif
-#ifdef O_RDWR
+#  endif
+#  ifdef O_RDWR
     if (PyModule_AddIntMacro(m, O_RDWR)) return -1;
-#endif
-#ifdef O_NDELAY
+#  endif
+#  ifdef O_NDELAY
     if (PyModule_AddIntMacro(m, O_NDELAY)) return -1;
-#endif
-#ifdef O_NONBLOCK
+#  endif
+#  ifdef O_NONBLOCK
     if (PyModule_AddIntMacro(m, O_NONBLOCK)) return -1;
-#endif
-#ifdef O_APPEND
+#  endif
+#  ifdef O_APPEND
     if (PyModule_AddIntMacro(m, O_APPEND)) return -1;
-#endif
-#ifdef O_DSYNC
+#  endif
+#  ifdef O_DSYNC
     if (PyModule_AddIntMacro(m, O_DSYNC)) return -1;
-#endif
-#ifdef O_RSYNC
+#  endif
+#  ifdef O_RSYNC
     if (PyModule_AddIntMacro(m, O_RSYNC)) return -1;
-#endif
-#ifdef O_SYNC
+#  endif
+#  ifdef O_SYNC
     if (PyModule_AddIntMacro(m, O_SYNC)) return -1;
-#endif
-#ifdef O_NOCTTY
+#  endif
+#  ifdef O_NOCTTY
     if (PyModule_AddIntMacro(m, O_NOCTTY)) return -1;
-#endif
-#ifdef O_CREAT
+#  endif
+#  ifdef O_CREAT
     if (PyModule_AddIntMacro(m, O_CREAT)) return -1;
-#endif
-#ifdef O_EXCL
+#  endif
+#  ifdef O_EXCL
     if (PyModule_AddIntMacro(m, O_EXCL)) return -1;
-#endif
-#ifdef O_TRUNC
+#  endif
+#  ifdef O_TRUNC
     if (PyModule_AddIntMacro(m, O_TRUNC)) return -1;
-#endif
-#ifdef O_BINARY
+#  endif
+#  ifdef O_BINARY
     if (PyModule_AddIntMacro(m, O_BINARY)) return -1;
-#endif
-#ifdef O_TEXT
+#  endif
+#  ifdef O_TEXT
     if (PyModule_AddIntMacro(m, O_TEXT)) return -1;
-#endif
-#ifdef O_XATTR
+#  endif
+#  ifdef O_XATTR
     if (PyModule_AddIntMacro(m, O_XATTR)) return -1;
-#endif
-#ifdef O_LARGEFILE
+#  endif
+#  ifdef O_LARGEFILE
     if (PyModule_AddIntMacro(m, O_LARGEFILE)) return -1;
-#endif
-#ifndef __GNU__
-#ifdef O_SHLOCK
+#  endif
+#  ifndef __GNU__
+#    ifdef O_SHLOCK
     if (PyModule_AddIntMacro(m, O_SHLOCK)) return -1;
-#endif
-#ifdef O_EXLOCK
+#    endif
+#    ifdef O_EXLOCK
     if (PyModule_AddIntMacro(m, O_EXLOCK)) return -1;
-#endif
-#endif
-#ifdef O_EXEC
+#    endif
+#  endif
+#  ifdef O_EXEC
     if (PyModule_AddIntMacro(m, O_EXEC)) return -1;
-#endif
-#ifdef O_SEARCH
+#  endif
+#  ifdef O_SEARCH
     if (PyModule_AddIntMacro(m, O_SEARCH)) return -1;
-#endif
-#ifdef O_PATH
+#  endif
+#  ifdef O_PATH
     if (PyModule_AddIntMacro(m, O_PATH)) return -1;
-#endif
-#ifdef O_TTY_INIT
+#  endif
+#  ifdef O_TTY_INIT
     if (PyModule_AddIntMacro(m, O_TTY_INIT)) return -1;
-#endif
-#ifdef O_TMPFILE
+#  endif
+#  ifdef O_TMPFILE
     if (PyModule_AddIntMacro(m, O_TMPFILE)) return -1;
-#endif
-#ifdef PRIO_PROCESS
+#  endif
+#  ifdef PRIO_PROCESS
     if (PyModule_AddIntMacro(m, PRIO_PROCESS)) return -1;
-#endif
-#ifdef PRIO_PGRP
+#  endif
+#  ifdef PRIO_PGRP
     if (PyModule_AddIntMacro(m, PRIO_PGRP)) return -1;
-#endif
-#ifdef PRIO_USER
+#  endif
+#  ifdef PRIO_USER
     if (PyModule_AddIntMacro(m, PRIO_USER)) return -1;
-#endif
-#ifdef O_CLOEXEC
+#  endif
+#  ifdef O_CLOEXEC
     if (PyModule_AddIntMacro(m, O_CLOEXEC)) return -1;
-#endif
-#ifdef O_ACCMODE
+#  endif
+#  ifdef O_ACCMODE
     if (PyModule_AddIntMacro(m, O_ACCMODE)) return -1;
-#endif
+#  endif
 
 
-#ifdef SEEK_HOLE
+#  ifdef SEEK_HOLE
     if (PyModule_AddIntMacro(m, SEEK_HOLE)) return -1;
-#endif
-#ifdef SEEK_DATA
+#  endif
+#  ifdef SEEK_DATA
     if (PyModule_AddIntMacro(m, SEEK_DATA)) return -1;
-#endif
+#  endif
 
 /* MS Windows */
-#ifdef O_NOINHERIT
+#  ifdef O_NOINHERIT
     /* Don't inherit in child processes. */
     if (PyModule_AddIntMacro(m, O_NOINHERIT)) return -1;
-#endif
-#ifdef _O_SHORT_LIVED
+#  endif
+#  ifdef _O_SHORT_LIVED
     /* Optimize for short life (keep in memory). */
     /* MS forgot to define this one with a non-underscore form too. */
     if (PyModule_AddIntConstant(m, "O_SHORT_LIVED", _O_SHORT_LIVED)) return -1;
-#endif
-#ifdef O_TEMPORARY
+#  endif
+#  ifdef O_TEMPORARY
     /* Automatically delete when last handle is closed. */
     if (PyModule_AddIntMacro(m, O_TEMPORARY)) return -1;
-#endif
-#ifdef O_RANDOM
+#  endif
+#  ifdef O_RANDOM
     /* Optimize for random access. */
     if (PyModule_AddIntMacro(m, O_RANDOM)) return -1;
-#endif
-#ifdef O_SEQUENTIAL
+#  endif
+#  ifdef O_SEQUENTIAL
     /* Optimize for sequential access. */
     if (PyModule_AddIntMacro(m, O_SEQUENTIAL)) return -1;
-#endif
+#  endif
 
 /* GNU extensions. */
-#ifdef O_ASYNC
+#  ifdef O_ASYNC
     /* Send a SIGIO signal whenever input or output
        becomes available on file descriptor */
     if (PyModule_AddIntMacro(m, O_ASYNC)) return -1;
-#endif
-#ifdef O_DIRECT
+#  endif
+#  ifdef O_DIRECT
     /* Direct disk access. */
     if (PyModule_AddIntMacro(m, O_DIRECT)) return -1;
-#endif
-#ifdef O_DIRECTORY
+#  endif
+#  ifdef O_DIRECTORY
     /* Must be a directory.      */
     if (PyModule_AddIntMacro(m, O_DIRECTORY)) return -1;
-#endif
-#ifdef O_NOFOLLOW
+#  endif
+#  ifdef O_NOFOLLOW
     /* Do not follow links.      */
     if (PyModule_AddIntMacro(m, O_NOFOLLOW)) return -1;
-#endif
-#ifdef O_NOLINKS
+#  endif
+#  ifdef O_NOLINKS
     /* Fails if link count of the named file is greater than 1 */
     if (PyModule_AddIntMacro(m, O_NOLINKS)) return -1;
-#endif
-#ifdef O_NOATIME
+#  endif
+#  ifdef O_NOATIME
     /* Do not update the access time. */
     if (PyModule_AddIntMacro(m, O_NOATIME)) return -1;
-#endif
+#  endif
 
     /* These come from sysexits.h */
-#ifdef EX_OK
+#  ifdef EX_OK
     if (PyModule_AddIntMacro(m, EX_OK)) return -1;
-#endif /* EX_OK */
-#ifdef EX_USAGE
+#  endif /* EX_OK */
+#  ifdef EX_USAGE
     if (PyModule_AddIntMacro(m, EX_USAGE)) return -1;
-#endif /* EX_USAGE */
-#ifdef EX_DATAERR
+#  endif /* EX_USAGE */
+#  ifdef EX_DATAERR
     if (PyModule_AddIntMacro(m, EX_DATAERR)) return -1;
-#endif /* EX_DATAERR */
-#ifdef EX_NOINPUT
+#  endif /* EX_DATAERR */
+#  ifdef EX_NOINPUT
     if (PyModule_AddIntMacro(m, EX_NOINPUT)) return -1;
-#endif /* EX_NOINPUT */
-#ifdef EX_NOUSER
+#  endif /* EX_NOINPUT */
+#  ifdef EX_NOUSER
     if (PyModule_AddIntMacro(m, EX_NOUSER)) return -1;
-#endif /* EX_NOUSER */
-#ifdef EX_NOHOST
+#  endif /* EX_NOUSER */
+#  ifdef EX_NOHOST
     if (PyModule_AddIntMacro(m, EX_NOHOST)) return -1;
-#endif /* EX_NOHOST */
-#ifdef EX_UNAVAILABLE
+#  endif /* EX_NOHOST */
+#  ifdef EX_UNAVAILABLE
     if (PyModule_AddIntMacro(m, EX_UNAVAILABLE)) return -1;
-#endif /* EX_UNAVAILABLE */
-#ifdef EX_SOFTWARE
+#  endif /* EX_UNAVAILABLE */
+#  ifdef EX_SOFTWARE
     if (PyModule_AddIntMacro(m, EX_SOFTWARE)) return -1;
-#endif /* EX_SOFTWARE */
-#ifdef EX_OSERR
+#  endif /* EX_SOFTWARE */
+#  ifdef EX_OSERR
     if (PyModule_AddIntMacro(m, EX_OSERR)) return -1;
-#endif /* EX_OSERR */
-#ifdef EX_OSFILE
+#  endif /* EX_OSERR */
+#  ifdef EX_OSFILE
     if (PyModule_AddIntMacro(m, EX_OSFILE)) return -1;
-#endif /* EX_OSFILE */
-#ifdef EX_CANTCREAT
+#  endif /* EX_OSFILE */
+#  ifdef EX_CANTCREAT
     if (PyModule_AddIntMacro(m, EX_CANTCREAT)) return -1;
-#endif /* EX_CANTCREAT */
-#ifdef EX_IOERR
+#  endif /* EX_CANTCREAT */
+#  ifdef EX_IOERR
     if (PyModule_AddIntMacro(m, EX_IOERR)) return -1;
-#endif /* EX_IOERR */
-#ifdef EX_TEMPFAIL
+#  endif /* EX_IOERR */
+#  ifdef EX_TEMPFAIL
     if (PyModule_AddIntMacro(m, EX_TEMPFAIL)) return -1;
-#endif /* EX_TEMPFAIL */
-#ifdef EX_PROTOCOL
+#  endif /* EX_TEMPFAIL */
+#  ifdef EX_PROTOCOL
     if (PyModule_AddIntMacro(m, EX_PROTOCOL)) return -1;
-#endif /* EX_PROTOCOL */
-#ifdef EX_NOPERM
+#  endif /* EX_PROTOCOL */
+#  ifdef EX_NOPERM
     if (PyModule_AddIntMacro(m, EX_NOPERM)) return -1;
-#endif /* EX_NOPERM */
-#ifdef EX_CONFIG
+#  endif /* EX_NOPERM */
+#  ifdef EX_CONFIG
     if (PyModule_AddIntMacro(m, EX_CONFIG)) return -1;
-#endif /* EX_CONFIG */
-#ifdef EX_NOTFOUND
+#  endif /* EX_CONFIG */
+#  ifdef EX_NOTFOUND
     if (PyModule_AddIntMacro(m, EX_NOTFOUND)) return -1;
-#endif /* EX_NOTFOUND */
+#  endif /* EX_NOTFOUND */
 
     /* statvfs */
-#ifdef ST_RDONLY
+#  ifdef ST_RDONLY
     if (PyModule_AddIntMacro(m, ST_RDONLY)) return -1;
-#endif /* ST_RDONLY */
-#ifdef ST_NOSUID
+#  endif /* ST_RDONLY */
+#  ifdef ST_NOSUID
     if (PyModule_AddIntMacro(m, ST_NOSUID)) return -1;
-#endif /* ST_NOSUID */
+#  endif /* ST_NOSUID */
 
        /* GNU extensions */
-#ifdef ST_NODEV
+#  ifdef ST_NODEV
     if (PyModule_AddIntMacro(m, ST_NODEV)) return -1;
-#endif /* ST_NODEV */
-#ifdef ST_NOEXEC
+#  endif /* ST_NODEV */
+#  ifdef ST_NOEXEC
     if (PyModule_AddIntMacro(m, ST_NOEXEC)) return -1;
-#endif /* ST_NOEXEC */
-#ifdef ST_SYNCHRONOUS
+#  endif /* ST_NOEXEC */
+#  ifdef ST_SYNCHRONOUS
     if (PyModule_AddIntMacro(m, ST_SYNCHRONOUS)) return -1;
-#endif /* ST_SYNCHRONOUS */
-#ifdef ST_MANDLOCK
+#  endif /* ST_SYNCHRONOUS */
+#  ifdef ST_MANDLOCK
     if (PyModule_AddIntMacro(m, ST_MANDLOCK)) return -1;
-#endif /* ST_MANDLOCK */
-#ifdef ST_WRITE
+#  endif /* ST_MANDLOCK */
+#  ifdef ST_WRITE
     if (PyModule_AddIntMacro(m, ST_WRITE)) return -1;
-#endif /* ST_WRITE */
-#ifdef ST_APPEND
+#  endif /* ST_WRITE */
+#  ifdef ST_APPEND
     if (PyModule_AddIntMacro(m, ST_APPEND)) return -1;
-#endif /* ST_APPEND */
-#ifdef ST_NOATIME
+#  endif /* ST_APPEND */
+#  ifdef ST_NOATIME
     if (PyModule_AddIntMacro(m, ST_NOATIME)) return -1;
-#endif /* ST_NOATIME */
-#ifdef ST_NODIRATIME
+#  endif /* ST_NOATIME */
+#  ifdef ST_NODIRATIME
     if (PyModule_AddIntMacro(m, ST_NODIRATIME)) return -1;
-#endif /* ST_NODIRATIME */
-#ifdef ST_RELATIME
+#  endif /* ST_NODIRATIME */
+#  ifdef ST_RELATIME
     if (PyModule_AddIntMacro(m, ST_RELATIME)) return -1;
-#endif /* ST_RELATIME */
+#  endif /* ST_RELATIME */
 
     /* FreeBSD sendfile() constants */
-#ifdef SF_NODISKIO
+#  ifdef SF_NODISKIO
     if (PyModule_AddIntMacro(m, SF_NODISKIO)) return -1;
-#endif
-#ifdef SF_MNOWAIT
+#  endif
+#  ifdef SF_MNOWAIT
     if (PyModule_AddIntMacro(m, SF_MNOWAIT)) return -1;
-#endif
-#ifdef SF_SYNC
+#  endif
+#  ifdef SF_SYNC
     if (PyModule_AddIntMacro(m, SF_SYNC)) return -1;
-#endif
+#  endif
 
     /* constants for posix_fadvise */
-#ifdef POSIX_FADV_NORMAL
+#  ifdef POSIX_FADV_NORMAL
     if (PyModule_AddIntMacro(m, POSIX_FADV_NORMAL)) return -1;
-#endif
-#ifdef POSIX_FADV_SEQUENTIAL
+#  endif
+#  ifdef POSIX_FADV_SEQUENTIAL
     if (PyModule_AddIntMacro(m, POSIX_FADV_SEQUENTIAL)) return -1;
-#endif
-#ifdef POSIX_FADV_RANDOM
+#  endif
+#  ifdef POSIX_FADV_RANDOM
     if (PyModule_AddIntMacro(m, POSIX_FADV_RANDOM)) return -1;
-#endif
-#ifdef POSIX_FADV_NOREUSE
+#  endif
+#  ifdef POSIX_FADV_NOREUSE
     if (PyModule_AddIntMacro(m, POSIX_FADV_NOREUSE)) return -1;
-#endif
-#ifdef POSIX_FADV_WILLNEED
+#  endif
+#  ifdef POSIX_FADV_WILLNEED
     if (PyModule_AddIntMacro(m, POSIX_FADV_WILLNEED)) return -1;
-#endif
-#ifdef POSIX_FADV_DONTNEED
+#  endif
+#  ifdef POSIX_FADV_DONTNEED
     if (PyModule_AddIntMacro(m, POSIX_FADV_DONTNEED)) return -1;
-#endif
+#  endif
 
     /* constants for waitid */
-#if defined(HAVE_SYS_WAIT_H) && defined(HAVE_WAITID)
+#  if defined(HAVE_SYS_WAIT_H) && defined(HAVE_WAITID)
     if (PyModule_AddIntMacro(m, P_PID)) return -1;
     if (PyModule_AddIntMacro(m, P_PGID)) return -1;
     if (PyModule_AddIntMacro(m, P_ALL)) return -1;
-#endif
-#ifdef WEXITED
+#  endif
+#  ifdef WEXITED
     if (PyModule_AddIntMacro(m, WEXITED)) return -1;
-#endif
-#ifdef WNOWAIT
+#  endif
+#  ifdef WNOWAIT
     if (PyModule_AddIntMacro(m, WNOWAIT)) return -1;
-#endif
-#ifdef WSTOPPED
+#  endif
+#  ifdef WSTOPPED
     if (PyModule_AddIntMacro(m, WSTOPPED)) return -1;
-#endif
-#ifdef CLD_EXITED
+#  endif
+#  ifdef CLD_EXITED
     if (PyModule_AddIntMacro(m, CLD_EXITED)) return -1;
-#endif
-#ifdef CLD_DUMPED
+#  endif
+#  ifdef CLD_DUMPED
     if (PyModule_AddIntMacro(m, CLD_DUMPED)) return -1;
-#endif
-#ifdef CLD_TRAPPED
+#  endif
+#  ifdef CLD_TRAPPED
     if (PyModule_AddIntMacro(m, CLD_TRAPPED)) return -1;
-#endif
-#ifdef CLD_CONTINUED
+#  endif
+#  ifdef CLD_CONTINUED
     if (PyModule_AddIntMacro(m, CLD_CONTINUED)) return -1;
-#endif
+#  endif
 
     /* constants for lockf */
-#ifdef F_LOCK
+#  ifdef F_LOCK
     if (PyModule_AddIntMacro(m, F_LOCK)) return -1;
-#endif
-#ifdef F_TLOCK
+#  endif
+#  ifdef F_TLOCK
     if (PyModule_AddIntMacro(m, F_TLOCK)) return -1;
-#endif
-#ifdef F_ULOCK
+#  endif
+#  ifdef F_ULOCK
     if (PyModule_AddIntMacro(m, F_ULOCK)) return -1;
-#endif
-#ifdef F_TEST
+#  endif
+#  ifdef F_TEST
     if (PyModule_AddIntMacro(m, F_TEST)) return -1;
-#endif
+#  endif
 
-#ifdef RWF_DSYNC
+#  ifdef RWF_DSYNC
     if (PyModule_AddIntConstant(m, "RWF_DSYNC", RWF_DSYNC)) return -1;
-#endif
-#ifdef RWF_HIPRI
+#  endif
+#  ifdef RWF_HIPRI
     if (PyModule_AddIntConstant(m, "RWF_HIPRI", RWF_HIPRI)) return -1;
-#endif
-#ifdef RWF_SYNC
+#  endif
+#  ifdef RWF_SYNC
     if (PyModule_AddIntConstant(m, "RWF_SYNC", RWF_SYNC)) return -1;
-#endif
-#ifdef RWF_NOWAIT
+#  endif
+#  ifdef RWF_NOWAIT
     if (PyModule_AddIntConstant(m, "RWF_NOWAIT", RWF_NOWAIT)) return -1;
-#endif
+#  endif
 
 /* constants for posix_spawn */
-#ifdef HAVE_POSIX_SPAWN
+#  ifdef HAVE_POSIX_SPAWN
     if (PyModule_AddIntConstant(m, "POSIX_SPAWN_OPEN", POSIX_SPAWN_OPEN)) return -1;
     if (PyModule_AddIntConstant(m, "POSIX_SPAWN_CLOSE", POSIX_SPAWN_CLOSE)) return -1;
     if (PyModule_AddIntConstant(m, "POSIX_SPAWN_DUP2", POSIX_SPAWN_DUP2)) return -1;
-#endif
+#  endif
 
-#if defined(HAVE_SPAWNV) || defined (HAVE_RTPSPAWN)
+#  if defined(HAVE_SPAWNV) || defined (HAVE_RTPSPAWN)
     if (PyModule_AddIntConstant(m, "P_WAIT", _P_WAIT)) return -1;
     if (PyModule_AddIntConstant(m, "P_NOWAIT", _P_NOWAIT)) return -1;
     if (PyModule_AddIntConstant(m, "P_NOWAITO", _P_NOWAITO)) return -1;
-#endif
-#ifdef HAVE_SPAWNV
+#  endif
+#  ifdef HAVE_SPAWNV
     if (PyModule_AddIntConstant(m, "P_OVERLAY", _OLD_P_OVERLAY)) return -1;
     if (PyModule_AddIntConstant(m, "P_DETACH", _P_DETACH)) return -1;
-#endif
+#  endif
 
-#ifdef HAVE_SCHED_H
-#ifdef SCHED_OTHER
+#  ifdef HAVE_SCHED_H
+#    ifdef SCHED_OTHER
     if (PyModule_AddIntMacro(m, SCHED_OTHER)) return -1;
-#endif
-#ifdef SCHED_FIFO
+#    endif
+#    ifdef SCHED_FIFO
     if (PyModule_AddIntMacro(m, SCHED_FIFO)) return -1;
-#endif
-#ifdef SCHED_RR
+#    endif
+#    ifdef SCHED_RR
     if (PyModule_AddIntMacro(m, SCHED_RR)) return -1;
-#endif
-#ifdef SCHED_SPORADIC
+#    endif
+#    ifdef SCHED_SPORADIC
     if (PyModule_AddIntMacro(m, SCHED_SPORADIC)) return -1;
-#endif
-#ifdef SCHED_BATCH
+#    endif
+#    ifdef SCHED_BATCH
     if (PyModule_AddIntMacro(m, SCHED_BATCH)) return -1;
-#endif
-#ifdef SCHED_IDLE
+#    endif
+#    ifdef SCHED_IDLE
     if (PyModule_AddIntMacro(m, SCHED_IDLE)) return -1;
-#endif
-#ifdef SCHED_RESET_ON_FORK
+#    endif
+#    ifdef SCHED_RESET_ON_FORK
     if (PyModule_AddIntMacro(m, SCHED_RESET_ON_FORK)) return -1;
-#endif
-#ifdef SCHED_SYS
+#    endif
+#    ifdef SCHED_SYS
     if (PyModule_AddIntMacro(m, SCHED_SYS)) return -1;
-#endif
-#ifdef SCHED_IA
+#    endif
+#    ifdef SCHED_IA
     if (PyModule_AddIntMacro(m, SCHED_IA)) return -1;
-#endif
-#ifdef SCHED_FSS
+#    endif
+#    ifdef SCHED_FSS
     if (PyModule_AddIntMacro(m, SCHED_FSS)) return -1;
-#endif
-#ifdef SCHED_FX
+#    endif
+#    ifdef SCHED_FX
     if (PyModule_AddIntConstant(m, "SCHED_FX", SCHED_FSS)) return -1;
-#endif
-#endif
+#    endif
+#  endif
 
-#ifdef USE_XATTRS
+#  ifdef USE_XATTRS
     if (PyModule_AddIntMacro(m, XATTR_CREATE)) return -1;
     if (PyModule_AddIntMacro(m, XATTR_REPLACE)) return -1;
     if (PyModule_AddIntMacro(m, XATTR_SIZE_MAX)) return -1;
-#endif
+#  endif
 
-#if HAVE_DECL_RTLD_LAZY
+#  if HAVE_DECL_RTLD_LAZY
     if (PyModule_AddIntMacro(m, RTLD_LAZY)) return -1;
-#endif
-#if HAVE_DECL_RTLD_NOW
+#  endif
+#  if HAVE_DECL_RTLD_NOW
     if (PyModule_AddIntMacro(m, RTLD_NOW)) return -1;
-#endif
-#if HAVE_DECL_RTLD_GLOBAL
+#  endif
+#  if HAVE_DECL_RTLD_GLOBAL
     if (PyModule_AddIntMacro(m, RTLD_GLOBAL)) return -1;
-#endif
-#if HAVE_DECL_RTLD_LOCAL
+#  endif
+#  if HAVE_DECL_RTLD_LOCAL
     if (PyModule_AddIntMacro(m, RTLD_LOCAL)) return -1;
-#endif
-#if HAVE_DECL_RTLD_NODELETE
+#  endif
+#  if HAVE_DECL_RTLD_NODELETE
     if (PyModule_AddIntMacro(m, RTLD_NODELETE)) return -1;
-#endif
-#if HAVE_DECL_RTLD_NOLOAD
+#  endif
+#  if HAVE_DECL_RTLD_NOLOAD
     if (PyModule_AddIntMacro(m, RTLD_NOLOAD)) return -1;
-#endif
-#if HAVE_DECL_RTLD_DEEPBIND
+#  endif
+#  if HAVE_DECL_RTLD_DEEPBIND
     if (PyModule_AddIntMacro(m, RTLD_DEEPBIND)) return -1;
-#endif
-#if HAVE_DECL_RTLD_MEMBER
+#  endif
+#  if HAVE_DECL_RTLD_MEMBER
     if (PyModule_AddIntMacro(m, RTLD_MEMBER)) return -1;
-#endif
+#  endif
 
-#ifdef HAVE_GETRANDOM_SYSCALL
+#  ifdef HAVE_GETRANDOM_SYSCALL
     if (PyModule_AddIntMacro(m, GRND_RANDOM)) return -1;
     if (PyModule_AddIntMacro(m, GRND_NONBLOCK)) return -1;
-#endif
-#ifdef HAVE_MEMFD_CREATE
+#  endif
+#  ifdef HAVE_MEMFD_CREATE
     if (PyModule_AddIntMacro(m, MFD_CLOEXEC)) return -1;
     if (PyModule_AddIntMacro(m, MFD_ALLOW_SEALING)) return -1;
-#ifdef MFD_HUGETLB
+#    ifdef MFD_HUGETLB
     if (PyModule_AddIntMacro(m, MFD_HUGETLB)) return -1;
-#endif
-#ifdef MFD_HUGE_SHIFT
+#    endif
+#    ifdef MFD_HUGE_SHIFT
     if (PyModule_AddIntMacro(m, MFD_HUGE_SHIFT)) return -1;
-#endif
-#ifdef MFD_HUGE_MASK
+#    endif
+#    ifdef MFD_HUGE_MASK
     if (PyModule_AddIntMacro(m, MFD_HUGE_MASK)) return -1;
-#endif
-#ifdef MFD_HUGE_64KB
+#    endif
+#    ifdef MFD_HUGE_64KB
     if (PyModule_AddIntMacro(m, MFD_HUGE_64KB)) return -1;
-#endif
-#ifdef MFD_HUGE_512KB
+#    endif
+#    ifdef MFD_HUGE_512KB
     if (PyModule_AddIntMacro(m, MFD_HUGE_512KB)) return -1;
-#endif
-#ifdef MFD_HUGE_1MB
+#    endif
+#    ifdef MFD_HUGE_1MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_1MB)) return -1;
-#endif
-#ifdef MFD_HUGE_2MB
+#    endif
+#    ifdef MFD_HUGE_2MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_2MB)) return -1;
-#endif
-#ifdef MFD_HUGE_8MB
+#    endif
+#    ifdef MFD_HUGE_8MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_8MB)) return -1;
-#endif
-#ifdef MFD_HUGE_16MB
+#    endif
+#    ifdef MFD_HUGE_16MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_16MB)) return -1;
-#endif
-#ifdef MFD_HUGE_32MB
+#    endif
+#    ifdef MFD_HUGE_32MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_32MB)) return -1;
-#endif
-#ifdef MFD_HUGE_256MB
+#    endif
+#    ifdef MFD_HUGE_256MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_256MB)) return -1;
-#endif
-#ifdef MFD_HUGE_512MB
+#    endif
+#    ifdef MFD_HUGE_512MB
     if (PyModule_AddIntMacro(m, MFD_HUGE_512MB)) return -1;
-#endif
-#ifdef MFD_HUGE_1GB
+#    endif
+#    ifdef MFD_HUGE_1GB
     if (PyModule_AddIntMacro(m, MFD_HUGE_1GB)) return -1;
-#endif
-#ifdef MFD_HUGE_2GB
+#    endif
+#    ifdef MFD_HUGE_2GB
     if (PyModule_AddIntMacro(m, MFD_HUGE_2GB)) return -1;
-#endif
-#ifdef MFD_HUGE_16GB
+#    endif
+#    ifdef MFD_HUGE_16GB
     if (PyModule_AddIntMacro(m, MFD_HUGE_16GB)) return -1;
-#endif
-#endif
+#    endif
+#  endif
 
-#if defined(__APPLE__)
+#  if defined(__APPLE__)
     if (PyModule_AddIntConstant(m, "_COPYFILE_DATA", COPYFILE_DATA)) return -1;
-#endif
+#  endif
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     if (PyModule_AddIntConstant(m, "_LOAD_LIBRARY_SEARCH_DEFAULT_DIRS", LOAD_LIBRARY_SEARCH_DEFAULT_DIRS)) return -1;
     if (PyModule_AddIntConstant(m, "_LOAD_LIBRARY_SEARCH_APPLICATION_DIR", LOAD_LIBRARY_SEARCH_APPLICATION_DIR)) return -1;
     if (PyModule_AddIntConstant(m, "_LOAD_LIBRARY_SEARCH_SYSTEM32", LOAD_LIBRARY_SEARCH_SYSTEM32)) return -1;
     if (PyModule_AddIntConstant(m, "_LOAD_LIBRARY_SEARCH_USER_DIRS", LOAD_LIBRARY_SEARCH_USER_DIRS)) return -1;
     if (PyModule_AddIntConstant(m, "_LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR", LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR)) return -1;
-#endif
+#  endif
 
     return 0;
 }
@@ -14209,133 +14209,133 @@ static struct PyModuleDef posixmodule = {
 
 static const char * const have_functions[] = {
 
-#ifdef HAVE_FACCESSAT
+#  ifdef HAVE_FACCESSAT
     "HAVE_FACCESSAT",
-#endif
+#  endif
 
-#ifdef HAVE_FCHDIR
+#  ifdef HAVE_FCHDIR
     "HAVE_FCHDIR",
-#endif
+#  endif
 
-#ifdef HAVE_FCHMOD
+#  ifdef HAVE_FCHMOD
     "HAVE_FCHMOD",
-#endif
+#  endif
 
-#ifdef HAVE_FCHMODAT
+#  ifdef HAVE_FCHMODAT
     "HAVE_FCHMODAT",
-#endif
+#  endif
 
-#ifdef HAVE_FCHOWN
+#  ifdef HAVE_FCHOWN
     "HAVE_FCHOWN",
-#endif
+#  endif
 
-#ifdef HAVE_FCHOWNAT
+#  ifdef HAVE_FCHOWNAT
     "HAVE_FCHOWNAT",
-#endif
+#  endif
 
-#ifdef HAVE_FEXECVE
+#  ifdef HAVE_FEXECVE
     "HAVE_FEXECVE",
-#endif
+#  endif
 
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
     "HAVE_FDOPENDIR",
-#endif
+#  endif
 
-#ifdef HAVE_FPATHCONF
+#  ifdef HAVE_FPATHCONF
     "HAVE_FPATHCONF",
-#endif
+#  endif
 
-#ifdef HAVE_FSTATAT
+#  ifdef HAVE_FSTATAT
     "HAVE_FSTATAT",
-#endif
+#  endif
 
-#ifdef HAVE_FSTATVFS
+#  ifdef HAVE_FSTATVFS
     "HAVE_FSTATVFS",
-#endif
+#  endif
 
-#if defined HAVE_FTRUNCATE || defined MS_WINDOWS
+#  if defined HAVE_FTRUNCATE || defined MS_WINDOWS
     "HAVE_FTRUNCATE",
-#endif
+#  endif
 
-#ifdef HAVE_FUTIMENS
+#  ifdef HAVE_FUTIMENS
     "HAVE_FUTIMENS",
-#endif
+#  endif
 
-#ifdef HAVE_FUTIMES
+#  ifdef HAVE_FUTIMES
     "HAVE_FUTIMES",
-#endif
+#  endif
 
-#ifdef HAVE_FUTIMESAT
+#  ifdef HAVE_FUTIMESAT
     "HAVE_FUTIMESAT",
-#endif
+#  endif
 
-#ifdef HAVE_LINKAT
+#  ifdef HAVE_LINKAT
     "HAVE_LINKAT",
-#endif
+#  endif
 
-#ifdef HAVE_LCHFLAGS
+#  ifdef HAVE_LCHFLAGS
     "HAVE_LCHFLAGS",
-#endif
+#  endif
 
-#ifdef HAVE_LCHMOD
+#  ifdef HAVE_LCHMOD
     "HAVE_LCHMOD",
-#endif
+#  endif
 
-#ifdef HAVE_LCHOWN
+#  ifdef HAVE_LCHOWN
     "HAVE_LCHOWN",
-#endif
+#  endif
 
-#ifdef HAVE_LSTAT
+#  ifdef HAVE_LSTAT
     "HAVE_LSTAT",
-#endif
+#  endif
 
-#ifdef HAVE_LUTIMES
+#  ifdef HAVE_LUTIMES
     "HAVE_LUTIMES",
-#endif
+#  endif
 
-#ifdef HAVE_MEMFD_CREATE
+#  ifdef HAVE_MEMFD_CREATE
     "HAVE_MEMFD_CREATE",
-#endif
+#  endif
 
-#ifdef HAVE_MKDIRAT
+#  ifdef HAVE_MKDIRAT
     "HAVE_MKDIRAT",
-#endif
+#  endif
 
-#ifdef HAVE_MKFIFOAT
+#  ifdef HAVE_MKFIFOAT
     "HAVE_MKFIFOAT",
-#endif
+#  endif
 
-#ifdef HAVE_MKNODAT
+#  ifdef HAVE_MKNODAT
     "HAVE_MKNODAT",
-#endif
+#  endif
 
-#ifdef HAVE_OPENAT
+#  ifdef HAVE_OPENAT
     "HAVE_OPENAT",
-#endif
+#  endif
 
-#ifdef HAVE_READLINKAT
+#  ifdef HAVE_READLINKAT
     "HAVE_READLINKAT",
-#endif
+#  endif
 
-#ifdef HAVE_RENAMEAT
+#  ifdef HAVE_RENAMEAT
     "HAVE_RENAMEAT",
-#endif
+#  endif
 
-#ifdef HAVE_SYMLINKAT
+#  ifdef HAVE_SYMLINKAT
     "HAVE_SYMLINKAT",
-#endif
+#  endif
 
-#ifdef HAVE_UNLINKAT
+#  ifdef HAVE_UNLINKAT
     "HAVE_UNLINKAT",
-#endif
+#  endif
 
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     "HAVE_UTIMENSAT",
-#endif
+#  endif
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     "MS_WINDOWS",
-#endif
+#  endif
 
     NULL
 };
@@ -14368,19 +14368,19 @@ INITFUNC(void)
     Py_INCREF(PyExc_OSError);
     PyModule_AddObject(m, "error", PyExc_OSError);
 
-#ifdef HAVE_PUTENV
+#  ifdef HAVE_PUTENV
     if (posix_putenv_garbage == NULL)
         posix_putenv_garbage = PyDict_New();
-#endif
+#  endif
 
     if (!initialized) {
-#if defined(HAVE_WAITID) && !defined(__APPLE__)
+#  if defined(HAVE_WAITID) && !defined(__APPLE__)
         waitid_result_desc.name = MODNAME ".waitid_result";
         WaitidResultType = PyStructSequence_NewType(&waitid_result_desc);
         if (WaitidResultType == NULL) {
             return NULL;
         }
-#endif
+#  endif
 
         stat_result_desc.name = "os.stat_result"; /* see issue #19209 */
         stat_result_desc.fields[7].name = PyStructSequence_UnnamedField;
@@ -14398,24 +14398,24 @@ INITFUNC(void)
         if (StatVFSResultType == NULL) {
             return NULL;
         }
-#ifdef NEED_TICKS_PER_SECOND
-#  if defined(HAVE_SYSCONF) && defined(_SC_CLK_TCK)
+#  ifdef NEED_TICKS_PER_SECOND
+#    if defined(HAVE_SYSCONF) && defined(_SC_CLK_TCK)
         ticks_per_second = sysconf(_SC_CLK_TCK);
-#  elif defined(HZ)
+#    elif defined(HZ)
         ticks_per_second = HZ;
-#  else
+#    else
         ticks_per_second = 60; /* magic fallback value; may be bogus */
+#    endif
 #  endif
-#endif
 
-#if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
+#  if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
         sched_param_desc.name = MODNAME ".sched_param";
         SchedParamType = PyStructSequence_NewType(&sched_param_desc);
         if (SchedParamType == NULL) {
             return NULL;
         }
         SchedParamType->tp_new = os_sched_param;
-#endif
+#  endif
 
         /* initialize TerminalSize_info */
         TerminalSizeType = PyStructSequence_NewType(&TerminalSize_desc);
@@ -14429,20 +14429,20 @@ INITFUNC(void)
         if (PyType_Ready(&DirEntryType) < 0)
             return NULL;
     }
-#if defined(HAVE_WAITID) && !defined(__APPLE__)
+#  if defined(HAVE_WAITID) && !defined(__APPLE__)
     Py_INCREF((PyObject*) WaitidResultType);
     PyModule_AddObject(m, "waitid_result", (PyObject*) WaitidResultType);
-#endif
+#  endif
     Py_INCREF((PyObject*) StatResultType);
     PyModule_AddObject(m, "stat_result", (PyObject*) StatResultType);
     Py_INCREF((PyObject*) StatVFSResultType);
     PyModule_AddObject(m, "statvfs_result",
                        (PyObject*) StatVFSResultType);
 
-#if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER)
+#  if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER)
     Py_INCREF(SchedParamType);
     PyModule_AddObject(m, "sched_param", (PyObject *)SchedParamType);
-#endif
+#  endif
 
     times_result_desc.name = MODNAME ".times_result";
     TimesResultType = PyStructSequence_NewType(&times_result_desc);
@@ -14458,7 +14458,7 @@ INITFUNC(void)
     }
     PyModule_AddObject(m, "uname_result", (PyObject *)UnameResultType);
 
-#ifdef __APPLE__
+#  ifdef __APPLE__
     /*
      * Step 2 of weak-linking support on Mac OS X.
      *
@@ -14469,32 +14469,32 @@ INITFUNC(void)
      * OSX 10.4 on OSX 10.3, without losing access to new APIs on
      * OSX 10.4.
      */
-#ifdef HAVE_FSTATVFS
+#    ifdef HAVE_FSTATVFS
     if (fstatvfs == NULL) {
         if (PyObject_DelAttrString(m, "fstatvfs") == -1) {
             return NULL;
         }
     }
-#endif /* HAVE_FSTATVFS */
+#    endif /* HAVE_FSTATVFS */
 
-#ifdef HAVE_STATVFS
+#    ifdef HAVE_STATVFS
     if (statvfs == NULL) {
         if (PyObject_DelAttrString(m, "statvfs") == -1) {
             return NULL;
         }
     }
-#endif /* HAVE_STATVFS */
+#    endif /* HAVE_STATVFS */
 
-# ifdef HAVE_LCHOWN
+#    ifdef HAVE_LCHOWN
     if (lchown == NULL) {
         if (PyObject_DelAttrString(m, "lchown") == -1) {
             return NULL;
         }
     }
-#endif /* HAVE_LCHOWN */
+#    endif /* HAVE_LCHOWN */
 
 
-#endif /* __APPLE__ */
+#  endif /* __APPLE__ */
 
     Py_INCREF(TerminalSizeType);
     PyModule_AddObject(m, "terminal_size", (PyObject*)TerminalSizeType);
@@ -14538,6 +14538,6 @@ INITFUNC(void)
     return m;
 }
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
