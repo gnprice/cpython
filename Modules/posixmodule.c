@@ -4587,33 +4587,6 @@ utime_to_time_t(const utime_t *ut, time_t *timet)
 }
 
 static int
-utime_nofollow_symlinks(utime_t *ut, const char *path)
-{
-#ifdef HAVE_UTIMENSAT
-    struct timespec ts[2];
-    struct timespec *time = utime_to_timespec(ut, ts);
-    return utimensat(DEFAULT_DIR_FD, path, time, AT_SYMLINK_NOFOLLOW);
-#elif HAVE_LUTIMES
-    struct timeval tv[2];
-    struct timeval *time = utime_to_timeval(ut, tv);
-    return lutimes(path, time);
-#else
-    assert(0);
-    return -1;
-#endif
-}
-
-static inline int
-check_utime_nofollow_symlinks()
-{
-#if defined(HAVE_UTIMENSAT) || defined(HAVE_LUTIMES)
-    return 0;
-#else
-    return follow_symlinks_specified("utime", 0);
-#endif
-}
-
-static int
 utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 {
 #ifdef HAVE_UTIMENSAT
@@ -4663,6 +4636,33 @@ check_utime_dir_fd(int dir_fd, int follow_symlinks)
 #else
 #  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
+
+static int
+utime_nofollow_symlinks(utime_t *ut, const char *path)
+{
+#ifdef HAVE_UTIMENSAT
+    struct timespec ts[2];
+    struct timespec *time = utime_to_timespec(ut, ts);
+    return utimensat(DEFAULT_DIR_FD, path, time, AT_SYMLINK_NOFOLLOW);
+#elif HAVE_LUTIMES
+    struct timeval tv[2];
+    struct timeval *time = utime_to_timeval(ut, tv);
+    return lutimes(path, time);
+#else
+    assert(0);
+    return -1;
+#endif
+}
+
+static inline int
+check_utime_nofollow_symlinks()
+{
+#if defined(HAVE_UTIMENSAT) || defined(HAVE_LUTIMES)
+    return 0;
+#else
+    return follow_symlinks_specified("utime", 0);
+#endif
+}
 
 static int
 utime_fd(utime_t *ut, int fd)
