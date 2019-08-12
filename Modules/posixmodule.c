@@ -4812,26 +4812,12 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
         utime.now = 1;
     }
 
-#if !defined(UTIME_HAVE_NOFOLLOW_SYMLINKS)
+#ifdef MS_WINDOWS
     if (follow_symlinks_specified("utime", follow_symlinks))
         return NULL;
-#endif
 
-    if (path_and_dir_fd_invalid("utime", path, dir_fd) ||
-        dir_fd_and_fd_invalid("utime", dir_fd, path->fd) ||
-        fd_and_follow_symlinks_invalid("utime", path->fd, follow_symlinks))
-        return NULL;
+    // TODO also make explicit that dir_fd disallowed
 
-#if !defined(HAVE_UTIMENSAT)
-    if ((dir_fd != DEFAULT_DIR_FD) && (!follow_symlinks)) {
-        PyErr_SetString(PyExc_ValueError,
-                     "utime: cannot use dir_fd and follow_symlinks "
-                     "together on this platform");
-        return NULL;
-    }
-#endif
-
-#ifdef MS_WINDOWS
     Py_BEGIN_ALLOW_THREADS
     hFile = CreateFileW(path->wide, FILE_WRITE_ATTRIBUTES, 0,
                         NULL, OPEN_EXISTING,
@@ -4861,6 +4847,26 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
     }
     CloseHandle(hFile);
 #else /* MS_WINDOWS */
+
+#if !defined(UTIME_HAVE_NOFOLLOW_SYMLINKS)
+    if (follow_symlinks_specified("utime", follow_symlinks))
+        return NULL;
+#endif
+
+    if (path_and_dir_fd_invalid("utime", path, dir_fd) ||
+        dir_fd_and_fd_invalid("utime", dir_fd, path->fd) ||
+        fd_and_follow_symlinks_invalid("utime", path->fd, follow_symlinks))
+        return NULL;
+
+#if !defined(HAVE_UTIMENSAT)
+    if ((dir_fd != DEFAULT_DIR_FD) && (!follow_symlinks)) {
+        PyErr_SetString(PyExc_ValueError,
+                     "utime: cannot use dir_fd and follow_symlinks "
+                     "together on this platform");
+        return NULL;
+    }
+#endif
+
     Py_BEGIN_ALLOW_THREADS
 
 #  ifdef UTIME_HAVE_NOFOLLOW_SYMLINKS
