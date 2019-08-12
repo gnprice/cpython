@@ -14,15 +14,15 @@
 #include "_iomodule.h"
 
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */
 
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif /* HAVE_SYS_STAT_H */
 
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 /* Various interned strings */

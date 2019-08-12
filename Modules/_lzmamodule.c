@@ -122,9 +122,9 @@ PyLzma_Free(void *opaque, void *ptr)
 }
 
 #if BUFSIZ < 8192
-#define INITIAL_BUFFER_SIZE 8192
+#  define INITIAL_BUFFER_SIZE 8192
 #else
-#define INITIAL_BUFFER_SIZE BUFSIZ
+#  define INITIAL_BUFFER_SIZE BUFSIZ
 #endif
 
 static int

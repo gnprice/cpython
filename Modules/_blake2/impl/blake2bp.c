@@ -135,7 +135,7 @@ int blake2bp_update( blake2bp_state *S, const uint8_t *in, size_t inlen )
 
 #if defined(_OPENMP)
   omp_set_num_threads(PARALLELISM_DEGREE);
-  #pragma omp parallel shared(S)
+#  pragma omp parallel shared(S)
 #else
   for( size_t id__ = 0; id__ < PARALLELISM_DEGREE; ++id__ )
 #endif
@@ -230,7 +230,7 @@ int blake2bp( uint8_t *out, const void *in, const void *key, size_t outlen, size
 
 #if defined(_OPENMP)
   omp_set_num_threads(PARALLELISM_DEGREE);
-  #pragma omp parallel shared(S,hash)
+#  pragma omp parallel shared(S,hash)
 #else
   for( size_t id__ = 0; id__ < PARALLELISM_DEGREE; ++id__ )
 #endif

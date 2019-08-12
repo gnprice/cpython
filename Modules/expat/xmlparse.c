@@ -31,7 +31,7 @@
 */
 
 #if !defined(_GNU_SOURCE)
-#define _GNU_SOURCE 1                  /* syscall prototype */
+#  define _GNU_SOURCE 1                  /* syscall prototype */
 #endif
 
 #include <stddef.h>
@@ -42,21 +42,21 @@
 #include <stdlib.h>                     /* getenv */
 
 #ifdef _WIN32
-#define getpid GetCurrentProcessId
+#  define getpid GetCurrentProcessId
 #else
-#include <sys/time.h>                   /* gettimeofday() */
-#include <sys/types.h>                  /* getpid() */
-#include <unistd.h>                     /* getpid() */
-#include <fcntl.h>                      /* O_RDONLY */
-#include <errno.h>
+#  include <sys/time.h>                   /* gettimeofday() */
+#  include <sys/types.h>                  /* getpid() */
+#  include <unistd.h>                     /* getpid() */
+#  include <fcntl.h>                      /* O_RDONLY */
+#  include <errno.h>
 #endif
 
 #define XML_BUILDING_EXPAT 1
 
 #ifdef _WIN32
-#include "winconfig.h"
+#  include "winconfig.h"
 #elif defined(HAVE_EXPAT_CONFIG_H)
-#include <expat_config.h>
+#  include <expat_config.h>
 #endif /* ndef _WIN32 */
 
 #include "ascii.h"
@@ -64,24 +64,24 @@
 #include "siphash.h"
 
 #if defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM)
-#if defined(HAVE_GETRANDOM)
-#  include <sys/random.h>    /* getrandom */
-#else
-#  include <unistd.h>        /* syscall */
-#  include <sys/syscall.h>   /* SYS_getrandom */
-#endif
-#if ! defined(GRND_NONBLOCK)
-#  define GRND_NONBLOCK  0x0001
-#endif  /* defined(GRND_NONBLOCK) */
+#  if defined(HAVE_GETRANDOM)
+#    include <sys/random.h>    /* getrandom */
+#  else
+#    include <unistd.h>        /* syscall */
+#    include <sys/syscall.h>   /* SYS_getrandom */
+#  endif
+#  if ! defined(GRND_NONBLOCK)
+#    define GRND_NONBLOCK  0x0001
+#  endif  /* defined(GRND_NONBLOCK) */
 #endif  /* defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM) */
 
 #if defined(HAVE_LIBBSD) \
     && (defined(HAVE_ARC4RANDOM_BUF) || defined(HAVE_ARC4RANDOM))
-#include <bsd/stdlib.h>
+#  include <bsd/stdlib.h>
 #endif
 
 #if defined(_WIN32) && !defined(LOAD_LIBRARY_SEARCH_SYSTEM32)
-#define LOAD_LIBRARY_SEARCH_SYSTEM32  0x00000800
+#  define LOAD_LIBRARY_SEARCH_SYSTEM32  0x00000800
 #endif
 
 #if !defined(HAVE_GETRANDOM) && !defined(HAVE_SYSCALL_GETRANDOM) \
@@ -89,7 +89,7 @@
     && !defined(XML_DEV_URANDOM) \
     && !defined(_WIN32) \
     && !defined(XML_POOR_ENTROPY)
-#error  \
+#  error  \
     You do not have support for any sources of high quality entropy \
     enabled.  For end user security, that is probably not what you want. \
     \
@@ -112,49 +112,49 @@
 
 
 #ifdef XML_UNICODE
-#define XML_ENCODE_MAX XML_UTF16_ENCODE_MAX
-#define XmlConvert XmlUtf16Convert
-#define XmlGetInternalEncoding XmlGetUtf16InternalEncoding
-#define XmlGetInternalEncodingNS XmlGetUtf16InternalEncodingNS
-#define XmlEncode XmlUtf16Encode
+#  define XML_ENCODE_MAX XML_UTF16_ENCODE_MAX
+#  define XmlConvert XmlUtf16Convert
+#  define XmlGetInternalEncoding XmlGetUtf16InternalEncoding
+#  define XmlGetInternalEncodingNS XmlGetUtf16InternalEncodingNS
+#  define XmlEncode XmlUtf16Encode
 /* Using pointer subtraction to convert to integer type. */
-#define MUST_CONVERT(enc, s) (!(enc)->isUtf16 || (((char *)(s) - (char *)NULL) & 1))
+#  define MUST_CONVERT(enc, s) (!(enc)->isUtf16 || (((char *)(s) - (char *)NULL) & 1))
 typedef unsigned short ICHAR;
 #else
-#define XML_ENCODE_MAX XML_UTF8_ENCODE_MAX
-#define XmlConvert XmlUtf8Convert
-#define XmlGetInternalEncoding XmlGetUtf8InternalEncoding
-#define XmlGetInternalEncodingNS XmlGetUtf8InternalEncodingNS
-#define XmlEncode XmlUtf8Encode
-#define MUST_CONVERT(enc, s) (!(enc)->isUtf8)
+#  define XML_ENCODE_MAX XML_UTF8_ENCODE_MAX
+#  define XmlConvert XmlUtf8Convert
+#  define XmlGetInternalEncoding XmlGetUtf8InternalEncoding
+#  define XmlGetInternalEncodingNS XmlGetUtf8InternalEncodingNS
+#  define XmlEncode XmlUtf8Encode
+#  define MUST_CONVERT(enc, s) (!(enc)->isUtf8)
 typedef char ICHAR;
 #endif
 
 
 #ifndef XML_NS
 
-#define XmlInitEncodingNS XmlInitEncoding
-#define XmlInitUnknownEncodingNS XmlInitUnknownEncoding
-#undef XmlGetInternalEncodingNS
-#define XmlGetInternalEncodingNS XmlGetInternalEncoding
-#define XmlParseXmlDeclNS XmlParseXmlDecl
+#  define XmlInitEncodingNS XmlInitEncoding
+#  define XmlInitUnknownEncodingNS XmlInitUnknownEncoding
+#  undef XmlGetInternalEncodingNS
+#  define XmlGetInternalEncodingNS XmlGetInternalEncoding
+#  define XmlParseXmlDeclNS XmlParseXmlDecl
 
 #endif
 
 #ifdef XML_UNICODE
 
-#ifdef XML_UNICODE_WCHAR_T
-#  define XML_T(x) (const wchar_t)x
-#  define XML_L(x) L ## x
+#  ifdef XML_UNICODE_WCHAR_T
+#    define XML_T(x) (const wchar_t)x
+#    define XML_L(x) L ## x
+#  else
+#    define XML_T(x) (const unsigned short)x
+#    define XML_L(x) x
+#  endif
+
 #else
-#  define XML_T(x) (const unsigned short)x
+
+#  define XML_T(x) x
 #  define XML_L(x) x
-#endif
-
-#else
-
-#define XML_T(x) x
-#define XML_L(x) x
 
 #endif
 
@@ -670,7 +670,7 @@ static const XML_Char implicitContext[] = {
 /* To avoid warnings about unused functions: */
 #if ! defined(HAVE_ARC4RANDOM_BUF) && ! defined(HAVE_ARC4RANDOM)
 
-#if defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM)
+#  if defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM)
 
 /* Obtain entropy on Linux 3.17+ */
 static int
@@ -684,11 +684,11 @@ writeRandomBytes_getrandom_nonblock(void * target, size_t count) {
     const size_t bytesToWrite = count - bytesWrittenTotal;
 
     const int bytesWrittenMore =
-#  if defined(HAVE_GETRANDOM)
+#    if defined(HAVE_GETRANDOM)
         getrandom(currentTarget, bytesToWrite, getrandomFlags);
-#  else
+#    else
         syscall(SYS_getrandom, currentTarget, bytesToWrite, getrandomFlags);
-#  endif
+#    endif
 
     if (bytesWrittenMore > 0) {
       bytesWrittenTotal += bytesWrittenMore;
@@ -700,10 +700,10 @@ writeRandomBytes_getrandom_nonblock(void * target, size_t count) {
   return success;
 }
 
-#endif  /* defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM) */
+#  endif  /* defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM) */
 
 
-#if ! defined(_WIN32) && defined(XML_DEV_URANDOM)
+#  if ! defined(_WIN32) && defined(XML_DEV_URANDOM)
 
 /* Extract entropy from /dev/urandom */
 static int
@@ -733,7 +733,7 @@ writeRandomBytes_dev_urandom(void * target, size_t count) {
   return success;
 }
 
-#endif  /* ! defined(_WIN32) && defined(XML_DEV_URANDOM) */
+#  endif  /* ! defined(_WIN32) && defined(XML_DEV_URANDOM) */
 
 #endif  /* ! defined(HAVE_ARC4RANDOM_BUF) && ! defined(HAVE_ARC4RANDOM) */
 
@@ -797,25 +797,25 @@ writeRandomBytes_RtlGenRandom(void * target, size_t count) {
 static unsigned long
 gather_time_entropy(void)
 {
-#ifdef _WIN32
+#  ifdef _WIN32
   FILETIME ft;
   GetSystemTimeAsFileTime(&ft); /* never fails */
   return ft.dwHighDateTime ^ ft.dwLowDateTime;
-#else
+#  else
   struct timeval tv;
   int gettimeofday_res;
 
   gettimeofday_res = gettimeofday(&tv, NULL);
 
-#  if defined(NDEBUG)
+#    if defined(NDEBUG)
   (void)gettimeofday_res;
-#  else
+#    else
   assert (gettimeofday_res == 0);
-#  endif  /* defined(NDEBUG) */
+#    endif  /* defined(NDEBUG) */
 
   /* Microseconds time is <20 bits entropy */
   return tv.tv_usec;
-#endif
+#  endif
 }
 
 #endif  /* ! defined(HAVE_ARC4RANDOM_BUF) && ! defined(HAVE_ARC4RANDOM) */
@@ -848,20 +848,20 @@ generate_hash_secret_salt(XML_Parser parser)
   return ENTROPY_DEBUG("arc4random", entropy);
 #else
   /* Try high quality providers first .. */
-#ifdef _WIN32
+#  ifdef _WIN32
   if (writeRandomBytes_RtlGenRandom((void *)&entropy, sizeof(entropy))) {
     return ENTROPY_DEBUG("RtlGenRandom", entropy);
   }
-#elif defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM)
+#  elif defined(HAVE_GETRANDOM) || defined(HAVE_SYSCALL_GETRANDOM)
   if (writeRandomBytes_getrandom_nonblock((void *)&entropy, sizeof(entropy))) {
     return ENTROPY_DEBUG("getrandom", entropy);
   }
-#endif
-#if ! defined(_WIN32) && defined(XML_DEV_URANDOM)
+#  endif
+#  if ! defined(_WIN32) && defined(XML_DEV_URANDOM)
   if (writeRandomBytes_dev_urandom((void *)&entropy, sizeof(entropy))) {
     return ENTROPY_DEBUG("/dev/urandom", entropy);
   }
-#endif  /* ! defined(_WIN32) && defined(XML_DEV_URANDOM) */
+#  endif  /* ! defined(_WIN32) && defined(XML_DEV_URANDOM) */
   /* .. and self-made low quality for backup: */
 
   /* Process ID is 0 bits entropy if attacker has local access */

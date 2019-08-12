@@ -27,12 +27,12 @@
 
 
 #ifndef UMODARITH_H
-#define UMODARITH_H
+#  define UMODARITH_H
 
 
-#include "constants.h"
-#include "mpdecimal.h"
-#include "typearith.h"
+#  include "constants.h"
+#  include "mpdecimal.h"
+#  include "typearith.h"
 
 
 /* Bignum: Low level routines for unsigned modular arithmetic. These are
@@ -126,7 +126,7 @@ dw_submod(mpd_uint_t a, mpd_uint_t hi, mpd_uint_t lo, mpd_uint_t m)
     return d;
 }
 
-#ifdef CONFIG_64
+#  ifdef CONFIG_64
 
 /**************************************************************************/
 /*                        64-bit modular arithmetic                       */
@@ -288,15 +288,15 @@ x64_powmod(mpd_uint_t base, mpd_uint_t exp, mpd_uint_t umod)
 }
 
 /* END CONFIG_64 */
-#else /* CONFIG_32 */
+#  else /* CONFIG_32 */
 
 
 /**************************************************************************/
 /*                        32-bit modular arithmetic                       */
 /**************************************************************************/
 
-#  if defined(ANSI)
-#    if !defined(LEGACY_COMPILER)
+#    if defined(ANSI)
+#      if !defined(LEGACY_COMPILER)
 /* HAVE_UINT64_T */
 static inline mpd_uint_t
 std_mulmod(mpd_uint_t a, mpd_uint_t b, mpd_uint_t m)
@@ -319,7 +319,7 @@ std_mulmod2(mpd_uint_t *a0, mpd_uint_t b0, mpd_uint_t *a1, mpd_uint_t b1,
     *a1 = ((mpd_uuint_t) *a1 * b1) % m;
 }
 /* END HAVE_UINT64_T */
-#    else
+#      else
 /* LEGACY_COMPILER */
 static inline mpd_uint_t
 std_mulmod(mpd_uint_t a, mpd_uint_t b, mpd_uint_t m)
@@ -345,7 +345,7 @@ std_mulmod2(mpd_uint_t *a0, mpd_uint_t b0, mpd_uint_t *a1, mpd_uint_t b1,
     *a1 = std_mulmod(*a1, b1, m);
 }
 /* END LEGACY_COMPILER */
-#    endif
+#      endif
 
 static inline mpd_uint_t
 std_powmod(mpd_uint_t base, mpd_uint_t exp, mpd_uint_t umod)
@@ -361,7 +361,7 @@ std_powmod(mpd_uint_t base, mpd_uint_t exp, mpd_uint_t umod)
 
     return r;
 }
-#  endif /* ANSI CONFIG_32 */
+#    endif /* ANSI CONFIG_32 */
 
 
 /**************************************************************************/
@@ -393,8 +393,8 @@ std_powmod(mpd_uint_t base, mpd_uint_t exp, mpd_uint_t umod)
  *   - random tests are provided in tests/extended/ppro_mulmod.c
  */
 
-#  if defined(PPRO)
-#    if defined(ASM)
+#    if defined(PPRO)
+#      if defined(ASM)
 
 /* Return (a * b) % dmod */
 static inline mpd_uint_t
@@ -509,7 +509,7 @@ ppro_mulmod2(mpd_uint_t *a0, mpd_uint_t b0, mpd_uint_t *a1, mpd_uint_t b1,
     );
 }
 /* END PPRO GCC ASM */
-#    elif defined(MASM)
+#      elif defined(MASM)
 
 /* Return (a * b) % dmod */
 static inline mpd_uint_t __cdecl
@@ -622,7 +622,7 @@ ppro_mulmod2(mpd_uint_t *a0, mpd_uint_t b0, mpd_uint_t *a1, mpd_uint_t b1,
         fistp   DWORD PTR [eax]
     }
 }
-#    endif /* PPRO MASM (_MSC_VER) */
+#      endif /* PPRO MASM (_MSC_VER) */
 
 
 /* Return (base ** exp) % dmod */
@@ -640,8 +640,8 @@ ppro_powmod(mpd_uint_t base, mpd_uint_t exp, double *dmod, uint32_t *dinvmod)
 
     return r;
 }
-#  endif /* PPRO */
-#endif /* CONFIG_32 */
+#    endif /* PPRO */
+#  endif /* CONFIG_32 */
 
 
 #endif /* UMODARITH_H */

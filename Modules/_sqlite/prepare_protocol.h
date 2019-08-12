@@ -22,9 +22,9 @@
  */
 
 #ifndef PYSQLITE_PREPARE_PROTOCOL_H
-#define PYSQLITE_PREPARE_PROTOCOL_H
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
+#  define PYSQLITE_PREPARE_PROTOCOL_H
+#  define PY_SSIZE_T_CLEAN
+#  include "Python.h"
 
 typedef struct
 {
@@ -38,5 +38,5 @@ void pysqlite_prepare_protocol_dealloc(pysqlite_PrepareProtocol* self);
 
 int pysqlite_prepare_protocol_setup_types(void);
 
-#define UNKNOWN (-1)
+#  define UNKNOWN (-1)
 #endif

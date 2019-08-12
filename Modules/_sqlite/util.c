@@ -98,9 +98,9 @@ int _pysqlite_seterror(sqlite3* db, sqlite3_stmt* st)
 }
 
 #ifdef WORDS_BIGENDIAN
-#define IS_LITTLE_ENDIAN 0
+#  define IS_LITTLE_ENDIAN 0
 #else
-#define IS_LITTLE_ENDIAN 1
+#  define IS_LITTLE_ENDIAN 1
 #endif
 
 PyObject *

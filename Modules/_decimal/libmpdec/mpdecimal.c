@@ -41,36 +41,36 @@
 #include "umodarith.h"
 
 #ifdef PPRO
-  #if defined(_MSC_VER)
-    #include <float.h>
-    #pragma float_control(precise, on)
-    #pragma fenv_access(on)
-  #elif !defined(__OpenBSD__) && !defined(__NetBSD__)
+#  if defined(_MSC_VER)
+#    include <float.h>
+#    pragma float_control(precise, on)
+#    pragma fenv_access(on)
+#  elif !defined(__OpenBSD__) && !defined(__NetBSD__)
     /* C99 */
-    #include <fenv.h>
-    #pragma STDC FENV_ACCESS ON
-  #endif
+#    include <fenv.h>
+#    pragma STDC FENV_ACCESS ON
+#  endif
 #endif
 
 
 /* Disable warning that is part of -Wextra since gcc 7.0. */
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && __GNUC__ >= 7
-  #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#  pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 
 #if defined(_MSC_VER)
-  #define ALWAYS_INLINE __forceinline
+#  define ALWAYS_INLINE __forceinline
 #elif defined(LEGACY_COMPILER)
-  #define ALWAYS_INLINE
-  #undef inline
-  #define inline
+#  define ALWAYS_INLINE
+#  undef inline
+#  define inline
 #else
-  #ifdef TEST_COVERAGE
-    #define ALWAYS_INLINE
-  #else
-    #define ALWAYS_INLINE inline __attribute__ ((always_inline))
-  #endif
+#  ifdef TEST_COVERAGE
+#    define ALWAYS_INLINE
+#  else
+#    define ALWAYS_INLINE inline __attribute__ ((always_inline))
+#  endif
 #endif
 
 
@@ -1237,11 +1237,11 @@ void
 mpd_qset_i64(mpd_t *result, int64_t a, const mpd_context_t *ctx,
              uint32_t *status)
 {
-#ifdef CONFIG_64
+#  ifdef CONFIG_64
     mpd_qset_ssize(result, a, ctx, status);
-#else
+#  else
     _c32_qset_i64(result, a, ctx, status);
-#endif
+#  endif
 }
 
 /* quietly set a decimal from a uint64_t */
@@ -1249,11 +1249,11 @@ void
 mpd_qset_u64(mpd_t *result, uint64_t a, const mpd_context_t *ctx,
              uint32_t *status)
 {
-#ifdef CONFIG_64
+#  ifdef CONFIG_64
     mpd_qset_uint(result, a, ctx, status);
-#else
+#  else
     _c32_qset_u64(result, a, ctx, status);
-#endif
+#  endif
 }
 #endif /* !LEGACY_COMPILER */
 
@@ -1499,7 +1499,7 @@ mpd_qget_i32(const mpd_t *a, uint32_t *status)
     return (int32_t)x;
 }
 #else
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 /* quietly get a uint64_t from a decimal */
 uint64_t
 mpd_qget_u64(const mpd_t *a, uint32_t *status)
@@ -1513,7 +1513,7 @@ mpd_qget_i64(const mpd_t *a, uint32_t *status)
 {
     return _c32_qget_i64(a, status);
 }
-#endif
+#  endif
 
 /* quietly get a uint32_t from a decimal */
 uint32_t
@@ -4247,9 +4247,9 @@ _mpd_qexp(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx,
      *     adjexp(e^(r*10^t)) <= log10(e^(r*10^t)) <= log10(e^(-0.1*10^t)) < MIN-ETINY
      */
 #if defined(CONFIG_64)
-    #define MPD_EXP_MAX_T 19
+#  define MPD_EXP_MAX_T 19
 #elif defined(CONFIG_32)
-    #define MPD_EXP_MAX_T 10
+#  define MPD_EXP_MAX_T 10
 #endif
     t = a->digits + a->exp;
     t = (t > 0) ? t : 0;
@@ -4480,9 +4480,9 @@ ln_schedule_prec(mpd_ssize_t klist[MPD_MAX_PREC_LOG2], mpd_ssize_t maxprec,
 
 /* The constants have been verified with both decimal.py and mpfr. */
 #ifdef CONFIG_64
-#if MPD_RDIGITS != 19
-  #error "mpdecimal.c: MPD_RDIGITS must be 19."
-#endif
+#  if MPD_RDIGITS != 19
+#    error "mpdecimal.c: MPD_RDIGITS must be 19."
+#  endif
 static const mpd_uint_t mpd_ln10_data[MPD_MINALLOC_MAX] = {
   6983716328982174407ULL, 9089704281976336583ULL, 1515961135648465461ULL,
   4416816335727555703ULL, 2900988039194170265ULL, 2307925037472986509ULL,
@@ -4508,9 +4508,9 @@ static const mpd_uint_t mpd_ln10_data[MPD_MINALLOC_MAX] = {
   2302585092994045684ULL
 };
 #else
-#if MPD_RDIGITS != 9
-  #error "mpdecimal.c: MPD_RDIGITS must be 9."
-#endif
+#  if MPD_RDIGITS != 9
+#    error "mpdecimal.c: MPD_RDIGITS must be 9."
+#  endif
 static const mpd_uint_t mpd_ln10_data[MPD_MINALLOC_MAX] = {
   401682692UL, 708474699UL, 720754403UL,  30896345UL, 602301057UL, 765871416UL,
   192920333UL, 763113569UL, 589402567UL, 956890167UL,  82413146UL, 589257242UL,
@@ -5431,7 +5431,7 @@ _mpd_get_transform_len(mpd_size_t rsize)
 }
 
 #ifdef PPRO
-#ifndef _MSC_VER
+#  ifndef _MSC_VER
 static inline unsigned short
 _mpd_get_control87(void)
 {
@@ -5446,13 +5446,13 @@ _mpd_set_control87(unsigned short cw)
 {
     __asm__ __volatile__ ("fldcw %0" : : "m" (cw));
 }
-#endif
+#  endif
 
 static unsigned int
 mpd_set_fenv(void)
 {
     unsigned int cw;
-#ifdef _MSC_VER
+#  ifdef _MSC_VER
     unsigned int flags =
         _EM_INVALID|_EM_DENORMAL|_EM_ZERODIVIDE|_EM_OVERFLOW|
         _EM_UNDERFLOW|_EM_INEXACT|_RC_CHOP|_PC_64;
@@ -5461,24 +5461,24 @@ mpd_set_fenv(void)
 
     __control87_2(0, 0, &cw, NULL);
     __control87_2(flags, mask, &dummy, NULL);
-#else
+#  else
     cw = _mpd_get_control87();
     _mpd_set_control87(cw|0xF3F);
-#endif
+#  endif
     return cw;
 }
 
 static void
 mpd_restore_fenv(unsigned int cw)
 {
-#ifdef _MSC_VER
+#  ifdef _MSC_VER
     unsigned int mask = _MCW_EM|_MCW_RC|_MCW_PC;
     unsigned int dummy;
 
     __control87_2(cw, mask, &dummy, NULL);
-#else
+#  else
     _mpd_set_control87((unsigned short)cw);
-#endif
+#  endif
 }
 #endif /* PPRO */
 

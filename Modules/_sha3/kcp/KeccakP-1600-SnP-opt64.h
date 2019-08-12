@@ -14,29 +14,29 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #ifndef _KeccakP_1600_SnP_h_
-#define _KeccakP_1600_SnP_h_
+#  define _KeccakP_1600_SnP_h_
 
 /** For the documentation, see SnP-documentation.h.
  */
 
 /* #include "brg_endian.h" */
-#include "KeccakP-1600-opt64-config.h"
+#  include "KeccakP-1600-opt64-config.h"
 
-#define KeccakP1600_implementation      "generic 64-bit optimized implementation (" KeccakP1600_implementation_config ")"
-#define KeccakP1600_stateSizeInBytes    200
-#define KeccakP1600_stateAlignment      8
-#define KeccakF1600_FastLoop_supported
+#  define KeccakP1600_implementation      "generic 64-bit optimized implementation (" KeccakP1600_implementation_config ")"
+#  define KeccakP1600_stateSizeInBytes    200
+#  define KeccakP1600_stateAlignment      8
+#  define KeccakF1600_FastLoop_supported
 
-#include <stddef.h>
+#  include <stddef.h>
 
-#define KeccakP1600_StaticInitialize()
+#  define KeccakP1600_StaticInitialize()
 void KeccakP1600_Initialize(void *state);
-#if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-#  define KeccakP1600_AddByte(state, byte, offset) \
+#  if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
+#    define KeccakP1600_AddByte(state, byte, offset) \
     ((unsigned char*)(state))[(offset)] ^= (byte)
-#else
+#  else
 void KeccakP1600_AddByte(void *state, unsigned char data, unsigned int offset);
-#endif
+#  endif
 void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
 void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned int offset, unsigned int length);
 void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount);

@@ -1,8 +1,8 @@
 #include "Python.h"
 #include <ffi.h>
 #ifdef MS_WIN32
-#include <windows.h>
-#include <malloc.h>
+#  include <windows.h>
+#  include <malloc.h>
 #endif
 #include "ctypes.h"
 

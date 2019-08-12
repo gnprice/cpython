@@ -275,11 +275,11 @@ m_inf(void)
 static double
 m_nan(void)
 {
-#ifndef PY_NO_SHORT_FLOAT_REPR
+#  ifndef PY_NO_SHORT_FLOAT_REPR
     return _Py_dg_stdnan(0);
-#else
+#  else
     return Py_NAN;
-#endif
+#  endif
 }
 
 #endif
@@ -468,10 +468,10 @@ m_lgamma(double x)
    ERFC_CONTFRAC_CUTOFF.  ERFC_SERIES_TERMS and ERFC_CONTFRAC_TERMS are the
    numbers of terms to use for the relevant expansions.  */
 
-#define ERF_SERIES_CUTOFF 1.5
-#define ERF_SERIES_TERMS 25
-#define ERFC_CONTFRAC_CUTOFF 30.0
-#define ERFC_CONTFRAC_TERMS 50
+#  define ERF_SERIES_CUTOFF 1.5
+#  define ERF_SERIES_TERMS 25
+#  define ERFC_CONTFRAC_CUTOFF 30.0
+#  define ERFC_CONTFRAC_TERMS 50
 
 /*
    Error function, via power series.

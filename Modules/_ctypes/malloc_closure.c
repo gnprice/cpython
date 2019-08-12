@@ -1,13 +1,13 @@
 #include <Python.h>
 #include <ffi.h>
 #ifdef MS_WIN32
-#include <windows.h>
+#  include <windows.h>
 #else
-#include <sys/mman.h>
-#include <unistd.h>
-#if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
-#  define MAP_ANONYMOUS MAP_ANON
-#endif
+#  include <sys/mman.h>
+#  include <unistd.h>
+#  if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
+#    define MAP_ANONYMOUS MAP_ANON
+#  endif
 #endif
 #include "ctypes.h"
 
@@ -44,11 +44,11 @@ static void more_core(void)
     }
 #else
     if (!_pagesize) {
-#ifdef _SC_PAGESIZE
+#  ifdef _SC_PAGESIZE
         _pagesize = sysconf(_SC_PAGESIZE);
-#else
+#  else
         _pagesize = getpagesize();
-#endif
+#  endif
     }
 #endif
 

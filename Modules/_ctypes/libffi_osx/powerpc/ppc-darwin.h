@@ -73,13 +73,13 @@ enum {
 	FLAG_RETVAL_REFERENCE	= 1 << (31 - 4)
 };
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 void ffi64_struct_to_ram_form(const ffi_type*, const char*, unsigned int*,
 	const char*, unsigned int*, unsigned int*, char*, unsigned int*);
 void ffi64_struct_to_reg_form(const ffi_type*, const char*, unsigned int*,
 	unsigned int*, char*, unsigned int*, char*, unsigned int*);
 bool ffi64_stret_needs_ptr(const ffi_type* inType,
 	unsigned short*, unsigned short*);
-#endif
+#  endif
 
 #endif	// !defined(LIBFFI_ASM)

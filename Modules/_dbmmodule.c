@@ -13,19 +13,19 @@
  * whichever configure was able to locate.
  */
 #if defined(HAVE_NDBM_H)
-#include <ndbm.h>
+#  include <ndbm.h>
 static const char which_dbm[] = "GNU gdbm";  /* EMX port of GDBM */
 #elif defined(HAVE_GDBM_NDBM_H)
-#include <gdbm/ndbm.h>
+#  include <gdbm/ndbm.h>
 static const char which_dbm[] = "GNU gdbm";
 #elif defined(HAVE_GDBM_DASH_NDBM_H)
-#include <gdbm-ndbm.h>
+#  include <gdbm-ndbm.h>
 static const char which_dbm[] = "GNU gdbm";
 #elif defined(HAVE_BERKDB_H)
-#include <db.h>
+#  include <db.h>
 static const char which_dbm[] = "Berkeley DB";
 #else
-#error "No ndbm.h available!"
+#  error "No ndbm.h available!"
 #endif
 
 /*[clinic input]

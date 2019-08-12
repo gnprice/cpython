@@ -27,10 +27,10 @@
 
 
 #ifndef MPALLOC_H
-#define MPALLOC_H
+#  define MPALLOC_H
 
 
-#include "mpdecimal.h"
+#  include "mpdecimal.h"
 
 
 /* Internal header file: all symbols have local scope in the DSO */

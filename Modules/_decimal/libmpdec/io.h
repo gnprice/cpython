@@ -27,16 +27,16 @@
 
 
 #ifndef IO_H
-#define IO_H
+#  define IO_H
 
 
-#include <errno.h>
-#include "mpdecimal.h"
+#  include <errno.h>
+#  include "mpdecimal.h"
 
 
-#if SIZE_MAX == MPD_SIZE_MAX
-  #define mpd_strtossize _mpd_strtossize
-#else
+#  if SIZE_MAX == MPD_SIZE_MAX
+#    define mpd_strtossize _mpd_strtossize
+#  else
 static inline mpd_ssize_t
 mpd_strtossize(const char *s, char **end, int base)
 {
@@ -53,7 +53,7 @@ mpd_strtossize(const char *s, char **end, int base)
 
     return (mpd_ssize_t)retval;
 }
-#endif
+#  endif
 
 
 #endif

@@ -6,13 +6,13 @@
 #include "Python.h"
 
 #ifdef HAVE_SYS_FILE_H
-#include <sys/file.h>
+#  include <sys/file.h>
 #endif
 
 #include <sys/ioctl.h>
 #include <fcntl.h>
 #ifdef HAVE_STROPTS_H
-#include <stropts.h>
+#  include <stropts.h>
 #endif
 
 /*[clinic input]
@@ -296,12 +296,12 @@ fcntl_flock_impl(PyObject *module, int fd, int code)
     } while (ret == -1 && errno == EINTR && !(async_err = PyErr_CheckSignals()));
 #else
 
-#ifndef LOCK_SH
-#  define LOCK_SH         1       /* shared lock */
-#  define LOCK_EX         2       /* exclusive lock */
-#  define LOCK_NB         4       /* don't block when locking */
-#  define LOCK_UN         8       /* unlock */
-#endif
+#  ifndef LOCK_SH
+#    define LOCK_SH         1       /* shared lock */
+#    define LOCK_EX         2       /* exclusive lock */
+#    define LOCK_NB         4       /* don't block when locking */
+#    define LOCK_UN         8       /* unlock */
+#  endif
     {
         struct flock l;
         if (code == LOCK_UN)
@@ -373,10 +373,10 @@ fcntl_lockf_impl(PyObject *module, int fd, int code, PyObject *lenobj,
     int async_err = 0;
 
 #ifndef LOCK_SH
-#define LOCK_SH         1       /* shared lock */
-#define LOCK_EX         2       /* exclusive lock */
-#define LOCK_NB         4       /* don't block when locking */
-#define LOCK_UN         8       /* unlock */
+#  define LOCK_SH         1       /* shared lock */
+#  define LOCK_EX         2       /* exclusive lock */
+#  define LOCK_NB         4       /* don't block when locking */
+#  define LOCK_UN         8       /* unlock */
 #endif  /* LOCK_SH */
     {
         struct flock l;
@@ -600,10 +600,10 @@ all_ins(PyObject* m)
     if (PyModule_AddIntMacro(m, I_FDINSERT)) return -1;
     if (PyModule_AddIntMacro(m, I_STR)) return -1;
     if (PyModule_AddIntMacro(m, I_SWROPT)) return -1;
-#ifdef I_GWROPT
+#  ifdef I_GWROPT
     /* despite the comment above, old-ish glibcs miss a couple... */
     if (PyModule_AddIntMacro(m, I_GWROPT)) return -1;
-#endif
+#  endif
     if (PyModule_AddIntMacro(m, I_SENDFD)) return -1;
     if (PyModule_AddIntMacro(m, I_RECVFD)) return -1;
     if (PyModule_AddIntMacro(m, I_LIST)) return -1;
@@ -612,9 +612,9 @@ all_ins(PyObject* m)
     if (PyModule_AddIntMacro(m, I_GETBAND)) return -1;
     if (PyModule_AddIntMacro(m, I_CANPUT)) return -1;
     if (PyModule_AddIntMacro(m, I_SETCLTIME)) return -1;
-#ifdef I_GETCLTIME
+#  ifdef I_GETCLTIME
     if (PyModule_AddIntMacro(m, I_GETCLTIME)) return -1;
-#endif
+#  endif
     if (PyModule_AddIntMacro(m, I_LINK)) return -1;
     if (PyModule_AddIntMacro(m, I_UNLINK)) return -1;
     if (PyModule_AddIntMacro(m, I_PLINK)) return -1;

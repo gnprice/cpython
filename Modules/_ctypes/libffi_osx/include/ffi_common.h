@@ -42,13 +42,13 @@ char* alloca();
 #  endif
 
 /*
-#if defined(FFI_DEBUG)
-#  include <stdio.h>
-#endif
+#  if defined(FFI_DEBUG)
+#    include <stdio.h>
+#  endif
 */
 
-#ifdef FFI_DEBUG
-#  include <stdio.h>
+#  ifdef FFI_DEBUG
+#    include <stdio.h>
 
 /*@exits@*/ void
 ffi_assert(
@@ -63,16 +63,16 @@ ffi_type_test(
 /*@temp@*/				char*	file,
 						int		line);
 
-#  define FFI_ASSERT(x)			((x) ? (void)0 : ffi_assert(#x, __FILE__,__LINE__))
-#  define FFI_ASSERT_AT(x, f, l)	((x) ? 0 : ffi_assert(#x, (f), (l)))
-#  define FFI_ASSERT_VALID_TYPE(x)	ffi_type_test(x, __FILE__, __LINE__)
-#else
-#  define FFI_ASSERT(x) 
-#  define FFI_ASSERT_AT(x, f, l)
-#  define FFI_ASSERT_VALID_TYPE(x)
-#endif	// #ifdef FFI_DEBUG
+#    define FFI_ASSERT(x)			((x) ? (void)0 : ffi_assert(#x, __FILE__,__LINE__))
+#    define FFI_ASSERT_AT(x, f, l)	((x) ? 0 : ffi_assert(#x, (f), (l)))
+#    define FFI_ASSERT_VALID_TYPE(x)	ffi_type_test(x, __FILE__, __LINE__)
+#  else
+#    define FFI_ASSERT(x) 
+#    define FFI_ASSERT_AT(x, f, l)
+#    define FFI_ASSERT_VALID_TYPE(x)
+#  endif	// #ifdef FFI_DEBUG
 
-#define ALIGN(v, a)	(((size_t)(v) + (a) - 1) & ~((a) - 1))
+#  define ALIGN(v, a)	(((size_t)(v) + (a) - 1) & ~((a) - 1))
 
 /*	Perform machine dependent cif processing */
 ffi_status
@@ -97,8 +97,8 @@ typedef unsigned int	UINT64	__attribute__((__mode__(__DI__)));
 typedef signed int		SINT64	__attribute__((__mode__(__DI__)));
 typedef float			FLOAT32;
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif	// #ifndef FFI_COMMON_H

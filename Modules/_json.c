@@ -5,7 +5,7 @@
  * platforms. */
 
 #if !defined(Py_BUILD_CORE_BUILTIN) && !defined(Py_BUILD_CORE_MODULE)
-#error "Py_BUILD_CORE_BUILTIN or Py_BUILD_CORE_MODULE must be defined"
+#  error "Py_BUILD_CORE_BUILTIN or Py_BUILD_CORE_MODULE must be defined"
 #endif
 
 #include "Python.h"
@@ -13,9 +13,9 @@
 #include "pycore_accu.h"
 
 #ifdef __GNUC__
-#define UNUSED __attribute__((__unused__))
+#  define UNUSED __attribute__((__unused__))
 #else
-#define UNUSED
+#  define UNUSED
 #endif
 
 #define PyScanner_Check(op) PyObject_TypeCheck(op, &PyScannerType)

@@ -3393,11 +3393,11 @@ PyUnicode_Decode(const char *s,
                 || strcmp(lower, "us_ascii") == 0) {
                 return PyUnicode_DecodeASCII(s, size, errors);
             }
-    #ifdef MS_WINDOWS
+#ifdef MS_WINDOWS
             else if (strcmp(lower, "mbcs") == 0) {
                 return PyUnicode_DecodeMBCS(s, size, errors);
             }
-    #endif
+#endif
             else if (strcmp(lower, "latin1") == 0
                      || strcmp(lower, "latin_1") == 0
                      || strcmp(lower, "iso_8859_1") == 0

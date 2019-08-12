@@ -36,16 +36,16 @@
 #ifdef __sparc
   /* opt64 uses un-aligned memory access that causes a BUS error with msg
    * 'invalid address alignment' on SPARC. */
-  #define KeccakOpt 32
+#  define KeccakOpt 32
 #elif PY_BIG_ENDIAN
   /* opt64 is not yet supported on big endian platforms */
-  #define KeccakOpt 32
+#  define KeccakOpt 32
 #elif SIZEOF_VOID_P == 8 && defined(PY_UINT64_T)
   /* opt64 works only on little-endian 64bit platforms with unsigned int64 */
-  #define KeccakOpt 64
+#  define KeccakOpt 64
 #else
   /* opt32 is used for the remaining 32 and 64bit platforms */
-  #define KeccakOpt 32
+#  define KeccakOpt 32
 #endif
 
 #if KeccakOpt == 64 && defined(PY_UINT64_T)
@@ -58,10 +58,10 @@
 #define IS_LITTLE_ENDIAN 1234
 #define IS_BIG_ENDIAN 4321
 #if PY_LITTLE_ENDIAN
-#define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
+#  define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
 #endif
 #if PY_BIG_ENDIAN
-#define PLATFORM_BYTE_ORDER IS_BIG_ENDIAN
+#  define PLATFORM_BYTE_ORDER IS_BIG_ENDIAN
 #endif
 
 /* mangle names */
@@ -92,9 +92,9 @@
 #define KeccakWidth1600_SpongeInitialize _PySHA3_KeccakWidth1600_SpongeInitialize
 #define KeccakWidth1600_SpongeSqueeze _PySHA3_KeccakWidth1600_SpongeSqueeze
 #if KeccakOpt == 32
-#define KeccakP1600_AddByte _PySHA3_KeccakP1600_AddByte
-#define KeccakP1600_Permute_Nrounds _PySHA3_KeccakP1600_Permute_Nrounds
-#define KeccakP1600_SetBytesInLaneToZero _PySHA3_KeccakP1600_SetBytesInLaneToZero
+#  define KeccakP1600_AddByte _PySHA3_KeccakP1600_AddByte
+#  define KeccakP1600_Permute_Nrounds _PySHA3_KeccakP1600_Permute_Nrounds
+#  define KeccakP1600_SetBytesInLaneToZero _PySHA3_KeccakP1600_SetBytesInLaneToZero
 #endif
 
 /* we are only interested in KeccakP1600 */
@@ -108,9 +108,9 @@
 #include "kcp/KeccakHash.c"
 #include "kcp/KeccakSponge.c"
 #if KeccakOpt == 64
-  #include "kcp/KeccakP-1600-opt64.c"
+#  include "kcp/KeccakP-1600-opt64.c"
 #elif KeccakOpt == 32
-  #include "kcp/KeccakP-1600-inplace32BI.c"
+#  include "kcp/KeccakP-1600-inplace32BI.c"
 #endif
 
 #define SHA3_MAX_DIGESTSIZE 64 /* 64 Bytes (512 Bits) for 224 to 512 */

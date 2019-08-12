@@ -1565,9 +1565,9 @@ init_timezone(PyObject *m)
     at the top of this function and removing the call to tzset() from
     time_tzset():
 
-        #ifdef HAVE_TZSET
+#ifdef HAVE_TZSET
         tzset()
-        #endif
+#endif
 
     And I'm lazy and hate C so nyer.
      */

@@ -27,11 +27,11 @@
 
 
 #ifndef NUMBER_THEORY_H
-#define NUMBER_THEORY_H
+#  define NUMBER_THEORY_H
 
 
-#include "constants.h"
-#include "mpdecimal.h"
+#  include "constants.h"
+#  include "mpdecimal.h"
 
 
 /* Internal header file: all symbols have local scope in the DSO */
@@ -52,7 +52,7 @@ struct fnt_params *_mpd_init_fnt_params(mpd_size_t n, int sign, int modnum);
 void _mpd_init_w3table(mpd_uint_t w3table[3], int sign, int modnum);
 
 
-#ifdef PPRO
+#  ifdef PPRO
 static inline void
 ppro_setmodulus(int modnum, mpd_uint_t *umod, double *dmod, uint32_t dinvmod[3])
 {
@@ -61,13 +61,13 @@ ppro_setmodulus(int modnum, mpd_uint_t *umod, double *dmod, uint32_t dinvmod[3])
     dinvmod[1] = mpd_invmoduli[modnum][1];
     dinvmod[2] = mpd_invmoduli[modnum][2];
 }
-#else
+#  else
 static inline void
 std_setmodulus(int modnum, mpd_uint_t *umod)
 {
     *umod =  mpd_moduli[modnum];
 }
-#endif
+#  endif
 
 
 MPD_PRAGMA(MPD_HIDE_SYMBOLS_END) /* restore previous scope rules */

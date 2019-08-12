@@ -32,34 +32,34 @@
 
 #if defined(_WIN32)
 
-#include <windows.h>
-#include <tchar.h>
+#  include <windows.h>
+#  include <tchar.h>
 
 
 HMODULE _Expat_LoadLibrary(LPCTSTR filename);
 
 
-#if !defined(LOAD_WITH_ALTERED_SEARCH_PATH)
-#  define LOAD_WITH_ALTERED_SEARCH_PATH  0x00000008
-#endif
+#  if !defined(LOAD_WITH_ALTERED_SEARCH_PATH)
+#    define LOAD_WITH_ALTERED_SEARCH_PATH  0x00000008
+#  endif
 
-#if !defined(LOAD_LIBRARY_SEARCH_SYSTEM32)
-#  define LOAD_LIBRARY_SEARCH_SYSTEM32   0x00000800
-#endif
+#  if !defined(LOAD_LIBRARY_SEARCH_SYSTEM32)
+#    define LOAD_LIBRARY_SEARCH_SYSTEM32   0x00000800
+#  endif
 
 /* We use our own typedef here since some headers might lack these */
 typedef HMODULE (APIENTRY *LOADLIBRARYEX_FN)(LPCTSTR, HANDLE, DWORD);
 
 /* See function definitions in winbase.h */
-#ifdef UNICODE
-#  ifdef _WIN32_WCE
-#    define LOADLIBARYEX  L"LoadLibraryExW"
+#  ifdef UNICODE
+#    ifdef _WIN32_WCE
+#      define LOADLIBARYEX  L"LoadLibraryExW"
+#    else
+#      define LOADLIBARYEX  "LoadLibraryExW"
+#    endif
 #  else
-#    define LOADLIBARYEX  "LoadLibraryExW"
+#    define LOADLIBARYEX    "LoadLibraryExA"
 #  endif
-#else
-#  define LOADLIBARYEX    "LoadLibraryExA"
-#endif
 
 
 /*

@@ -41,9 +41,9 @@
 extern grammar _PyParser_Grammar; /* From graminit.c */
 
 #ifdef lint
-#include <note.h>
+#  include <note.h>
 #else
-#define NOTE(x)
+#  define NOTE(x)
 #endif
 
 /*  String constants used to initialize module attributes.

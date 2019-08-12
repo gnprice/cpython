@@ -22,15 +22,15 @@
  */
 
 #ifndef PYSQLITE_STATEMENT_H
-#define PYSQLITE_STATEMENT_H
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
+#  define PYSQLITE_STATEMENT_H
+#  define PY_SSIZE_T_CLEAN
+#  include "Python.h"
 
-#include "connection.h"
-#include "sqlite3.h"
+#  include "connection.h"
+#  include "sqlite3.h"
 
-#define PYSQLITE_TOO_MUCH_SQL (-100)
-#define PYSQLITE_SQL_WRONG_TYPE (-101)
+#  define PYSQLITE_TOO_MUCH_SQL (-100)
+#  define PYSQLITE_SQL_WRONG_TYPE (-101)
 
 typedef struct
 {

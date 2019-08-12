@@ -58,7 +58,7 @@
 #include "Python.h"
 #include "pystrhex.h"
 #ifdef USE_ZLIB_CRC32
-#include "zlib.h"
+#  include "zlib.h"
 #endif
 
 typedef struct binascii_state {

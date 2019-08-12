@@ -334,7 +334,7 @@ validate_list(PyGC_Head *head, uintptr_t expected_mask)
     assert(prev == GC_PREV(head));
 }
 #else
-#define validate_list(x,y) do{}while(0)
+#  define validate_list(x,y) do{}while(0)
 #endif
 
 /*** end of list stuff ***/

@@ -11,7 +11,7 @@
 #include <string.h>
 
 #ifdef __APPLE__
-#include <mach-o/dyld.h>
+#  include <mach-o/dyld.h>
 #endif
 
 /* Search in some common locations for the associated Python libraries.
@@ -106,11 +106,11 @@ extern "C" {
 
 
 #if !defined(PREFIX) || !defined(EXEC_PREFIX) || !defined(VERSION) || !defined(VPATH)
-#error "PREFIX, EXEC_PREFIX, VERSION, and VPATH must be constant defined"
+#  error "PREFIX, EXEC_PREFIX, VERSION, and VPATH must be constant defined"
 #endif
 
 #ifndef LANDMARK
-#define LANDMARK L"os.py"
+#  define LANDMARK L"os.py"
 #endif
 
 #define DECODE_LOCALE_ERR(NAME, LEN) \
@@ -330,9 +330,9 @@ absolutize(wchar_t *path, size_t path_len)
 
 
 #if defined(__CYGWIN__) || defined(__MINGW32__)
-#ifndef EXE_SUFFIX
-#  define EXE_SUFFIX L".exe"
-#endif
+#  ifndef EXE_SUFFIX
+#    define EXE_SUFFIX L".exe"
+#  endif
 
 /* pathlen: 'path' length in characters including trailing NUL */
 static PyStatus
@@ -731,11 +731,11 @@ calculate_program_full_path(const PyConfig *config,
 
 #ifdef __APPLE__
     char execpath[MAXPATHLEN + 1];
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+#  if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     uint32_t nsexeclength = Py_ARRAY_LENGTH(execpath) - 1;
-#else
+#  else
     unsigned long nsexeclength = Py_ARRAY_LENGTH(execpath) - 1;
-#endif
+#  endif
 #endif
 
     /* If there is no slash in the argv0 path, then we have to

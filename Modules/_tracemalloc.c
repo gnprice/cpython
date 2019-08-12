@@ -20,7 +20,7 @@ static void* raw_malloc(size_t size);
 static void raw_free(void *ptr);
 
 #ifdef Py_DEBUG
-#define TRACE_DEBUG
+#  define TRACE_DEBUG
 #endif
 
 /* Protected by the GIL */
@@ -36,12 +36,12 @@ static struct {
    the GIL held from PyMem_RawFree(). It cannot acquire the lock because it
    would introduce a deadlock in PyThreadState_DeleteCurrent(). */
 static PyThread_type_lock tables_lock;
-#define TABLES_LOCK() PyThread_acquire_lock(tables_lock, 1)
-#define TABLES_UNLOCK() PyThread_release_lock(tables_lock)
+#  define TABLES_LOCK() PyThread_acquire_lock(tables_lock, 1)
+#  define TABLES_UNLOCK() PyThread_release_lock(tables_lock)
 #else
    /* variables are protected by the GIL */
-#define TABLES_LOCK()
-#define TABLES_UNLOCK()
+#  define TABLES_LOCK()
+#  define TABLES_UNLOCK()
 #endif
 
 
@@ -63,7 +63,7 @@ typedef struct
 #ifdef __GNUC__
 __attribute__((packed))
 #elif defined(_MSC_VER)
-#pragma pack(push, 4)
+#  pragma pack(push, 4)
 #endif
 {
     /* filename cannot be NULL: "<unknown>" is used if the Python frame
@@ -72,7 +72,7 @@ __attribute__((packed))
     unsigned int lineno;
 } frame_t;
 #ifdef _MSC_VER
-#pragma pack(pop)
+#  pragma pack(pop)
 #endif
 
 
@@ -145,12 +145,12 @@ tracemalloc_error(const char *format, ...)
 
 
 #if defined(TRACE_RAW_MALLOC)
-#define REENTRANT_THREADLOCAL
+#  define REENTRANT_THREADLOCAL
 
 static Py_tss_t tracemalloc_reentrant_key = Py_tss_NEEDS_INIT;
 
 /* Any non-NULL pointer can be used */
-#define REENTRANT Py_True
+#  define REENTRANT Py_True
 
 static int
 get_reentrant(void)
@@ -949,11 +949,11 @@ tracemalloc_init(void)
 
 #ifdef REENTRANT_THREADLOCAL
     if (PyThread_tss_create(&tracemalloc_reentrant_key) != 0) {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
         PyErr_SetFromWindowsErr(0);
-#else
+#  else
         PyErr_SetFromErrno(PyExc_OSError);
-#endif
+#  endif
         return -1;
     }
 #endif

@@ -27,60 +27,60 @@
 
 
 #ifndef MPDECIMAL_H
-#define MPDECIMAL_H
+#  define MPDECIMAL_H
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-  #ifndef __STDC_LIMIT_MACROS
-    #define __STDC_LIMIT_MACROS
-    #define MPD_CLEAR_STDC_LIMIT_MACROS
-  #endif
-#endif
+#    ifndef __STDC_LIMIT_MACROS
+#      define __STDC_LIMIT_MACROS
+#      define MPD_CLEAR_STDC_LIMIT_MACROS
+#    endif
+#  endif
 
 
-#ifndef _MSC_VER
-  #include "pyconfig.h"
-#endif
+#  ifndef _MSC_VER
+#    include "pyconfig.h"
+#  endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
-#include <assert.h>
-#include <stdint.h>
-#include <inttypes.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <string.h>
+#  include <limits.h>
+#  include <assert.h>
+#  include <stdint.h>
+#  include <inttypes.h>
 
-#ifdef _MSC_VER
-  #include "vccompat.h"
-  #ifndef UNUSED
-    #define UNUSED
-  #endif
-  #define MPD_PRAGMA(x)
-  #define MPD_HIDE_SYMBOLS_START
-  #define MPD_HIDE_SYMBOLS_END
-  #define EXTINLINE extern inline
-#else
-  #ifndef __GNUC_STDC_INLINE__
-    #define __GNUC_STDC_INLINE__ 1
-  #endif
-  #if defined(__GNUC__) && !defined(__INTEL_COMPILER)
-    #define UNUSED __attribute__((unused))
-  #else
-    #define UNUSED
-  #endif
-  #if (defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__)) && \
+#  ifdef _MSC_VER
+#    include "vccompat.h"
+#    ifndef UNUSED
+#      define UNUSED
+#    endif
+#    define MPD_PRAGMA(x)
+#    define MPD_HIDE_SYMBOLS_START
+#    define MPD_HIDE_SYMBOLS_END
+#    define EXTINLINE extern inline
+#  else
+#    ifndef __GNUC_STDC_INLINE__
+#      define __GNUC_STDC_INLINE__ 1
+#    endif
+#    if defined(__GNUC__) && !defined(__INTEL_COMPILER)
+#      define UNUSED __attribute__((unused))
+#    else
+#      define UNUSED
+#    endif
+#    if (defined(__linux__) || defined(__FreeBSD__) || defined(__APPLE__)) && \
       defined(__GNUC__) && __GNUC__ >= 4 && !defined(__INTEL_COMPILER)
-    #define MPD_PRAGMA(x) _Pragma(x)
-    #define MPD_HIDE_SYMBOLS_START "GCC visibility push(hidden)"
-    #define MPD_HIDE_SYMBOLS_END "GCC visibility pop"
-  #else
-    #define MPD_PRAGMA(x)
-    #define MPD_HIDE_SYMBOLS_START
-    #define MPD_HIDE_SYMBOLS_END
-  #endif
-  #define EXTINLINE
-#endif
+#      define MPD_PRAGMA(x) _Pragma(x)
+#      define MPD_HIDE_SYMBOLS_START "GCC visibility push(hidden)"
+#      define MPD_HIDE_SYMBOLS_END "GCC visibility pop"
+#    else
+#      define MPD_PRAGMA(x)
+#      define MPD_HIDE_SYMBOLS_START
+#      define MPD_HIDE_SYMBOLS_END
+#    endif
+#    define EXTINLINE
+#  endif
 
 
 /* This header file is internal for the purpose of building _decimal.so.
@@ -88,27 +88,27 @@ extern "C" {
 MPD_PRAGMA(MPD_HIDE_SYMBOLS_START)
 
 
-#if !defined(LEGACY_COMPILER)
-  #if !defined(UINT64_MAX)
+#  if !defined(LEGACY_COMPILER)
+#    if !defined(UINT64_MAX)
     /* The following #error is just a warning. If the compiler indeed does
      * not have uint64_t, it is perfectly safe to comment out the #error. */
-    #error "Warning: Compiler without uint64_t. Comment out this line."
-    #define LEGACY_COMPILER
-  #endif
-#endif
+#      error "Warning: Compiler without uint64_t. Comment out this line."
+#      define LEGACY_COMPILER
+#    endif
+#  endif
 
 
 /******************************************************************************/
 /*                                  Version                                   */
 /******************************************************************************/
 
-#define MPD_MAJOR_VERSION 2
-#define MPD_MINOR_VERSION 4
-#define MPD_MICRO_VERSION 2
+#  define MPD_MAJOR_VERSION 2
+#  define MPD_MINOR_VERSION 4
+#  define MPD_MICRO_VERSION 2
 
-#define MPD_VERSION "2.4.2"
+#  define MPD_VERSION "2.4.2"
 
-#define MPD_VERSION_HEX ((MPD_MAJOR_VERSION << 24) | \
+#  define MPD_VERSION_HEX ((MPD_MAJOR_VERSION << 24) | \
                          (MPD_MINOR_VERSION << 16) | \
                          (MPD_MICRO_VERSION <<  8))
 
@@ -119,119 +119,119 @@ const char *mpd_version(void);
 /*                              Configuration                                 */
 /******************************************************************************/
 
-#if defined(UNIVERSAL)
-  #if defined(CONFIG_64) || defined(CONFIG_32)
-    #error "cannot use CONFIG_64 or CONFIG_32 with UNIVERSAL."
-  #endif
-  #if defined(__ppc__)
-    #define CONFIG_32
-    #define ANSI
-  #elif defined(__ppc64__)
-    #define CONFIG_64
-    #define ANSI
-  #elif defined(__i386__)
-    #define CONFIG_32
-    #define ANSI
-  #elif defined(__x86_64__)
-    #define CONFIG_64
-    #define ASM
-  #else
-    #error "unknown architecture for universal build."
-  #endif
-#endif
+#  if defined(UNIVERSAL)
+#    if defined(CONFIG_64) || defined(CONFIG_32)
+#      error "cannot use CONFIG_64 or CONFIG_32 with UNIVERSAL."
+#    endif
+#    if defined(__ppc__)
+#      define CONFIG_32
+#      define ANSI
+#    elif defined(__ppc64__)
+#      define CONFIG_64
+#      define ANSI
+#    elif defined(__i386__)
+#      define CONFIG_32
+#      define ANSI
+#    elif defined(__x86_64__)
+#      define CONFIG_64
+#      define ASM
+#    else
+#      error "unknown architecture for universal build."
+#    endif
+#  endif
 
 
 /* BEGIN CONFIG_64 */
-#if defined(CONFIG_64)
+#  if defined(CONFIG_64)
 /* types for modular and base arithmetic */
-#  define MPD_UINT_MAX UINT64_MAX
-#  define MPD_BITS_PER_UINT 64
+#    define MPD_UINT_MAX UINT64_MAX
+#    define MPD_BITS_PER_UINT 64
 typedef uint64_t mpd_uint_t;  /* unsigned mod type */
 
-#  define MPD_SIZE_MAX SIZE_MAX
+#    define MPD_SIZE_MAX SIZE_MAX
 typedef size_t mpd_size_t; /* unsigned size type */
 
 /* type for exp, digits, len, prec */
-#  define MPD_SSIZE_MAX INT64_MAX
-#  define MPD_SSIZE_MIN INT64_MIN
+#    define MPD_SSIZE_MAX INT64_MAX
+#    define MPD_SSIZE_MIN INT64_MIN
 typedef int64_t mpd_ssize_t;
-#  define _mpd_strtossize strtoll
+#    define _mpd_strtossize strtoll
 
 /* decimal arithmetic */
-#  define MPD_RADIX 10000000000000000000ULL  /* 10**19 */
-#  define MPD_RDIGITS 19
-#  define MPD_MAX_POW10 19
-#  define MPD_EXPDIGITS 19  /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
+#    define MPD_RADIX 10000000000000000000ULL  /* 10**19 */
+#    define MPD_RDIGITS 19
+#    define MPD_MAX_POW10 19
+#    define MPD_EXPDIGITS 19  /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
 
-#  define MPD_MAXTRANSFORM_2N 4294967296ULL      /* 2**32 */
-#  define MPD_MAX_PREC 999999999999999999LL
-#  define MPD_MAX_PREC_LOG2 64
-#  define MPD_ELIMIT  1000000000000000000LL
-#  define MPD_MAX_EMAX   999999999999999999LL    /* ELIMIT-1 */
-#  define MPD_MIN_EMIN  (-999999999999999999LL)  /* -EMAX */
-#  define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
-#  define MPD_EXP_INF 2000000000000000001LL
-#  define MPD_EXP_CLAMP (-4000000000000000001LL)
-#  define MPD_MAXIMPORT 105263157894736842L /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
+#    define MPD_MAXTRANSFORM_2N 4294967296ULL      /* 2**32 */
+#    define MPD_MAX_PREC 999999999999999999LL
+#    define MPD_MAX_PREC_LOG2 64
+#    define MPD_ELIMIT  1000000000000000000LL
+#    define MPD_MAX_EMAX   999999999999999999LL    /* ELIMIT-1 */
+#    define MPD_MIN_EMIN  (-999999999999999999LL)  /* -EMAX */
+#    define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
+#    define MPD_EXP_INF 2000000000000000001LL
+#    define MPD_EXP_CLAMP (-4000000000000000001LL)
+#    define MPD_MAXIMPORT 105263157894736842L /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
 
 /* conversion specifiers */
-#  define PRI_mpd_uint_t PRIu64
-#  define PRI_mpd_ssize_t PRIi64
+#    define PRI_mpd_uint_t PRIu64
+#    define PRI_mpd_ssize_t PRIi64
 /* END CONFIG_64 */
 
 
 /* BEGIN CONFIG_32 */
-#elif defined(CONFIG_32)
+#  elif defined(CONFIG_32)
 /* types for modular and base arithmetic */
-#  define MPD_UINT_MAX UINT32_MAX
-#  define MPD_BITS_PER_UINT 32
+#    define MPD_UINT_MAX UINT32_MAX
+#    define MPD_BITS_PER_UINT 32
 typedef uint32_t mpd_uint_t;  /* unsigned mod type */
 
-#  ifndef LEGACY_COMPILER
-#    define MPD_UUINT_MAX UINT64_MAX
+#    ifndef LEGACY_COMPILER
+#      define MPD_UUINT_MAX UINT64_MAX
 typedef uint64_t mpd_uuint_t; /* double width unsigned mod type */
-#  endif
+#    endif
 
-#  define MPD_SIZE_MAX SIZE_MAX
+#    define MPD_SIZE_MAX SIZE_MAX
 typedef size_t mpd_size_t; /* unsigned size type */
 
 /* type for dec->len, dec->exp, ctx->prec */
-#  define MPD_SSIZE_MAX INT32_MAX
-#  define MPD_SSIZE_MIN INT32_MIN
+#    define MPD_SSIZE_MAX INT32_MAX
+#    define MPD_SSIZE_MIN INT32_MIN
 typedef int32_t mpd_ssize_t;
-#  define _mpd_strtossize strtol
+#    define _mpd_strtossize strtol
 
 /* decimal arithmetic */
-#  define MPD_RADIX 1000000000UL  /* 10**9 */
-#  define MPD_RDIGITS 9
-#  define MPD_MAX_POW10 9
-#  define MPD_EXPDIGITS 10 /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
+#    define MPD_RADIX 1000000000UL  /* 10**9 */
+#    define MPD_RDIGITS 9
+#    define MPD_MAX_POW10 9
+#    define MPD_EXPDIGITS 10 /* MPD_EXPDIGITS <= MPD_RDIGITS+1 */
 
-#  define MPD_MAXTRANSFORM_2N 33554432UL /* 2**25 */
-#  define MPD_MAX_PREC 425000000L
-#  define MPD_MAX_PREC_LOG2 32
-#  define MPD_ELIMIT 425000001L
-#  define MPD_MAX_EMAX 425000000L        /* ELIMIT-1 */
-#  define MPD_MIN_EMIN (-425000000L)     /* -EMAX */
-#  define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
-#  define MPD_EXP_INF 1000000001L      /* allows for emax=999999999 in the tests */
-#  define MPD_EXP_CLAMP (-2000000001L) /* allows for emin=-999999999 in the tests */
-#  define MPD_MAXIMPORT 94444445L      /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
+#    define MPD_MAXTRANSFORM_2N 33554432UL /* 2**25 */
+#    define MPD_MAX_PREC 425000000L
+#    define MPD_MAX_PREC_LOG2 32
+#    define MPD_ELIMIT 425000001L
+#    define MPD_MAX_EMAX 425000000L        /* ELIMIT-1 */
+#    define MPD_MIN_EMIN (-425000000L)     /* -EMAX */
+#    define MPD_MIN_ETINY (MPD_MIN_EMIN-(MPD_MAX_PREC-1))
+#    define MPD_EXP_INF 1000000001L      /* allows for emax=999999999 in the tests */
+#    define MPD_EXP_CLAMP (-2000000001L) /* allows for emin=-999999999 in the tests */
+#    define MPD_MAXIMPORT 94444445L      /* ceil((2*MPD_MAX_PREC)/MPD_RDIGITS) */
 
 /* conversion specifiers */
-#  define PRI_mpd_uint_t PRIu32
-#  define PRI_mpd_ssize_t PRIi32
+#    define PRI_mpd_uint_t PRIu32
+#    define PRI_mpd_ssize_t PRIi32
 /* END CONFIG_32 */
 
-#else
-  #error "define CONFIG_64 or CONFIG_32"
-#endif
+#  else
+#    error "define CONFIG_64 or CONFIG_32"
+#  endif
 /* END CONFIG */
 
 
-#if MPD_SIZE_MAX != MPD_UINT_MAX
-  #error "unsupported platform: need mpd_size_t == mpd_uint_t"
-#endif
+#  if MPD_SIZE_MAX != MPD_UINT_MAX
+#    error "unsupported platform: need mpd_size_t == mpd_uint_t"
+#  endif
 
 
 /******************************************************************************/
@@ -271,25 +271,25 @@ typedef struct mpd_context_t {
 
 
 /* Status flags */
-#define MPD_Clamped             0x00000001U
-#define MPD_Conversion_syntax   0x00000002U
-#define MPD_Division_by_zero    0x00000004U
-#define MPD_Division_impossible 0x00000008U
-#define MPD_Division_undefined  0x00000010U
-#define MPD_Fpu_error           0x00000020U
-#define MPD_Inexact             0x00000040U
-#define MPD_Invalid_context     0x00000080U
-#define MPD_Invalid_operation   0x00000100U
-#define MPD_Malloc_error        0x00000200U
-#define MPD_Not_implemented     0x00000400U
-#define MPD_Overflow            0x00000800U
-#define MPD_Rounded             0x00001000U
-#define MPD_Subnormal           0x00002000U
-#define MPD_Underflow           0x00004000U
-#define MPD_Max_status         (0x00008000U-1U)
+#  define MPD_Clamped             0x00000001U
+#  define MPD_Conversion_syntax   0x00000002U
+#  define MPD_Division_by_zero    0x00000004U
+#  define MPD_Division_impossible 0x00000008U
+#  define MPD_Division_undefined  0x00000010U
+#  define MPD_Fpu_error           0x00000020U
+#  define MPD_Inexact             0x00000040U
+#  define MPD_Invalid_context     0x00000080U
+#  define MPD_Invalid_operation   0x00000100U
+#  define MPD_Malloc_error        0x00000200U
+#  define MPD_Not_implemented     0x00000400U
+#  define MPD_Overflow            0x00000800U
+#  define MPD_Rounded             0x00001000U
+#  define MPD_Subnormal           0x00002000U
+#  define MPD_Underflow           0x00004000U
+#  define MPD_Max_status         (0x00008000U-1U)
 
 /* Conditions that result in an IEEE 754 exception */
-#define MPD_IEEE_Invalid_operation (MPD_Conversion_syntax |   \
+#  define MPD_IEEE_Invalid_operation (MPD_Conversion_syntax |   \
                                     MPD_Division_impossible | \
                                     MPD_Division_undefined |  \
                                     MPD_Fpu_error |           \
@@ -298,27 +298,27 @@ typedef struct mpd_context_t {
                                     MPD_Malloc_error)         \
 
 /* Errors that require the result of an operation to be set to NaN */
-#define MPD_Errors (MPD_IEEE_Invalid_operation | \
+#  define MPD_Errors (MPD_IEEE_Invalid_operation | \
                     MPD_Division_by_zero)
 
 /* Default traps */
-#define MPD_Traps (MPD_IEEE_Invalid_operation | \
+#  define MPD_Traps (MPD_IEEE_Invalid_operation | \
                    MPD_Division_by_zero |       \
                    MPD_Overflow |               \
                    MPD_Underflow)
 
 /* Official name */
-#define MPD_Insufficient_storage MPD_Malloc_error
+#  define MPD_Insufficient_storage MPD_Malloc_error
 
 /* IEEE 754 interchange format contexts */
-#define MPD_IEEE_CONTEXT_MAX_BITS 512 /* 16*(log2(MPD_MAX_EMAX / 3)-3) */
-#define MPD_DECIMAL32 32
-#define MPD_DECIMAL64 64
-#define MPD_DECIMAL128 128
+#  define MPD_IEEE_CONTEXT_MAX_BITS 512 /* 16*(log2(MPD_MAX_EMAX / 3)-3) */
+#  define MPD_DECIMAL32 32
+#  define MPD_DECIMAL64 64
+#  define MPD_DECIMAL128 128
 
 
-#define MPD_MINALLOC_MIN 2
-#define MPD_MINALLOC_MAX 64
+#  define MPD_MINALLOC_MIN 2
+#  define MPD_MINALLOC_MAX 64
 extern mpd_ssize_t MPD_MINALLOC;
 extern void (* mpd_traphandler)(mpd_context_t *);
 void mpd_dflt_traphandler(mpd_context_t *);
@@ -356,17 +356,17 @@ void mpd_addstatus_raise(mpd_context_t *ctx, uint32_t flags);
 /******************************************************************************/
 
 /* mpd_t flags */
-#define MPD_POS                 ((uint8_t)0)
-#define MPD_NEG                 ((uint8_t)1)
-#define MPD_INF                 ((uint8_t)2)
-#define MPD_NAN                 ((uint8_t)4)
-#define MPD_SNAN                ((uint8_t)8)
-#define MPD_SPECIAL (MPD_INF|MPD_NAN|MPD_SNAN)
-#define MPD_STATIC              ((uint8_t)16)
-#define MPD_STATIC_DATA         ((uint8_t)32)
-#define MPD_SHARED_DATA         ((uint8_t)64)
-#define MPD_CONST_DATA          ((uint8_t)128)
-#define MPD_DATAFLAGS (MPD_STATIC_DATA|MPD_SHARED_DATA|MPD_CONST_DATA)
+#  define MPD_POS                 ((uint8_t)0)
+#  define MPD_NEG                 ((uint8_t)1)
+#  define MPD_INF                 ((uint8_t)2)
+#  define MPD_NAN                 ((uint8_t)4)
+#  define MPD_SNAN                ((uint8_t)8)
+#  define MPD_SPECIAL (MPD_INF|MPD_NAN|MPD_SNAN)
+#  define MPD_STATIC              ((uint8_t)16)
+#  define MPD_STATIC_DATA         ((uint8_t)32)
+#  define MPD_SHARED_DATA         ((uint8_t)64)
+#  define MPD_CONST_DATA          ((uint8_t)128)
+#  define MPD_DATAFLAGS (MPD_STATIC_DATA|MPD_SHARED_DATA|MPD_CONST_DATA)
 
 /* mpd_t */
 typedef struct mpd_t {
@@ -409,10 +409,10 @@ int mpd_parse_fmt_str(mpd_spec_t *spec, const char *fmt, int caps);
 char *mpd_qformat_spec(const mpd_t *dec, const mpd_spec_t *spec, const mpd_context_t *ctx, uint32_t *status);
 char *mpd_qformat(const mpd_t *dec, const char *fmt, const mpd_context_t *ctx, uint32_t *status);
 
-#define MPD_NUM_FLAGS 15
-#define MPD_MAX_FLAG_STRING 208
-#define MPD_MAX_FLAG_LIST (MPD_MAX_FLAG_STRING+18)
-#define MPD_MAX_SIGNAL_LIST 121
+#  define MPD_NUM_FLAGS 15
+#  define MPD_MAX_FLAG_STRING 208
+#  define MPD_MAX_FLAG_LIST (MPD_MAX_FLAG_STRING+18)
+#  define MPD_MAX_SIGNAL_LIST 121
 int mpd_snprint_flags(char *dest, int nmemb, uint32_t flags);
 int mpd_lsnprint_flags(char *dest, int nmemb, uint32_t flags, const char *flag_string[]);
 int mpd_lsnprint_signals(char *dest, int nmemb, uint32_t flags, const char *signal_string[]);
@@ -437,10 +437,10 @@ void mpd_qset_ssize(mpd_t *result, mpd_ssize_t a, const mpd_context_t *ctx, uint
 void mpd_qset_i32(mpd_t *result, int32_t a, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qset_uint(mpd_t *result, mpd_uint_t a, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qset_u32(mpd_t *result, uint32_t a, const mpd_context_t *ctx, uint32_t *status);
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 void mpd_qset_i64(mpd_t *result, int64_t a, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qset_u64(mpd_t *result, uint64_t a, const mpd_context_t *ctx, uint32_t *status);
-#endif
+#  endif
 
 /* quietly assign a C integer type to an mpd_t with a static coefficient */
 void mpd_qsset_ssize(mpd_t *result, mpd_ssize_t a, const mpd_context_t *ctx, uint32_t *status);
@@ -455,10 +455,10 @@ mpd_uint_t mpd_qabs_uint(const mpd_t *dec, uint32_t *status);
 
 int32_t mpd_qget_i32(const mpd_t *dec, uint32_t *status);
 uint32_t mpd_qget_u32(const mpd_t *dec, uint32_t *status);
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 int64_t mpd_qget_i64(const mpd_t *dec, uint32_t *status);
 uint64_t mpd_qget_u64(const mpd_t *dec, uint32_t *status);
-#endif
+#  endif
 
 /* quiet functions */
 int mpd_qcheck_nan(mpd_t *nanresult, const mpd_t *a, const mpd_context_t *ctx, uint32_t *status);
@@ -550,7 +550,7 @@ void mpd_qlog10(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx, uint32_
 void mpd_qsqrt(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qinvroot(mpd_t *result, const mpd_t *a, const mpd_context_t *ctx, uint32_t *status);
 
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 void mpd_qadd_i64(mpd_t *result, const mpd_t *a, int64_t b, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qadd_u64(mpd_t *result, const mpd_t *a, uint64_t b, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qsub_i64(mpd_t *result, const mpd_t *a, int64_t b, const mpd_context_t *ctx, uint32_t *status);
@@ -559,7 +559,7 @@ void mpd_qmul_i64(mpd_t *result, const mpd_t *a, int64_t b, const mpd_context_t 
 void mpd_qmul_u64(mpd_t *result, const mpd_t *a, uint64_t b, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qdiv_i64(mpd_t *result, const mpd_t *a, int64_t b, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qdiv_u64(mpd_t *result, const mpd_t *a, uint64_t b, const mpd_context_t *ctx, uint32_t *status);
-#endif
+#  endif
 
 
 size_t mpd_sizeinbase(const mpd_t *a, uint32_t base);
@@ -597,19 +597,19 @@ void mpd_set_ssize(mpd_t *result, mpd_ssize_t a, mpd_context_t *ctx);
 void mpd_set_i32(mpd_t *result, int32_t a, mpd_context_t *ctx);
 void mpd_set_uint(mpd_t *result, mpd_uint_t a, mpd_context_t *ctx);
 void mpd_set_u32(mpd_t *result, uint32_t a, mpd_context_t *ctx);
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 void mpd_set_i64(mpd_t *result, int64_t a, mpd_context_t *ctx);
 void mpd_set_u64(mpd_t *result, uint64_t a, mpd_context_t *ctx);
-#endif
+#  endif
 mpd_ssize_t mpd_get_ssize(const mpd_t *a, mpd_context_t *ctx);
 mpd_uint_t mpd_get_uint(const mpd_t *a, mpd_context_t *ctx);
 mpd_uint_t mpd_abs_uint(const mpd_t *a, mpd_context_t *ctx);
 int32_t mpd_get_i32(const mpd_t *a, mpd_context_t *ctx);
 uint32_t mpd_get_u32(const mpd_t *a, mpd_context_t *ctx);
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 int64_t mpd_get_i64(const mpd_t *a, mpd_context_t *ctx);
 uint64_t mpd_get_u64(const mpd_t *a, mpd_context_t *ctx);
-#endif
+#  endif
 void mpd_and(mpd_t *result, const mpd_t *a, const mpd_t *b, mpd_context_t *ctx);
 void mpd_copy(mpd_t *result, const mpd_t *a, mpd_context_t *ctx);
 void mpd_canonical(mpd_t *result, const mpd_t *a, mpd_context_t *ctx);
@@ -680,7 +680,7 @@ void mpd_ceil(mpd_t *result, const mpd_t *a, mpd_context_t *ctx);
 void mpd_sqrt(mpd_t *result, const mpd_t *a, mpd_context_t *ctx);
 void mpd_invroot(mpd_t *result, const mpd_t *a, mpd_context_t *ctx);
 
-#ifndef LEGACY_COMPILER
+#  ifndef LEGACY_COMPILER
 void mpd_add_i64(mpd_t *result, const mpd_t *a, int64_t b, mpd_context_t *ctx);
 void mpd_add_u64(mpd_t *result, const mpd_t *a, uint64_t b, mpd_context_t *ctx);
 void mpd_sub_i64(mpd_t *result, const mpd_t *a, int64_t b, mpd_context_t *ctx);
@@ -689,19 +689,19 @@ void mpd_div_i64(mpd_t *result, const mpd_t *a, int64_t b, mpd_context_t *ctx);
 void mpd_div_u64(mpd_t *result, const mpd_t *a, uint64_t b, mpd_context_t *ctx);
 void mpd_mul_i64(mpd_t *result, const mpd_t *a, int64_t b, mpd_context_t *ctx);
 void mpd_mul_u64(mpd_t *result, const mpd_t *a, uint64_t b, mpd_context_t *ctx);
-#endif
+#  endif
 
 
 /******************************************************************************/
 /*                          Configuration specific                            */
 /******************************************************************************/
 
-#ifdef CONFIG_64
+#  ifdef CONFIG_64
 void mpd_qsset_i64(mpd_t *result, int64_t a, const mpd_context_t *ctx, uint32_t *status);
 void mpd_qsset_u64(mpd_t *result, uint64_t a, const mpd_context_t *ctx, uint32_t *status);
 void mpd_sset_i64(mpd_t *result, int64_t a, mpd_context_t *ctx);
 void mpd_sset_u64(mpd_t *result, uint64_t a, mpd_context_t *ctx);
-#endif
+#  endif
 
 
 /******************************************************************************/
@@ -788,12 +788,12 @@ EXTINLINE void mpd_copy_flags(mpd_t *result, const mpd_t *a);
 /*                              Error Macros                                  */
 /******************************************************************************/
 
-#define mpd_err_fatal(...) \
+#  define mpd_err_fatal(...) \
     do {fprintf(stderr, "%s:%d: error: ", __FILE__, __LINE__); \
         fprintf(stderr, __VA_ARGS__);  fputc('\n', stderr);    \
         abort();                                               \
     } while (0)
-#define mpd_err_warn(...) \
+#  define mpd_err_warn(...) \
     do {fprintf(stderr, "%s:%d: warning: ", __FILE__, __LINE__); \
         fprintf(stderr, __VA_ARGS__); fputc('\n', stderr);       \
     } while (0)
@@ -832,13 +832,13 @@ int mpd_resize_zero(mpd_t *result, mpd_ssize_t size, mpd_context_t *ctx);
 MPD_PRAGMA(MPD_HIDE_SYMBOLS_END) /* restore previous scope rules */
 
 
-#ifdef __cplusplus
-  #ifdef MPD_CLEAR_STDC_LIMIT_MACROS
-    #undef MPD_CLEAR_STDC_LIMIT_MACROS
-    #undef __STDC_LIMIT_MACROS
-  #endif
+#  ifdef __cplusplus
+#    ifdef MPD_CLEAR_STDC_LIMIT_MACROS
+#      undef MPD_CLEAR_STDC_LIMIT_MACROS
+#      undef __STDC_LIMIT_MACROS
+#    endif
 } /* END extern "C" */
-#endif
+#  endif
 
 
 #endif /* MPDECIMAL_H */

@@ -51,7 +51,7 @@ static const char copyright[] =
 
 /* name of this module, minus the leading underscore */
 #if !defined(SRE_MODULE)
-#define SRE_MODULE "sre"
+#  define SRE_MODULE "sre"
 #endif
 
 #define SRE_PY_MODULE "re"
@@ -62,12 +62,12 @@ static const char copyright[] =
 /* -------------------------------------------------------------------- */
 
 #if defined(_MSC_VER)
-#pragma optimize("agtw", on) /* doesn't seem to make much difference... */
-#pragma warning(disable: 4710) /* who cares if functions are not inlined ;-) */
+#  pragma optimize("agtw", on) /* doesn't seem to make much difference... */
+#  pragma warning(disable: 4710) /* who cares if functions are not inlined ;-) */
 /* fastest possible local call under MSVC */
-#define LOCAL(type) static __inline type __fastcall
+#  define LOCAL(type) static __inline type __fastcall
 #else
-#define LOCAL(type) static inline type
+#  define LOCAL(type) static inline type
 #endif
 
 /* error codes */
@@ -78,9 +78,9 @@ static const char copyright[] =
 #define SRE_ERROR_INTERRUPTED -10 /* signal handler raised exception */
 
 #if defined(VERBOSE)
-#define TRACE(v) printf v
+#  define TRACE(v) printf v
 #else
-#define TRACE(v)
+#  define TRACE(v)
 #endif
 
 /* -------------------------------------------------------------------- */
@@ -1436,9 +1436,9 @@ _sre_compile_impl(PyObject *module, PyObject *pattern, int flags,
 
 /* Trace macro for the validator */
 #if defined(VVERBOSE)
-#define VTRACE(v) printf v
+#  define VTRACE(v) printf v
 #else
-#define VTRACE(v) do {} while(0)  /* do nothing */
+#  define VTRACE(v) do {} while(0)  /* do nothing */
 #endif
 
 /* Report failure */

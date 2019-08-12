@@ -14,7 +14,7 @@
 #include <time.h>
 
 #ifdef MS_WINDOWS
-#include <winsock2.h>         /* struct timeval */
+#  include <winsock2.h>         /* struct timeval */
 #endif
 
 #define PyDate_Check(op) PyObject_TypeCheck(op, &PyDateTime_DateType)
@@ -48,7 +48,7 @@ class datetime.date "PyDateTime_Date *" "&PyDateTime_DateType"
  * final result fits in a C int (this can be an issue on 64-bit boxes).
  */
 #if SIZEOF_INT < 4
-#error "_datetime.c requires that C int have at least 32 bits"
+#  error "_datetime.c requires that C int have at least 32 bits"
 #endif
 
 #define MINYEAR 1

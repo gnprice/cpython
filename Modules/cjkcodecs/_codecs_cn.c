@@ -12,7 +12,7 @@
  * conflict against hz codec's.
  */
 #ifdef _AIX
-#undef hz
+#  undef hz
 #endif
 
 /* GBK and GB2312 map differently in few code points that are listed below:

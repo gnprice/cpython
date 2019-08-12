@@ -39,26 +39,26 @@
  */
 
 #if 0
-#include <sys/types.h>
-#include <sys/param.h>
-#include <sys/sysctl.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <arpa/nameser.h>
-#include <netdb.h>
-#include <resolv.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <ctype.h>
-#include <unistd.h>
+#  include <sys/types.h>
+#  include <sys/param.h>
+#  include <sys/sysctl.h>
+#  include <sys/socket.h>
+#  include <netinet/in.h>
+#  include <arpa/inet.h>
+#  include <arpa/nameser.h>
+#  include <netdb.h>
+#  include <resolv.h>
+#  include <string.h>
+#  include <stdlib.h>
+#  include <stddef.h>
+#  include <ctype.h>
+#  include <unistd.h>
 
-#include "addrinfo.h"
+#  include "addrinfo.h"
 #endif
 
 #if defined(__KAME__) && defined(ENABLE_IPV6)
-#define FAITH
+#  define FAITH
 #endif
 
 #define SUCCESS 0
@@ -95,14 +95,14 @@ static struct gai_afd {
     const char *a_loopback;
 } gai_afdl [] = {
 #ifdef ENABLE_IPV6
-#define N_INET6 0
+#  define N_INET6 0
     {PF_INET6, sizeof(struct in6_addr),
      sizeof(struct sockaddr_in6),
      offsetof(struct sockaddr_in6, sin6_addr),
      in6_addrany, in6_loopback},
-#define N_INET  1
+#  define N_INET  1
 #else
-#define N_INET  0
+#  define N_INET  0
 #endif
     {PF_INET, sizeof(struct in_addr),
      sizeof(struct sockaddr_in),
@@ -112,21 +112,21 @@ static struct gai_afd {
 };
 
 #ifdef ENABLE_IPV6
-#define PTON_MAX        16
+#  define PTON_MAX        16
 #else
-#define PTON_MAX        4
+#  define PTON_MAX        4
 #endif
 
 #ifndef IN_MULTICAST
-#define IN_MULTICAST(i)     (((i) & 0xf0000000U) == 0xe0000000U)
+#  define IN_MULTICAST(i)     (((i) & 0xf0000000U) == 0xe0000000U)
 #endif
 
 #ifndef IN_EXPERIMENTAL
-#define IN_EXPERIMENTAL(i)  (((i) & 0xe0000000U) == 0xe0000000U)
+#  define IN_EXPERIMENTAL(i)  (((i) & 0xe0000000U) == 0xe0000000U)
 #endif
 
 #ifndef IN_LOOPBACKNET
-#define IN_LOOPBACKNET      127
+#  define IN_LOOPBACKNET      127
 #endif
 
 static int get_name(const char *, struct gai_afd *,
@@ -165,7 +165,7 @@ if (pai->ai_flags & AI_CANONNAME) {\
 }
 
 #ifdef HAVE_SOCKADDR_SA_LEN
-#define GET_AI(ai, gai_afd, addr, port) {\
+#  define GET_AI(ai, gai_afd, addr, port) {\
     char *p;\
     if (((ai) = (struct addrinfo *)malloc(sizeof(struct addrinfo) +\
                                           ((gai_afd)->a_socklen)))\
@@ -180,7 +180,7 @@ if (pai->ai_flags & AI_CANONNAME) {\
     memcpy(p + (gai_afd)->a_off, (addr), (gai_afd)->a_addrlen);\
 }
 #else
-#define GET_AI(ai, gai_afd, addr, port) {\
+#  define GET_AI(ai, gai_afd, addr, port) {\
     char *p;\
     if (((ai) = (struct addrinfo *)malloc(sizeof(struct addrinfo) +\
                                           ((gai_afd)->a_socklen)))\

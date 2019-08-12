@@ -24,27 +24,27 @@ typedef unsigned char UINT8;
 #endif
 
 #if defined(KeccakP1600_useLaneComplementing)
-#define UseBebigokimisa
+#  define UseBebigokimisa
 #endif
 
 #if defined(_MSC_VER)
-#define ROL64(a, offset) _rotl64(a, offset)
+#  define ROL64(a, offset) _rotl64(a, offset)
 #elif defined(KeccakP1600_useSHLD)
-    #define ROL64(x,N) ({ \
+#  define ROL64(x,N) ({ \
     register UINT64 __out; \
     register UINT64 __in = x; \
     __asm__ ("shld %2,%0,%0" : "=r"(__out) : "0"(__in), "i"(N)); \
     __out; \
     })
 #else
-#define ROL64(a, offset) ((((UINT64)a) << offset) ^ (((UINT64)a) >> (64-offset)))
+#  define ROL64(a, offset) ((((UINT64)a) << offset) ^ (((UINT64)a) >> (64-offset)))
 #endif
 
 #include "KeccakP-1600-64.macros"
 #ifdef KeccakP1600_fullUnrolling
-#define FullUnrolling
+#  define FullUnrolling
 #else
-#define Unrolling KeccakP1600_unrolling
+#  define Unrolling KeccakP1600_unrolling
 #endif
 #include "KeccakP-1600-unrolling.macros"
 #include "SnP-Relaned.h"
@@ -120,7 +120,7 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
     unsigned int i = 0;
-#ifdef NO_MISALIGNED_ACCESSES
+#  ifdef NO_MISALIGNED_ACCESSES
     /* If either pointer is misaligned, fall back to byte-wise xor. */
 
     if (((((uintptr_t)state) & 7) != 0) || ((((uintptr_t)data) & 7) != 0)) {
@@ -129,7 +129,7 @@ void KeccakP1600_AddLanes(void *state, const unsigned char *data, unsigned int l
       }
     }
     else
-#endif
+#  endif
     {
       /* Otherwise... */
 
@@ -197,19 +197,19 @@ void KeccakP1600_AddBytes(void *state, const unsigned char *data, unsigned int o
 void KeccakP1600_OverwriteBytesInLane(void *state, unsigned int lanePosition, const unsigned char *data, unsigned int offset, unsigned int length)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-#ifdef KeccakP1600_useLaneComplementing
+#  ifdef KeccakP1600_useLaneComplementing
     if ((lanePosition == 1) || (lanePosition == 2) || (lanePosition == 8) || (lanePosition == 12) || (lanePosition == 17) || (lanePosition == 20)) {
         unsigned int i;
         for(i=0; i<length; i++)
             ((unsigned char*)state)[lanePosition*8+offset+i] = ~data[i];
     }
     else
-#endif
+#  endif
     {
         memcpy((unsigned char*)state+lanePosition*8+offset, data, length);
     }
 #else
-#error "Not yet implemented"
+#  error "Not yet implemented"
 #endif
 }
 
@@ -218,7 +218,7 @@ void KeccakP1600_OverwriteBytesInLane(void *state, unsigned int lanePosition, co
 void KeccakP1600_OverwriteLanes(void *state, const unsigned char *data, unsigned int laneCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-#ifdef KeccakP1600_useLaneComplementing
+#  ifdef KeccakP1600_useLaneComplementing
     unsigned int lanePosition;
 
     for(lanePosition=0; lanePosition<laneCount; lanePosition++)
@@ -226,11 +226,11 @@ void KeccakP1600_OverwriteLanes(void *state, const unsigned char *data, unsigned
             ((UINT64*)state)[lanePosition] = ~((const UINT64*)data)[lanePosition];
         else
             ((UINT64*)state)[lanePosition] = ((const UINT64*)data)[lanePosition];
-#else
+#  else
     memcpy(state, data, laneCount*8);
-#endif
+#  endif
 #else
-#error "Not yet implemented"
+#  error "Not yet implemented"
 #endif
 }
 
@@ -246,7 +246,7 @@ void KeccakP1600_OverwriteBytes(void *state, const unsigned char *data, unsigned
 void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
 {
 #if (PLATFORM_BYTE_ORDER == IS_LITTLE_ENDIAN)
-#ifdef KeccakP1600_useLaneComplementing
+#  ifdef KeccakP1600_useLaneComplementing
     unsigned int lanePosition;
 
     for(lanePosition=0; lanePosition<byteCount/8; lanePosition++)
@@ -261,11 +261,11 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
         else
             memset((unsigned char*)state+lanePosition*8, 0, byteCount%8);
     }
-#else
+#  else
     memset(state, 0, byteCount);
-#endif
+#  endif
 #else
-#error "Not yet implemented"
+#  error "Not yet implemented"
 #endif
 }
 
@@ -274,9 +274,9 @@ void KeccakP1600_OverwriteWithZeroes(void *state, unsigned int byteCount)
 void KeccakP1600_Permute_24rounds(void *state)
 {
     declareABCDE
-    #ifndef KeccakP1600_fullUnrolling
+#ifndef KeccakP1600_fullUnrolling
     unsigned int i;
-    #endif
+#endif
     UINT64 *stateAsLanes = (UINT64*)state;
 
     copyFromState(A, stateAsLanes)
@@ -289,9 +289,9 @@ void KeccakP1600_Permute_24rounds(void *state)
 void KeccakP1600_Permute_12rounds(void *state)
 {
     declareABCDE
-    #ifndef KeccakP1600_fullUnrolling
+#ifndef KeccakP1600_fullUnrolling
     unsigned int i;
-    #endif
+#endif
     UINT64 *stateAsLanes = (UINT64*)state;
 
     copyFromState(A, stateAsLanes)
@@ -456,9 +456,9 @@ size_t KeccakF1600_FastLoop_Absorb(void *state, unsigned int laneCount, const un
 {
     size_t originalDataByteLen = dataByteLen;
     declareABCDE
-    #ifndef KeccakP1600_fullUnrolling
+#ifndef KeccakP1600_fullUnrolling
     unsigned int i;
-    #endif
+#endif
     UINT64 *stateAsLanes = (UINT64*)state;
     UINT64 *inDataAsLanes = (UINT64*)data;
 

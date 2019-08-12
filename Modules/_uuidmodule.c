@@ -7,9 +7,9 @@
 
 #include "Python.h"
 #ifdef HAVE_UUID_UUID_H
-#include <uuid/uuid.h>
+#  include <uuid/uuid.h>
 #elif defined(HAVE_UUID_H)
-#include <uuid.h>
+#  include <uuid.h>
 #endif
 
 static PyObject *
@@ -25,13 +25,13 @@ py_uuid_generate_time_safe(PyObject *Py_UNUSED(context),
 #elif defined(HAVE_UUID_CREATE)
     uint32_t status;
     uuid_create(&uuid, &status);
-#if defined(HAVE_UUID_ENC_BE)
+#  if defined(HAVE_UUID_ENC_BE)
     unsigned char buf[sizeof(uuid)];
     uuid_enc_be(buf, &uuid);
     return Py_BuildValue("y#i", buf, sizeof(uuid), (int) status);
-#else
+#  else
     return Py_BuildValue("y#i", (const char *) &uuid, sizeof(uuid), (int) status);
-#endif
+#  endif
 #else
     uuid_generate_time(uuid);
     return Py_BuildValue("y#O", (const char *) uuid, sizeof(uuid), Py_None);

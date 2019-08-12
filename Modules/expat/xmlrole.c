@@ -33,11 +33,11 @@
 #include <stddef.h>
 
 #ifdef _WIN32
-#include "winconfig.h"
+#  include "winconfig.h"
 #else
-#ifdef HAVE_EXPAT_CONFIG_H
-#  include <expat_config.h>
-#endif
+#  ifdef HAVE_EXPAT_CONFIG_H
+#    include <expat_config.h>
+#  endif
 #endif /* ndef _WIN32 */
 
 #include "expat_external.h"
@@ -108,16 +108,16 @@ static const char KW_SYSTEM[] = {
     ASCII_S, ASCII_Y, ASCII_S, ASCII_T, ASCII_E, ASCII_M, '\0' };
 
 #ifndef MIN_BYTES_PER_CHAR
-#define MIN_BYTES_PER_CHAR(enc) ((enc)->minBytesPerChar)
+#  define MIN_BYTES_PER_CHAR(enc) ((enc)->minBytesPerChar)
 #endif
 
 #ifdef XML_DTD
-#define setTopLevel(state) \
+#  define setTopLevel(state) \
   ((state)->handler = ((state)->documentEntity \
                        ? internalSubset \
                        : externalSubset1))
 #else /* not XML_DTD */
-#define setTopLevel(state) ((state)->handler = internalSubset)
+#  define setTopLevel(state) ((state)->handler = internalSubset)
 #endif /* not XML_DTD */
 
 typedef int PTRCALL PROLOG_HANDLER(PROLOG_STATE *state,

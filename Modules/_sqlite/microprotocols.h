@@ -24,16 +24,16 @@
  */
 
 #ifndef PSYCOPG_MICROPROTOCOLS_H
-#define PSYCOPG_MICROPROTOCOLS_H 1
+#  define PSYCOPG_MICROPROTOCOLS_H 1
 
-#define PY_SSIZE_T_CLEAN
-#include <Python.h>
+#  define PY_SSIZE_T_CLEAN
+#  include <Python.h>
 
 /** the names of the three mandatory methods **/
 
-#define MICROPROTOCOLS_GETQUOTED_NAME "getquoted"
-#define MICROPROTOCOLS_GETSTRING_NAME "getstring"
-#define MICROPROTOCOLS_GETBINARY_NAME "getbinary"
+#  define MICROPROTOCOLS_GETQUOTED_NAME "getquoted"
+#  define MICROPROTOCOLS_GETSTRING_NAME "getstring"
+#  define MICROPROTOCOLS_GETBINARY_NAME "getbinary"
 
 /** exported functions **/
 
@@ -46,7 +46,7 @@ extern PyObject *pysqlite_microprotocols_adapt(
 
 extern PyObject *
     pysqlite_adapt(pysqlite_Cursor* self, PyObject *args);
-#define pysqlite_adapt_doc \
+#  define pysqlite_adapt_doc \
     "adapt(obj, protocol, alternate) -> adapt obj to given protocol. Non-standard."
 
 #endif /* !defined(PSYCOPG_MICROPROTOCOLS_H) */

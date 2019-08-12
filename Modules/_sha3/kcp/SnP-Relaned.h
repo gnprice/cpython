@@ -14,9 +14,9 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #ifndef _SnP_Relaned_h_
-#define _SnP_Relaned_h_
+#  define _SnP_Relaned_h_
 
-#define SnP_AddBytes(state, data, offset, length, SnP_AddLanes, SnP_AddBytesInLane, SnP_laneLengthInBytes) \
+#  define SnP_AddBytes(state, data, offset, length, SnP_AddLanes, SnP_AddBytesInLane, SnP_laneLengthInBytes) \
     { \
         if ((offset) == 0) { \
             SnP_AddLanes(state, data, (length)/SnP_laneLengthInBytes); \
@@ -44,7 +44,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         } \
     }
 
-#define SnP_OverwriteBytes(state, data, offset, length, SnP_OverwriteLanes, SnP_OverwriteBytesInLane, SnP_laneLengthInBytes) \
+#  define SnP_OverwriteBytes(state, data, offset, length, SnP_OverwriteLanes, SnP_OverwriteBytesInLane, SnP_laneLengthInBytes) \
     { \
         if ((offset) == 0) { \
             SnP_OverwriteLanes(state, data, (length)/SnP_laneLengthInBytes); \
@@ -72,7 +72,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         } \
     }
 
-#define SnP_ExtractBytes(state, data, offset, length, SnP_ExtractLanes, SnP_ExtractBytesInLane, SnP_laneLengthInBytes) \
+#  define SnP_ExtractBytes(state, data, offset, length, SnP_ExtractLanes, SnP_ExtractBytesInLane, SnP_laneLengthInBytes) \
     { \
         if ((offset) == 0) { \
             SnP_ExtractLanes(state, data, (length)/SnP_laneLengthInBytes); \
@@ -100,7 +100,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
         } \
     }
 
-#define SnP_ExtractAndAddBytes(state, input, output, offset, length, SnP_ExtractAndAddLanes, SnP_ExtractAndAddBytesInLane, SnP_laneLengthInBytes) \
+#  define SnP_ExtractAndAddBytes(state, input, output, offset, length, SnP_ExtractAndAddLanes, SnP_ExtractAndAddBytesInLane, SnP_laneLengthInBytes) \
     { \
         if ((offset) == 0) { \
             SnP_ExtractAndAddLanes(state, input, output, (length)/SnP_laneLengthInBytes); \

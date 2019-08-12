@@ -130,10 +130,10 @@ static void sha1_compress(struct sha1_state *sha1, unsigned char *buf)
 
     /* compress */
     /* round one */
-    #define FF_0(a,b,c,d,e,i) e = (ROLc(a, 5) + F0(b,c,d) + e + W[i] + 0x5a827999UL); b = ROLc(b, 30);
-    #define FF_1(a,b,c,d,e,i) e = (ROLc(a, 5) + F1(b,c,d) + e + W[i] + 0x6ed9eba1UL); b = ROLc(b, 30);
-    #define FF_2(a,b,c,d,e,i) e = (ROLc(a, 5) + F2(b,c,d) + e + W[i] + 0x8f1bbcdcUL); b = ROLc(b, 30);
-    #define FF_3(a,b,c,d,e,i) e = (ROLc(a, 5) + F3(b,c,d) + e + W[i] + 0xca62c1d6UL); b = ROLc(b, 30);
+#define FF_0(a,b,c,d,e,i) e = (ROLc(a, 5) + F0(b,c,d) + e + W[i] + 0x5a827999UL); b = ROLc(b, 30);
+#define FF_1(a,b,c,d,e,i) e = (ROLc(a, 5) + F1(b,c,d) + e + W[i] + 0x6ed9eba1UL); b = ROLc(b, 30);
+#define FF_2(a,b,c,d,e,i) e = (ROLc(a, 5) + F2(b,c,d) + e + W[i] + 0x8f1bbcdcUL); b = ROLc(b, 30);
+#define FF_3(a,b,c,d,e,i) e = (ROLc(a, 5) + F3(b,c,d) + e + W[i] + 0xca62c1d6UL); b = ROLc(b, 30);
 
     for (i = 0; i < 20; ) {
        FF_0(a,b,c,d,e,i++);
@@ -170,10 +170,10 @@ static void sha1_compress(struct sha1_state *sha1, unsigned char *buf)
        FF_3(b,c,d,e,a,i++);
     }
 
-    #undef FF_0
-    #undef FF_1
-    #undef FF_2
-    #undef FF_3
+#undef FF_0
+#undef FF_1
+#undef FF_2
+#undef FF_3
 
     /* store */
     sha1->state[0] = sha1->state[0] + a;

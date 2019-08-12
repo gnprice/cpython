@@ -14,7 +14,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
 */
 
 #ifndef _KeccakSponge_h_
-#define _KeccakSponge_h_
+#  define _KeccakSponge_h_
 
 /** General information
   *
@@ -39,7 +39,7 @@ http://creativecommons.org/publicdomain/zero/1.0/
   * (absorbing or squeezing).
   */
 
-#ifdef DontReallyInclude_DocumentationOnly
+#  ifdef DontReallyInclude_DocumentationOnly
 /** Function to evaluate the sponge function Keccak[r, c] in a single call.
   * @param  rate        The value of the rate r.
   * @param  capacity    The value of the capacity c.
@@ -125,12 +125,12 @@ int Prefix_SpongeAbsorbLastFewBits(Prefix_SpongeInstance *spongeInstance, unsign
   * @return Zero if successful, 1 otherwise.
   */
 int Prefix_SpongeSqueeze(Prefix_SpongeInstance *spongeInstance, unsigned char *data, size_t dataByteLen);
-#endif
+#  endif
 
-#include <string.h>
-#include "align.h"
+#  include <string.h>
+#  include "align.h"
 
-#define KCP_DeclareSpongeStructure(prefix, size, alignment) \
+#  define KCP_DeclareSpongeStructure(prefix, size, alignment) \
     ALIGN(alignment) typedef struct prefix##_SpongeInstanceStruct { \
         unsigned char state[size]; \
         unsigned int rate; \
@@ -138,35 +138,35 @@ int Prefix_SpongeSqueeze(Prefix_SpongeInstance *spongeInstance, unsigned char *d
         int squeezing; \
     } prefix##_SpongeInstance;
 
-#define KCP_DeclareSpongeFunctions(prefix) \
+#  define KCP_DeclareSpongeFunctions(prefix) \
     int prefix##_Sponge(unsigned int rate, unsigned int capacity, const unsigned char *input, size_t inputByteLen, unsigned char suffix, unsigned char *output, size_t outputByteLen); \
     int prefix##_SpongeInitialize(prefix##_SpongeInstance *spongeInstance, unsigned int rate, unsigned int capacity); \
     int prefix##_SpongeAbsorb(prefix##_SpongeInstance *spongeInstance, const unsigned char *data, size_t dataByteLen); \
     int prefix##_SpongeAbsorbLastFewBits(prefix##_SpongeInstance *spongeInstance, unsigned char delimitedData); \
     int prefix##_SpongeSqueeze(prefix##_SpongeInstance *spongeInstance, unsigned char *data, size_t dataByteLen);
 
-#ifndef KeccakP200_excluded
-    #include "KeccakP-200-SnP.h"
+#  ifndef KeccakP200_excluded
+#    include "KeccakP-200-SnP.h"
     KCP_DeclareSpongeStructure(KeccakWidth200, KeccakP200_stateSizeInBytes, KeccakP200_stateAlignment)
     KCP_DeclareSpongeFunctions(KeccakWidth200)
-#endif
+#  endif
 
-#ifndef KeccakP400_excluded
-    #include "KeccakP-400-SnP.h"
+#  ifndef KeccakP400_excluded
+#    include "KeccakP-400-SnP.h"
     KCP_DeclareSpongeStructure(KeccakWidth400, KeccakP400_stateSizeInBytes, KeccakP400_stateAlignment)
     KCP_DeclareSpongeFunctions(KeccakWidth400)
-#endif
+#  endif
 
-#ifndef KeccakP800_excluded
-    #include "KeccakP-800-SnP.h"
+#  ifndef KeccakP800_excluded
+#    include "KeccakP-800-SnP.h"
     KCP_DeclareSpongeStructure(KeccakWidth800, KeccakP800_stateSizeInBytes, KeccakP800_stateAlignment)
     KCP_DeclareSpongeFunctions(KeccakWidth800)
-#endif
+#  endif
 
-#ifndef KeccakP1600_excluded
-    #include "KeccakP-1600-SnP.h"
+#  ifndef KeccakP1600_excluded
+#    include "KeccakP-1600-SnP.h"
     KCP_DeclareSpongeStructure(KeccakWidth1600, KeccakP1600_stateSizeInBytes, KeccakP1600_stateAlignment)
     KCP_DeclareSpongeFunctions(KeccakWidth1600)
-#endif
+#  endif
 
 #endif

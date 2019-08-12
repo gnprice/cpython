@@ -31,13 +31,13 @@ As an example of how an extension module with a DllMain should be
 changed, here is a snippet from the pythoncom extension module.
 
   // end of example code from pythoncom's DllMain.cpp
-  #ifndef BUILD_FREEZE
-  #define DLLMAIN DllMain
-  #define DLLMAIN_DECL
-  #else
-  #define DLLMAIN DllMainpythoncom
-  #define DLLMAIN_DECL __declspec(dllexport)
-  #endif
+#ifndef BUILD_FREEZE
+#  define DLLMAIN DllMain
+#  define DLLMAIN_DECL
+#else
+#  define DLLMAIN DllMainpythoncom
+#  define DLLMAIN_DECL __declspec(dllexport)
+#endif
 
   extern "C" DLLMAIN_DECL
   BOOL WINAPI DLLMAIN(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)

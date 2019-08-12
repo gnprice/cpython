@@ -36,13 +36,13 @@
 #define ACTION_RESET 2
 
 #if SQLITE_VERSION_NUMBER >= 3003008
-#ifndef SQLITE_OMIT_LOAD_EXTENSION
-#  define HAVE_LOAD_EXTENSION
-#endif
+#  ifndef SQLITE_OMIT_LOAD_EXTENSION
+#    define HAVE_LOAD_EXTENSION
+#  endif
 #endif
 
 #if SQLITE_VERSION_NUMBER >= 3006011
-#define HAVE_BACKUP_API
+#  define HAVE_BACKUP_API
 #endif
 
 _Py_IDENTIFIER(cursor);
@@ -1525,14 +1525,14 @@ pysqlite_connection_backup(pysqlite_Connection *self, PyObject *args, PyObject *
         return NULL;
     }
 
-#if SQLITE_VERSION_NUMBER < 3008008
+#  if SQLITE_VERSION_NUMBER < 3008008
     /* Since 3.8.8 this is already done, per commit
        https://www.sqlite.org/src/info/169b5505498c0a7e */
     if (!sqlite3_get_autocommit(((pysqlite_Connection *)target)->db)) {
         PyErr_SetString(pysqlite_OperationalError, "target is in transaction");
         return NULL;
     }
-#endif
+#  endif
 
     if (progress != Py_None && !PyCallable_Check(progress)) {
         PyErr_SetString(PyExc_TypeError, "progress argument must be a callable");
@@ -1594,9 +1594,9 @@ pysqlite_connection_backup(pysqlite_Connection *self, PyObject *args, PyObject *
         if (rc == SQLITE_NOMEM) {
             (void)PyErr_NoMemory();
         } else {
-#if SQLITE_VERSION_NUMBER > 3007015
+#  if SQLITE_VERSION_NUMBER > 3007015
             PyErr_SetString(pysqlite_OperationalError, sqlite3_errstr(rc));
-#else
+#  else
             switch (rc) {
                 case SQLITE_ERROR:
                     /* Description of SQLITE_ERROR in SQLite 3.7.14 and older
@@ -1620,7 +1620,7 @@ pysqlite_connection_backup(pysqlite_Connection *self, PyObject *args, PyObject *
                                  "unrecognized error code: %d", rc);
                     break;
             }
-#endif
+#  endif
         }
     }
 
@@ -1782,12 +1782,12 @@ static PyMethodDef connection_methods[] = {
         PyDoc_STR("Creates a new aggregate. Non-standard.")},
     {"set_authorizer", (PyCFunction)(void(*)(void))pysqlite_connection_set_authorizer, METH_VARARGS|METH_KEYWORDS,
         PyDoc_STR("Sets authorizer callback. Non-standard.")},
-    #ifdef HAVE_LOAD_EXTENSION
+#ifdef HAVE_LOAD_EXTENSION
     {"enable_load_extension", (PyCFunction)pysqlite_enable_load_extension, METH_VARARGS,
         PyDoc_STR("Enable dynamic loading of SQLite extension modules. Non-standard.")},
     {"load_extension", (PyCFunction)pysqlite_load_extension, METH_VARARGS,
         PyDoc_STR("Load SQLite extension module. Non-standard.")},
-    #endif
+#endif
     {"set_progress_handler", (PyCFunction)(void(*)(void))pysqlite_connection_set_progress_handler, METH_VARARGS|METH_KEYWORDS,
         PyDoc_STR("Sets progress handler callback. Non-standard.")},
     {"set_trace_callback", (PyCFunction)(void(*)(void))pysqlite_connection_set_trace_callback, METH_VARARGS|METH_KEYWORDS,
@@ -1804,10 +1804,10 @@ static PyMethodDef connection_methods[] = {
         PyDoc_STR("Abort any pending database operation. Non-standard.")},
     {"iterdump", (PyCFunction)pysqlite_connection_iterdump, METH_NOARGS,
         PyDoc_STR("Returns iterator to the dump of the database in an SQL text format. Non-standard.")},
-    #ifdef HAVE_BACKUP_API
+#ifdef HAVE_BACKUP_API
     {"backup", (PyCFunction)(void(*)(void))pysqlite_connection_backup, METH_VARARGS | METH_KEYWORDS,
         PyDoc_STR("Makes a backup of the database. Non-standard.")},
-    #endif
+#endif
     {"__enter__", (PyCFunction)pysqlite_connection_enter, METH_NOARGS,
         PyDoc_STR("For context manager. Non-standard.")},
     {"__exit__", (PyCFunction)pysqlite_connection_exit, METH_VARARGS,

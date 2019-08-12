@@ -7,19 +7,19 @@
 #include "pycore_pystate.h"
 
 #ifdef __FreeBSD__
-#include <fenv.h>     /* fedisableexcept() */
+#  include <fenv.h>     /* fedisableexcept() */
 #endif
 
 /* Includes for exit_sigint() */
 #include <stdio.h>      /* perror() */
 #ifdef HAVE_SIGNAL_H
-#include <signal.h>   /* SIGINT */
+#  include <signal.h>   /* SIGINT */
 #endif
 #if defined(HAVE_GETPID) && defined(HAVE_UNISTD_H)
-#include <unistd.h>   /* getpid() */
+#  include <unistd.h>   /* getpid() */
 #endif
 #ifdef MS_WINDOWS
-#include <windows.h>  /* STATUS_CONTROL_C_EXIT */
+#  include <windows.h>  /* STATUS_CONTROL_C_EXIT */
 #endif
 /* End of includes for exit_sigint() */
 

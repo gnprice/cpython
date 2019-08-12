@@ -5,16 +5,16 @@
 #include "pycore_object.h"
 #include "structmember.h"
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif
 #ifdef HAVE_IO_H
-#include <io.h>
+#  include <io.h>
 #endif
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #endif
 #include <stddef.h> /* For offsetof */
 #include "_iomodule.h"
@@ -34,17 +34,17 @@
 
 #ifdef MS_WINDOWS
 /* can simulate truncate with Win32 API functions; see file_truncate */
-#define HAVE_FTRUNCATE
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#  define HAVE_FTRUNCATE
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
 #endif
 
 #if BUFSIZ < (8*1024)
-#define SMALLCHUNK (8*1024)
+#  define SMALLCHUNK (8*1024)
 #elif (BUFSIZ >= (2 << 25))
-#error "unreasonable BUFSIZ > 64 MiB defined"
+#  error "unreasonable BUFSIZ > 64 MiB defined"
 #else
-#define SMALLCHUNK BUFSIZ
+#  define SMALLCHUNK BUFSIZ
 #endif
 
 /*[clinic input]
@@ -878,15 +878,15 @@ portable_lseek(fileio *self, PyObject *posobj, int whence)
 #ifdef SEEK_SET
     /* Turn 0, 1, 2 into SEEK_{SET,CUR,END} */
     switch (whence) {
-#if SEEK_SET != 0
+#  if SEEK_SET != 0
     case 0: whence = SEEK_SET; break;
-#endif
-#if SEEK_CUR != 1
+#  endif
+#  if SEEK_CUR != 1
     case 1: whence = SEEK_CUR; break;
-#endif
-#if SEEK_END != 2
+#  endif
+#  if SEEK_END != 2
     case 2: whence = SEEK_END; break;
-#endif
+#  endif
     }
 #endif /* SEEK_SET */
 
@@ -1012,11 +1012,11 @@ _io_FileIO_truncate_impl(fileio *self, PyObject *posobj)
         Py_INCREF(posobj);
     }
 
-#if defined(HAVE_LARGEFILE_SUPPORT)
+#  if defined(HAVE_LARGEFILE_SUPPORT)
     pos = PyLong_AsLongLong(posobj);
-#else
+#  else
     pos = PyLong_AsLong(posobj);
-#endif
+#  endif
     if (PyErr_Occurred()){
         Py_DECREF(posobj);
         return NULL;
@@ -1025,11 +1025,11 @@ _io_FileIO_truncate_impl(fileio *self, PyObject *posobj)
     Py_BEGIN_ALLOW_THREADS
     _Py_BEGIN_SUPPRESS_IPH
     errno = 0;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     ret = _chsize_s(fd, pos);
-#else
+#  else
     ret = ftruncate(fd, pos);
-#endif
+#  endif
     _Py_END_SUPPRESS_IPH
     Py_END_ALLOW_THREADS
 

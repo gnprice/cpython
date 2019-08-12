@@ -2574,22 +2574,22 @@ cmsg_min_space(struct msghdr *msg, struct cmsghdr *cmsgh, size_t space)
        tautological comparison warning under Clang when compared against 0.
        Since the check is valid on other platforms, silence the warning under
        Clang. */
-    #ifdef __clang__
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored "-Wtautological-compare"
-    #endif
-    #if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5)))
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wtype-limits"
-    #endif
+#  ifdef __clang__
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wtautological-compare"
+#  endif
+#  if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5)))
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wtype-limits"
+#  endif
     if (msg->msg_controllen < 0)
         return 0;
-    #if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5)))
-    #pragma GCC diagnostic pop
-    #endif
-    #ifdef __clang__
-    #pragma clang diagnostic pop
-    #endif
+#  if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5)))
+#    pragma GCC diagnostic pop
+#  endif
+#  ifdef __clang__
+#    pragma clang diagnostic pop
+#  endif
     if (space < cmsg_len_end)
         space = cmsg_len_end;
     cmsg_offset = (char *)cmsgh - (char *)msg->msg_control;
@@ -7811,13 +7811,13 @@ PyInit__socket(void)
 #endif
 #ifdef  IPPROTO_UDPLITE
     PyModule_AddIntMacro(m, IPPROTO_UDPLITE);
-    #ifndef UDPLITE_SEND_CSCOV
-        #define UDPLITE_SEND_CSCOV 10
-    #endif
+#  ifndef UDPLITE_SEND_CSCOV
+#    define UDPLITE_SEND_CSCOV 10
+#  endif
     PyModule_AddIntMacro(m, UDPLITE_SEND_CSCOV);
-    #ifndef UDPLITE_RECV_CSCOV
-        #define UDPLITE_RECV_CSCOV 11
-    #endif
+#  ifndef UDPLITE_RECV_CSCOV
+#    define UDPLITE_RECV_CSCOV 11
+#  endif
     PyModule_AddIntMacro(m, UDPLITE_RECV_CSCOV);
 #endif
 #ifdef  IPPROTO_IDP

@@ -5,16 +5,16 @@
  */
 
 #ifndef _PYTHON_MULTIBYTECODEC_H_
-#define _PYTHON_MULTIBYTECODEC_H_
-#ifdef __cplusplus
+#  define _PYTHON_MULTIBYTECODEC_H_
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
-#ifdef uint16_t
+#  ifdef uint16_t
 typedef uint16_t ucs2_t, DBCHAR;
-#else
+#  else
 typedef unsigned short ucs2_t, DBCHAR;
-#endif
+#  endif
 
 /*
  * A struct that provides 8 bytes of state for multibyte
@@ -65,9 +65,9 @@ typedef struct {
     MultibyteCodec *codec;
 } MultibyteCodecObject;
 
-#define MultibyteCodec_Check(op) ((op)->ob_type == &MultibyteCodec_Type)
+#  define MultibyteCodec_Check(op) ((op)->ob_type == &MultibyteCodec_Type)
 
-#define _MultibyteStatefulCodec_HEAD            \
+#  define _MultibyteStatefulCodec_HEAD            \
     PyObject_HEAD                               \
     MultibyteCodec *codec;                      \
     MultibyteCodec_State state;                 \
@@ -76,16 +76,16 @@ typedef struct {
     _MultibyteStatefulCodec_HEAD
 } MultibyteStatefulCodecContext;
 
-#define MAXENCPENDING   2
-#define _MultibyteStatefulEncoder_HEAD          \
+#  define MAXENCPENDING   2
+#  define _MultibyteStatefulEncoder_HEAD          \
     _MultibyteStatefulCodec_HEAD                \
     PyObject *pending;
 typedef struct {
     _MultibyteStatefulEncoder_HEAD
 } MultibyteStatefulEncoderContext;
 
-#define MAXDECPENDING   8
-#define _MultibyteStatefulDecoder_HEAD          \
+#  define MAXDECPENDING   8
+#  define _MultibyteStatefulDecoder_HEAD          \
     _MultibyteStatefulCodec_HEAD                \
     unsigned char pending[MAXDECPENDING];       \
     Py_ssize_t pendingsize;
@@ -112,28 +112,28 @@ typedef struct {
 } MultibyteStreamWriterObject;
 
 /* positive values for illegal sequences */
-#define MBERR_TOOSMALL          (-1) /* insufficient output buffer space */
-#define MBERR_TOOFEW            (-2) /* incomplete input buffer */
-#define MBERR_INTERNAL          (-3) /* internal runtime error */
-#define MBERR_EXCEPTION         (-4) /* an exception has been raised */
+#  define MBERR_TOOSMALL          (-1) /* insufficient output buffer space */
+#  define MBERR_TOOFEW            (-2) /* incomplete input buffer */
+#  define MBERR_INTERNAL          (-3) /* internal runtime error */
+#  define MBERR_EXCEPTION         (-4) /* an exception has been raised */
 
-#define ERROR_STRICT            (PyObject *)(1)
-#define ERROR_IGNORE            (PyObject *)(2)
-#define ERROR_REPLACE           (PyObject *)(3)
-#define ERROR_ISCUSTOM(p)       ((p) < ERROR_STRICT || ERROR_REPLACE < (p))
-#define ERROR_DECREF(p)                             \
+#  define ERROR_STRICT            (PyObject *)(1)
+#  define ERROR_IGNORE            (PyObject *)(2)
+#  define ERROR_REPLACE           (PyObject *)(3)
+#  define ERROR_ISCUSTOM(p)       ((p) < ERROR_STRICT || ERROR_REPLACE < (p))
+#  define ERROR_DECREF(p)                             \
     do {                                            \
         if (p != NULL && ERROR_ISCUSTOM(p))         \
             Py_DECREF(p);                           \
     } while (0);
 
-#define MBENC_FLUSH             0x0001 /* encode all characters encodable */
-#define MBENC_MAX               MBENC_FLUSH
+#  define MBENC_FLUSH             0x0001 /* encode all characters encodable */
+#  define MBENC_MAX               MBENC_FLUSH
 
-#define PyMultibyteCodec_CAPSULE_NAME "multibytecodec.__map_*"
+#  define PyMultibyteCodec_CAPSULE_NAME "multibytecodec.__map_*"
 
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 #endif

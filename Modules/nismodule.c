@@ -230,13 +230,13 @@ nis_cat (PyObject *self, PyObject *args, PyObject *kwdict)
 /* These should be u_long on Sun h/w but not on 64-bit h/w.
    This is not portable to machines with 16-bit ints and no prototypes */
 #ifndef YPPROC_MAPLIST
-#define YPPROC_MAPLIST  11
+#  define YPPROC_MAPLIST  11
 #endif
 #ifndef YPPROG
-#define YPPROG          100004
+#  define YPPROG          100004
 #endif
 #ifndef YPVERS
-#define YPVERS          2
+#  define YPVERS          2
 #endif
 
 typedef char *domainname;

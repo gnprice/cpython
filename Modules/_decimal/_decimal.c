@@ -39,7 +39,7 @@
 
 
 #if !defined(MPD_VERSION_HEX) || MPD_VERSION_HEX < 0x02040100
-  #error "libmpdec version >= 2.4.1 required"
+#  error "libmpdec version >= 2.4.1 required"
 #endif
 
 
@@ -50,8 +50,8 @@
  */
 
 #ifdef TEST_COVERAGE
-  #undef Py_LOCAL_INLINE
-  #define Py_LOCAL_INLINE Py_LOCAL
+#  undef Py_LOCAL_INLINE
+#  define Py_LOCAL_INLINE Py_LOCAL
 #endif
 
 #define MPD_Float_operation MPD_Not_implemented
@@ -197,9 +197,9 @@ static const char *dec_signal_string[MPD_NUM_FLAGS] = {
 };
 
 #ifdef EXTRA_FUNCTIONALITY
-  #define _PY_DEC_ROUND_GUARD MPD_ROUND_GUARD
+#  define _PY_DEC_ROUND_GUARD MPD_ROUND_GUARD
 #else
-  #define _PY_DEC_ROUND_GUARD (MPD_ROUND_GUARD-1)
+#  define _PY_DEC_ROUND_GUARD (MPD_ROUND_GUARD-1)
 #endif
 static PyObject *round_map[_PY_DEC_ROUND_GUARD];
 
@@ -2010,7 +2010,7 @@ dec_from_long(PyTypeObject *type, const PyObject *v,
     mpd_qimport_u16(MPD(dec), l->ob_digit, len, sign, PyLong_BASE,
                     ctx, status);
 #else
-  #error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
+#  error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
 #endif
 
     return dec;
@@ -3228,7 +3228,7 @@ dec_as_long(PyObject *dec, PyObject *context, int round)
 #elif PYLONG_BITS_IN_DIGIT == 15
     n = mpd_qexport_u16(&ob_digit, 0, PyLong_BASE, x, &status);
 #else
-    #error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
+#  error "PYLONG_BITS_IN_DIGIT should be 15 or 30"
 #endif
 
     if (n == SIZE_MAX) {
@@ -4375,7 +4375,7 @@ _dec_hash(PyDecObject *v)
     mpd_t inv10_p = {MPD_POS|MPD_STATIC|MPD_CONST_DATA,
                      0, 10, 2, 2, inv10_p_data};
 #else
-    #error "No valid combination of CONFIG_64, CONFIG_32 and _PyHASH_BITS"
+#  error "No valid combination of CONFIG_64, CONFIG_32 and _PyHASH_BITS"
 #endif
     const Py_hash_t py_hash_inf = 314159;
     const Py_hash_t py_hash_nan = 0;

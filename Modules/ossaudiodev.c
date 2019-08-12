@@ -24,30 +24,30 @@
 #include "structmember.h"
 
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #else
-#define O_RDONLY 00
-#define O_WRONLY 01
+#  define O_RDONLY 00
+#  define O_WRONLY 01
 #endif
 
 #include <sys/ioctl.h>
 #ifdef __ANDROID__
-#include <linux/soundcard.h>
+#  include <linux/soundcard.h>
 #else
-#include <sys/soundcard.h>
+#  include <sys/soundcard.h>
 #endif
 
 #ifdef __linux__
 
-#ifndef HAVE_STDINT_H
+#  ifndef HAVE_STDINT_H
 typedef unsigned long uint32_t;
-#endif
+#  endif
 
 #elif defined(__FreeBSD__)
 
-#ifndef SNDCTL_DSP_CHANNELS
-#  define SNDCTL_DSP_CHANNELS SOUND_PCM_WRITE_CHANNELS
-#endif
+#  ifndef SNDCTL_DSP_CHANNELS
+#    define SNDCTL_DSP_CHANNELS SOUND_PCM_WRITE_CHANNELS
+#  endif
 
 #endif
 

@@ -40,17 +40,17 @@
 static PySocketModule_APIObject PySocketModule;
 
 #if defined(HAVE_POLL_H)
-#include <poll.h>
+#  include <poll.h>
 #elif defined(HAVE_SYS_POLL_H)
-#include <sys/poll.h>
+#  include <sys/poll.h>
 #endif
 
 /* Don't warn about deprecated functions */
 #ifdef __GNUC__
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 #ifdef __clang__
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 /* Include OpenSSL header files */
@@ -66,13 +66,13 @@ static PySocketModule_APIObject PySocketModule;
 #include "openssl/dh.h"
 
 #ifndef HAVE_X509_VERIFY_PARAM_SET1_HOST
-#ifdef LIBRESSL_VERSION_NUMBER
-#  error "LibreSSL is missing X509_VERIFY_PARAM_set1_host(), see https://github.com/libressl-portable/portable/issues/381"
-#elif OPENSSL_VERSION_NUMBER > 0x1000200fL
-#  define HAVE_X509_VERIFY_PARAM_SET1_HOST
-#else
-#  error "libssl is too old and does not support X509_VERIFY_PARAM_set1_host()"
-#endif
+#  ifdef LIBRESSL_VERSION_NUMBER
+#    error "LibreSSL is missing X509_VERIFY_PARAM_set1_host(), see https://github.com/libressl-portable/portable/issues/381"
+#  elif OPENSSL_VERSION_NUMBER > 0x1000200fL
+#    define HAVE_X509_VERIFY_PARAM_SET1_HOST
+#  else
+#    error "libssl is too old and does not support X509_VERIFY_PARAM_set1_host()"
+#  endif
 #endif
 
 /* SSL error object */
@@ -128,45 +128,45 @@ static void _PySSLFixErrno(void) {
     }
 }
 
-#undef _PySSL_FIX_ERRNO
-#define _PySSL_FIX_ERRNO _PySSLFixErrno()
+#  undef _PySSL_FIX_ERRNO
+#  define _PySSL_FIX_ERRNO _PySSLFixErrno()
 #endif
 
 /* Include generated data (error codes) */
 #include "_ssl_data.h"
 
 #if (OPENSSL_VERSION_NUMBER >= 0x10100000L) && !defined(LIBRESSL_VERSION_NUMBER)
-#define OPENSSL_VERSION_1_1 1
-#define PY_OPENSSL_1_1_API 1
+#  define OPENSSL_VERSION_1_1 1
+#  define PY_OPENSSL_1_1_API 1
 #endif
 
 /* LibreSSL 2.7.0 provides necessary OpenSSL 1.1.0 APIs */
 #if defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER >= 0x2070000fL
-#define PY_OPENSSL_1_1_API 1
+#  define PY_OPENSSL_1_1_API 1
 #endif
 
 /* Openssl comes with TLSv1.1 and TLSv1.2 between 1.0.0h and 1.0.1
     http://www.openssl.org/news/changelog.html
  */
 #if OPENSSL_VERSION_NUMBER >= 0x10001000L
-#define HAVE_TLSv1_2 1
+#  define HAVE_TLSv1_2 1
 #else
-#define HAVE_TLSv1_2 0
+#  define HAVE_TLSv1_2 0
 #endif
 
 /* SNI support (client- and server-side) appeared in OpenSSL 1.0.0 and 0.9.8f
  * This includes the SSL_set_SSL_CTX() function.
  */
 #ifdef SSL_CTRL_SET_TLSEXT_HOSTNAME
-#define HAVE_SNI 1
+#  define HAVE_SNI 1
 #else
-#define HAVE_SNI 0
+#  define HAVE_SNI 0
 #endif
 
 #ifdef TLSEXT_TYPE_application_layer_protocol_negotiation
-#define HAVE_ALPN 1
+#  define HAVE_ALPN 1
 #else
-#define HAVE_ALPN 0
+#  define HAVE_ALPN 0
 #endif
 
 /* We cannot rely on OPENSSL_NO_NEXTPROTONEG because LibreSSL 2.6.1 dropped
@@ -176,52 +176,52 @@ static void _PySSLFixErrno(void) {
  * OpenSSL 1.1.1-pre1 dropped NPN but still has TLSEXT_TYPE_next_proto_neg.
  */
 #ifdef OPENSSL_NO_NEXTPROTONEG
-#define HAVE_NPN 0
+#  define HAVE_NPN 0
 #elif (OPENSSL_VERSION_NUMBER >= 0x10101000L) && !defined(LIBRESSL_VERSION_NUMBER)
-#define HAVE_NPN 0
+#  define HAVE_NPN 0
 #elif defined(TLSEXT_TYPE_next_proto_neg)
-#define HAVE_NPN 1
+#  define HAVE_NPN 1
 #else
-#define HAVE_NPN 0
+#  define HAVE_NPN 0
 #endif
 
 #if (OPENSSL_VERSION_NUMBER >= 0x10101000L) && !defined(LIBRESSL_VERSION_NUMBER)
-#define HAVE_OPENSSL_KEYLOG 1
+#  define HAVE_OPENSSL_KEYLOG 1
 #endif
 
 #ifndef INVALID_SOCKET /* MS defines this */
-#define INVALID_SOCKET (-1)
+#  define INVALID_SOCKET (-1)
 #endif
 
 /* OpenSSL 1.0.2 and LibreSSL needs extra code for locking */
 #ifndef OPENSSL_VERSION_1_1
-#define HAVE_OPENSSL_CRYPTO_LOCK
+#  define HAVE_OPENSSL_CRYPTO_LOCK
 #endif
 
 #if defined(OPENSSL_VERSION_1_1) && !defined(OPENSSL_NO_SSL2)
-#define OPENSSL_NO_SSL2
+#  define OPENSSL_NO_SSL2
 #endif
 
 #ifndef PY_OPENSSL_1_1_API
 /* OpenSSL 1.1 API shims for OpenSSL < 1.1.0 and LibreSSL < 2.7.0 */
 
-#define TLS_method SSLv23_method
-#define TLS_client_method SSLv23_client_method
-#define TLS_server_method SSLv23_server_method
+#  define TLS_method SSLv23_method
+#  define TLS_client_method SSLv23_client_method
+#  define TLS_server_method SSLv23_server_method
 
 static int X509_NAME_ENTRY_set(const X509_NAME_ENTRY *ne)
 {
     return ne->set;
 }
 
-#ifndef OPENSSL_NO_COMP
+#  ifndef OPENSSL_NO_COMP
 /* LCOV_EXCL_START */
 static int COMP_get_type(const COMP_METHOD *meth)
 {
     return meth->type;
 }
 /* LCOV_EXCL_STOP */
-#endif
+#  endif
 
 static pem_password_cb *SSL_CTX_get_default_passwd_cb(SSL_CTX *ctx)
 {
@@ -269,13 +269,13 @@ SSL_SESSION_get_ticket_lifetime_hint(const SSL_SESSION *s)
 
 /* Default cipher suites */
 #ifndef PY_SSL_DEFAULT_CIPHERS
-#define PY_SSL_DEFAULT_CIPHERS 1
+#  define PY_SSL_DEFAULT_CIPHERS 1
 #endif
 
 #if PY_SSL_DEFAULT_CIPHERS == 0
-  #ifndef PY_SSL_DEFAULT_CIPHER_STRING
-     #error "Py_SSL_DEFAULT_CIPHERS 0 needs Py_SSL_DEFAULT_CIPHER_STRING"
-  #endif
+#  ifndef PY_SSL_DEFAULT_CIPHER_STRING
+#    error "Py_SSL_DEFAULT_CIPHERS 0 needs Py_SSL_DEFAULT_CIPHER_STRING"
+#  endif
 #elif PY_SSL_DEFAULT_CIPHERS == 1
 /* Python custom selection of sensible cipher suites
  * DEFAULT: OpenSSL's default cipher list. Since 1.0.2 the list is in sensible order.
@@ -284,12 +284,12 @@ SSL_SESSION_get_ticket_lifetime_hint(const SSL_SESSION *s)
  * !aDSS: no authentication with discrete logarithm DSA algorithm
  * !SRP:!PSK: no secure remote password or pre-shared key authentication
  */
-  #define PY_SSL_DEFAULT_CIPHER_STRING "DEFAULT:!aNULL:!eNULL:!MD5:!3DES:!DES:!RC4:!IDEA:!SEED:!aDSS:!SRP:!PSK"
+#  define PY_SSL_DEFAULT_CIPHER_STRING "DEFAULT:!aNULL:!eNULL:!MD5:!3DES:!DES:!RC4:!IDEA:!SEED:!aDSS:!SRP:!PSK"
 #elif PY_SSL_DEFAULT_CIPHERS == 2
 /* Ignored in SSLContext constructor, only used to as _ssl.DEFAULT_CIPHER_STRING */
-  #define PY_SSL_DEFAULT_CIPHER_STRING SSL_DEFAULT_CIPHER_LIST
+#  define PY_SSL_DEFAULT_CIPHER_STRING SSL_DEFAULT_CIPHER_LIST
 #else
-  #error "Unsupported PY_SSL_DEFAULT_CIPHERS"
+#  error "Unsupported PY_SSL_DEFAULT_CIPHERS"
 #endif
 
 
@@ -363,7 +363,7 @@ enum py_proto_version {
 #elif defined(TLS1_3_VERSION) && !defined(OPENSSL_NO_TLS1_3)
     PY_PROTO_MINIMUM_AVAILABLE = PY_PROTO_TLSv1_3,
 #else
-    #error "PY_PROTO_MINIMUM_AVAILABLE not found"
+#  error "PY_PROTO_MINIMUM_AVAILABLE not found"
 #endif
 
 #if defined(TLS1_3_VERSION) && !defined(OPENSSL_NO_TLS1_3)
@@ -377,7 +377,7 @@ enum py_proto_version {
 #elif defined(SSL3_VERSION) && !defined(OPENSSL_NO_SSL3)
     PY_PROTO_MAXIMUM_AVAILABLE = PY_PROTO_SSLv3,
 #else
-    #error "PY_PROTO_MAXIMUM_AVAILABLE not found"
+#  error "PY_PROTO_MAXIMUM_AVAILABLE not found"
 #endif
 };
 
@@ -395,9 +395,9 @@ static unsigned int _ssl_locks_count = 0;
  * OpenSSL 0.9.8m but do not appear in some 0.9.9-dev versions such the
  * 0.9.9 from "May 2008" that NetBSD 5.0 uses. */
 #if OPENSSL_VERSION_NUMBER >= 0x009080dfL && OPENSSL_VERSION_NUMBER != 0x00909000L
-#define HAVE_SSL_CTX_CLEAR_OPTIONS
+#  define HAVE_SSL_CTX_CLEAR_OPTIONS
 #else
-#undef HAVE_SSL_CTX_CLEAR_OPTIONS
+#  undef HAVE_SSL_CTX_CLEAR_OPTIONS
 #endif
 
 /* In case of 'tls-unique' it will be 12 bytes for TLS, 36 bytes for
@@ -1937,10 +1937,10 @@ cipher_to_dict(const SSL_CIPHER *cipher)
     unsigned long cipher_id;
     int alg_bits, strength_bits, len;
     char buf[512] = {0};
-#if OPENSSL_VERSION_1_1
+#  if OPENSSL_VERSION_1_1
     int aead, nid;
     const char *skcipher = NULL, *digest = NULL, *kx = NULL, *auth = NULL;
-#endif
+#  endif
 
     /* can be NULL */
     cipher_name = SSL_CIPHER_get_name(cipher);
@@ -1953,7 +1953,7 @@ cipher_to_dict(const SSL_CIPHER *cipher)
         buf[len-1] = '\0';
     strength_bits = SSL_CIPHER_get_bits(cipher, &alg_bits);
 
-#if OPENSSL_VERSION_1_1
+#  if OPENSSL_VERSION_1_1
     aead = SSL_CIPHER_is_aead(cipher);
     nid = SSL_CIPHER_get_cipher_nid(cipher);
     skcipher = nid != NID_undef ? OBJ_nid2ln(nid) : NULL;
@@ -1963,13 +1963,13 @@ cipher_to_dict(const SSL_CIPHER *cipher)
     kx = nid != NID_undef ? OBJ_nid2ln(nid) : NULL;
     nid = SSL_CIPHER_get_auth_nid(cipher);
     auth = nid != NID_undef ? OBJ_nid2ln(nid) : NULL;
-#endif
+#  endif
 
     return Py_BuildValue(
         "{sksssssssisi"
-#if OPENSSL_VERSION_1_1
+#  if OPENSSL_VERSION_1_1
         "sOssssssss"
-#endif
+#  endif
         "}",
         "id", cipher_id,
         "name", cipher_name,
@@ -1977,13 +1977,13 @@ cipher_to_dict(const SSL_CIPHER *cipher)
         "description", buf,
         "strength_bits", strength_bits,
         "alg_bits", alg_bits
-#if OPENSSL_VERSION_1_1
+#  if OPENSSL_VERSION_1_1
         ,"aead", aead ? Py_True : Py_False,
         "symmetric", skcipher,
         "digest", digest,
         "kea", kx,
         "auth", auth
-#endif
+#  endif
        );
 }
 #endif
@@ -3174,15 +3174,15 @@ _ssl__SSLContext_impl(PyTypeObject *type, int proto_version)
        prime256v1 by default.  This is Apache mod_ssl's initialization
        policy, so we should be safe. OpenSSL 1.1 has it enabled by default.
      */
-#if defined(SSL_CTX_set_ecdh_auto)
+#  if defined(SSL_CTX_set_ecdh_auto)
     SSL_CTX_set_ecdh_auto(self->ctx, 1);
-#else
+#  else
     {
         EC_KEY *key = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
         SSL_CTX_set_tmp_ecdh(self->ctx, key);
         EC_KEY_free(key);
     }
-#endif
+#  endif
 #endif
 
 #define SID_CTX "Python"
@@ -5805,20 +5805,20 @@ static PyMethodDef PySSL_methods[] = {
 
 static PyThread_type_lock *_ssl_locks = NULL;
 
-#if OPENSSL_VERSION_NUMBER >= 0x10000000
+#  if OPENSSL_VERSION_NUMBER >= 0x10000000
 /* use new CRYPTO_THREADID API. */
 static void
 _ssl_threadid_callback(CRYPTO_THREADID *id)
 {
     CRYPTO_THREADID_set_numeric(id, PyThread_get_thread_ident());
 }
-#else
+#  else
 /* deprecated CRYPTO_set_id_callback() API. */
 static unsigned long
 _ssl_thread_id_function (void) {
     return PyThread_get_thread_ident();
 }
-#endif
+#  endif
 
 static void _ssl_thread_locking_function
     (int mode, int n, const char *file, int line) {
@@ -5871,11 +5871,11 @@ static int _setup_ssl_threads(void) {
             }
         }
         CRYPTO_set_locking_callback(_ssl_thread_locking_function);
-#if OPENSSL_VERSION_NUMBER >= 0x10000000
+#  if OPENSSL_VERSION_NUMBER >= 0x10000000
         CRYPTO_THREADID_set_callback(_ssl_threadid_callback);
-#else
+#  else
         CRYPTO_set_id_callback(_ssl_thread_id_function);
-#endif
+#  endif
     }
     return 1;
 }

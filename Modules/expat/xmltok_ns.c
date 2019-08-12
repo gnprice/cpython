@@ -41,16 +41,16 @@ NS(XmlGetUtf8InternalEncoding)(void)
 const ENCODING *
 NS(XmlGetUtf16InternalEncoding)(void)
 {
-#if BYTEORDER == 1234
+#  if BYTEORDER == 1234
   return &ns(internal_little2_encoding).enc;
-#elif BYTEORDER == 4321
+#  elif BYTEORDER == 4321
   return &ns(internal_big2_encoding).enc;
-#else
+#  else
   const short n = 1;
   return (*(const char *)&n
           ? &ns(internal_little2_encoding).enc
           : &ns(internal_big2_encoding).enc);
-#endif
+#  endif
 }
 
 static const ENCODING * const NS(encodings)[] = {
@@ -98,7 +98,7 @@ NS(XmlInitEncoding)(INIT_ENCODING *p, const ENCODING **encPtr,
 static const ENCODING *
 NS(findEncoding)(const ENCODING *enc, const char *ptr, const char *end)
 {
-#define ENCODING_MAX 128
+#  define ENCODING_MAX 128
   char buf[ENCODING_MAX];
   char *p = buf;
   int i;

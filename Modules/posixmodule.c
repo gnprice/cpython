@@ -16,9 +16,9 @@
     * OSX 10.4 and later, see the comment in the #ifdef __APPLE__ block
     * at the end of this file for more information.
     */
-#pragma weak lchown
-#pragma weak statvfs
-#pragma weak fstatvfs
+#  pragma weak lchown
+#  pragma weak statvfs
+#  pragma weak fstatvfs
 
 #endif /* __APPLE__ */
 
@@ -28,11 +28,11 @@
 #ifdef MS_WINDOWS
    /* include <windows.h> early to avoid conflict with pycore_condvar.h:
 
-        #define WIN32_LEAN_AND_MEAN
-        #include <windows.h>
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
 
       FSCTL_GET_REPARSE_POINT is not exported with WIN32_LEAN_AND_MEAN. */
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 #include "pycore_ceval.h"     /* _PyEval_ReInitThreads() */
@@ -41,15 +41,15 @@
 #include "pythread.h"
 #include "structmember.h"
 #ifndef MS_WINDOWS
-#include "posixmodule.h"
+#  include "posixmodule.h"
 #else
-#include "winreparse.h"
+#  include "winreparse.h"
 #endif
 
 /* On android API level 21, 'AT_EACCESS' is not declared although
  * HAVE_FACCESSAT is defined. */
 #ifdef __ANDROID__
-#undef HAVE_FACCESSAT
+#  undef HAVE_FACCESSAT
 #endif
 
 #include <stdio.h>  /* needed for ctermid() */
@@ -66,86 +66,86 @@ corresponding Unix manual entries for more information on calls.");
 
 
 #ifdef HAVE_SYS_UIO_H
-#include <sys/uio.h>
+#  include <sys/uio.h>
 #endif
 
 #ifdef HAVE_SYS_SYSMACROS_H
 /* GNU C Library: major(), minor(), makedev() */
-#include <sys/sysmacros.h>
+#  include <sys/sysmacros.h>
 #endif
 
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */
 
 #ifdef HAVE_SYS_STAT_H
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif /* HAVE_SYS_STAT_H */
 
 #ifdef HAVE_SYS_WAIT_H
-#include <sys/wait.h>           /* For WNOHANG */
+#  include <sys/wait.h>           /* For WNOHANG */
 #endif
 
 #ifdef HAVE_SIGNAL_H
-#include <signal.h>
+#  include <signal.h>
 #endif
 
 #ifdef HAVE_FCNTL_H
-#include <fcntl.h>
+#  include <fcntl.h>
 #endif /* HAVE_FCNTL_H */
 
 #ifdef HAVE_GRP_H
-#include <grp.h>
+#  include <grp.h>
 #endif
 
 #ifdef HAVE_SYSEXITS_H
-#include <sysexits.h>
+#  include <sysexits.h>
 #endif /* HAVE_SYSEXITS_H */
 
 #ifdef HAVE_SYS_LOADAVG_H
-#include <sys/loadavg.h>
+#  include <sys/loadavg.h>
 #endif
 
 #ifdef HAVE_SYS_SENDFILE_H
-#include <sys/sendfile.h>
+#  include <sys/sendfile.h>
 #endif
 
 #if defined(__APPLE__)
-#include <copyfile.h>
+#  include <copyfile.h>
 #endif
 
 #ifdef HAVE_SCHED_H
-#include <sched.h>
+#  include <sched.h>
 #endif
 
 #ifdef HAVE_COPY_FILE_RANGE
-#include <unistd.h>
+#  include <unistd.h>
 #endif
 
 #if !defined(CPU_ALLOC) && defined(HAVE_SCHED_SETAFFINITY)
-#undef HAVE_SCHED_SETAFFINITY
+#  undef HAVE_SCHED_SETAFFINITY
 #endif
 
 #if defined(HAVE_SYS_XATTR_H) && defined(__GLIBC__) && !defined(__FreeBSD_kernel__) && !defined(__GNU__)
-#define USE_XATTRS
+#  define USE_XATTRS
 #endif
 
 #ifdef USE_XATTRS
-#include <sys/xattr.h>
+#  include <sys/xattr.h>
 #endif
 
 #if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__APPLE__)
-#ifdef HAVE_SYS_SOCKET_H
-#  include <sys/socket.h>
-#endif
+#  ifdef HAVE_SYS_SOCKET_H
+#    include <sys/socket.h>
+#  endif
 #endif
 
 #ifdef HAVE_DLFCN_H
-#include <dlfcn.h>
+#  include <dlfcn.h>
 #endif
 
 #ifdef __hpux
-#include <sys/mpctl.h>
+#  include <sys/mpctl.h>
 #endif
 
 #if defined(__DragonFly__) || \
@@ -153,205 +153,205 @@ corresponding Unix manual entries for more information on calls.");
     defined(__FreeBSD__)   || \
     defined(__NetBSD__)    || \
     defined(__APPLE__)
-#include <sys/sysctl.h>
+#  include <sys/sysctl.h>
 #endif
 
 #ifdef HAVE_LINUX_RANDOM_H
-#include <linux/random.h>
+#  include <linux/random.h>
 #endif
 #ifdef HAVE_GETRANDOM_SYSCALL
-#include <sys/syscall.h>
+#  include <sys/syscall.h>
 #endif
 
 #if defined(MS_WINDOWS)
-#define TERMSIZE_USE_CONIO
+#  define TERMSIZE_USE_CONIO
 #elif defined(HAVE_SYS_IOCTL_H)
-#include <sys/ioctl.h>
-#if defined(HAVE_TERMIOS_H)
-#  include <termios.h>
-#endif
-#if defined(TIOCGWINSZ)
-#  define TERMSIZE_USE_IOCTL
-#endif
+#  include <sys/ioctl.h>
+#  if defined(HAVE_TERMIOS_H)
+#    include <termios.h>
+#  endif
+#  if defined(TIOCGWINSZ)
+#    define TERMSIZE_USE_IOCTL
+#  endif
 #endif /* MS_WINDOWS */
 
 /* Various compilers have only certain posix functions */
 /* XXX Gosh I wish these were all moved into pyconfig.h */
 #if defined(__WATCOMC__) && !defined(__QNX__)           /* Watcom compiler */
-#define HAVE_OPENDIR    1
-#define HAVE_SYSTEM     1
-#include <process.h>
-#else
-#ifdef _MSC_VER         /* Microsoft compiler */
-#  define HAVE_GETPPID    1
-#  define HAVE_GETLOGIN   1
-#  define HAVE_SPAWNV     1
-#  define HAVE_EXECV      1
-#  define HAVE_WSPAWNV    1
-#  define HAVE_WEXECV     1
-#  define HAVE_PIPE       1
-#  define HAVE_SYSTEM     1
-#  define HAVE_CWAIT      1
-#  define HAVE_FSYNC      1
-#  define fsync _commit
-#else
-/* Unix functions that the configure script doesn't check for */
-#  ifndef __VXWORKS__
-#    define HAVE_EXECV      1
-#    define HAVE_FORK       1
-#    if defined(__USLC__) && defined(__SCO_VERSION__)       /* SCO UDK Compiler */
-#      define HAVE_FORK1      1
-#    endif
-#  endif
-#  define HAVE_GETEGID    1
-#  define HAVE_GETEUID    1
-#  define HAVE_GETGID     1
-#  define HAVE_GETPPID    1
-#  define HAVE_GETUID     1
-#  define HAVE_KILL       1
 #  define HAVE_OPENDIR    1
-#  define HAVE_PIPE       1
 #  define HAVE_SYSTEM     1
-#  define HAVE_WAIT       1
-#  define HAVE_TTYNAME    1
-#endif  /* _MSC_VER */
+#  include <process.h>
+#else
+#  ifdef _MSC_VER         /* Microsoft compiler */
+#    define HAVE_GETPPID    1
+#    define HAVE_GETLOGIN   1
+#    define HAVE_SPAWNV     1
+#    define HAVE_EXECV      1
+#    define HAVE_WSPAWNV    1
+#    define HAVE_WEXECV     1
+#    define HAVE_PIPE       1
+#    define HAVE_SYSTEM     1
+#    define HAVE_CWAIT      1
+#    define HAVE_FSYNC      1
+#    define fsync _commit
+#  else
+/* Unix functions that the configure script doesn't check for */
+#    ifndef __VXWORKS__
+#      define HAVE_EXECV      1
+#      define HAVE_FORK       1
+#      if defined(__USLC__) && defined(__SCO_VERSION__)       /* SCO UDK Compiler */
+#        define HAVE_FORK1      1
+#      endif
+#    endif
+#    define HAVE_GETEGID    1
+#    define HAVE_GETEUID    1
+#    define HAVE_GETGID     1
+#    define HAVE_GETPPID    1
+#    define HAVE_GETUID     1
+#    define HAVE_KILL       1
+#    define HAVE_OPENDIR    1
+#    define HAVE_PIPE       1
+#    define HAVE_SYSTEM     1
+#    define HAVE_WAIT       1
+#    define HAVE_TTYNAME    1
+#  endif  /* _MSC_VER */
 #endif  /* ! __WATCOMC__ || __QNX__ */
 
 
 /*[clinic input]
-#one of the few times we lie about this name!
+# one of the few times we lie about this name!
 module os
 [clinic start generated code]*/
 /*[clinic end generated code: output=da39a3ee5e6b4b0d input=94a0f0f978acae17]*/
 
 #ifndef _MSC_VER
 
-#if defined(__sgi)&&_COMPILER_VERSION>=700
+#  if defined(__sgi)&&_COMPILER_VERSION>=700
 /* declare ctermid_r if compiling with MIPSPro 7.x in ANSI C mode
    (default) */
 extern char        *ctermid_r(char *);
-#endif
+#  endif
 
 #endif /* !_MSC_VER */
 
 #if defined(__VXWORKS__)
-#include <vxCpuLib.h>
-#include <rtpLib.h>
-#include <wait.h>
-#include <taskLib.h>
-#ifndef _P_WAIT
-#  define _P_WAIT          0
-#  define _P_NOWAIT        1
-#  define _P_NOWAITO       1
-#endif
+#  include <vxCpuLib.h>
+#  include <rtpLib.h>
+#  include <wait.h>
+#  include <taskLib.h>
+#  ifndef _P_WAIT
+#    define _P_WAIT          0
+#    define _P_NOWAIT        1
+#    define _P_NOWAITO       1
+#  endif
 #endif /* __VXWORKS__ */
 
 #ifdef HAVE_POSIX_SPAWN
-#include <spawn.h>
+#  include <spawn.h>
 #endif
 
 #ifdef HAVE_UTIME_H
-#include <utime.h>
+#  include <utime.h>
 #endif /* HAVE_UTIME_H */
 
 #ifdef HAVE_SYS_UTIME_H
-#include <sys/utime.h>
-#define HAVE_UTIME_H /* pretend we do for the rest of this file */
+#  include <sys/utime.h>
+#  define HAVE_UTIME_H /* pretend we do for the rest of this file */
 #endif /* HAVE_SYS_UTIME_H */
 
 #ifdef HAVE_SYS_TIMES_H
-#include <sys/times.h>
+#  include <sys/times.h>
 #endif /* HAVE_SYS_TIMES_H */
 
 #ifdef HAVE_SYS_PARAM_H
-#include <sys/param.h>
+#  include <sys/param.h>
 #endif /* HAVE_SYS_PARAM_H */
 
 #ifdef HAVE_SYS_UTSNAME_H
-#include <sys/utsname.h>
+#  include <sys/utsname.h>
 #endif /* HAVE_SYS_UTSNAME_H */
 
 #ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
-#else
-#if defined(__WATCOMC__) && !defined(__QNX__)
-#  include <direct.h>
+#  include <dirent.h>
 #  define NAMLEN(dirent) strlen((dirent)->d_name)
 #else
-#  define dirent direct
-#  define NAMLEN(dirent) (dirent)->d_namlen
-#endif
-#ifdef HAVE_SYS_NDIR_H
-#  include <sys/ndir.h>
-#endif
-#ifdef HAVE_SYS_DIR_H
-#  include <sys/dir.h>
-#endif
-#ifdef HAVE_NDIR_H
-#  include <ndir.h>
-#endif
+#  if defined(__WATCOMC__) && !defined(__QNX__)
+#    include <direct.h>
+#    define NAMLEN(dirent) strlen((dirent)->d_name)
+#  else
+#    define dirent direct
+#    define NAMLEN(dirent) (dirent)->d_namlen
+#  endif
+#  ifdef HAVE_SYS_NDIR_H
+#    include <sys/ndir.h>
+#  endif
+#  ifdef HAVE_SYS_DIR_H
+#    include <sys/dir.h>
+#  endif
+#  ifdef HAVE_NDIR_H
+#    include <ndir.h>
+#  endif
 #endif
 
 #ifdef _MSC_VER
-#ifdef HAVE_DIRECT_H
-#  include <direct.h>
-#endif
-#ifdef HAVE_IO_H
-#  include <io.h>
-#endif
-#ifdef HAVE_PROCESS_H
-#  include <process.h>
-#endif
-#ifndef IO_REPARSE_TAG_SYMLINK
-#  define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
-#endif
-#ifndef IO_REPARSE_TAG_MOUNT_POINT
-#  define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
-#endif
-#include "osdefs.h"
-#include <malloc.h>
-#include <windows.h>
-#include <shellapi.h>   /* for ShellExecute() */
-#include <lmcons.h>     /* for UNLEN */
-#define HAVE_SYMLINK
+#  ifdef HAVE_DIRECT_H
+#    include <direct.h>
+#  endif
+#  ifdef HAVE_IO_H
+#    include <io.h>
+#  endif
+#  ifdef HAVE_PROCESS_H
+#    include <process.h>
+#  endif
+#  ifndef IO_REPARSE_TAG_SYMLINK
+#    define IO_REPARSE_TAG_SYMLINK (0xA000000CL)
+#  endif
+#  ifndef IO_REPARSE_TAG_MOUNT_POINT
+#    define IO_REPARSE_TAG_MOUNT_POINT (0xA0000003L)
+#  endif
+#  include "osdefs.h"
+#  include <malloc.h>
+#  include <windows.h>
+#  include <shellapi.h>   /* for ShellExecute() */
+#  include <lmcons.h>     /* for UNLEN */
+#  define HAVE_SYMLINK
 #endif /* _MSC_VER */
 
 #ifndef MAXPATHLEN
-#if defined(PATH_MAX) && PATH_MAX > 1024
-#  define MAXPATHLEN PATH_MAX
-#else
-#  define MAXPATHLEN 1024
-#endif
+#  if defined(PATH_MAX) && PATH_MAX > 1024
+#    define MAXPATHLEN PATH_MAX
+#  else
+#    define MAXPATHLEN 1024
+#  endif
 #endif /* MAXPATHLEN */
 
 #ifdef UNION_WAIT
 /* Emulate some macros on systems that have a union instead of macros */
 
-#ifndef WIFEXITED
-#  define WIFEXITED(u_wait) (!(u_wait).w_termsig && !(u_wait).w_coredump)
-#endif
+#  ifndef WIFEXITED
+#    define WIFEXITED(u_wait) (!(u_wait).w_termsig && !(u_wait).w_coredump)
+#  endif
 
-#ifndef WEXITSTATUS
-#  define WEXITSTATUS(u_wait) (WIFEXITED(u_wait)?((u_wait).w_retcode):-1)
-#endif
+#  ifndef WEXITSTATUS
+#    define WEXITSTATUS(u_wait) (WIFEXITED(u_wait)?((u_wait).w_retcode):-1)
+#  endif
 
-#ifndef WTERMSIG
-#  define WTERMSIG(u_wait) ((u_wait).w_termsig)
-#endif
+#  ifndef WTERMSIG
+#    define WTERMSIG(u_wait) ((u_wait).w_termsig)
+#  endif
 
-#define WAIT_TYPE union wait
-#define WAIT_STATUS_INT(s) (s.w_status)
+#  define WAIT_TYPE union wait
+#  define WAIT_STATUS_INT(s) (s.w_status)
 
 #else /* !UNION_WAIT */
-#define WAIT_TYPE int
-#define WAIT_STATUS_INT(s) (s)
+#  define WAIT_TYPE int
+#  define WAIT_STATUS_INT(s) (s)
 #endif /* UNION_WAIT */
 
 /* Don't use the "_r" form if we don't need it (also, won't have a
    prototype for it, at least on Solaris -- maybe others as well?). */
 #if defined(HAVE_CTERMID_R)
-#define USE_CTERMID_R
+#  define USE_CTERMID_R
 #endif
 
 /* choose the appropriate stat and fstat functions and return structs */
@@ -359,56 +359,56 @@ extern char        *ctermid_r(char *);
 #undef FSTAT
 #undef STRUCT_STAT
 #ifdef MS_WINDOWS
-#define STAT win32_stat
-#define LSTAT win32_lstat
-#define FSTAT _Py_fstat_noraise
-#define STRUCT_STAT struct _Py_stat_struct
+#  define STAT win32_stat
+#  define LSTAT win32_lstat
+#  define FSTAT _Py_fstat_noraise
+#  define STRUCT_STAT struct _Py_stat_struct
 #else
-#define STAT stat
-#define LSTAT lstat
-#define FSTAT fstat
-#define STRUCT_STAT struct stat
+#  define STAT stat
+#  define LSTAT lstat
+#  define FSTAT fstat
+#  define STRUCT_STAT struct stat
 #endif
 
 #if defined(MAJOR_IN_MKDEV)
-#include <sys/mkdev.h>
-#else
-#if defined(MAJOR_IN_SYSMACROS)
-#  include <sys/sysmacros.h>
-#endif
-#if defined(HAVE_MKNOD) && defined(HAVE_SYS_MKDEV_H)
 #  include <sys/mkdev.h>
-#endif
+#else
+#  if defined(MAJOR_IN_SYSMACROS)
+#    include <sys/sysmacros.h>
+#  endif
+#  if defined(HAVE_MKNOD) && defined(HAVE_SYS_MKDEV_H)
+#    include <sys/mkdev.h>
+#  endif
 #endif
 
 #ifdef MS_WINDOWS
-#define INITFUNC PyInit_nt
-#define MODNAME "nt"
+#  define INITFUNC PyInit_nt
+#  define MODNAME "nt"
 #else
-#define INITFUNC PyInit_posix
-#define MODNAME "posix"
+#  define INITFUNC PyInit_posix
+#  define MODNAME "posix"
 #endif
 
 #if defined(__sun)
 /* Something to implement in autoconf, not present in autoconf 2.69 */
-#define HAVE_STRUCT_STAT_ST_FSTYPE 1
+#  define HAVE_STRUCT_STAT_ST_FSTYPE 1
 #endif
 
 /* memfd_create is either defined in sys/mman.h or sys/memfd.h
  * linux/memfd.h defines additional flags
  */
 #ifdef HAVE_SYS_MMAN_H
-#include <sys/mman.h>
+#  include <sys/mman.h>
 #endif
 #ifdef HAVE_SYS_MEMFD_H
-#include <sys/memfd.h>
+#  include <sys/memfd.h>
 #endif
 #ifdef HAVE_LINUX_MEMFD_H
-#include <linux/memfd.h>
+#  include <linux/memfd.h>
 #endif
 
 #ifdef _Py_MEMORY_SANITIZER
-#include <sanitizer/msan_interface.h>
+#  include <sanitizer/msan_interface.h>
 #endif
 
 #ifdef HAVE_FORK
@@ -762,9 +762,9 @@ _Py_Dev_Converter(PyObject *obj, void *p)
  * look like this:
  *      int dir_fd = DEFAULT_DIR_FD;
  */
-#define DEFAULT_DIR_FD (int)AT_FDCWD
+#  define DEFAULT_DIR_FD (int)AT_FDCWD
 #else
-#define DEFAULT_DIR_FD (-100)
+#  define DEFAULT_DIR_FD (-100)
 #endif
 
 static int
@@ -920,10 +920,10 @@ typedef struct {
 } path_t;
 
 #ifdef MS_WINDOWS
-#define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
+#  define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
     {function_name, argument_name, nullable, allow_fd, NULL, FALSE, -1, 0, NULL, NULL}
 #else
-#define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
+#  define PATH_T_INITIALIZE(function_name, argument_name, nullable, allow_fd) \
     {function_name, argument_name, nullable, allow_fd, NULL, NULL, -1, 0, NULL, NULL}
 #endif
 
@@ -1372,7 +1372,7 @@ win32_get_reparse_tag(HANDLE reparse_point_handle, ULONG *reparse_tag)
 ** environ directly, we must obtain it with _NSGetEnviron(). See also
 ** man environ(7).
 */
-#include <crt_externs.h>
+#  include <crt_externs.h>
 static char **environ;
 #elif !defined(_MSC_VER) && (!defined(__WATCOMC__) || defined(__QNX__) || defined(__VXWORKS__))
 extern char **environ;
@@ -1623,8 +1623,8 @@ win32_wchdir(LPCWSTR path)
      UTC and local time
    Therefore, we implement our own stat, based on the Win32 API directly.
 */
-#define HAVE_STAT_NSEC 1
-#define HAVE_STRUCT_STAT_ST_FILE_ATTRIBUTES 1
+#  define HAVE_STAT_NSEC 1
+#  define HAVE_STRUCT_STAT_ST_FILE_ATTRIBUTES 1
 
 static void
 find_data_to_file_info(WIN32_FIND_DATAW *pFileData,
@@ -1881,51 +1881,51 @@ static PyStructSequence_Field stat_result_fields[] = {
 };
 
 #ifdef HAVE_STRUCT_STAT_ST_BLKSIZE
-#define ST_BLKSIZE_IDX 16
+#  define ST_BLKSIZE_IDX 16
 #else
-#define ST_BLKSIZE_IDX 15
+#  define ST_BLKSIZE_IDX 15
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_BLOCKS
-#define ST_BLOCKS_IDX (ST_BLKSIZE_IDX+1)
+#  define ST_BLOCKS_IDX (ST_BLKSIZE_IDX+1)
 #else
-#define ST_BLOCKS_IDX ST_BLKSIZE_IDX
+#  define ST_BLOCKS_IDX ST_BLKSIZE_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_RDEV
-#define ST_RDEV_IDX (ST_BLOCKS_IDX+1)
+#  define ST_RDEV_IDX (ST_BLOCKS_IDX+1)
 #else
-#define ST_RDEV_IDX ST_BLOCKS_IDX
+#  define ST_RDEV_IDX ST_BLOCKS_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_FLAGS
-#define ST_FLAGS_IDX (ST_RDEV_IDX+1)
+#  define ST_FLAGS_IDX (ST_RDEV_IDX+1)
 #else
-#define ST_FLAGS_IDX ST_RDEV_IDX
+#  define ST_FLAGS_IDX ST_RDEV_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_GEN
-#define ST_GEN_IDX (ST_FLAGS_IDX+1)
+#  define ST_GEN_IDX (ST_FLAGS_IDX+1)
 #else
-#define ST_GEN_IDX ST_FLAGS_IDX
+#  define ST_GEN_IDX ST_FLAGS_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_BIRTHTIME
-#define ST_BIRTHTIME_IDX (ST_GEN_IDX+1)
+#  define ST_BIRTHTIME_IDX (ST_GEN_IDX+1)
 #else
-#define ST_BIRTHTIME_IDX ST_GEN_IDX
+#  define ST_BIRTHTIME_IDX ST_GEN_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_FILE_ATTRIBUTES
-#define ST_FILE_ATTRIBUTES_IDX (ST_BIRTHTIME_IDX+1)
+#  define ST_FILE_ATTRIBUTES_IDX (ST_BIRTHTIME_IDX+1)
 #else
-#define ST_FILE_ATTRIBUTES_IDX ST_BIRTHTIME_IDX
+#  define ST_FILE_ATTRIBUTES_IDX ST_BIRTHTIME_IDX
 #endif
 
 #ifdef HAVE_STRUCT_STAT_ST_FSTYPE
-#define ST_FSTYPE_IDX (ST_FILE_ATTRIBUTES_IDX+1)
+#  define ST_FSTYPE_IDX (ST_FILE_ATTRIBUTES_IDX+1)
 #else
-#define ST_FSTYPE_IDX ST_FILE_ATTRIBUTES_IDX
+#  define ST_FSTYPE_IDX ST_FILE_ATTRIBUTES_IDX
 #endif
 
 static PyStructSequence_Desc stat_result_desc = {
@@ -2133,11 +2133,11 @@ _pystat_fromstructstat(STRUCT_STAT *st)
       PyObject *val;
       unsigned long bsec,bnsec;
       bsec = (long)st->st_birthtime;
-#ifdef HAVE_STAT_TV_NSEC2
+#  ifdef HAVE_STAT_TV_NSEC2
       bnsec = st->st_birthtimespec.tv_nsec;
-#else
+#  else
       bnsec = 0;
-#endif
+#  endif
       val = PyFloat_FromDouble(bsec + 1e-9*bnsec);
       PyStructSequence_SET_ITEM(v, ST_BIRTHTIME_IDX,
                                 val);
@@ -2194,17 +2194,17 @@ posix_do_stat(const char *function_name, path_t *path,
         result = win32_lstat(path->wide, &st);
 #else
     else
-#if defined(HAVE_LSTAT)
+#  if defined(HAVE_LSTAT)
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = LSTAT(path->narrow, &st);
     else
-#endif /* HAVE_LSTAT */
-#ifdef HAVE_FSTATAT
+#  endif /* HAVE_LSTAT */
+#  ifdef HAVE_FSTATAT
     if ((dir_fd != DEFAULT_DIR_FD) || !follow_symlinks)
         result = fstatat(dir_fd, path->narrow, &st,
                          follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW);
     else
-#endif /* HAVE_FSTATAT */
+#  endif /* HAVE_FSTATAT */
         result = STAT(path->narrow, &st);
 #endif /* MS_WINDOWS */
     Py_END_ALLOW_THREADS
@@ -2237,9 +2237,9 @@ UNLINKAT
     s = s.strip()
     print("""
 #ifdef HAVE_{s}
-    #define {s}_DIR_FD_CONVERTER dir_fd_converter
+#  define {s}_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define {s}_DIR_FD_CONVERTER dir_fd_unavailable
+#  define {s}_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 """.rstrip().format(s=s))
 
@@ -2258,138 +2258,138 @@ FTRUNCATE
     s = s.strip()
     print("""
 #ifdef HAVE_{s}
-    #define PATH_HAVE_{s} 1
+#  define PATH_HAVE_{s} 1
 #else
-    #define PATH_HAVE_{s} 0
+#  define PATH_HAVE_{s} 0
 #endif
 
 """.rstrip().format(s=s))
 [python start generated code]*/
 
 #ifdef HAVE_FACCESSAT
-    #define FACCESSAT_DIR_FD_CONVERTER dir_fd_converter
+#  define FACCESSAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define FACCESSAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define FACCESSAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_FCHMODAT
-    #define FCHMODAT_DIR_FD_CONVERTER dir_fd_converter
+#  define FCHMODAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define FCHMODAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define FCHMODAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_FCHOWNAT
-    #define FCHOWNAT_DIR_FD_CONVERTER dir_fd_converter
+#  define FCHOWNAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define FCHOWNAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define FCHOWNAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_FSTATAT
-    #define FSTATAT_DIR_FD_CONVERTER dir_fd_converter
+#  define FSTATAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define FSTATAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define FSTATAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_LINKAT
-    #define LINKAT_DIR_FD_CONVERTER dir_fd_converter
+#  define LINKAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define LINKAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define LINKAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_MKDIRAT
-    #define MKDIRAT_DIR_FD_CONVERTER dir_fd_converter
+#  define MKDIRAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define MKDIRAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define MKDIRAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_MKFIFOAT
-    #define MKFIFOAT_DIR_FD_CONVERTER dir_fd_converter
+#  define MKFIFOAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define MKFIFOAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define MKFIFOAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_MKNODAT
-    #define MKNODAT_DIR_FD_CONVERTER dir_fd_converter
+#  define MKNODAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define MKNODAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define MKNODAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_OPENAT
-    #define OPENAT_DIR_FD_CONVERTER dir_fd_converter
+#  define OPENAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define OPENAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define OPENAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_READLINKAT
-    #define READLINKAT_DIR_FD_CONVERTER dir_fd_converter
+#  define READLINKAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define READLINKAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define READLINKAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_SYMLINKAT
-    #define SYMLINKAT_DIR_FD_CONVERTER dir_fd_converter
+#  define SYMLINKAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define SYMLINKAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define SYMLINKAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_UNLINKAT
-    #define UNLINKAT_DIR_FD_CONVERTER dir_fd_converter
+#  define UNLINKAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define UNLINKAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define UNLINKAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #ifdef HAVE_FCHDIR
-    #define PATH_HAVE_FCHDIR 1
+#  define PATH_HAVE_FCHDIR 1
 #else
-    #define PATH_HAVE_FCHDIR 0
+#  define PATH_HAVE_FCHDIR 0
 #endif
 
 #ifdef HAVE_FCHMOD
-    #define PATH_HAVE_FCHMOD 1
+#  define PATH_HAVE_FCHMOD 1
 #else
-    #define PATH_HAVE_FCHMOD 0
+#  define PATH_HAVE_FCHMOD 0
 #endif
 
 #ifdef HAVE_FCHOWN
-    #define PATH_HAVE_FCHOWN 1
+#  define PATH_HAVE_FCHOWN 1
 #else
-    #define PATH_HAVE_FCHOWN 0
+#  define PATH_HAVE_FCHOWN 0
 #endif
 
 #ifdef HAVE_FDOPENDIR
-    #define PATH_HAVE_FDOPENDIR 1
+#  define PATH_HAVE_FDOPENDIR 1
 #else
-    #define PATH_HAVE_FDOPENDIR 0
+#  define PATH_HAVE_FDOPENDIR 0
 #endif
 
 #ifdef HAVE_FEXECVE
-    #define PATH_HAVE_FEXECVE 1
+#  define PATH_HAVE_FEXECVE 1
 #else
-    #define PATH_HAVE_FEXECVE 0
+#  define PATH_HAVE_FEXECVE 0
 #endif
 
 #ifdef HAVE_FPATHCONF
-    #define PATH_HAVE_FPATHCONF 1
+#  define PATH_HAVE_FPATHCONF 1
 #else
-    #define PATH_HAVE_FPATHCONF 0
+#  define PATH_HAVE_FPATHCONF 0
 #endif
 
 #ifdef HAVE_FSTATVFS
-    #define PATH_HAVE_FSTATVFS 1
+#  define PATH_HAVE_FSTATVFS 1
 #else
-    #define PATH_HAVE_FSTATVFS 0
+#  define PATH_HAVE_FSTATVFS 0
 #endif
 
 #ifdef HAVE_FTRUNCATE
-    #define PATH_HAVE_FTRUNCATE 1
+#  define PATH_HAVE_FTRUNCATE 1
 #else
-    #define PATH_HAVE_FTRUNCATE 0
+#  define PATH_HAVE_FTRUNCATE 0
 #endif
 /*[python end generated code: output=4bd4f6f7d41267f1 input=80b4c890b6774ea5]*/
 
 #ifdef MS_WINDOWS
-    #undef PATH_HAVE_FTRUNCATE
-    #define PATH_HAVE_FTRUNCATE 1
+#  undef PATH_HAVE_FTRUNCATE
+#  define PATH_HAVE_FTRUNCATE 1
 #endif
 
 /*[python input]
@@ -2661,7 +2661,7 @@ os_access_impl(PyObject *module, path_t *path, int mode, int dir_fd,
 #else
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FACCESSAT
+#  ifdef HAVE_FACCESSAT
     if ((dir_fd != DEFAULT_DIR_FD) ||
         effective_ids ||
         !follow_symlinks) {
@@ -2673,7 +2673,7 @@ os_access_impl(PyObject *module, path_t *path, int mode, int dir_fd,
         result = faccessat(dir_fd, path->narrow, mode, flags);
     }
     else
-#endif
+#  endif
         result = access(path->narrow, mode);
     Py_END_ALLOW_THREADS
     return_value = !result;
@@ -2683,16 +2683,16 @@ os_access_impl(PyObject *module, path_t *path, int mode, int dir_fd,
 }
 
 #ifndef F_OK
-#define F_OK 0
+#  define F_OK 0
 #endif
 #ifndef R_OK
-#define R_OK 4
+#  define R_OK 4
 #endif
 #ifndef W_OK
-#define W_OK 2
+#  define W_OK 2
 #endif
 #ifndef X_OK
-#define X_OK 1
+#  define X_OK 1
 #endif
 
 
@@ -2736,11 +2736,11 @@ os_ctermid_impl(PyObject *module)
     char *ret;
     char buffer[L_ctermid];
 
-#ifdef USE_CTERMID_R
+#  ifdef USE_CTERMID_R
     ret = ctermid_r(buffer);
-#else
+#  else
     ret = ctermid(buffer);
-#endif
+#  endif
     if (ret == NULL)
         return posix_error();
     return PyUnicode_DecodeFSDefault(buffer);
@@ -2771,11 +2771,11 @@ os_chdir_impl(PyObject *module, path_t *path)
     /* on unix, success = 0, on windows, success = !0 */
     result = !win32_wchdir(path->wide);
 #else
-#ifdef HAVE_FCHDIR
+#  ifdef HAVE_FCHDIR
     if (path->fd != -1)
         result = fchdir(path->fd);
     else
-#endif
+#  endif
         result = chdir(path->narrow);
 #endif
     Py_END_ALLOW_THREADS
@@ -2881,17 +2881,17 @@ os_chmod_impl(PyObject *module, path_t *path, int mode, int dir_fd,
     }
 #else /* MS_WINDOWS */
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FCHMOD
+#  ifdef HAVE_FCHMOD
     if (path->fd != -1)
         result = fchmod(path->fd, mode);
     else
-#endif
-#ifdef HAVE_LCHMOD
+#  endif
+#  ifdef HAVE_LCHMOD
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = lchmod(path->narrow, mode);
     else
-#endif
-#ifdef HAVE_FCHMODAT
+#  endif
+#  ifdef HAVE_FCHMODAT
     if ((dir_fd != DEFAULT_DIR_FD) || !follow_symlinks) {
         /*
          * fchmodat() doesn't currently support AT_SYMLINK_NOFOLLOW!
@@ -2915,12 +2915,12 @@ os_chmod_impl(PyObject *module, path_t *path, int mode, int dir_fd,
                          !follow_symlinks;
     }
     else
-#endif
+#  endif
         result = chmod(path->narrow, mode);
     Py_END_ALLOW_THREADS
 
     if (result) {
-#ifdef HAVE_FCHMODAT
+#  ifdef HAVE_FCHMODAT
         if (fchmodat_nofollow_unsupported) {
             if (dir_fd != DEFAULT_DIR_FD)
                 dir_fd_and_follow_symlinks_invalid("chmod",
@@ -2930,7 +2930,7 @@ os_chmod_impl(PyObject *module, path_t *path, int mode, int dir_fd,
             return NULL;
         }
         else
-#endif
+#  endif
         return path_error(path);
     }
 #endif
@@ -3026,17 +3026,17 @@ os_chflags_impl(PyObject *module, path_t *path, unsigned long flags,
 {
     int result;
 
-#ifndef HAVE_LCHFLAGS
+#  ifndef HAVE_LCHFLAGS
     if (follow_symlinks_specified("chflags", follow_symlinks))
         return NULL;
-#endif
+#  endif
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_LCHFLAGS
+#  ifdef HAVE_LCHFLAGS
     if (!follow_symlinks)
         result = lchflags(path->narrow, flags);
     else
-#endif
+#  endif
         result = chflags(path->narrow, flags);
     Py_END_ALLOW_THREADS
 
@@ -3139,9 +3139,9 @@ os_sync_impl(PyObject *module)
 
 
 #ifdef HAVE_FDATASYNC
-#ifdef __hpux
+#  ifdef __hpux
 extern int fdatasync(int); /* On HP-UX, in libc but not in unistd.h */
-#endif
+#  endif
 
 /*[clinic input]
 os.fdatasync
@@ -3207,15 +3207,15 @@ os_chown_impl(PyObject *module, path_t *path, uid_t uid, gid_t gid,
 {
     int result;
 
-#if !(defined(HAVE_LCHOWN) || defined(HAVE_FCHOWNAT))
+#  if !(defined(HAVE_LCHOWN) || defined(HAVE_FCHOWNAT))
     if (follow_symlinks_specified("chown", follow_symlinks))
         return NULL;
-#endif
+#  endif
     if (dir_fd_and_fd_invalid("chown", dir_fd, path->fd) ||
         fd_and_follow_symlinks_invalid("chown", path->fd, follow_symlinks))
         return NULL;
 
-#ifdef __APPLE__
+#  ifdef __APPLE__
     /*
      * This is for Mac OS X 10.3, which doesn't have lchown.
      * (But we still have an lchown symbol because of weak-linking.)
@@ -3226,25 +3226,25 @@ os_chown_impl(PyObject *module, path_t *path, uid_t uid, gid_t gid,
         follow_symlinks_specified("chown", follow_symlinks);
         return NULL;
     }
-#endif
+#  endif
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FCHOWN
+#  ifdef HAVE_FCHOWN
     if (path->fd != -1)
         result = fchown(path->fd, uid, gid);
     else
-#endif
-#ifdef HAVE_LCHOWN
+#  endif
+#  ifdef HAVE_LCHOWN
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = lchown(path->narrow, uid, gid);
     else
-#endif
-#ifdef HAVE_FCHOWNAT
+#  endif
+#  ifdef HAVE_FCHOWNAT
     if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
         result = fchownat(dir_fd, path->narrow, uid, gid,
                           follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW);
     else
-#endif
+#  endif
         result = chown(path->narrow, uid, gid);
     Py_END_ALLOW_THREADS
 
@@ -3448,7 +3448,7 @@ os_getcwdb_impl(PyObject *module)
 
 
 #if ((!defined(HAVE_LINK)) && defined(MS_WINDOWS))
-#define HAVE_LINK 1
+#  define HAVE_LINK 1
 #endif
 
 #ifdef HAVE_LINK
@@ -3481,37 +3481,37 @@ os_link_impl(PyObject *module, path_t *src, path_t *dst, int src_dir_fd,
              int dst_dir_fd, int follow_symlinks)
 /*[clinic end generated code: output=7f00f6007fd5269a input=b0095ebbcbaa7e04]*/
 {
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     BOOL result = FALSE;
-#else
+#  else
     int result;
-#endif
+#  endif
 
-#ifndef HAVE_LINKAT
+#  ifndef HAVE_LINKAT
     if ((src_dir_fd != DEFAULT_DIR_FD) || (dst_dir_fd != DEFAULT_DIR_FD)) {
         argument_unavailable_error("link", "src_dir_fd and dst_dir_fd");
         return NULL;
     }
-#endif
+#  endif
 
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     if ((src->narrow && dst->wide) || (src->wide && dst->narrow)) {
         PyErr_SetString(PyExc_NotImplementedError,
                         "link: src and dst must be the same type");
         return NULL;
     }
-#endif
+#  endif
 
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
     Py_BEGIN_ALLOW_THREADS
     result = CreateHardLinkW(dst->wide, src->wide, NULL);
     Py_END_ALLOW_THREADS
 
     if (!result)
         return path_error2(src, dst);
-#else
+#  else
     Py_BEGIN_ALLOW_THREADS
-#  ifdef HAVE_LINKAT
+#    ifdef HAVE_LINKAT
     if ((src_dir_fd != DEFAULT_DIR_FD) ||
         (dst_dir_fd != DEFAULT_DIR_FD) ||
         (!follow_symlinks))
@@ -3519,13 +3519,13 @@ os_link_impl(PyObject *module, path_t *src, path_t *dst, int src_dir_fd,
             dst_dir_fd, dst->narrow,
             follow_symlinks ? AT_SYMLINK_FOLLOW : 0);
     else
-#  endif /* HAVE_LINKAT */
+#    endif /* HAVE_LINKAT */
         result = link(src->narrow, dst->narrow);
     Py_END_ALLOW_THREADS
 
     if (result)
         return path_error2(src, dst);
-#endif /* MS_WINDOWS */
+#  endif /* MS_WINDOWS */
 
     Py_RETURN_NONE;
 }
@@ -3638,12 +3638,12 @@ _posix_listdir(path_t *path, PyObject *list)
     DIR *dirp = NULL;
     struct dirent *ep;
     int return_str; /* if false, return bytes */
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
     int fd = -1;
-#endif
+#  endif
 
     errno = 0;
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
     if (path->fd != -1) {
         /* closedir() closes the FD, so we duplicate it */
         fd = _Py_dup(path->fd);
@@ -3657,7 +3657,7 @@ _posix_listdir(path_t *path, PyObject *list)
         Py_END_ALLOW_THREADS
     }
     else
-#endif
+#  endif
     {
         const char *name;
         if (path->narrow) {
@@ -3677,13 +3677,13 @@ _posix_listdir(path_t *path, PyObject *list)
 
     if (dirp == NULL) {
         list = path_error(path);
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
         if (fd != -1) {
             Py_BEGIN_ALLOW_THREADS
             close(fd);
             Py_END_ALLOW_THREADS
         }
-#endif
+#  endif
         goto exit;
     }
     if ((list = PyList_New(0)) == NULL) {
@@ -3726,10 +3726,10 @@ _posix_listdir(path_t *path, PyObject *list)
 exit:
     if (dirp != NULL) {
         Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_FDOPENDIR
+#  ifdef HAVE_FDOPENDIR
         if (fd > -1)
             rewinddir(dirp);
-#endif
+#  endif
         closedir(dirp);
         Py_END_ALLOW_THREADS
     }
@@ -3988,7 +3988,7 @@ os.mkdir
 
     dir_fd : dir_fd(requires='mkdirat') = None
 
-#"mkdir(path, mode=0o777, *, dir_fd=None)\n\n\
+# "mkdir(path, mode=0o777, *, dir_fd=None)\n\n\
 
 Create a directory.
 
@@ -4015,16 +4015,16 @@ os_mkdir_impl(PyObject *module, path_t *path, int mode, int dir_fd)
         return path_error(path);
 #else
     Py_BEGIN_ALLOW_THREADS
-#if HAVE_MKDIRAT
+#  if HAVE_MKDIRAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = mkdirat(dir_fd, path->narrow, mode);
     else
-#endif
-#if defined(__WATCOMC__) && !defined(__QNX__)
+#  endif
+#  if defined(__WATCOMC__) && !defined(__QNX__)
         result = mkdir(path->narrow);
-#else
+#  else
         result = mkdir(path->narrow, mode);
-#endif
+#  endif
     Py_END_ALLOW_THREADS
     if (result < 0)
         return path_error(path);
@@ -4035,7 +4035,7 @@ os_mkdir_impl(PyObject *module, path_t *path, int mode, int dir_fd)
 
 /* sys/resource.h is needed for at least: wait3(), wait4(), broken nice. */
 #if defined(HAVE_SYS_RESOURCE_H)
-#include <sys/resource.h>
+#  include <sys/resource.h>
 #endif
 
 
@@ -4067,10 +4067,10 @@ os_nice_impl(PyObject *module, int increment)
 
     errno = 0;
     value = nice(increment);
-#if defined(HAVE_BROKEN_NICE) && defined(HAVE_GETPRIORITY)
+#  if defined(HAVE_BROKEN_NICE) && defined(HAVE_GETPRIORITY)
     if (value == 0)
         value = getpriority(PRIO_PROCESS, 0);
-#endif
+#  endif
     if (value == -1 && errno != 0)
         /* either nice() or getpriority() returned an error */
         return posix_error();
@@ -4167,11 +4167,11 @@ internal_rename(path_t *src, path_t *dst, int src_dir_fd, int dst_dir_fd, int is
     }
 
     Py_BEGIN_ALLOW_THREADS
-#ifdef HAVE_RENAMEAT
+#  ifdef HAVE_RENAMEAT
     if (dir_fd_specified)
         result = renameat(src_dir_fd, src->narrow, dst_dir_fd, dst->narrow);
     else
-#endif
+#  endif
     result = rename(src->narrow, dst->narrow);
     Py_END_ALLOW_THREADS
 
@@ -4256,11 +4256,11 @@ os_rmdir_impl(PyObject *module, path_t *path, int dir_fd)
     /* Windows, success=1, UNIX, success=0 */
     result = !RemoveDirectoryW(path->wide);
 #else
-#ifdef HAVE_UNLINKAT
+#  ifdef HAVE_UNLINKAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = unlinkat(dir_fd, path->narrow, AT_REMOVEDIR);
     else
-#endif
+#  endif
         result = rmdir(path->narrow);
 #endif
     Py_END_ALLOW_THREADS
@@ -4273,7 +4273,7 @@ os_rmdir_impl(PyObject *module, path_t *path, int dir_fd)
 
 
 #ifdef HAVE_SYSTEM
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 /*[clinic input]
 os.system -> long
 
@@ -4299,7 +4299,7 @@ os_system_impl(PyObject *module, const Py_UNICODE *command)
     Py_END_ALLOW_THREADS
     return result;
 }
-#else /* MS_WINDOWS */
+#  else /* MS_WINDOWS */
 /*[clinic input]
 os.system -> long
 
@@ -4324,7 +4324,7 @@ os_system_impl(PyObject *module, PyObject *command)
     Py_END_ALLOW_THREADS
     return result;
 }
-#endif
+#  endif
 #endif /* HAVE_SYSTEM */
 
 
@@ -4415,11 +4415,11 @@ os_unlink_impl(PyObject *module, path_t *path, int dir_fd)
     /* Windows, success=1, UNIX, success=0 */
     result = !Py_DeleteFileW(path->wide);
 #else
-#ifdef HAVE_UNLINKAT
+#  ifdef HAVE_UNLINKAT
     if (dir_fd != DEFAULT_DIR_FD)
         result = unlinkat(dir_fd, path->narrow, 0);
     else
-#endif /* HAVE_UNLINKAT */
+#  endif /* HAVE_UNLINKAT */
         result = unlink(path->narrow);
 #endif
     _Py_END_SUPPRESS_IPH
@@ -4507,7 +4507,7 @@ os_uname_impl(PyObject *module)
     if (value == NULL)
         return NULL;
 
-#define SET(i, field) \
+#  define SET(i, field) \
     { \
     PyObject *o = PyUnicode_DecodeFSDefault(field); \
     if (!o) { \
@@ -4523,7 +4523,7 @@ os_uname_impl(PyObject *module)
     SET(3, u.version);
     SET(4, u.machine);
 
-#undef SET
+#  undef SET
 
     return value;
 }
@@ -4597,11 +4597,11 @@ typedef struct {
 static int
 utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 {
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     int flags = follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW;
     UTIME_TO_TIMESPEC;
     return utimensat(dir_fd, path, time, flags);
-#elif defined(HAVE_FUTIMESAT)
+#  elif defined(HAVE_FUTIMESAT)
     UTIME_TO_TIMEVAL;
     /*
      * follow_symlinks will never be false here;
@@ -4610,12 +4610,12 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
      */
     assert(follow_symlinks);
     return futimesat(dir_fd, path, time);
-#endif
+#  endif
 }
 
-    #define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_converter
+#  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_converter
 #else
-    #define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_unavailable
+#  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
 #if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
@@ -4623,22 +4623,22 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 static int
 utime_fd(utime_t *ut, int fd)
 {
-#ifdef HAVE_FUTIMENS
+#  ifdef HAVE_FUTIMENS
     UTIME_TO_TIMESPEC;
     return futimens(fd, time);
-#else
+#  else
     UTIME_TO_TIMEVAL;
     return futimes(fd, time);
-#endif
+#  endif
 }
 
-    #define PATH_UTIME_HAVE_FD 1
+#  define PATH_UTIME_HAVE_FD 1
 #else
-    #define PATH_UTIME_HAVE_FD 0
+#  define PATH_UTIME_HAVE_FD 0
 #endif
 
 #if defined(HAVE_UTIMENSAT) || defined(HAVE_LUTIMES)
-#define UTIME_HAVE_NOFOLLOW_SYMLINKS
+#  define UTIME_HAVE_NOFOLLOW_SYMLINKS
 #endif
 
 #ifdef UTIME_HAVE_NOFOLLOW_SYMLINKS
@@ -4646,13 +4646,13 @@ utime_fd(utime_t *ut, int fd)
 static int
 utime_nofollow_symlinks(utime_t *ut, const char *path)
 {
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     UTIME_TO_TIMESPEC;
     return utimensat(DEFAULT_DIR_FD, path, time, AT_SYMLINK_NOFOLLOW);
-#else
+#  else
     UTIME_TO_TIMEVAL;
     return lutimes(path, time);
-#endif
+#  endif
 }
 
 #endif
@@ -4662,19 +4662,19 @@ utime_nofollow_symlinks(utime_t *ut, const char *path)
 static int
 utime_default(utime_t *ut, const char *path)
 {
-#ifdef HAVE_UTIMENSAT
+#  ifdef HAVE_UTIMENSAT
     UTIME_TO_TIMESPEC;
     return utimensat(DEFAULT_DIR_FD, path, time, 0);
-#elif defined(HAVE_UTIMES)
+#  elif defined(HAVE_UTIMES)
     UTIME_TO_TIMEVAL;
     return utimes(path, time);
-#elif defined(HAVE_UTIME_H)
+#  elif defined(HAVE_UTIME_H)
     UTIME_TO_UTIMBUF;
     return utime(path, time);
-#else
+#  else
     UTIME_TO_TIME_T;
     return utime(path, time);
-#endif
+#  endif
 }
 
 #endif
@@ -4717,7 +4717,7 @@ os.utime
     dir_fd: dir_fd(requires='futimensat') = None
     follow_symlinks: bool=True
 
-#"utime(path, times=None, *[, ns], dir_fd=None, follow_symlinks=True)\n\
+# "utime(path, times=None, *[, ns], dir_fd=None, follow_symlinks=True)\n\
 
 Set the access and modified time of path.
 
@@ -4859,23 +4859,23 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
 #else /* MS_WINDOWS */
     Py_BEGIN_ALLOW_THREADS
 
-#ifdef UTIME_HAVE_NOFOLLOW_SYMLINKS
+#  ifdef UTIME_HAVE_NOFOLLOW_SYMLINKS
     if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
         result = utime_nofollow_symlinks(&utime, path->narrow);
     else
-#endif
+#  endif
 
-#if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
+#  if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
     if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
     else
-#endif
+#  endif
 
-#if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
+#  if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
     if (path->fd != -1)
         result = utime_fd(&utime, path->fd);
     else
-#endif
+#  endif
 
     result = utime_default(&utime, path->narrow);
 
@@ -4912,9 +4912,9 @@ os__exit_impl(PyObject *module, int status)
 }
 
 #if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
-#define EXECV_CHAR wchar_t
+#  define EXECV_CHAR wchar_t
 #else
-#define EXECV_CHAR char
+#  define EXECV_CHAR char
 #endif
 
 #if defined(HAVE_EXECV) || defined(HAVE_SPAWNV) || defined(HAVE_RTPSPAWN)
@@ -4933,13 +4933,13 @@ fsconvert_strdup(PyObject *o, EXECV_CHAR **out)
     Py_ssize_t size;
     PyObject *ub;
     int result = 0;
-#if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
+#  if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
     if (!PyUnicode_FSDecoder(o, &ub))
         return 0;
     *out = PyUnicode_AsWideCharString(ub, &size);
     if (*out)
         result = 1;
-#else
+#  else
     if (!PyUnicode_FSConverter(o, &ub))
         return 0;
     size = PyBytes_GET_SIZE(ub);
@@ -4949,7 +4949,7 @@ fsconvert_strdup(PyObject *o, EXECV_CHAR **out)
         result = 1;
     } else
         PyErr_NoMemory();
-#endif
+#  endif
     Py_DECREF(ub);
     return result;
 }
@@ -4991,7 +4991,7 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
         if (!key || !val)
             goto error;
 
-#if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
+#  if defined(HAVE_WEXECV) || defined(HAVE_WSPAWNV)
         if (!PyUnicode_FSDecoder(key, &key2))
             goto error;
         if (!PyUnicode_FSDecoder(val, &val2)) {
@@ -5009,7 +5009,7 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
             goto error;
         }
         keyval = PyUnicode_FromFormat("%U=%U", key2, val2);
-#else
+#  else
         if (!PyUnicode_FSConverter(key, &key2))
             goto error;
         if (!PyUnicode_FSConverter(val, &val2)) {
@@ -5026,7 +5026,7 @@ parse_envlist(PyObject* env, Py_ssize_t *envc_ptr)
         }
         keyval = PyBytes_FromFormat("%s=%s", PyBytes_AS_STRING(key2),
                                              PyBytes_AS_STRING(val2));
-#endif
+#  endif
         Py_DECREF(key2);
         Py_DECREF(val2);
         if (!keyval)
@@ -5129,11 +5129,11 @@ os_execv_impl(PyObject *module, path_t *path, PyObject *argv)
     }
 
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_WEXECV
+#  ifdef HAVE_WEXECV
     _wexecv(path->wide, argvlist);
-#else
+#  else
     execv(path->narrow, argvlist);
-#endif
+#  endif
     _Py_END_SUPPRESS_IPH
 
     /* If we get here it's definitely an error */
@@ -5200,16 +5200,16 @@ os_execve_impl(PyObject *module, path_t *path, PyObject *argv, PyObject *env)
         goto fail;
 
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_FEXECVE
+#  ifdef HAVE_FEXECVE
     if (path->fd > -1)
         fexecve(path->fd, argvlist, envlist);
     else
-#endif
-#ifdef HAVE_WEXECV
+#  endif
+#  ifdef HAVE_WEXECV
         _wexecve(path->wide, argvlist, envlist);
-#else
+#  else
         execve(path->narrow, argvlist, envlist);
-#endif
+#  endif
     _Py_END_SUPPRESS_IPH
 
     /* If we get here it's definitely an error */
@@ -5233,10 +5233,10 @@ enum posix_spawn_file_actions_identifier {
     POSIX_SPAWN_DUP2
 };
 
-#if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
+#  if defined(HAVE_SCHED_SETPARAM) || defined(HAVE_SCHED_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDULER) || defined(POSIX_SPAWN_SETSCHEDPARAM)
 static int
 convert_sched_param(PyObject *param, struct sched_param *res);
-#endif
+#  endif
 
 static int
 parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
@@ -5270,14 +5270,14 @@ parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
     }
 
     if (setsid) {
-#ifdef POSIX_SPAWN_SETSID
+#  ifdef POSIX_SPAWN_SETSID
         all_flags |= POSIX_SPAWN_SETSID;
-#elif defined(POSIX_SPAWN_SETSID_NP)
+#  elif defined(POSIX_SPAWN_SETSID_NP)
         all_flags |= POSIX_SPAWN_SETSID_NP;
-#else
+#  else
         argument_unavailable_error(func_name, "setsid");
         return -1;
-#endif
+#  endif
     }
 
    if (setsigmask) {
@@ -5307,7 +5307,7 @@ parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
     }
 
     if (scheduler) {
-#ifdef POSIX_SPAWN_SETSCHEDULER
+#  ifdef POSIX_SPAWN_SETSCHEDULER
         PyObject *py_schedpolicy;
         struct sched_param schedparam;
 
@@ -5335,11 +5335,11 @@ parse_posix_spawn_flags(const char *func_name, PyObject *setpgroup,
             goto fail;
         }
         all_flags |= POSIX_SPAWN_SETSCHEDPARAM;
-#else
+#  else
         PyErr_SetString(PyExc_NotImplementedError,
                 "The scheduler option is not supported in this system.");
         goto fail;
-#endif
+#  endif
     }
 
     errno = posix_spawnattr_setflags(attrp, all_flags);
@@ -5549,13 +5549,13 @@ py_posix_spawn(int use_posix_spawnp, PyObject *module, path_t *path, PyObject *a
     attrp = &attr;
 
     _Py_BEGIN_SUPPRESS_IPH
-#ifdef HAVE_POSIX_SPAWNP
+#  ifdef HAVE_POSIX_SPAWNP
     if (use_posix_spawnp) {
         err_code = posix_spawnp(&pid, path->narrow,
                                 file_actionsp, attrp, argvlist, envlist);
     }
     else
-#endif /* HAVE_POSIX_SPAWNP */
+#  endif /* HAVE_POSIX_SPAWNP */
     {
         err_code = posix_spawn(&pid, path->narrow,
                                file_actionsp, attrp, argvlist, envlist);
@@ -5567,9 +5567,9 @@ py_posix_spawn(int use_posix_spawnp, PyObject *module, path_t *path, PyObject *a
         PyErr_SetFromErrnoWithFilenameObject(PyExc_OSError, path->object);
         goto exit;
     }
-#ifdef _Py_MEMORY_SANITIZER
+#  ifdef _Py_MEMORY_SANITIZER
     __msan_unpoison(&pid, sizeof(pid));
-#endif
+#  endif
     result = PyLong_FromPid(pid);
 
 exit:
@@ -5631,7 +5631,7 @@ os_posix_spawn_impl(PyObject *module, path_t *path, PyObject *argv,
                           setpgroup, resetids, setsid, setsigmask, setsigdef,
                           scheduler);
 }
- #endif /* HAVE_POSIX_SPAWN */
+#endif /* HAVE_POSIX_SPAWN */
 
 
 
@@ -7939,7 +7939,7 @@ os.symlink
     *
     dir_fd: dir_fd(requires='symlinkat')=None
 
-#  "symlink(src, dst, target_is_directory=False, *, dir_fd=None)\n\n\
+# "symlink(src, dst, target_is_directory=False, *, dir_fd=None)\n\n\
 
 Create a symbolic link pointing to src named dst.
 
@@ -8288,7 +8288,7 @@ os.open -> int
     *
     dir_fd: dir_fd(requires='openat') = None
 
-#"open(path, flags, mode=0o777, *, dir_fd=None)\n\n\
+# "open(path, flags, mode=0o777, *, dir_fd=None)\n\n\
 
 Open a file for low level IO.  Returns a file descriptor (integer).
 
@@ -8763,7 +8763,7 @@ os_readv_impl(PyObject *module, int fd, PyObject *buffers)
 
 #ifdef HAVE_PREAD
 /*[clinic input]
-#  TODO length should be size_t!  but Python doesn't support parsing size_t yet.
+# TODO length should be size_t!  but Python doesn't support parsing size_t yet.
 os.pread
 
     fd: int
@@ -9050,11 +9050,11 @@ posix_sendfile(PyObject *self, PyObject *args, PyObject *kwdict)
     goto done;
 
 done:
-    #if !defined(HAVE_LARGEFILE_SUPPORT)
+#    if !defined(HAVE_LARGEFILE_SUPPORT)
         return Py_BuildValue("l", sbytes);
-    #else
+#    else
         return Py_BuildValue("L", sbytes);
-    #endif
+#    endif
 
 #  else
     Py_ssize_t count;

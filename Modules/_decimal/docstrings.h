@@ -5,10 +5,10 @@
 
 
 #ifndef DOCSTRINGS_H
-#define DOCSTRINGS_H
+#  define DOCSTRINGS_H
 
 
-#include "pymacro.h"
+#  include "pymacro.h"
 
 
 /******************************************************************************/
@@ -37,7 +37,7 @@ exiting the with-statement. If no context is specified, a copy of the current\n\
 default context is used.\n\
 \n");
 
-#ifdef EXTRA_FUNCTIONALITY
+#  ifdef EXTRA_FUNCTIONALITY
 PyDoc_STRVAR(doc_ieee_context,
 "IEEEContext($module, bits, /)\n--\n\n\
 Return a context object initialized to the proper values for one of the\n\
@@ -45,7 +45,7 @@ IEEE interchange formats.  The argument must be a multiple of 32 and less\n\
 than IEEE_CONTEXT_MAX_BITS.  For the most common values, the constants\n\
 DECIMAL32, DECIMAL64 and DECIMAL128 are provided.\n\
 \n");
-#endif
+#  endif
 
 
 /******************************************************************************/
@@ -508,12 +508,12 @@ can be constructed as follows:\n\
 \n\
 \n");
 
-#ifdef EXTRA_FUNCTIONALITY
+#  ifdef EXTRA_FUNCTIONALITY
 PyDoc_STRVAR(doc_ctx_apply,
 "apply($self, x, /)\n--\n\n\
 Apply self to Decimal x.\n\
 \n");
-#endif
+#  endif
 
 PyDoc_STRVAR(doc_ctx_clear_flags,
 "clear_flags($self, /)\n--\n\n\

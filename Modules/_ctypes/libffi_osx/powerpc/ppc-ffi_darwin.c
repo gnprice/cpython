@@ -28,26 +28,26 @@
    OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------- */
 
-#include <ffi.h>
-#include <ffi_common.h>
+#  include <ffi.h>
+#  include <ffi_common.h>
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ppc-darwin.h>
-#include <architecture/ppc/mode_independent_asm.h>
+#  include <stdbool.h>
+#  include <stdio.h>
+#  include <stdlib.h>
+#  include <ppc-darwin.h>
+#  include <architecture/ppc/mode_independent_asm.h>
 
-#if 0
-#  if defined(POWERPC_DARWIN)
-#    include <libkern/OSCacheControl.h>	// for sys_icache_invalidate()
-#  endif
+#  if 0
+#    if defined(POWERPC_DARWIN)
+#      include <libkern/OSCacheControl.h>	// for sys_icache_invalidate()
+#    endif
 
-#else
+#  else
 
-#  pragma weak sys_icache_invalidate
+#    pragma weak sys_icache_invalidate
 extern void sys_icache_invalidate(void *start, size_t len);
 
-#endif
+#  endif
 
 
 extern void ffi_closure_ASM(void);
@@ -105,27 +105,27 @@ ffi_prep_args(
 	unsigned long *const longStack	= (unsigned long *const)stack;
 
 	/* 'stacktop' points at the previous backchain pointer.	*/
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 	//	In ppc-darwin.s, an extra 96 bytes is reserved for the linkage area,
 	//	saved registers, and an extra FPR.
 	unsigned long *const stacktop	=
 		(unsigned long *)(unsigned long)((char*)longStack + bytes + 96);
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 	unsigned long *const stacktop	= longStack + (bytes / sizeof(long));
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 
 	/* 'fpr_base' points at the space for fpr1, and grows upwards as
 		we use FPR registers.  */
 	double*		fpr_base = (double*)(stacktop - ASM_NEEDS_REGISTERS) -
 		NUM_FPR_ARG_REGISTERS;
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 	//	64-bit saves an extra register, and uses an extra FPR. Knock fpr_base
 	//	down a couple pegs.
 	fpr_base -= 2;
-#endif
+#  endif
 
 	unsigned int	fparg_count = 0;
 
@@ -187,19 +187,19 @@ ffi_prep_args(
 
 				break;
 
-#if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 			case FFI_TYPE_LONGDOUBLE:
-#  if defined(__ppc64__)
+#    if defined(__ppc64__)
 				if (fparg_count < NUM_FPR_ARG_REGISTERS)
 					*(long double*)fpr_base	= *(long double*)*p_argv;
-#  elif defined(__ppc__)
+#    elif defined(__ppc__)
 				if (fparg_count < NUM_FPR_ARG_REGISTERS - 1)
 					*(long double*)fpr_base	= *(long double*)*p_argv;
 				else if (fparg_count == NUM_FPR_ARG_REGISTERS - 1)
 					*(double*)fpr_base	= *(double*)*p_argv;
-#  else
-#    error undefined architecture
-#  endif
+#    else
+#      error undefined architecture
+#    endif
 
 				*(long double*)next_arg	= *(long double*)*p_argv;
 				fparg_count += 2;
@@ -208,20 +208,20 @@ ffi_prep_args(
 				FFI_ASSERT(flags & FLAG_FP_ARGUMENTS);
 
 				break;
-#endif	//	FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  endif	//	FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 
 			case FFI_TYPE_UINT64:
 			case FFI_TYPE_SINT64:
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 				gprvalue = *(long long*)*p_argv;
 				goto putgpr;
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 				*(long long*)next_arg = *(long long*)*p_argv;
 				next_arg += 2;
 				break;
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 
 			case FFI_TYPE_POINTER:
 				gprvalue = *(unsigned long*)*p_argv;
@@ -245,7 +245,7 @@ ffi_prep_args(
 
 			case FFI_TYPE_STRUCT:
 			{
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 				unsigned int	gprSize = 0;
 				unsigned int	fprSize = 0;
 
@@ -254,7 +254,7 @@ ffi_prep_args(
 				next_arg += gprSize / sizeof(long);
 				fpr_base += fprSize / sizeof(double);
 
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 				char*	dest_cpy = (char*)next_arg;
 
 			/*	Structures that match the basic modes (QI 1 byte, HI 2 bytes,
@@ -275,9 +275,9 @@ ffi_prep_args(
 
 				memcpy((char*)dest_cpy, (char*)*p_argv, size_al);
 				next_arg += (size_al + 3) / 4;
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 				break;
 			}
 
@@ -302,7 +302,7 @@ putgpr:
   //FFI_ASSERT(flags & FLAG_4_GPR_ARGUMENTS || intarg_count <= 4);
 }
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 
 bool
 ffi64_struct_contains_fp(
@@ -324,7 +324,7 @@ ffi64_struct_contains_fp(
 	return containsFP;
 }
 
-#endif	// defined(__ppc64__)
+#  endif	// defined(__ppc64__)
 
 /* Perform machine dependent cif processing.  */
 ffi_status
@@ -358,12 +358,12 @@ ffi_prep_cif_machdep(
 			as the first argument.  */
 	switch (cif->rtype->type)
 	{
-#if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 		case FFI_TYPE_LONGDOUBLE:
 			flags |= FLAG_RETURNS_128BITS;
 			flags |= FLAG_RETURNS_FP;
 			break;
-#endif	// FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  endif	// FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 
 		case FFI_TYPE_DOUBLE:
 			flags |= FLAG_RETURNS_64BITS;
@@ -372,9 +372,9 @@ ffi_prep_cif_machdep(
 			flags |= FLAG_RETURNS_FP;
 			break;
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 		case FFI_TYPE_POINTER:
-#endif
+#  endif
 		case FFI_TYPE_UINT64:
 		case FFI_TYPE_SINT64:
 			flags |= FLAG_RETURNS_64BITS;
@@ -382,7 +382,7 @@ ffi_prep_cif_machdep(
 
 		case FFI_TYPE_STRUCT:
 		{
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 
 			if (ffi64_stret_needs_ptr(cif->rtype, NULL, NULL))
 			{
@@ -398,15 +398,15 @@ ffi_prep_cif_machdep(
 					flags |= FLAG_STRUCT_CONTAINS_FP;
 			}
 
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 
 			flags |= FLAG_RETVAL_REFERENCE;
 			flags |= FLAG_RETURNS_NOTHING;
 			intarg_count++;
 
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 			break;
 		}
 
@@ -437,26 +437,26 @@ ffi_prep_cif_machdep(
 					intarg_count++;
 				break;
 
-#if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 			case FFI_TYPE_LONGDOUBLE:
 				fparg_count += 2;
 				/*	If this FP arg is going on the stack, it must be
 					8-byte-aligned.  */
 
 				if (
-#  if defined(__ppc64__)
+#    if defined(__ppc64__)
 					fparg_count > NUM_FPR_ARG_REGISTERS + 1
-#  elif defined(__ppc__)
+#    elif defined(__ppc__)
 					fparg_count > NUM_FPR_ARG_REGISTERS
-#  else
-#    error undefined architecture
-#  endif
+#    else
+#      error undefined architecture
+#    endif
 					&& intarg_count % 2 != 0)
 					intarg_count++;
 
 				intarg_count += 2;
 				break;
-#endif	// FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  endif	// FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 
 			case FFI_TYPE_UINT64:
 			case FFI_TYPE_SINT64:
@@ -480,7 +480,7 @@ ffi_prep_cif_machdep(
 				if ((*ptr)->elements[0]->type == FFI_TYPE_DOUBLE)
 					size_al = ALIGN((*ptr)->size, 8);
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 				// Look for FP struct members.
 				unsigned int	j;
 
@@ -504,11 +504,11 @@ ffi_prep_cif_machdep(
 					else
 						intarg_count++;
 				}
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 				intarg_count += (size_al + 3) / 4;
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 
 				break;
 
@@ -524,25 +524,25 @@ ffi_prep_cif_machdep(
 	if (fparg_count != 0)
 	{
 		flags |= FLAG_FP_ARGUMENTS;
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 		bytes += (NUM_FPR_ARG_REGISTERS + 1) * sizeof(double);
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 		bytes += NUM_FPR_ARG_REGISTERS * sizeof(double);
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 	}
 
 	/* Stack space.  */
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 	if ((intarg_count + fparg_count) > NUM_GPR_ARG_REGISTERS)
 		bytes += (intarg_count + fparg_count) * sizeof(long);
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 	if ((intarg_count + 2 * fparg_count) > NUM_GPR_ARG_REGISTERS)
 		bytes += (intarg_count + 2 * fparg_count) * sizeof(long);
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 	else
 		bytes += NUM_GPR_ARG_REGISTERS * sizeof(long);
 
@@ -676,15 +676,15 @@ SP current -->    +---------------------------------------+ 176 <- parent frame
 		  +---------------------------------------+ xxx
 */
 
-#if !defined(POWERPC_DARWIN)
+#  if !defined(POWERPC_DARWIN)
 
-#  define MIN_LINE_SIZE 32
+#    define MIN_LINE_SIZE 32
 
 static void
 flush_icache(
 	char*	addr)
 {
-#  ifndef _AIX
+#    ifndef _AIX
 	__asm__ volatile (
 		"dcbf 0,%0\n"
 		"sync\n"
@@ -692,7 +692,7 @@ flush_icache(
 		"sync\n"
 		"isync"
 		: : "r" (addr) : "memory");
-#  endif
+#    endif
 }
 
 static void
@@ -708,7 +708,7 @@ flush_range(
 	flush_icache(addr + size - 1);
 }
 
-#endif	// !defined(POWERPC_DARWIN)
+#  endif	// !defined(POWERPC_DARWIN)
 
 ffi_status
 ffi_prep_closure(
@@ -725,7 +725,7 @@ ffi_prep_closure(
 
 			unsigned int*	tramp = (unsigned int*)&closure->tramp[0];
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 			tramp[0] = 0x7c0802a6;	//	mflr	r0
 			tramp[1] = 0x429f0005;	//	bcl		20,31,+0x8
 			tramp[2] = 0x7d6802a6;	//	mflr	r11
@@ -736,7 +736,7 @@ ffi_prep_closure(
 			tramp[7] = 0x4e800420;	//	bctr
 			*(unsigned long*)&tramp[8] = (unsigned long)ffi_closure_ASM;
 			*(unsigned long*)&tramp[10] = (unsigned long)closure;
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 			tramp[0] = 0x7c0802a6;	//	mflr	r0
 			tramp[1] = 0x429f0005;	//	bcl		20,31,+0x8
 			tramp[2] = 0x7d6802a6;	//	mflr	r11
@@ -747,20 +747,20 @@ ffi_prep_closure(
 			tramp[7] = 0x4e800420;	//	bctr
 			tramp[8] = (unsigned long)ffi_closure_ASM;
 			tramp[9] = (unsigned long)closure;
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 
 			closure->cif = cif;
 			closure->fun = fun;
 			closure->user_data = user_data;
 
 			// Flush the icache. Only necessary on Darwin.
-#if defined(POWERPC_DARWIN)
+#  if defined(POWERPC_DARWIN)
 			sys_icache_invalidate(closure->tramp, FFI_TRAMPOLINE_SIZE);
-#else
+#  else
 			flush_range(closure->tramp, FFI_TRAMPOLINE_SIZE);
-#endif
+#  endif
 
 			break;
 		}
@@ -789,7 +789,7 @@ ffi_prep_closure(
 	return FFI_OK;
 }
 
-#if defined(__ppc__)
+#  if defined(__ppc__)
 	typedef double ldbits[2];
 
 	typedef union
@@ -797,7 +797,7 @@ ffi_prep_closure(
 		ldbits lb;
 		long double ld;
 	} ldu;
-#endif
+#  endif
 
 typedef union
 {
@@ -821,9 +821,9 @@ ffi_closure_helper_DARWIN(
 		pgr is the pointer to where r3-r10 are stored in ffi_closure_ASM
 		pfr is the pointer to where f1-f13 are stored in ffi_closure_ASM.  */
 
-#if defined(__ppc__)
+#  if defined(__ppc__)
 	ldu	temp_ld;
-#endif
+#  endif
 
 	double				temp;
 	unsigned int		i;
@@ -836,14 +836,14 @@ ffi_closure_helper_DARWIN(
 
 	/*	Copy the caller's structure return value address so that the closure
 		returns the data directly to the caller.  */
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 	if (cif->rtype->type == FFI_TYPE_STRUCT &&
 		ffi64_stret_needs_ptr(cif->rtype, NULL, NULL))
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 	if (cif->rtype->type == FFI_TYPE_STRUCT)
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 	{
 		rvalue = (void*)*pgr;
 		pgr++;
@@ -869,9 +869,9 @@ ffi_closure_helper_DARWIN(
 				pgr++;
 				break;
 
-#if defined(__ppc__)
+#  if defined(__ppc__)
 			case FFI_TYPE_POINTER:
-#endif
+#  endif
 			case FFI_TYPE_SINT32:
 			case FFI_TYPE_UINT32:
 				avalue[i] = (char*)pgr + MODE_CHOICE(0,4);
@@ -883,7 +883,7 @@ ffi_closure_helper_DARWIN(
 			case FFI_TYPE_STRUCT:
 				if (cif->abi == FFI_DARWIN)
 				{
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 					unsigned int	gprSize = 0;
 					unsigned int	fprSize	= 0;
 					unsigned int	savedFPRSize = fprSize;
@@ -896,7 +896,7 @@ ffi_closure_helper_DARWIN(
 					pgr	+= gprSize / sizeof(long);
 					pfr	+= (fprSize - savedFPRSize) / sizeof(double);
 
-#elif defined(__ppc__)
+#  elif defined(__ppc__)
 					/*	Structures that match the basic modes (QI 1 byte, HI 2 bytes,
 						SI 4 bytes) are aligned as if they were those modes.  */
 					unsigned int	size_al	= size_al = arg_types[i]->size;
@@ -913,16 +913,16 @@ ffi_closure_helper_DARWIN(
 
 					ng	+= (size_al + 3) / sizeof(long);
 					pgr += (size_al + 3) / sizeof(long);
-#else
-#  error undefined architecture
-#endif
+#  else
+#    error undefined architecture
+#  endif
 				}
 
 				break;
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 			case FFI_TYPE_POINTER:
-#endif
+#  endif
 			case FFI_TYPE_SINT64:
 			case FFI_TYPE_UINT64:
 				/* Long long ints are passed in 1 or 2 GPRs.  */
@@ -967,16 +967,16 @@ ffi_closure_helper_DARWIN(
 
 				break;
 
-#if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
+#  if FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE
 
 			case FFI_TYPE_LONGDOUBLE:
-#  if defined(__ppc64__)
+#    if defined(__ppc64__)
 				if (nf < NUM_FPR_ARG_REGISTERS)
 				{
 					avalue[i] = pfr;
 					pfr += 2;
 				}
-#  elif defined(__ppc__)
+#    elif defined(__ppc__)
 				/*	A long double value consumes 2/4 GPRs and 2 FPRs.
 					There are 13 64bit floating point registers.  */
 				if (nf < NUM_FPR_ARG_REGISTERS - 1)
@@ -993,9 +993,9 @@ ffi_closure_helper_DARWIN(
 					memcpy (&temp_ld.lb[1], pgr + 2, sizeof(temp_ld.lb[1]));
 					avalue[i] = &temp_ld.ld;
 				}
-#  else
-#    error undefined architecture
-#  endif
+#    else
+#      error undefined architecture
+#    endif
 				else
 					avalue[i] = pgr;
 
@@ -1005,7 +1005,7 @@ ffi_closure_helper_DARWIN(
 
 				break;
 
-#endif	/*	FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE	*/
+#  endif	/*	FFI_TYPE_LONGDOUBLE != FFI_TYPE_DOUBLE	*/
 
 			default:
 				FFI_ASSERT(0);
@@ -1019,7 +1019,7 @@ ffi_closure_helper_DARWIN(
 	return cif->rtype->type;
 }
 
-#if defined(__ppc64__)
+#  if defined(__ppc64__)
 
 /*	ffi64_struct_to_ram_form
 
@@ -1772,5 +1772,5 @@ ffi64_data_size(
 	return size;
 }
 
-#endif	/*	defined(__ppc64__)	*/
+#  endif	/*	defined(__ppc64__)	*/
 #endif	/* __ppc__ || __ppc64__ */

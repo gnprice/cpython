@@ -35,20 +35,20 @@
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
   /* for vs2012/11.0/1700 and earlier Visual Studio compilers */
-#define bool   int
-#define false  0
-#define true   1
+#  define bool   int
+#  define false  0
+#  define true   1
 #else
-#include <stdbool.h>
+#  include <stdbool.h>
 #endif
 
 
 #ifdef _WIN32
-#include "winconfig.h"
+#  include "winconfig.h"
 #else
-#ifdef HAVE_EXPAT_CONFIG_H
-#  include <expat_config.h>
-#endif
+#  ifdef HAVE_EXPAT_CONFIG_H
+#    include <expat_config.h>
+#  endif
 #endif /* ndef _WIN32 */
 
 #include "expat_external.h"
@@ -57,9 +57,9 @@
 #include "nametab.h"
 
 #ifdef XML_DTD
-#define IGNORE_SECTION_TOK_VTABLE , PREFIX(ignoreSectionTok)
+#  define IGNORE_SECTION_TOK_VTABLE , PREFIX(ignoreSectionTok)
 #else
-#define IGNORE_SECTION_TOK_VTABLE /* as nothing */
+#  define IGNORE_SECTION_TOK_VTABLE /* as nothing */
 #endif
 
 #define VTABLE1 \
@@ -230,7 +230,7 @@ struct normal_encoding {
 
 #ifdef XML_MIN_SIZE
 
-#define STANDARD_VTABLE(E) \
+#  define STANDARD_VTABLE(E) \
  E ## byteType, \
  E ## isNameMin, \
  E ## isNmstrtMin, \
@@ -239,7 +239,7 @@ struct normal_encoding {
 
 #else
 
-#define STANDARD_VTABLE(E) /* as nothing */
+#  define STANDARD_VTABLE(E) /* as nothing */
 
 #endif
 
@@ -271,15 +271,15 @@ static int FASTCALL checkCharRefNumber(int);
 #include "ascii.h"
 
 #ifdef XML_MIN_SIZE
-#define sb_isNameMin isNever
-#define sb_isNmstrtMin isNever
+#  define sb_isNameMin isNever
+#  define sb_isNmstrtMin isNever
 #endif
 
 #ifdef XML_MIN_SIZE
-#define MINBPC(enc) ((enc)->minBytesPerChar)
+#  define MINBPC(enc) ((enc)->minBytesPerChar)
 #else
 /* minimum bytes per character */
-#define MINBPC(enc) 1
+#  define MINBPC(enc) 1
 #endif
 
 #define SB_BYTE_TYPE(enc, p) \
@@ -291,14 +291,14 @@ sb_byteType(const ENCODING *enc, const char *p)
 {
   return SB_BYTE_TYPE(enc, p);
 }
-#define BYTE_TYPE(enc, p) \
+#  define BYTE_TYPE(enc, p) \
  (AS_NORMAL_ENCODING(enc)->byteType(enc, p))
 #else
-#define BYTE_TYPE(enc, p) SB_BYTE_TYPE(enc, p)
+#  define BYTE_TYPE(enc, p) SB_BYTE_TYPE(enc, p)
 #endif
 
 #ifdef XML_MIN_SIZE
-#define BYTE_TO_ASCII(enc, p) \
+#  define BYTE_TO_ASCII(enc, p) \
  (AS_NORMAL_ENCODING(enc)->byteToAscii(enc, p))
 static int PTRFASTCALL
 sb_byteToAscii(const ENCODING *enc, const char *p)
@@ -306,7 +306,7 @@ sb_byteToAscii(const ENCODING *enc, const char *p)
   return *p;
 }
 #else
-#define BYTE_TO_ASCII(enc, p) (*(p))
+#  define BYTE_TO_ASCII(enc, p) (*(p))
 #endif
 
 #define IS_NAME_CHAR(enc, p, n) \
@@ -317,17 +317,17 @@ sb_byteToAscii(const ENCODING *enc, const char *p)
  (AS_NORMAL_ENCODING(enc)->isInvalid ## n(enc, p))
 
 #ifdef XML_MIN_SIZE
-#define IS_NAME_CHAR_MINBPC(enc, p) \
+#  define IS_NAME_CHAR_MINBPC(enc, p) \
  (AS_NORMAL_ENCODING(enc)->isNameMin(enc, p))
-#define IS_NMSTRT_CHAR_MINBPC(enc, p) \
+#  define IS_NMSTRT_CHAR_MINBPC(enc, p) \
  (AS_NORMAL_ENCODING(enc)->isNmstrtMin(enc, p))
 #else
-#define IS_NAME_CHAR_MINBPC(enc, p) (0)
-#define IS_NMSTRT_CHAR_MINBPC(enc, p) (0)
+#  define IS_NAME_CHAR_MINBPC(enc, p) (0)
+#  define IS_NMSTRT_CHAR_MINBPC(enc, p) (0)
 #endif
 
 #ifdef XML_MIN_SIZE
-#define CHAR_MATCHES(enc, p, c) \
+#  define CHAR_MATCHES(enc, p, c) \
  (AS_NORMAL_ENCODING(enc)->charMatches(enc, p, c))
 static int PTRCALL
 sb_charMatches(const ENCODING *enc, const char *p, int c)
@@ -336,7 +336,7 @@ sb_charMatches(const ENCODING *enc, const char *p, int c)
 }
 #else
 /* c is an ASCII character */
-#define CHAR_MATCHES(enc, p, c) (*(p) == c)
+#  define CHAR_MATCHES(enc, p, c) (*(p) == c)
 #endif
 
 #define PREFIX(ident) normal_ ## ident
@@ -500,8 +500,8 @@ after:
 static const struct normal_encoding utf8_encoding_ns = {
   { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 },
   {
-#include "asciitab.h"
-#include "utf8tab.h"
+#  include "asciitab.h"
+#  include "utf8tab.h"
   },
   STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
 };
@@ -523,8 +523,8 @@ static const struct normal_encoding utf8_encoding = {
 static const struct normal_encoding internal_utf8_encoding_ns = {
   { VTABLE1, utf8_toUtf8, utf8_toUtf16, 1, 1, 0 },
   {
-#include "iasciitab.h"
-#include "utf8tab.h"
+#  include "iasciitab.h"
+#  include "utf8tab.h"
   },
   STANDARD_VTABLE(sb_) NORMAL_VTABLE(utf8_)
 };
@@ -586,8 +586,8 @@ latin1_toUtf16(const ENCODING *UNUSED_P(enc),
 static const struct normal_encoding latin1_encoding_ns = {
   { VTABLE1, latin1_toUtf8, latin1_toUtf16, 1, 0, 0 },
   {
-#include "asciitab.h"
-#include "latin1tab.h"
+#  include "asciitab.h"
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(sb_) NULL_VTABLE
 };
@@ -624,7 +624,7 @@ ascii_toUtf8(const ENCODING *UNUSED_P(enc),
 static const struct normal_encoding ascii_encoding_ns = {
   { VTABLE1, ascii_toUtf8, latin1_toUtf16, 1, 1, 0 },
   {
-#include "asciitab.h"
+#  include "asciitab.h"
 /* BT_NONXML == 0 */
   },
   STANDARD_VTABLE(sb_) NULL_VTABLE
@@ -823,36 +823,36 @@ little2_isNmstrtMin(const ENCODING *enc, const char *p)
   return LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p);
 }
 
-#undef VTABLE
-#define VTABLE VTABLE1, little2_toUtf8, little2_toUtf16
+#  undef VTABLE
+#  define VTABLE VTABLE1, little2_toUtf8, little2_toUtf16
 
 #else /* not XML_MIN_SIZE */
 
-#undef PREFIX
-#define PREFIX(ident) little2_ ## ident
-#define MINBPC(enc) 2
+#  undef PREFIX
+#  define PREFIX(ident) little2_ ## ident
+#  define MINBPC(enc) 2
 /* CHAR_MATCHES is guaranteed to have MINBPC bytes available. */
-#define BYTE_TYPE(enc, p) LITTLE2_BYTE_TYPE(enc, p)
-#define BYTE_TO_ASCII(enc, p) LITTLE2_BYTE_TO_ASCII(enc, p)
-#define CHAR_MATCHES(enc, p, c) LITTLE2_CHAR_MATCHES(enc, p, c)
-#define IS_NAME_CHAR(enc, p, n) 0
-#define IS_NAME_CHAR_MINBPC(enc, p) LITTLE2_IS_NAME_CHAR_MINBPC(enc, p)
-#define IS_NMSTRT_CHAR(enc, p, n) (0)
-#define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
+#  define BYTE_TYPE(enc, p) LITTLE2_BYTE_TYPE(enc, p)
+#  define BYTE_TO_ASCII(enc, p) LITTLE2_BYTE_TO_ASCII(enc, p)
+#  define CHAR_MATCHES(enc, p, c) LITTLE2_CHAR_MATCHES(enc, p, c)
+#  define IS_NAME_CHAR(enc, p, n) 0
+#  define IS_NAME_CHAR_MINBPC(enc, p) LITTLE2_IS_NAME_CHAR_MINBPC(enc, p)
+#  define IS_NMSTRT_CHAR(enc, p, n) (0)
+#  define IS_NMSTRT_CHAR_MINBPC(enc, p) LITTLE2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
-#define XML_TOK_IMPL_C
-#include "xmltok_impl.c"
-#undef XML_TOK_IMPL_C
+#  define XML_TOK_IMPL_C
+#  include "xmltok_impl.c"
+#  undef XML_TOK_IMPL_C
 
-#undef MINBPC
-#undef BYTE_TYPE
-#undef BYTE_TO_ASCII
-#undef CHAR_MATCHES
-#undef IS_NAME_CHAR
-#undef IS_NAME_CHAR_MINBPC
-#undef IS_NMSTRT_CHAR
-#undef IS_NMSTRT_CHAR_MINBPC
-#undef IS_INVALID_CHAR
+#  undef MINBPC
+#  undef BYTE_TYPE
+#  undef BYTE_TO_ASCII
+#  undef CHAR_MATCHES
+#  undef IS_NAME_CHAR
+#  undef IS_NAME_CHAR_MINBPC
+#  undef IS_NMSTRT_CHAR
+#  undef IS_NMSTRT_CHAR_MINBPC
+#  undef IS_INVALID_CHAR
 
 #endif /* not XML_MIN_SIZE */
 
@@ -860,15 +860,15 @@ little2_isNmstrtMin(const ENCODING *enc, const char *p)
 
 static const struct normal_encoding little2_encoding_ns = {
   { VTABLE, 2, 0,
-#if BYTEORDER == 1234
+#  if BYTEORDER == 1234
     1
-#else
+#  else
     0
-#endif
+#  endif
   },
   {
-#include "asciitab.h"
-#include "latin1tab.h"
+#  include "asciitab.h"
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(little2_) NULL_VTABLE
 };
@@ -894,26 +894,26 @@ static const struct normal_encoding little2_encoding = {
 
 #if BYTEORDER != 4321
 
-#ifdef XML_NS
+#  ifdef XML_NS
 
 static const struct normal_encoding internal_little2_encoding_ns = {
   { VTABLE, 2, 0, 1 },
   {
-#  include "iasciitab.h"
-#  include "latin1tab.h"
+#    include "iasciitab.h"
+#    include "latin1tab.h"
   },
   STANDARD_VTABLE(little2_) NULL_VTABLE
 };
 
-#endif
+#  endif
 
 static const struct normal_encoding internal_little2_encoding = {
   { VTABLE, 2, 0, 1 },
   {
-#define BT_COLON BT_NMSTRT
-#include "iasciitab.h"
-#undef BT_COLON
-#include "latin1tab.h"
+#  define BT_COLON BT_NMSTRT
+#  include "iasciitab.h"
+#  undef BT_COLON
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(little2_) NULL_VTABLE
 };
@@ -964,36 +964,36 @@ big2_isNmstrtMin(const ENCODING *enc, const char *p)
   return BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p);
 }
 
-#undef VTABLE
-#define VTABLE VTABLE1, big2_toUtf8, big2_toUtf16
+#  undef VTABLE
+#  define VTABLE VTABLE1, big2_toUtf8, big2_toUtf16
 
 #else /* not XML_MIN_SIZE */
 
-#undef PREFIX
-#define PREFIX(ident) big2_ ## ident
-#define MINBPC(enc) 2
+#  undef PREFIX
+#  define PREFIX(ident) big2_ ## ident
+#  define MINBPC(enc) 2
 /* CHAR_MATCHES is guaranteed to have MINBPC bytes available. */
-#define BYTE_TYPE(enc, p) BIG2_BYTE_TYPE(enc, p)
-#define BYTE_TO_ASCII(enc, p) BIG2_BYTE_TO_ASCII(enc, p)
-#define CHAR_MATCHES(enc, p, c) BIG2_CHAR_MATCHES(enc, p, c)
-#define IS_NAME_CHAR(enc, p, n) 0
-#define IS_NAME_CHAR_MINBPC(enc, p) BIG2_IS_NAME_CHAR_MINBPC(enc, p)
-#define IS_NMSTRT_CHAR(enc, p, n) (0)
-#define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
+#  define BYTE_TYPE(enc, p) BIG2_BYTE_TYPE(enc, p)
+#  define BYTE_TO_ASCII(enc, p) BIG2_BYTE_TO_ASCII(enc, p)
+#  define CHAR_MATCHES(enc, p, c) BIG2_CHAR_MATCHES(enc, p, c)
+#  define IS_NAME_CHAR(enc, p, n) 0
+#  define IS_NAME_CHAR_MINBPC(enc, p) BIG2_IS_NAME_CHAR_MINBPC(enc, p)
+#  define IS_NMSTRT_CHAR(enc, p, n) (0)
+#  define IS_NMSTRT_CHAR_MINBPC(enc, p) BIG2_IS_NMSTRT_CHAR_MINBPC(enc, p)
 
-#define XML_TOK_IMPL_C
-#include "xmltok_impl.c"
-#undef XML_TOK_IMPL_C
+#  define XML_TOK_IMPL_C
+#  include "xmltok_impl.c"
+#  undef XML_TOK_IMPL_C
 
-#undef MINBPC
-#undef BYTE_TYPE
-#undef BYTE_TO_ASCII
-#undef CHAR_MATCHES
-#undef IS_NAME_CHAR
-#undef IS_NAME_CHAR_MINBPC
-#undef IS_NMSTRT_CHAR
-#undef IS_NMSTRT_CHAR_MINBPC
-#undef IS_INVALID_CHAR
+#  undef MINBPC
+#  undef BYTE_TYPE
+#  undef BYTE_TO_ASCII
+#  undef CHAR_MATCHES
+#  undef IS_NAME_CHAR
+#  undef IS_NAME_CHAR_MINBPC
+#  undef IS_NMSTRT_CHAR
+#  undef IS_NMSTRT_CHAR_MINBPC
+#  undef IS_INVALID_CHAR
 
 #endif /* not XML_MIN_SIZE */
 
@@ -1001,15 +1001,15 @@ big2_isNmstrtMin(const ENCODING *enc, const char *p)
 
 static const struct normal_encoding big2_encoding_ns = {
   { VTABLE, 2, 0,
-#if BYTEORDER == 4321
+#  if BYTEORDER == 4321
   1
-#else
+#  else
   0
-#endif
+#  endif
   },
   {
-#include "asciitab.h"
-#include "latin1tab.h"
+#  include "asciitab.h"
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(big2_) NULL_VTABLE
 };
@@ -1035,26 +1035,26 @@ static const struct normal_encoding big2_encoding = {
 
 #if BYTEORDER != 1234
 
-#ifdef XML_NS
+#  ifdef XML_NS
 
 static const struct normal_encoding internal_big2_encoding_ns = {
   { VTABLE, 2, 0, 1 },
   {
-#  include "iasciitab.h"
-#  include "latin1tab.h"
+#    include "iasciitab.h"
+#    include "latin1tab.h"
   },
   STANDARD_VTABLE(big2_) NULL_VTABLE
 };
 
-#endif
+#  endif
 
 static const struct normal_encoding internal_big2_encoding = {
   { VTABLE, 2, 0, 1 },
   {
-#define BT_COLON BT_NMSTRT
-#include "iasciitab.h"
-#undef BT_COLON
-#include "latin1tab.h"
+#  define BT_COLON BT_NMSTRT
+#  include "iasciitab.h"
+#  undef BT_COLON
+#  include "latin1tab.h"
   },
   STANDARD_VTABLE(big2_) NULL_VTABLE
 };
@@ -1781,15 +1781,15 @@ initScan(const ENCODING * const *encodingTable,
 
 #ifdef XML_NS
 
-#define NS(x) x ## NS
-#define ns(x) x ## _ns
+#  define NS(x) x ## NS
+#  define ns(x) x ## _ns
 
-#define XML_TOK_NS_C
-#include "xmltok_ns.c"
-#undef XML_TOK_NS_C
+#  define XML_TOK_NS_C
+#  include "xmltok_ns.c"
+#  undef XML_TOK_NS_C
 
-#undef NS
-#undef ns
+#  undef NS
+#  undef ns
 
 ENCODING *
 XmlInitUnknownEncodingNS(void *mem,

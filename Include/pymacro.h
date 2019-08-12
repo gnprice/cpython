@@ -31,7 +31,7 @@
 
    Example:
 
-   #define foo_to_char(foo)  \
+#  define foo_to_char(foo)  \
        ((char *)(foo)        \
         + Py_BUILD_ASSERT_EXPR(offsetof(struct foo, string) == 0))
 

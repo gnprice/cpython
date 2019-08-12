@@ -22,13 +22,13 @@
  */
 
 #ifndef PYSQLITE_CURSOR_H
-#define PYSQLITE_CURSOR_H
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
+#  define PYSQLITE_CURSOR_H
+#  define PY_SSIZE_T_CLEAN
+#  include "Python.h"
 
-#include "statement.h"
-#include "connection.h"
-#include "module.h"
+#  include "statement.h"
+#  include "connection.h"
+#  include "module.h"
 
 typedef struct
 {
@@ -66,5 +66,5 @@ PyObject* pysqlite_cursor_close(pysqlite_Cursor* self, PyObject* args);
 
 int pysqlite_cursor_setup_types(void);
 
-#define UNKNOWN (-1)
+#  define UNKNOWN (-1)
 #endif

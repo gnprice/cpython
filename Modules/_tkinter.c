@@ -29,7 +29,7 @@ Copyright (C) 1994 Steen Lumholt.
 #include "pythread.h"
 
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 #endif
 
 #define CHECK_SIZE(size, elemsize) \
@@ -41,64 +41,64 @@ Copyright (C) 1994 Steen Lumholt.
 #define TCL_THREADS
 
 #ifdef TK_FRAMEWORK
-#include <Tcl/tcl.h>
-#include <Tk/tk.h>
+#  include <Tcl/tcl.h>
+#  include <Tk/tk.h>
 #else
-#include <tcl.h>
-#include <tk.h>
+#  include <tcl.h>
+#  include <tk.h>
 #endif
 
 #include "tkinter.h"
 
 #if TK_HEX_VERSION < 0x08040200
-#error "Tk older than 8.4 not supported"
+#  error "Tk older than 8.4 not supported"
 #endif
 
 #if TK_HEX_VERSION >= 0x08050208 && TK_HEX_VERSION < 0x08060000 || \
     TK_HEX_VERSION >= 0x08060200
-#define HAVE_LIBTOMMAMTH
-#include <tclTomMath.h>
+#  define HAVE_LIBTOMMAMTH
+#  include <tclTomMath.h>
 #endif
 
 #if !(defined(MS_WINDOWS) || defined(__CYGWIN__))
-#define HAVE_CREATEFILEHANDLER
+#  define HAVE_CREATEFILEHANDLER
 #endif
 
 #ifdef HAVE_CREATEFILEHANDLER
 
 /* This bit is to ensure that TCL_UNIX_FD is defined and doesn't interfere
    with the proper calculation of FHANDLETYPE == TCL_UNIX_FD below. */
-#ifndef TCL_UNIX_FD
-#  ifdef TCL_WIN_SOCKET
-#    define TCL_UNIX_FD (! TCL_WIN_SOCKET)
-#  else
-#    define TCL_UNIX_FD 1
+#  ifndef TCL_UNIX_FD
+#    ifdef TCL_WIN_SOCKET
+#      define TCL_UNIX_FD (! TCL_WIN_SOCKET)
+#    else
+#      define TCL_UNIX_FD 1
+#    endif
 #  endif
-#endif
 
 /* Tcl_CreateFileHandler() changed several times; these macros deal with the
    messiness.  In Tcl 8.0 and later, it is not available on Windows (and on
    Unix, only because Jack added it back); when available on Windows, it only
    applies to sockets. */
 
-#ifdef MS_WINDOWS
-#  define FHANDLETYPE TCL_WIN_SOCKET
-#else
-#  define FHANDLETYPE TCL_UNIX_FD
-#endif
+#  ifdef MS_WINDOWS
+#    define FHANDLETYPE TCL_WIN_SOCKET
+#  else
+#    define FHANDLETYPE TCL_UNIX_FD
+#  endif
 
 /* If Tcl can wait for a Unix file descriptor, define the EventHook() routine
    which uses this to handle Tcl events while the user is typing commands. */
 
-#if FHANDLETYPE == TCL_UNIX_FD
-#  define WAIT_FOR_STDIN
-#endif
+#  if FHANDLETYPE == TCL_UNIX_FD
+#    define WAIT_FOR_STDIN
+#  endif
 
 #endif /* HAVE_CREATEFILEHANDLER */
 
 #ifdef MS_WINDOWS
-#include <conio.h>
-#define WAIT_FOR_STDIN
+#  include <conio.h>
+#  define WAIT_FOR_STDIN
 
 static PyObject *
 _get_tcl_lib_path()
@@ -133,7 +133,7 @@ _get_tcl_lib_path()
             /* install location doesn't exist, reset errno and see if
                we're a repository build */
             errno = 0;
-#ifdef Py_TCLTK_DIR
+#  ifdef Py_TCLTK_DIR
             tcl_library_path = PyUnicode_FromString(
                                     Py_TCLTK_DIR "\\lib\\tcl" TCL_VERSION);
             if (tcl_library_path == NULL) {
@@ -149,9 +149,9 @@ _get_tcl_lib_path()
                 errno = 0;
                 tcl_library_path = NULL;
             }
-#else
+#  else
             tcl_library_path = NULL;
-#endif
+#  endif
         }
         already_checked = 1;
     }
@@ -223,7 +223,7 @@ static PyThread_type_lock tcl_lock = 0;
 #ifdef TCL_THREADS
 static Tcl_ThreadDataKey state_key;
 typedef PyThreadState *ThreadSpecificData;
-#define tcl_tstate \
+#  define tcl_tstate \
     (*(PyThreadState**)Tcl_GetThreadData(&state_key, sizeof(PyThreadState*)))
 #else
 static PyThreadState *tcl_tstate = NULL;
@@ -261,7 +261,7 @@ static PyThreadState *tcl_tstate = NULL;
     }
 
 #ifndef FREECAST
-#define FREECAST (char *)
+#  define FREECAST (char *)
 #endif
 
 /**** Tkapp Object Declaration ****/
@@ -577,17 +577,17 @@ Tcl_AppInit(Tcl_Interp *interp)
         return TCL_OK;
     }
 
-#ifdef TKINTER_PROTECT_LOADTK
+#  ifdef TKINTER_PROTECT_LOADTK
     if (tk_load_failed) {
         PySys_WriteStderr("Tk_Init error: %s\n", TKINTER_LOADTK_ERRMSG);
         return TCL_ERROR;
     }
-#endif
+#  endif
 
     if (Tk_Init(interp) == TCL_ERROR) {
-#ifdef TKINTER_PROTECT_LOADTK
+#  ifdef TKINTER_PROTECT_LOADTK
         tk_load_failed = 1;
-#endif
+#  endif
         PySys_WriteStderr("Tk_Init error: %s\n", Tcl_GetStringResult(interp));
         return TCL_ERROR;
     }
@@ -923,13 +923,13 @@ static PyType_Spec PyTclObject_Type_spec = {
 
 
 #if SIZE_MAX > INT_MAX
-#define CHECK_STRING_LENGTH(s) do {                                     \
+#  define CHECK_STRING_LENGTH(s) do {                                     \
         if (s != NULL && strlen(s) >= INT_MAX) {                        \
             PyErr_SetString(PyExc_OverflowError, "string is too long"); \
             return NULL;                                                \
         } } while(0)
 #else
-#define CHECK_STRING_LENGTH(s)
+#  define CHECK_STRING_LENGTH(s)
 #endif
 
 #ifdef HAVE_LIBTOMMAMTH
@@ -3283,37 +3283,37 @@ static PyMethodDef moduleMethods[] =
 
 static int stdin_ready = 0;
 
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
 static void
 MyFileProc(void *clientData, int mask)
 {
     stdin_ready = 1;
 }
-#endif
+#  endif
 
 static PyThreadState *event_tstate = NULL;
 
 static int
 EventHook(void)
 {
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     int tfile;
-#endif
+#  endif
     PyEval_RestoreThread(event_tstate);
     stdin_ready = 0;
     errorInCmd = 0;
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     tfile = fileno(stdin);
     Tcl_CreateFileHandler(tfile, TCL_READABLE, MyFileProc, NULL);
-#endif
+#  endif
     while (!errorInCmd && !stdin_ready) {
         int result;
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
         if (_kbhit()) {
             stdin_ready = 1;
             break;
         }
-#endif
+#  endif
         Py_BEGIN_ALLOW_THREADS
         if(tcl_lock)PyThread_acquire_lock(tcl_lock, 1);
         tcl_tstate = event_tstate;
@@ -3329,9 +3329,9 @@ EventHook(void)
         if (result < 0)
             break;
     }
-#ifndef MS_WINDOWS
+#  ifndef MS_WINDOWS
     Tcl_DeleteFileHandler(tfile);
-#endif
+#  endif
     if (errorInCmd) {
         errorInCmd = 0;
         PyErr_Restore(excInCmd, valInCmd, trbInCmd);

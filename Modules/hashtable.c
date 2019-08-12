@@ -380,12 +380,12 @@ _Py_hashtable_pop(_Py_hashtable_t *ht, size_t key_size, const void *pkey,
 void
 _Py_hashtable_delete(_Py_hashtable_t *ht, size_t key_size, const void *pkey)
 {
-#ifndef NDEBUG
+#  ifndef NDEBUG
     int found = _Py_hashtable_pop_entry(ht, key_size, pkey, NULL, 0);
     assert(found);
-#else
+#  else
     (void)_Py_hashtable_pop_entry(ht, key_size, pkey, NULL, 0);
-#endif
+#  endif
 }
 #endif
 

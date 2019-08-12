@@ -43,15 +43,15 @@ else {
 /*[python end generated code: output=da39a3ee5e6b4b0d input=345daa075b1028e7]*/
 
 #if (FLT_RADIX != 2 && FLT_RADIX != 16)
-#error "Modules/cmathmodule.c expects FLT_RADIX to be 2 or 16"
+#  error "Modules/cmathmodule.c expects FLT_RADIX to be 2 or 16"
 #endif
 
 #ifndef M_LN2
-#define M_LN2 (0.6931471805599453094) /* natural log of 2 */
+#  define M_LN2 (0.6931471805599453094) /* natural log of 2 */
 #endif
 
 #ifndef M_LN10
-#define M_LN10 (2.302585092994045684) /* natural log of 10 */
+#  define M_LN10 (2.302585092994045684) /* natural log of 10 */
 #endif
 
 /*
@@ -75,9 +75,9 @@ else {
 */
 
 #if FLT_RADIX==2
-#define CM_SCALE_UP (2*(DBL_MANT_DIG/2) + 1)
+#  define CM_SCALE_UP (2*(DBL_MANT_DIG/2) + 1)
 #elif FLT_RADIX==16
-#define CM_SCALE_UP (4*DBL_MANT_DIG+1)
+#  define CM_SCALE_UP (4*DBL_MANT_DIG+1)
 #endif
 #define CM_SCALE_DOWN (-(CM_SCALE_UP+1)/2)
 
@@ -111,11 +111,11 @@ c_infj(void)
 static double
 m_nan(void)
 {
-#ifndef PY_NO_SHORT_FLOAT_REPR
+#  ifndef PY_NO_SHORT_FLOAT_REPR
     return _Py_dg_stdnan(0);
-#else
+#  else
     return Py_NAN;
-#endif
+#  endif
 }
 
 static Py_complex

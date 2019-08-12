@@ -106,7 +106,7 @@ static const char PyCursesVersion[] = "2.2";
 
 
 #ifdef __hpux
-#define STRICT_SYSV_CURSES
+#  define STRICT_SYSV_CURSES
 #endif
 
 #define CURSES_MODULE
@@ -115,23 +115,23 @@ static const char PyCursesVersion[] = "2.2";
 #if defined(HAVE_TERM_H) || defined(__sgi)
 /* For termname, longname, putp, tigetflag, tigetnum, tigetstr, tparm
    which are not declared in SysV curses and for setupterm. */
-#include <term.h>
+#  include <term.h>
 /* Including <term.h> #defines many common symbols. */
-#undef lines
-#undef columns
+#  undef lines
+#  undef columns
 #endif
 
 #ifdef HAVE_LANGINFO_H
-#include <langinfo.h>
+#  include <langinfo.h>
 #endif
 
 #if !defined(HAVE_NCURSES_H) && (defined(sgi) || defined(__sun) || defined(SCO5))
-#define STRICT_SYSV_CURSES       /* Don't use ncurses extensions */
+#  define STRICT_SYSV_CURSES       /* Don't use ncurses extensions */
 typedef chtype attr_t;           /* No attr_t type is available */
 #endif
 
 #if defined(_AIX)
-#define STRICT_SYSV_CURSES
+#  define STRICT_SYSV_CURSES
 #endif
 
 /*[clinic input]
@@ -991,7 +991,7 @@ _curses_window_box_impl(PyCursesWindowObject *self, int group_right_1,
 }
 
 #if defined(HAVE_NCURSES_H) || defined(MVWDELCH_IS_EXPRESSION)
-#define py_mvwdelch mvwdelch
+#  define py_mvwdelch mvwdelch
 #else
 int py_mvwdelch(WINDOW *w, int y, int x)
 {
@@ -1003,9 +1003,9 @@ int py_mvwdelch(WINDOW *w, int y, int x)
 #endif
 
 #if defined(HAVE_CURSES_IS_PAD)
-#define py_is_pad(win)      is_pad(win)
+#  define py_is_pad(win)      is_pad(win)
 #elif defined(WINDOW_HAS_FLAGS)
-#define py_is_pad(win)      ((win) ? ((win)->_flags & _ISPAD) != 0 : FALSE)
+#  define py_is_pad(win)      ((win) ? ((win)->_flags & _ISPAD) != 0 : FALSE)
 #endif
 
 /* chgat, added by Fabian Kreutz <fabian.kreutz at gmx.net> */
@@ -1303,12 +1303,12 @@ _curses_window_getkey_impl(PyCursesWindowObject *self, int group_right_1,
         return NULL;
     } else if (rtn <= 255) {
 #ifdef NCURSES_VERSION_MAJOR
-#if NCURSES_VERSION_MAJOR*100+NCURSES_VERSION_MINOR <= 507
+#  if NCURSES_VERSION_MAJOR*100+NCURSES_VERSION_MINOR <= 507
         /* Work around a bug in ncurses 5.7 and earlier */
         if (rtn < 0) {
             rtn += 256;
         }
-#endif
+#  endif
 #endif
         return PyUnicode_FromOrdinal(rtn);
     } else {
@@ -4324,7 +4324,7 @@ make_ncurses_version(void)
         return NULL;
     }
 
-#define SetIntItem(flag) \
+#  define SetIntItem(flag) \
     PyStructSequence_SET_ITEM(ncurses_version, pos++, PyLong_FromLong(flag)); \
     if (PyErr_Occurred()) { \
         Py_CLEAR(ncurses_version); \
@@ -4334,7 +4334,7 @@ make_ncurses_version(void)
     SetIntItem(NCURSES_VERSION_MAJOR)
     SetIntItem(NCURSES_VERSION_MINOR)
     SetIntItem(NCURSES_VERSION_PATCH)
-#undef SetIntItem
+#  undef SetIntItem
 
     return ncurses_version;
 }

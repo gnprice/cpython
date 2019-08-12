@@ -20,11 +20,11 @@ extern PyTypeObject PyTextIOWrapper_Type;
 extern PyTypeObject PyIncrementalNewlineDecoder_Type;
 
 #ifndef Py_LIMITED_API
-#ifdef MS_WINDOWS
+#  ifdef MS_WINDOWS
 extern PyTypeObject PyWindowsConsoleIO_Type;
 PyAPI_DATA(PyObject *) _PyWindowsConsoleIO_Type;
-#  define PyWindowsConsoleIO_Check(op) (PyObject_TypeCheck((op), (PyTypeObject*)_PyWindowsConsoleIO_Type))
-#endif /* MS_WINDOWS */
+#    define PyWindowsConsoleIO_Check(op) (PyObject_TypeCheck((op), (PyTypeObject*)_PyWindowsConsoleIO_Type))
+#  endif /* MS_WINDOWS */
 #endif /* Py_LIMITED_API */
 
 /* These functions are used as METH_NOARGS methods, are normally called
@@ -91,41 +91,41 @@ extern int _PyIO_trap_eintr(void);
 
 /* Windows uses long long for offsets */
 typedef long long Py_off_t;
-#define PyLong_AsOff_t     PyLong_AsLongLong
-#define PyLong_FromOff_t   PyLong_FromLongLong
-#define PY_OFF_T_MAX       LLONG_MAX
-#define PY_OFF_T_MIN       LLONG_MIN
-#define PY_OFF_T_COMPAT    long long    /* type compatible with off_t */
-#define PY_PRIdOFF         "lld"        /* format to use for that type */
+#  define PyLong_AsOff_t     PyLong_AsLongLong
+#  define PyLong_FromOff_t   PyLong_FromLongLong
+#  define PY_OFF_T_MAX       LLONG_MAX
+#  define PY_OFF_T_MIN       LLONG_MIN
+#  define PY_OFF_T_COMPAT    long long    /* type compatible with off_t */
+#  define PY_PRIdOFF         "lld"        /* format to use for that type */
 
 #else
 
 /* Other platforms use off_t */
 typedef off_t Py_off_t;
-#if (SIZEOF_OFF_T == SIZEOF_SIZE_T)
-#  define PyLong_AsOff_t     PyLong_AsSsize_t
-#  define PyLong_FromOff_t   PyLong_FromSsize_t
-#  define PY_OFF_T_MAX       PY_SSIZE_T_MAX
-#  define PY_OFF_T_MIN       PY_SSIZE_T_MIN
-#  define PY_OFF_T_COMPAT    Py_ssize_t
-#  define PY_PRIdOFF         "zd"
-#elif (SIZEOF_OFF_T == SIZEOF_LONG_LONG)
-#  define PyLong_AsOff_t     PyLong_AsLongLong
-#  define PyLong_FromOff_t   PyLong_FromLongLong
-#  define PY_OFF_T_MAX       LLONG_MAX
-#  define PY_OFF_T_MIN       LLONG_MIN
-#  define PY_OFF_T_COMPAT    long long
-#  define PY_PRIdOFF         "lld"
-#elif (SIZEOF_OFF_T == SIZEOF_LONG)
-#  define PyLong_AsOff_t     PyLong_AsLong
-#  define PyLong_FromOff_t   PyLong_FromLong
-#  define PY_OFF_T_MAX       LONG_MAX
-#  define PY_OFF_T_MIN       LONG_MIN
-#  define PY_OFF_T_COMPAT    long
-#  define PY_PRIdOFF         "ld"
-#else
-#  error off_t does not match either size_t, long, or long long!
-#endif
+#  if (SIZEOF_OFF_T == SIZEOF_SIZE_T)
+#    define PyLong_AsOff_t     PyLong_AsSsize_t
+#    define PyLong_FromOff_t   PyLong_FromSsize_t
+#    define PY_OFF_T_MAX       PY_SSIZE_T_MAX
+#    define PY_OFF_T_MIN       PY_SSIZE_T_MIN
+#    define PY_OFF_T_COMPAT    Py_ssize_t
+#    define PY_PRIdOFF         "zd"
+#  elif (SIZEOF_OFF_T == SIZEOF_LONG_LONG)
+#    define PyLong_AsOff_t     PyLong_AsLongLong
+#    define PyLong_FromOff_t   PyLong_FromLongLong
+#    define PY_OFF_T_MAX       LLONG_MAX
+#    define PY_OFF_T_MIN       LLONG_MIN
+#    define PY_OFF_T_COMPAT    long long
+#    define PY_PRIdOFF         "lld"
+#  elif (SIZEOF_OFF_T == SIZEOF_LONG)
+#    define PyLong_AsOff_t     PyLong_AsLong
+#    define PyLong_FromOff_t   PyLong_FromLong
+#    define PY_OFF_T_MAX       LONG_MAX
+#    define PY_OFF_T_MIN       LONG_MIN
+#    define PY_OFF_T_COMPAT    long
+#    define PY_PRIdOFF         "ld"
+#  else
+#    error off_t does not match either size_t, long, or long long!
+#  endif
 
 #endif
 

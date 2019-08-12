@@ -5,26 +5,26 @@
  */
 
 #ifndef _CJKCODECS_H_
-#define _CJKCODECS_H_
+#  define _CJKCODECS_H_
 
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
-#include "multibytecodec.h"
+#  define PY_SSIZE_T_CLEAN
+#  include "Python.h"
+#  include "multibytecodec.h"
 
 
 /* a unicode "undefined" code point */
-#define UNIINV  0xFFFE
+#  define UNIINV  0xFFFE
 
 /* internal-use DBCS code points which aren't used by any charsets */
-#define NOCHAR  0xFFFF
-#define MULTIC  0xFFFE
-#define DBCINV  0xFFFD
+#  define NOCHAR  0xFFFF
+#  define MULTIC  0xFFFE
+#  define DBCINV  0xFFFD
 
 /* shorter macros to save source size of mapping tables */
-#define U UNIINV
-#define N NOCHAR
-#define M MULTIC
-#define D DBCINV
+#  define U UNIINV
+#  define N NOCHAR
+#  define M MULTIC
+#  define D DBCINV
 
 struct dbcs_index {
     const ucs2_t *map;
@@ -63,82 +63,82 @@ struct pair_encodemap {
 static const MultibyteCodec *codec_list;
 static const struct dbcs_map *mapping_list;
 
-#define CODEC_INIT(encoding)                                            \
+#  define CODEC_INIT(encoding)                                            \
     static int encoding##_codec_init(const void *config)
 
-#define ENCODER_INIT(encoding)                                          \
+#  define ENCODER_INIT(encoding)                                          \
     static int encoding##_encode_init(                                  \
         MultibyteCodec_State *state, const void *config)
-#define ENCODER(encoding)                                               \
+#  define ENCODER(encoding)                                               \
     static Py_ssize_t encoding##_encode(                                \
         MultibyteCodec_State *state, const void *config,                \
         int kind, void *data,                          \
         Py_ssize_t *inpos, Py_ssize_t inlen,                            \
         unsigned char **outbuf, Py_ssize_t outleft, int flags)
-#define ENCODER_RESET(encoding)                                         \
+#  define ENCODER_RESET(encoding)                                         \
     static Py_ssize_t encoding##_encode_reset(                          \
         MultibyteCodec_State *state, const void *config,                \
         unsigned char **outbuf, Py_ssize_t outleft)
 
-#define DECODER_INIT(encoding)                                          \
+#  define DECODER_INIT(encoding)                                          \
     static int encoding##_decode_init(                                  \
         MultibyteCodec_State *state, const void *config)
-#define DECODER(encoding)                                               \
+#  define DECODER(encoding)                                               \
     static Py_ssize_t encoding##_decode(                                \
         MultibyteCodec_State *state, const void *config,                \
         const unsigned char **inbuf, Py_ssize_t inleft,                 \
         _PyUnicodeWriter *writer)
-#define DECODER_RESET(encoding)                                         \
+#  define DECODER_RESET(encoding)                                         \
     static Py_ssize_t encoding##_decode_reset(                          \
         MultibyteCodec_State *state, const void *config)
 
-#define NEXT_IN(i)                              \
+#  define NEXT_IN(i)                              \
     do {                                        \
         (*inbuf) += (i);                        \
         (inleft) -= (i);                        \
     } while (0)
-#define NEXT_INCHAR(i)                          \
+#  define NEXT_INCHAR(i)                          \
     do {                                        \
         (*inpos) += (i);                        \
     } while (0)
-#define NEXT_OUT(o)                             \
+#  define NEXT_OUT(o)                             \
     do {                                        \
         (*outbuf) += (o);                       \
         (outleft) -= (o);                       \
     } while (0)
-#define NEXT(i, o)                              \
+#  define NEXT(i, o)                              \
     do {                                        \
         NEXT_INCHAR(i);                         \
         NEXT_OUT(o);                            \
     } while (0)
 
-#define REQUIRE_INBUF(n)                        \
+#  define REQUIRE_INBUF(n)                        \
     do {                                        \
         if (inleft < (n))                       \
             return MBERR_TOOFEW;                \
     } while (0)
 
-#define REQUIRE_OUTBUF(n)                       \
+#  define REQUIRE_OUTBUF(n)                       \
     do {                                        \
         if (outleft < (n))                      \
             return MBERR_TOOSMALL;              \
     } while (0)
 
-#define INBYTE1 ((*inbuf)[0])
-#define INBYTE2 ((*inbuf)[1])
-#define INBYTE3 ((*inbuf)[2])
-#define INBYTE4 ((*inbuf)[3])
+#  define INBYTE1 ((*inbuf)[0])
+#  define INBYTE2 ((*inbuf)[1])
+#  define INBYTE3 ((*inbuf)[2])
+#  define INBYTE4 ((*inbuf)[3])
 
-#define INCHAR1 (PyUnicode_READ(kind, data, *inpos))
-#define INCHAR2 (PyUnicode_READ(kind, data, *inpos + 1))
+#  define INCHAR1 (PyUnicode_READ(kind, data, *inpos))
+#  define INCHAR2 (PyUnicode_READ(kind, data, *inpos + 1))
 
-#define OUTCHAR(c)                                                         \
+#  define OUTCHAR(c)                                                         \
     do {                                                                   \
         if (_PyUnicodeWriter_WriteChar(writer, (c)) < 0)                   \
             return MBERR_EXCEPTION;                                         \
     } while (0)
 
-#define OUTCHAR2(c1, c2)                                                   \
+#  define OUTCHAR2(c1, c2)                                                   \
     do {                                                                   \
         Py_UCS4 _c1 = (c1);                                                \
         Py_UCS4 _c2 = (c2);                                                \
@@ -149,36 +149,36 @@ static const struct dbcs_map *mapping_list;
         writer->pos += 2;                                                  \
     } while (0)
 
-#define OUTBYTEI(c, i)                     \
+#  define OUTBYTEI(c, i)                     \
     do {                                   \
         assert((unsigned char)(c) == (c)); \
         ((*outbuf)[i]) = (c);              \
     } while (0)
 
-#define OUTBYTE1(c) OUTBYTEI(c, 0)
-#define OUTBYTE2(c) OUTBYTEI(c, 1)
-#define OUTBYTE3(c) OUTBYTEI(c, 2)
-#define OUTBYTE4(c) OUTBYTEI(c, 3)
+#  define OUTBYTE1(c) OUTBYTEI(c, 0)
+#  define OUTBYTE2(c) OUTBYTEI(c, 1)
+#  define OUTBYTE3(c) OUTBYTEI(c, 2)
+#  define OUTBYTE4(c) OUTBYTEI(c, 3)
 
-#define WRITEBYTE1(c1)              \
+#  define WRITEBYTE1(c1)              \
     do {                            \
         REQUIRE_OUTBUF(1);          \
         OUTBYTE1(c1);               \
     } while (0)
-#define WRITEBYTE2(c1, c2)          \
+#  define WRITEBYTE2(c1, c2)          \
     do {                            \
         REQUIRE_OUTBUF(2);          \
         OUTBYTE1(c1);               \
         OUTBYTE2(c2);               \
     } while (0)
-#define WRITEBYTE3(c1, c2, c3)      \
+#  define WRITEBYTE3(c1, c2, c3)      \
     do {                            \
         REQUIRE_OUTBUF(3);          \
         OUTBYTE1(c1);               \
         OUTBYTE2(c2);               \
         OUTBYTE3(c3);               \
     } while (0)
-#define WRITEBYTE4(c1, c2, c3, c4)  \
+#  define WRITEBYTE4(c1, c2, c3, c4)  \
     do {                            \
         REQUIRE_OUTBUF(4);          \
         OUTBYTE1(c1);               \
@@ -187,55 +187,55 @@ static const struct dbcs_map *mapping_list;
         OUTBYTE4(c4);               \
     } while (0)
 
-#define _TRYMAP_ENC(m, assi, val)                               \
+#  define _TRYMAP_ENC(m, assi, val)                               \
     ((m)->map != NULL && (val) >= (m)->bottom &&                \
         (val)<= (m)->top && ((assi) = (m)->map[(val) -          \
         (m)->bottom]) != NOCHAR)
-#define TRYMAP_ENC(charset, assi, uni)                     \
+#  define TRYMAP_ENC(charset, assi, uni)                     \
     _TRYMAP_ENC(&charset##_encmap[(uni) >> 8], assi, (uni) & 0xff)
 
-#define _TRYMAP_DEC(m, assi, val)                             \
+#  define _TRYMAP_DEC(m, assi, val)                             \
     ((m)->map != NULL &&                                        \
      (val) >= (m)->bottom &&                                    \
      (val)<= (m)->top &&                                        \
      ((assi) = (m)->map[(val) - (m)->bottom]) != UNIINV)
-#define TRYMAP_DEC(charset, assi, c1, c2)                     \
+#  define TRYMAP_DEC(charset, assi, c1, c2)                     \
     _TRYMAP_DEC(&charset##_decmap[c1], assi, c2)
 
-#define BEGIN_MAPPINGS_LIST static const struct dbcs_map _mapping_list[] = {
-#define MAPPING_ENCONLY(enc) {#enc, (void*)enc##_encmap, NULL},
-#define MAPPING_DECONLY(enc) {#enc, NULL, (void*)enc##_decmap},
-#define MAPPING_ENCDEC(enc) {#enc, (void*)enc##_encmap, (void*)enc##_decmap},
-#define END_MAPPINGS_LIST                               \
+#  define BEGIN_MAPPINGS_LIST static const struct dbcs_map _mapping_list[] = {
+#  define MAPPING_ENCONLY(enc) {#enc, (void*)enc##_encmap, NULL},
+#  define MAPPING_DECONLY(enc) {#enc, NULL, (void*)enc##_decmap},
+#  define MAPPING_ENCDEC(enc) {#enc, (void*)enc##_encmap, (void*)enc##_decmap},
+#  define END_MAPPINGS_LIST                               \
     {"", NULL, NULL} };                                 \
     static const struct dbcs_map *mapping_list =        \
         (const struct dbcs_map *)_mapping_list;
 
-#define BEGIN_CODECS_LIST static const MultibyteCodec _codec_list[] = {
-#define _STATEFUL_METHODS(enc)          \
+#  define BEGIN_CODECS_LIST static const MultibyteCodec _codec_list[] = {
+#  define _STATEFUL_METHODS(enc)          \
     enc##_encode,                       \
     enc##_encode_init,                  \
     enc##_encode_reset,                 \
     enc##_decode,                       \
     enc##_decode_init,                  \
     enc##_decode_reset,
-#define _STATELESS_METHODS(enc)         \
+#  define _STATELESS_METHODS(enc)         \
     enc##_encode, NULL, NULL,           \
     enc##_decode, NULL, NULL,
-#define CODEC_STATEFUL(enc) {           \
+#  define CODEC_STATEFUL(enc) {           \
     #enc, NULL, NULL,                   \
     _STATEFUL_METHODS(enc)              \
 },
-#define CODEC_STATELESS(enc) {          \
+#  define CODEC_STATELESS(enc) {          \
     #enc, NULL, NULL,                   \
     _STATELESS_METHODS(enc)             \
 },
-#define CODEC_STATELESS_WINIT(enc) {    \
+#  define CODEC_STATELESS_WINIT(enc) {    \
     #enc, NULL,                         \
     enc##_codec_init,                   \
     _STATELESS_METHODS(enc)             \
 },
-#define END_CODECS_LIST                                 \
+#  define END_CODECS_LIST                                 \
     {"", NULL,} };                                      \
     static const MultibyteCodec *codec_list =           \
         (const MultibyteCodec *)_codec_list;
@@ -319,7 +319,7 @@ register_maps(PyObject *module)
     return 0;
 }
 
-#ifdef USING_BINARY_PAIR_SEARCH
+#  ifdef USING_BINARY_PAIR_SEARCH
 static DBCHAR
 find_pairencmap(ucs2_t body, ucs2_t modifier,
                 const struct pair_encodemap *haystack, int haystacksize)
@@ -351,10 +351,10 @@ find_pairencmap(ucs2_t body, ucs2_t modifier,
     }
     return DBCINV;
 }
-#endif
+#  endif
 
-#ifdef USING_IMPORTED_MAPS
-#  define IMPORT_MAP(locale, charset, encmap, decmap) \
+#  ifdef USING_IMPORTED_MAPS
+#    define IMPORT_MAP(locale, charset, encmap, decmap) \
     importmap("_codecs_" #locale, "__map_" #charset, \
               (const void**)encmap, (const void**)decmap)
 
@@ -393,9 +393,9 @@ errorexit:
     Py_DECREF(mod);
     return -1;
 }
-#endif
+#  endif
 
-#define I_AM_A_MODULE_FOR(loc)                                          \
+#  define I_AM_A_MODULE_FOR(loc)                                          \
     static struct PyModuleDef __module = {                              \
         PyModuleDef_HEAD_INIT,                                          \
         "_codecs_"#loc,                                                 \

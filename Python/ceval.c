@@ -818,15 +818,15 @@ _PyEval_EvalFrameDefault(PyFrameObject *f, int throwflag)
 #endif
 
 #ifdef HAVE_COMPUTED_GOTOS
-    #ifndef USE_COMPUTED_GOTOS
-    #define USE_COMPUTED_GOTOS 1
-    #endif
+#  ifndef USE_COMPUTED_GOTOS
+#    define USE_COMPUTED_GOTOS 1
+#  endif
 #else
-    #if defined(USE_COMPUTED_GOTOS) && USE_COMPUTED_GOTOS
-    #error "Computed gotos are not supported on this compiler."
-    #endif
-    #undef USE_COMPUTED_GOTOS
-    #define USE_COMPUTED_GOTOS 0
+#  if defined(USE_COMPUTED_GOTOS) && USE_COMPUTED_GOTOS
+#    error "Computed gotos are not supported on this compiler."
+#  endif
+#  undef USE_COMPUTED_GOTOS
+#  define USE_COMPUTED_GOTOS 0
 #endif
 
 #if USE_COMPUTED_GOTOS

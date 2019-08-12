@@ -5,35 +5,35 @@
 
 /* Windows socket errors (WSA*)  */
 #ifdef MS_WINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
 /* The following constants were added to errno.h in VS2010 but have
    preferred WSA equivalents. */
-#undef EADDRINUSE
-#undef EADDRNOTAVAIL
-#undef EAFNOSUPPORT
-#undef EALREADY
-#undef ECONNABORTED
-#undef ECONNREFUSED
-#undef ECONNRESET
-#undef EDESTADDRREQ
-#undef EHOSTUNREACH
-#undef EINPROGRESS
-#undef EISCONN
-#undef ELOOP
-#undef EMSGSIZE
-#undef ENETDOWN
-#undef ENETRESET
-#undef ENETUNREACH
-#undef ENOBUFS
-#undef ENOPROTOOPT
-#undef ENOTCONN
-#undef ENOTSOCK
-#undef EOPNOTSUPP
-#undef EPROTONOSUPPORT
-#undef EPROTOTYPE
-#undef ETIMEDOUT
-#undef EWOULDBLOCK
+#  undef EADDRINUSE
+#  undef EADDRNOTAVAIL
+#  undef EAFNOSUPPORT
+#  undef EALREADY
+#  undef ECONNABORTED
+#  undef ECONNREFUSED
+#  undef ECONNRESET
+#  undef EDESTADDRREQ
+#  undef EHOSTUNREACH
+#  undef EINPROGRESS
+#  undef EISCONN
+#  undef ELOOP
+#  undef EMSGSIZE
+#  undef ENETDOWN
+#  undef ENETRESET
+#  undef ENETUNREACH
+#  undef ENOBUFS
+#  undef ENOPROTOOPT
+#  undef ENOTCONN
+#  undef ENOTSOCK
+#  undef EOPNOTSUPP
+#  undef EPROTONOSUPPORT
+#  undef EPROTOTYPE
+#  undef ETIMEDOUT
+#  undef EWOULDBLOCK
 #endif
 
 /*
@@ -124,9 +124,9 @@ PyInit_errno(void)
 #ifdef EHOSTUNREACH
     inscode(d, ds, de, "EHOSTUNREACH", EHOSTUNREACH, "No route to host");
 #else
-#ifdef WSAEHOSTUNREACH
+#  ifdef WSAEHOSTUNREACH
     inscode(d, ds, de, "EHOSTUNREACH", WSAEHOSTUNREACH, "No route to host");
-#endif
+#  endif
 #endif
 #ifdef ENOMSG
     inscode(d, ds, de, "ENOMSG", ENOMSG, "No message of desired type");
@@ -155,9 +155,9 @@ PyInit_errno(void)
 #ifdef EINVAL
     inscode(d, ds, de, "EINVAL", EINVAL, "Invalid argument");
 #else
-#ifdef WSAEINVAL
+#  ifdef WSAEINVAL
     inscode(d, ds, de, "EINVAL", WSAEINVAL, "Invalid argument");
-#endif
+#  endif
 #endif
 #ifdef EOVERFLOW
     inscode(d, ds, de, "EOVERFLOW", EOVERFLOW, "Value too large for defined data type");
@@ -168,30 +168,30 @@ PyInit_errno(void)
 #ifdef EINTR
     inscode(d, ds, de, "EINTR", EINTR, "Interrupted system call");
 #else
-#ifdef WSAEINTR
+#  ifdef WSAEINTR
     inscode(d, ds, de, "EINTR", WSAEINTR, "Interrupted system call");
-#endif
+#  endif
 #endif
 #ifdef EUSERS
     inscode(d, ds, de, "EUSERS", EUSERS, "Too many users");
 #else
-#ifdef WSAEUSERS
+#  ifdef WSAEUSERS
     inscode(d, ds, de, "EUSERS", WSAEUSERS, "Too many users");
-#endif
+#  endif
 #endif
 #ifdef ENOTEMPTY
     inscode(d, ds, de, "ENOTEMPTY", ENOTEMPTY, "Directory not empty");
 #else
-#ifdef WSAENOTEMPTY
+#  ifdef WSAENOTEMPTY
     inscode(d, ds, de, "ENOTEMPTY", WSAENOTEMPTY, "Directory not empty");
-#endif
+#  endif
 #endif
 #ifdef ENOBUFS
     inscode(d, ds, de, "ENOBUFS", ENOBUFS, "No buffer space available");
 #else
-#ifdef WSAENOBUFS
+#  ifdef WSAENOBUFS
     inscode(d, ds, de, "ENOBUFS", WSAENOBUFS, "No buffer space available");
-#endif
+#  endif
 #endif
 #ifdef EPROTO
     inscode(d, ds, de, "EPROTO", EPROTO, "Protocol error");
@@ -199,9 +199,9 @@ PyInit_errno(void)
 #ifdef EREMOTE
     inscode(d, ds, de, "EREMOTE", EREMOTE, "Object is remote");
 #else
-#ifdef WSAEREMOTE
+#  ifdef WSAEREMOTE
     inscode(d, ds, de, "EREMOTE", WSAEREMOTE, "Object is remote");
-#endif
+#  endif
 #endif
 #ifdef ENAVAIL
     inscode(d, ds, de, "ENAVAIL", ENAVAIL, "No XENIX semaphores available");
@@ -212,9 +212,9 @@ PyInit_errno(void)
 #ifdef ELOOP
     inscode(d, ds, de, "ELOOP", ELOOP, "Too many symbolic links encountered");
 #else
-#ifdef WSAELOOP
+#  ifdef WSAELOOP
     inscode(d, ds, de, "ELOOP", WSAELOOP, "Too many symbolic links encountered");
-#endif
+#  endif
 #endif
 #ifdef EXDEV
     inscode(d, ds, de, "EXDEV", EXDEV, "Cross-device link");
@@ -228,16 +228,16 @@ PyInit_errno(void)
 #ifdef EMSGSIZE
     inscode(d, ds, de, "EMSGSIZE", EMSGSIZE, "Message too long");
 #else
-#ifdef WSAEMSGSIZE
+#  ifdef WSAEMSGSIZE
     inscode(d, ds, de, "EMSGSIZE", WSAEMSGSIZE, "Message too long");
-#endif
+#  endif
 #endif
 #ifdef EAFNOSUPPORT
     inscode(d, ds, de, "EAFNOSUPPORT", EAFNOSUPPORT, "Address family not supported by protocol");
 #else
-#ifdef WSAEAFNOSUPPORT
+#  ifdef WSAEAFNOSUPPORT
     inscode(d, ds, de, "EAFNOSUPPORT", WSAEAFNOSUPPORT, "Address family not supported by protocol");
-#endif
+#  endif
 #endif
 #ifdef EBADR
     inscode(d, ds, de, "EBADR", EBADR, "Invalid request descriptor");
@@ -245,23 +245,23 @@ PyInit_errno(void)
 #ifdef EHOSTDOWN
     inscode(d, ds, de, "EHOSTDOWN", EHOSTDOWN, "Host is down");
 #else
-#ifdef WSAEHOSTDOWN
+#  ifdef WSAEHOSTDOWN
     inscode(d, ds, de, "EHOSTDOWN", WSAEHOSTDOWN, "Host is down");
-#endif
+#  endif
 #endif
 #ifdef EPFNOSUPPORT
     inscode(d, ds, de, "EPFNOSUPPORT", EPFNOSUPPORT, "Protocol family not supported");
 #else
-#ifdef WSAEPFNOSUPPORT
+#  ifdef WSAEPFNOSUPPORT
     inscode(d, ds, de, "EPFNOSUPPORT", WSAEPFNOSUPPORT, "Protocol family not supported");
-#endif
+#  endif
 #endif
 #ifdef ENOPROTOOPT
     inscode(d, ds, de, "ENOPROTOOPT", ENOPROTOOPT, "Protocol not available");
 #else
-#ifdef WSAENOPROTOOPT
+#  ifdef WSAENOPROTOOPT
     inscode(d, ds, de, "ENOPROTOOPT", WSAENOPROTOOPT, "Protocol not available");
-#endif
+#  endif
 #endif
 #ifdef EBUSY
     inscode(d, ds, de, "EBUSY", EBUSY, "Device or resource busy");
@@ -269,9 +269,9 @@ PyInit_errno(void)
 #ifdef EWOULDBLOCK
     inscode(d, ds, de, "EWOULDBLOCK", EWOULDBLOCK, "Operation would block");
 #else
-#ifdef WSAEWOULDBLOCK
+#  ifdef WSAEWOULDBLOCK
     inscode(d, ds, de, "EWOULDBLOCK", WSAEWOULDBLOCK, "Operation would block");
-#endif
+#  endif
 #endif
 #ifdef EBADFD
     inscode(d, ds, de, "EBADFD", EBADFD, "File descriptor in bad state");
@@ -282,9 +282,9 @@ PyInit_errno(void)
 #ifdef EISCONN
     inscode(d, ds, de, "EISCONN", EISCONN, "Transport endpoint is already connected");
 #else
-#ifdef WSAEISCONN
+#  ifdef WSAEISCONN
     inscode(d, ds, de, "EISCONN", WSAEISCONN, "Transport endpoint is already connected");
-#endif
+#  endif
 #endif
 #ifdef ENOANO
     inscode(d, ds, de, "ENOANO", ENOANO, "No anode");
@@ -292,9 +292,9 @@ PyInit_errno(void)
 #ifdef ESHUTDOWN
     inscode(d, ds, de, "ESHUTDOWN", ESHUTDOWN, "Cannot send after transport endpoint shutdown");
 #else
-#ifdef WSAESHUTDOWN
+#  ifdef WSAESHUTDOWN
     inscode(d, ds, de, "ESHUTDOWN", WSAESHUTDOWN, "Cannot send after transport endpoint shutdown");
-#endif
+#  endif
 #endif
 #ifdef ECHRNG
     inscode(d, ds, de, "ECHRNG", ECHRNG, "Channel number out of range");
@@ -311,9 +311,9 @@ PyInit_errno(void)
 #ifdef EBADF
     inscode(d, ds, de, "EBADF", EBADF, "Bad file number");
 #else
-#ifdef WSAEBADF
+#  ifdef WSAEBADF
     inscode(d, ds, de, "EBADF", WSAEBADF, "Bad file number");
-#endif
+#  endif
 #endif
 #ifdef EMULTIHOP
     inscode(d, ds, de, "EMULTIHOP", EMULTIHOP, "Multihop attempted");
@@ -327,9 +327,9 @@ PyInit_errno(void)
 #ifdef EPROTOTYPE
     inscode(d, ds, de, "EPROTOTYPE", EPROTOTYPE, "Protocol wrong type for socket");
 #else
-#ifdef WSAEPROTOTYPE
+#  ifdef WSAEPROTOTYPE
     inscode(d, ds, de, "EPROTOTYPE", WSAEPROTOTYPE, "Protocol wrong type for socket");
-#endif
+#  endif
 #endif
 #ifdef ENOSPC
     inscode(d, ds, de, "ENOSPC", ENOSPC, "No space left on device");
@@ -340,16 +340,16 @@ PyInit_errno(void)
 #ifdef EALREADY
     inscode(d, ds, de, "EALREADY", EALREADY, "Operation already in progress");
 #else
-#ifdef WSAEALREADY
+#  ifdef WSAEALREADY
     inscode(d, ds, de, "EALREADY", WSAEALREADY, "Operation already in progress");
-#endif
+#  endif
 #endif
 #ifdef ENETDOWN
     inscode(d, ds, de, "ENETDOWN", ENETDOWN, "Network is down");
 #else
-#ifdef WSAENETDOWN
+#  ifdef WSAENETDOWN
     inscode(d, ds, de, "ENETDOWN", WSAENETDOWN, "Network is down");
-#endif
+#  endif
 #endif
 #ifdef ENOTNAM
     inscode(d, ds, de, "ENOTNAM", ENOTNAM, "Not a XENIX named type file");
@@ -357,9 +357,9 @@ PyInit_errno(void)
 #ifdef EACCES
     inscode(d, ds, de, "EACCES", EACCES, "Permission denied");
 #else
-#ifdef WSAEACCES
+#  ifdef WSAEACCES
     inscode(d, ds, de, "EACCES", WSAEACCES, "Permission denied");
-#endif
+#  endif
 #endif
 #ifdef ELNRNG
     inscode(d, ds, de, "ELNRNG", ELNRNG, "Link number out of range");
@@ -385,9 +385,9 @@ PyInit_errno(void)
 #ifdef ECONNREFUSED
     inscode(d, ds, de, "ECONNREFUSED", ECONNREFUSED, "Connection refused");
 #else
-#ifdef WSAECONNREFUSED
+#  ifdef WSAECONNREFUSED
     inscode(d, ds, de, "ECONNREFUSED", WSAECONNREFUSED, "Connection refused");
-#endif
+#  endif
 #endif
 #ifdef EISDIR
     inscode(d, ds, de, "EISDIR", EISDIR, "Is a directory");
@@ -395,9 +395,9 @@ PyInit_errno(void)
 #ifdef EPROTONOSUPPORT
     inscode(d, ds, de, "EPROTONOSUPPORT", EPROTONOSUPPORT, "Protocol not supported");
 #else
-#ifdef WSAEPROTONOSUPPORT
+#  ifdef WSAEPROTONOSUPPORT
     inscode(d, ds, de, "EPROTONOSUPPORT", WSAEPROTONOSUPPORT, "Protocol not supported");
-#endif
+#  endif
 #endif
 #ifdef EROFS
     inscode(d, ds, de, "EROFS", EROFS, "Read-only file system");
@@ -405,9 +405,9 @@ PyInit_errno(void)
 #ifdef EADDRNOTAVAIL
     inscode(d, ds, de, "EADDRNOTAVAIL", EADDRNOTAVAIL, "Cannot assign requested address");
 #else
-#ifdef WSAEADDRNOTAVAIL
+#  ifdef WSAEADDRNOTAVAIL
     inscode(d, ds, de, "EADDRNOTAVAIL", WSAEADDRNOTAVAIL, "Cannot assign requested address");
-#endif
+#  endif
 #endif
 #ifdef EIDRM
     inscode(d, ds, de, "EIDRM", EIDRM, "Identifier removed");
@@ -442,16 +442,16 @@ PyInit_errno(void)
 #ifdef ENETRESET
     inscode(d, ds, de, "ENETRESET", ENETRESET, "Network dropped connection because of reset");
 #else
-#ifdef WSAENETRESET
+#  ifdef WSAENETRESET
     inscode(d, ds, de, "ENETRESET", WSAENETRESET, "Network dropped connection because of reset");
-#endif
+#  endif
 #endif
 #ifdef ETIMEDOUT
     inscode(d, ds, de, "ETIMEDOUT", ETIMEDOUT, "Connection timed out");
 #else
-#ifdef WSAETIMEDOUT
+#  ifdef WSAETIMEDOUT
     inscode(d, ds, de, "ETIMEDOUT", WSAETIMEDOUT, "Connection timed out");
-#endif
+#  endif
 #endif
 #ifdef ENOENT
     inscode(d, ds, de, "ENOENT", ENOENT, "No such file or directory");
@@ -462,9 +462,9 @@ PyInit_errno(void)
 #ifdef EDQUOT
     inscode(d, ds, de, "EDQUOT", EDQUOT, "Quota exceeded");
 #else
-#ifdef WSAEDQUOT
+#  ifdef WSAEDQUOT
     inscode(d, ds, de, "EDQUOT", WSAEDQUOT, "Quota exceeded");
-#endif
+#  endif
 #endif
 #ifdef ENOSTR
     inscode(d, ds, de, "ENOSTR", ENOSTR, "Device not a stream");
@@ -481,9 +481,9 @@ PyInit_errno(void)
 #ifdef EFAULT
     inscode(d, ds, de, "EFAULT", EFAULT, "Bad address");
 #else
-#ifdef WSAEFAULT
+#  ifdef WSAEFAULT
     inscode(d, ds, de, "EFAULT", WSAEFAULT, "Bad address");
-#endif
+#  endif
 #endif
 #ifdef EFBIG
     inscode(d, ds, de, "EFBIG", EFBIG, "File too large");
@@ -494,16 +494,16 @@ PyInit_errno(void)
 #ifdef ENOTCONN
     inscode(d, ds, de, "ENOTCONN", ENOTCONN, "Transport endpoint is not connected");
 #else
-#ifdef WSAENOTCONN
+#  ifdef WSAENOTCONN
     inscode(d, ds, de, "ENOTCONN", WSAENOTCONN, "Transport endpoint is not connected");
-#endif
+#  endif
 #endif
 #ifdef EDESTADDRREQ
     inscode(d, ds, de, "EDESTADDRREQ", EDESTADDRREQ, "Destination address required");
 #else
-#ifdef WSAEDESTADDRREQ
+#  ifdef WSAEDESTADDRREQ
     inscode(d, ds, de, "EDESTADDRREQ", WSAEDESTADDRREQ, "Destination address required");
-#endif
+#  endif
 #endif
 #ifdef ELIBSCN
     inscode(d, ds, de, "ELIBSCN", ELIBSCN, ".lib section in a.out corrupted");
@@ -517,23 +517,23 @@ PyInit_errno(void)
 #ifdef ECONNABORTED
     inscode(d, ds, de, "ECONNABORTED", ECONNABORTED, "Software caused connection abort");
 #else
-#ifdef WSAECONNABORTED
+#  ifdef WSAECONNABORTED
     inscode(d, ds, de, "ECONNABORTED", WSAECONNABORTED, "Software caused connection abort");
-#endif
+#  endif
 #endif
 #ifdef ENETUNREACH
     inscode(d, ds, de, "ENETUNREACH", ENETUNREACH, "Network is unreachable");
 #else
-#ifdef WSAENETUNREACH
+#  ifdef WSAENETUNREACH
     inscode(d, ds, de, "ENETUNREACH", WSAENETUNREACH, "Network is unreachable");
-#endif
+#  endif
 #endif
 #ifdef ESTALE
     inscode(d, ds, de, "ESTALE", ESTALE, "Stale NFS file handle");
 #else
-#ifdef WSAESTALE
+#  ifdef WSAESTALE
     inscode(d, ds, de, "ESTALE", WSAESTALE, "Stale NFS file handle");
-#endif
+#  endif
 #endif
 #ifdef ENOSR
     inscode(d, ds, de, "ENOSR", ENOSR, "Out of streams resources");
@@ -544,9 +544,9 @@ PyInit_errno(void)
 #ifdef ENOTSOCK
     inscode(d, ds, de, "ENOTSOCK", ENOTSOCK, "Socket operation on non-socket");
 #else
-#ifdef WSAENOTSOCK
+#  ifdef WSAENOTSOCK
     inscode(d, ds, de, "ENOTSOCK", WSAENOTSOCK, "Socket operation on non-socket");
-#endif
+#  endif
 #endif
 #ifdef ESTRPIPE
     inscode(d, ds, de, "ESTRPIPE", ESTRPIPE, "Streams pipe error");
@@ -566,23 +566,23 @@ PyInit_errno(void)
 #ifdef ECONNRESET
     inscode(d, ds, de, "ECONNRESET", ECONNRESET, "Connection reset by peer");
 #else
-#ifdef WSAECONNRESET
+#  ifdef WSAECONNRESET
     inscode(d, ds, de, "ECONNRESET", WSAECONNRESET, "Connection reset by peer");
-#endif
+#  endif
 #endif
 #ifdef EADDRINUSE
     inscode(d, ds, de, "EADDRINUSE", EADDRINUSE, "Address already in use");
 #else
-#ifdef WSAEADDRINUSE
+#  ifdef WSAEADDRINUSE
     inscode(d, ds, de, "EADDRINUSE", WSAEADDRINUSE, "Address already in use");
-#endif
+#  endif
 #endif
 #ifdef EOPNOTSUPP
     inscode(d, ds, de, "EOPNOTSUPP", EOPNOTSUPP, "Operation not supported on transport endpoint");
 #else
-#ifdef WSAEOPNOTSUPP
+#  ifdef WSAEOPNOTSUPP
     inscode(d, ds, de, "EOPNOTSUPP", WSAEOPNOTSUPP, "Operation not supported on transport endpoint");
-#endif
+#  endif
 #endif
 #ifdef EREMCHG
     inscode(d, ds, de, "EREMCHG", EREMCHG, "Remote address changed");
@@ -593,9 +593,9 @@ PyInit_errno(void)
 #ifdef ENAMETOOLONG
     inscode(d, ds, de, "ENAMETOOLONG", ENAMETOOLONG, "File name too long");
 #else
-#ifdef WSAENAMETOOLONG
+#  ifdef WSAENAMETOOLONG
     inscode(d, ds, de, "ENAMETOOLONG", WSAENAMETOOLONG, "File name too long");
-#endif
+#  endif
 #endif
 #ifdef ENOTTY
     inscode(d, ds, de, "ENOTTY", ENOTTY, "Not a typewriter");
@@ -606,9 +606,9 @@ PyInit_errno(void)
 #ifdef ESOCKTNOSUPPORT
     inscode(d, ds, de, "ESOCKTNOSUPPORT", ESOCKTNOSUPPORT, "Socket type not supported");
 #else
-#ifdef WSAESOCKTNOSUPPORT
+#  ifdef WSAESOCKTNOSUPPORT
     inscode(d, ds, de, "ESOCKTNOSUPPORT", WSAESOCKTNOSUPPORT, "Socket type not supported");
-#endif
+#  endif
 #endif
 #ifdef ETIME
     inscode(d, ds, de, "ETIME", ETIME, "Timer expired");
@@ -622,16 +622,16 @@ PyInit_errno(void)
 #ifdef ETOOMANYREFS
     inscode(d, ds, de, "ETOOMANYREFS", ETOOMANYREFS, "Too many references: cannot splice");
 #else
-#ifdef WSAETOOMANYREFS
+#  ifdef WSAETOOMANYREFS
     inscode(d, ds, de, "ETOOMANYREFS", WSAETOOMANYREFS, "Too many references: cannot splice");
-#endif
+#  endif
 #endif
 #ifdef EMFILE
     inscode(d, ds, de, "EMFILE", EMFILE, "Too many open files");
 #else
-#ifdef WSAEMFILE
+#  ifdef WSAEMFILE
     inscode(d, ds, de, "EMFILE", WSAEMFILE, "Too many open files");
-#endif
+#  endif
 #endif
 #ifdef ETXTBSY
     inscode(d, ds, de, "ETXTBSY", ETXTBSY, "Text file busy");
@@ -639,9 +639,9 @@ PyInit_errno(void)
 #ifdef EINPROGRESS
     inscode(d, ds, de, "EINPROGRESS", EINPROGRESS, "Operation now in progress");
 #else
-#ifdef WSAEINPROGRESS
+#  ifdef WSAEINPROGRESS
     inscode(d, ds, de, "EINPROGRESS", WSAEINPROGRESS, "Operation now in progress");
-#endif
+#  endif
 #endif
 #ifdef ENXIO
     inscode(d, ds, de, "ENXIO", ENXIO, "No such device or address");

@@ -204,8 +204,8 @@ PyAPI_FUNC(int) PyModule_ExecDef(PyObject *module, PyModuleDef *def);
  /* When we are tracing reference counts, rename module creation functions so
     modules compiled with incompatible settings will generate a
     link-time error. */
- #define PyModule_Create2 PyModule_Create2TraceRefs
- #define PyModule_FromDefAndSpec2 PyModule_FromDefAndSpec2TraceRefs
+#    define PyModule_Create2 PyModule_Create2TraceRefs
+#    define PyModule_FromDefAndSpec2 PyModule_FromDefAndSpec2TraceRefs
 #  endif
 
 PyAPI_FUNC(PyObject *) PyModule_Create2(struct PyModuleDef*,

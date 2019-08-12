@@ -27,11 +27,11 @@
 
 
 #ifndef SIX_STEP_H
-#define SIX_STEP_H
+#  define SIX_STEP_H
 
 
-#include "mpdecimal.h"
-#include <stdio.h>
+#  include "mpdecimal.h"
+#  include <stdio.h>
 
 
 /* Internal header file: all symbols have local scope in the DSO */

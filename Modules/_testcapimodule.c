@@ -21,15 +21,15 @@
 #include <signal.h>
 
 #ifdef MS_WINDOWS
-#include <winsock2.h>         /* struct timeval */
+#  include <winsock2.h>         /* struct timeval */
 #endif
 
 #ifdef HAVE_SYS_WAIT_H
-#include <sys/wait.h>           /* For W_STOPCODE */
+#  include <sys/wait.h>           /* For W_STOPCODE */
 #endif
 
 #ifdef Py_BUILD_CORE
-#error "_testcapi must test the public Python C API, not CPython internal C API"
+#  error "_testcapi must test the public Python C API, not CPython internal C API"
 #endif
 
 static PyObject *TestError;     /* set to exception object in init */
@@ -82,8 +82,8 @@ static PyObject*
 test_sizeof_c_types(PyObject *self, PyObject *Py_UNUSED(ignored))
 {
 #if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5)))
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wtype-limits"
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-Wtype-limits"
 #endif
 #define CHECK_SIZEOF(TYPE, EXPECTED)         \
     if (EXPECTED != sizeof(TYPE))  {         \
@@ -134,7 +134,7 @@ test_sizeof_c_types(PyObject *self, PyObject *Py_UNUSED(ignored))
 #undef CHECK_SIGNESS
 #undef CHECK_SIZEOF
 #if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5)))
-#pragma GCC diagnostic pop
+#  pragma GCC diagnostic pop
 #endif
 }
 
@@ -2898,7 +2898,7 @@ test_capsule(PyObject *self, PyObject *Py_UNUSED(ignored))
     void *pointer;
     void *pointer2;
     known_capsule known_capsules[] = {
-        #define KNOWN_CAPSULE(module, name)             { module "." name, module, name }
+#define KNOWN_CAPSULE(module, name)             { module "." name, module, name }
         KNOWN_CAPSULE("_socket", "CAPI"),
         KNOWN_CAPSULE("_curses", "_C_API"),
         KNOWN_CAPSULE("datetime", "datetime_CAPI"),

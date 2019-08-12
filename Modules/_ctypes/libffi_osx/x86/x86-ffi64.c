@@ -25,14 +25,14 @@
    OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------- */
 
-#include <ffi.h>
-#include <ffi_common.h>
+#  include <ffi.h>
+#  include <ffi_common.h>
 
-#include <stdlib.h>
-#include <stdarg.h>
+#  include <stdlib.h>
+#  include <stdarg.h>
 
-#define MAX_GPR_REGS 6
-#define MAX_SSE_REGS 8
+#  define MAX_GPR_REGS 6
+#  define MAX_SSE_REGS 8
 
 typedef struct RegisterArgs {
 	/* Registers for argument passing.  */
@@ -74,8 +74,8 @@ enum x86_64_reg_class
 	X86_64_MEMORY_CLASS
 };
 
-#define MAX_CLASSES 4
-#define SSE_CLASS_P(X)	((X) >= X86_64_SSE_CLASS && X <= X86_64_SSEUP_CLASS)
+#  define MAX_CLASSES 4
+#  define SSE_CLASS_P(X)	((X) >= X86_64_SSE_CLASS && X <= X86_64_SSEUP_CLASS)
 
 /*	x86-64 register passing implementation.  See x86-64 ABI for details.  Goal
 	of this code is to classify each 8bytes of incoming argument by the register
@@ -152,14 +152,14 @@ classify_argument(
 		case FFI_TYPE_UINT64:
 		case FFI_TYPE_SINT64:
 		case FFI_TYPE_POINTER:
-#if 0
+#  if 0
 			if (byte_offset + type->size <= 4)
 				classes[0] = X86_64_INTEGERSI_CLASS;
 			else
 				classes[0] = X86_64_INTEGER_CLASS;
 
 			return 1;
-#else
+#  else
 		{
 			int size = byte_offset + type->size;
 
@@ -187,7 +187,7 @@ classify_argument(
 			else
 				FFI_ASSERT (0);
 		}
-#endif
+#  endif
 
 		case FFI_TYPE_FLOAT:
 			if (byte_offset == 0)
@@ -615,15 +615,15 @@ ffi_prep_closure(
 	return FFI_OK;
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-prototypes"
+#  pragma clang diagnostic push
+#  pragma clang diagnostic ignored "-Wmissing-prototypes"
 int
 ffi_closure_unix64_inner(
 	ffi_closure*	closure,
 	void*			rvalue,
 	RegisterArgs*	reg_args,
 	char*			argp)
-#pragma clang diagnostic pop
+#  pragma clang diagnostic pop
 {
 	ffi_cif*	cif = closure->cif;
 	void**		avalue = alloca(cif->nargs * sizeof(void *));
@@ -689,7 +689,7 @@ ffi_closure_unix64_inner(
 			argp += arg_types[i]->size;
 		}
 
-#if !defined(X86_DARWIN)
+#  if !defined(X86_DARWIN)
 		/*	If the argument is in a single register, or two consecutive
 			registers, then we can use that address directly.  */
 		else if (n == 1 || (n == 2 &&
@@ -707,7 +707,7 @@ ffi_closure_unix64_inner(
 				gprcount += n;
 			}
 		}
-#endif
+#  endif
 
 		/* Otherwise, allocate space to make them consecutive.  */
 		else

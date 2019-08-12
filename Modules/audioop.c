@@ -6,10 +6,10 @@
 #include "Python.h"
 
 #if defined(__CHAR_UNSIGNED__)
-#if defined(signed)
+#  if defined(signed)
 /* This module currently does not work on systems where only unsigned
    characters are available.  Take it out of Setup.  Sorry. */
-#endif
+#  endif
 #endif
 
 static const int maxvals[] = {0, 0x7F, 0x7FFF, 0x7FFFFF, 0x7FFFFFFF};
@@ -305,12 +305,12 @@ static const int stepsizeTable[89] = {
 #define GETINT32(cp, i)         GETINTX(int32_t, (cp), (i))
 
 #if WORDS_BIGENDIAN
-#define GETINT24(cp, i)  (                              \
+#  define GETINT24(cp, i)  (                              \
         ((unsigned char *)(cp) + (i))[2] +              \
         (((unsigned char *)(cp) + (i))[1] << 8) +       \
         (((signed char *)(cp) + (i))[0] << 16) )
 #else
-#define GETINT24(cp, i)  (                              \
+#  define GETINT24(cp, i)  (                              \
         ((unsigned char *)(cp) + (i))[0] +              \
         (((unsigned char *)(cp) + (i))[1] << 8) +       \
         (((signed char *)(cp) + (i))[2] << 16) )
@@ -322,13 +322,13 @@ static const int stepsizeTable[89] = {
 #define SETINT32(cp, i, val)    SETINTX(int32_t, (cp), (i), (val))
 
 #if WORDS_BIGENDIAN
-#define SETINT24(cp, i, val)  do {                              \
+#  define SETINT24(cp, i, val)  do {                              \
         ((unsigned char *)(cp) + (i))[2] = (int)(val);          \
         ((unsigned char *)(cp) + (i))[1] = (int)(val) >> 8;     \
         ((signed char *)(cp) + (i))[0] = (int)(val) >> 16;      \
     } while (0)
 #else
-#define SETINT24(cp, i, val)  do {                              \
+#  define SETINT24(cp, i, val)  do {                              \
         ((unsigned char *)(cp) + (i))[0] = (int)(val);          \
         ((unsigned char *)(cp) + (i))[1] = (int)(val) >> 8;     \
         ((signed char *)(cp) + (i))[2] = (int)(val) >> 16;      \

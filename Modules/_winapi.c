@@ -43,17 +43,17 @@
 #include "winreparse.h"
 
 #if defined(MS_WIN32) && !defined(MS_WIN64)
-#define HANDLE_TO_PYNUM(handle) \
+#  define HANDLE_TO_PYNUM(handle) \
     PyLong_FromUnsignedLong((unsigned long) handle)
-#define PYNUM_TO_HANDLE(obj) ((HANDLE)PyLong_AsUnsignedLong(obj))
-#define F_POINTER "k"
-#define T_POINTER T_ULONG
+#  define PYNUM_TO_HANDLE(obj) ((HANDLE)PyLong_AsUnsignedLong(obj))
+#  define F_POINTER "k"
+#  define T_POINTER T_ULONG
 #else
-#define HANDLE_TO_PYNUM(handle) \
+#  define HANDLE_TO_PYNUM(handle) \
     PyLong_FromUnsignedLongLong((unsigned long long) handle)
-#define PYNUM_TO_HANDLE(obj) ((HANDLE)PyLong_AsUnsignedLongLong(obj))
-#define F_POINTER "K"
-#define T_POINTER T_ULONGLONG
+#  define PYNUM_TO_HANDLE(obj) ((HANDLE)PyLong_AsUnsignedLongLong(obj))
+#  define F_POINTER "K"
+#  define T_POINTER T_ULONGLONG
 #endif
 
 #define F_HANDLE F_POINTER
@@ -155,7 +155,7 @@ def create_converter(type_, format_unit):
     # registered upon creation by CConverter's metaclass
     type(name, (CConverter,), {'type': type_, 'format_unit': format_unit})
 
-#format unit differs between platforms for these
+# format unit differs between platforms for these
 create_converter('HANDLE', '" F_HANDLE "')
 create_converter('HMODULE', '" F_HANDLE "')
 create_converter('LPSECURITY_ATTRIBUTES', '" F_POINTER "')
@@ -1212,11 +1212,11 @@ static PyObject *
 _winapi_ExitProcess_impl(PyObject *module, UINT ExitCode)
 /*[clinic end generated code: output=a387deb651175301 input=4f05466a9406c558]*/
 {
-    #if defined(Py_DEBUG)
+#if defined(Py_DEBUG)
         SetErrorMode(SEM_FAILCRITICALERRORS|SEM_NOALIGNMENTFAULTEXCEPT|
                      SEM_NOGPFAULTERRORBOX|SEM_NOOPENFILEERRORBOX);
         _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_DEBUG);
-    #endif
+#endif
 
     ExitProcess(ExitCode);
 

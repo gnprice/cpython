@@ -23,14 +23,14 @@
 #include "structmember.h"
 
 #ifndef MS_WINDOWS
-#define UNIX
-#ifdef HAVE_FCNTL_H
-#  include <fcntl.h>
-#endif /* HAVE_FCNTL_H */
+#  define UNIX
+#  ifdef HAVE_FCNTL_H
+#    include <fcntl.h>
+#  endif /* HAVE_FCNTL_H */
 #endif
 
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 static int
 my_getpagesize(void)
 {
@@ -51,32 +51,32 @@ my_getallocationgranularity (void)
 #endif
 
 #ifdef UNIX
-#include <sys/mman.h>
-#include <sys/stat.h>
+#  include <sys/mman.h>
+#  include <sys/stat.h>
 
-#if defined(HAVE_SYSCONF) && defined(_SC_PAGESIZE)
+#  if defined(HAVE_SYSCONF) && defined(_SC_PAGESIZE)
 static int
 my_getpagesize(void)
 {
     return sysconf(_SC_PAGESIZE);
 }
 
-#  define my_getallocationgranularity my_getpagesize
-#else
-#  define my_getpagesize getpagesize
-#endif
+#    define my_getallocationgranularity my_getpagesize
+#  else
+#    define my_getpagesize getpagesize
+#  endif
 
 #endif /* UNIX */
 
 #include <string.h>
 
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif /* HAVE_SYS_TYPES_H */
 
 /* Prefer MAP_ANONYMOUS since MAP_ANON is deprecated according to man page. */
 #if !defined(MAP_ANONYMOUS) && defined(MAP_ANON)
-#define MAP_ANONYMOUS MAP_ANON
+#  define MAP_ANONYMOUS MAP_ANON
 #endif
 
 typedef enum
@@ -198,7 +198,7 @@ mmap_close_method(mmap_object *self, PyObject *unused)
 }
 
 #ifdef MS_WINDOWS
-#define CHECK_VALID(err)                                                \
+#  define CHECK_VALID(err)                                                \
 do {                                                                    \
     if (self->map_handle == NULL) {                                     \
     PyErr_SetString(PyExc_ValueError, "mmap closed or invalid");        \
@@ -208,7 +208,7 @@ do {                                                                    \
 #endif /* MS_WINDOWS */
 
 #ifdef UNIX
-#define CHECK_VALID(err)                                                \
+#  define CHECK_VALID(err)                                                \
 do {                                                                    \
     if (self->data == NULL) {                                           \
     PyErr_SetString(PyExc_ValueError, "mmap closed or invalid");        \
@@ -445,11 +445,11 @@ mmap_size_method(mmap_object *self,
         struct _Py_stat_struct status;
         if (_Py_fstat(self->fd, &status) == -1)
             return NULL;
-#ifdef HAVE_LARGEFILE_SUPPORT
+#  ifdef HAVE_LARGEFILE_SUPPORT
         return PyLong_FromLongLong(status.st_size);
-#else
+#  else
         return PyLong_FromLong(status.st_size);
-#endif
+#  endif
     }
 #endif /* UNIX */
 }
@@ -527,11 +527,11 @@ mmap_resize_method(mmap_object *self,
 #endif /* MS_WINDOWS */
 
 #ifdef UNIX
-#ifndef HAVE_MREMAP
+#  ifndef HAVE_MREMAP
         PyErr_SetString(PyExc_SystemError,
                         "mmap: resizing not available--no mremap()");
         return NULL;
-#else
+#  else
         void *newmap;
 
         if (self->fd != -1 && ftruncate(self->fd, self->offset + new_size) == -1) {
@@ -539,15 +539,15 @@ mmap_resize_method(mmap_object *self,
             return NULL;
         }
 
-#  ifdef MREMAP_MAYMOVE
+#    ifdef MREMAP_MAYMOVE
         newmap = mremap(self->data, self->size, new_size, MREMAP_MAYMOVE);
-#  else
-#    if defined(__NetBSD__)
-        newmap = mremap(self->data, self->size, self->data, new_size, 0);
 #    else
+#      if defined(__NetBSD__)
+        newmap = mremap(self->data, self->size, self->data, new_size, 0);
+#      else
         newmap = mremap(self->data, self->size, new_size, 0);
-#    endif /* __NetBSD__ */
-#  endif
+#      endif /* __NetBSD__ */
+#    endif
         if (newmap == (void *)-1)
         {
             PyErr_SetFromErrno(PyExc_OSError);
@@ -556,7 +556,7 @@ mmap_resize_method(mmap_object *self,
         self->data = newmap;
         self->size = new_size;
         Py_RETURN_NONE;
-#endif /* HAVE_MREMAP */
+#  endif /* HAVE_MREMAP */
 #endif /* UNIX */
     }
 }
@@ -1083,11 +1083,11 @@ static PyTypeObject mmap_object_type = {
 
 
 #ifdef UNIX
-#ifdef HAVE_LARGEFILE_SUPPORT
-#  define _Py_PARSE_OFF_T "L"
-#else
-#  define _Py_PARSE_OFF_T "l"
-#endif
+#  ifdef HAVE_LARGEFILE_SUPPORT
+#    define _Py_PARSE_OFF_T "L"
+#  else
+#    define _Py_PARSE_OFF_T "l"
+#  endif
 
 static PyObject *
 new_mmap_object(PyTypeObject *type, PyObject *args, PyObject *kwdict)
@@ -1158,12 +1158,12 @@ new_mmap_object(PyTypeObject *type, PyObject *args, PyObject *kwdict)
         return NULL;
     }
 
-#ifdef __APPLE__
+#  ifdef __APPLE__
     /* Issue #11277: fsync(2) is not enough on OS X - a special, OS X specific
        fcntl(2) is necessary to force DISKSYNC and get around mmap(2) bug */
     if (fd != -1)
         (void)fcntl(fd, F_FULLFSYNC);
-#endif
+#  endif
 
     if (fd != -1) {
         Py_BEGIN_ALLOW_THREADS
@@ -1209,24 +1209,24 @@ new_mmap_object(PyTypeObject *type, PyObject *args, PyObject *kwdict)
            This is the same behaviour as Windows.  mmap.mmap(-1, size)
            on both Windows and Unix map anonymous memory.
         */
-#ifdef MAP_ANONYMOUS
+#  ifdef MAP_ANONYMOUS
         /* BSD way to map anonymous memory */
         flags |= MAP_ANONYMOUS;
 
         /* VxWorks only supports MAP_ANONYMOUS with MAP_PRIVATE flag */
-#  ifdef __VXWORKS__
+#    ifdef __VXWORKS__
         flags &= ~MAP_SHARED;
         flags |= MAP_PRIVATE;
-#  endif
+#    endif
 
-#else
+#  else
         /* SVR4 method to map anonymous memory is to open /dev/zero */
         fd = devzero = _Py_open("/dev/zero", O_RDWR);
         if (devzero == -1) {
             Py_DECREF(m_obj);
             return NULL;
         }
-#endif
+#  endif
     }
     else {
         m_obj->fd = _Py_dup(fd);
@@ -1540,76 +1540,76 @@ PyInit_mmap(void)
 
 #ifdef HAVE_MADVISE
     // Conventional advice values
-#ifdef MADV_NORMAL
+#  ifdef MADV_NORMAL
     setint(dict, "MADV_NORMAL", MADV_NORMAL);
-#endif
-#ifdef MADV_RANDOM
+#  endif
+#  ifdef MADV_RANDOM
     setint(dict, "MADV_RANDOM", MADV_RANDOM);
-#endif
-#ifdef MADV_SEQUENTIAL
+#  endif
+#  ifdef MADV_SEQUENTIAL
     setint(dict, "MADV_SEQUENTIAL", MADV_SEQUENTIAL);
-#endif
-#ifdef MADV_WILLNEED
+#  endif
+#  ifdef MADV_WILLNEED
     setint(dict, "MADV_WILLNEED", MADV_WILLNEED);
-#endif
-#ifdef MADV_DONTNEED
+#  endif
+#  ifdef MADV_DONTNEED
     setint(dict, "MADV_DONTNEED", MADV_DONTNEED);
-#endif
+#  endif
 
     // Linux-specific advice values
-#ifdef MADV_REMOVE
+#  ifdef MADV_REMOVE
     setint(dict, "MADV_REMOVE", MADV_REMOVE);
-#endif
-#ifdef MADV_DONTFORK
+#  endif
+#  ifdef MADV_DONTFORK
     setint(dict, "MADV_DONTFORK", MADV_DONTFORK);
-#endif
-#ifdef MADV_DOFORK
+#  endif
+#  ifdef MADV_DOFORK
     setint(dict, "MADV_DOFORK", MADV_DOFORK);
-#endif
-#ifdef MADV_HWPOISON
+#  endif
+#  ifdef MADV_HWPOISON
     setint(dict, "MADV_HWPOISON", MADV_HWPOISON);
-#endif
-#ifdef MADV_MERGEABLE
+#  endif
+#  ifdef MADV_MERGEABLE
     setint(dict, "MADV_MERGEABLE", MADV_MERGEABLE);
-#endif
-#ifdef MADV_UNMERGEABLE
+#  endif
+#  ifdef MADV_UNMERGEABLE
     setint(dict, "MADV_UNMERGEABLE", MADV_UNMERGEABLE);
-#endif
-#ifdef MADV_SOFT_OFFLINE
+#  endif
+#  ifdef MADV_SOFT_OFFLINE
     setint(dict, "MADV_SOFT_OFFLINE", MADV_SOFT_OFFLINE);
-#endif
-#ifdef MADV_HUGEPAGE
+#  endif
+#  ifdef MADV_HUGEPAGE
     setint(dict, "MADV_HUGEPAGE", MADV_HUGEPAGE);
-#endif
-#ifdef MADV_NOHUGEPAGE
+#  endif
+#  ifdef MADV_NOHUGEPAGE
     setint(dict, "MADV_NOHUGEPAGE", MADV_NOHUGEPAGE);
-#endif
-#ifdef MADV_DONTDUMP
+#  endif
+#  ifdef MADV_DONTDUMP
     setint(dict, "MADV_DONTDUMP", MADV_DONTDUMP);
-#endif
-#ifdef MADV_DODUMP
+#  endif
+#  ifdef MADV_DODUMP
     setint(dict, "MADV_DODUMP", MADV_DODUMP);
-#endif
-#ifdef MADV_FREE // (Also present on FreeBSD and macOS.)
+#  endif
+#  ifdef MADV_FREE // (Also present on FreeBSD and macOS.)
     setint(dict, "MADV_FREE", MADV_FREE);
-#endif
+#  endif
 
     // FreeBSD-specific
-#ifdef MADV_NOSYNC
+#  ifdef MADV_NOSYNC
     setint(dict, "MADV_NOSYNC", MADV_NOSYNC);
-#endif
-#ifdef MADV_AUTOSYNC
+#  endif
+#  ifdef MADV_AUTOSYNC
     setint(dict, "MADV_AUTOSYNC", MADV_AUTOSYNC);
-#endif
-#ifdef MADV_NOCORE
+#  endif
+#  ifdef MADV_NOCORE
     setint(dict, "MADV_NOCORE", MADV_NOCORE);
-#endif
-#ifdef MADV_CORE
+#  endif
+#  ifdef MADV_CORE
     setint(dict, "MADV_CORE", MADV_CORE);
-#endif
-#ifdef MADV_PROTECT
+#  endif
+#  ifdef MADV_PROTECT
     setint(dict, "MADV_PROTECT", MADV_PROTECT);
-#endif
+#  endif
 #endif // HAVE_MADVISE
 
     return module;

@@ -37,20 +37,20 @@
 
 #if 0
 static int memory = 0;
-#define ALLOC(size, comment)\
+#  define ALLOC(size, comment)\
 do { memory += size; printf("%8d - %s\n", memory, comment); } while (0)
-#define RELEASE(size, comment)\
+#  define RELEASE(size, comment)\
 do { memory -= size; printf("%8d - %s\n", memory, comment); } while (0)
 #else
-#define ALLOC(size, comment)
-#define RELEASE(size, comment)
+#  define ALLOC(size, comment)
+#  define RELEASE(size, comment)
 #endif
 
 /* compiler tweaks */
 #if defined(_MSC_VER)
-#define LOCAL(type) static __inline type __fastcall
+#  define LOCAL(type) static __inline type __fastcall
 #else
-#define LOCAL(type) static type
+#  define LOCAL(type) static type
 #endif
 
 /* macros used to store 'join' flags in string object pointers.  note

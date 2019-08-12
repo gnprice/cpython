@@ -109,7 +109,7 @@
   };
 
 #else
-  #error "CONFIG_64 or CONFIG_32 must be defined."
+#  error "CONFIG_64 or CONFIG_32 must be defined."
 #endif
 
 const char *mpd_round_string[MPD_ROUND_GUARD] = {

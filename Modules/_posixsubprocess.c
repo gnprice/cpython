@@ -1,50 +1,50 @@
 /* Authors: Gregory P. Smith & Jeffrey Yasskin */
 #include "Python.h"
 #if defined(HAVE_PIPE2) && !defined(_GNU_SOURCE)
-#define _GNU_SOURCE
+#  define _GNU_SOURCE
 #endif
 #include <unistd.h>
 #include <fcntl.h>
 #ifdef HAVE_SYS_TYPES_H
-#include <sys/types.h>
+#  include <sys/types.h>
 #endif
 #if defined(HAVE_SYS_STAT_H) && defined(__FreeBSD__)
-#include <sys/stat.h>
+#  include <sys/stat.h>
 #endif
 #ifdef HAVE_SYS_SYSCALL_H
-#include <sys/syscall.h>
+#  include <sys/syscall.h>
 #endif
 #if defined(HAVE_SYS_RESOURCE_H)
-#include <sys/resource.h>
+#  include <sys/resource.h>
 #endif
 #ifdef HAVE_DIRENT_H
-#include <dirent.h>
+#  include <dirent.h>
 #endif
 
 #ifdef _Py_MEMORY_SANITIZER
-#include <sanitizer/msan_interface.h>
+#  include <sanitizer/msan_interface.h>
 #endif
 
 #if defined(__ANDROID__) && __ANDROID_API__ < 21 && !defined(SYS_getdents64)
-#include <sys/linux-syscalls.h>
-#define SYS_getdents64  __NR_getdents64
+#  include <sys/linux-syscalls.h>
+#  define SYS_getdents64  __NR_getdents64
 #endif
 
 #if defined(__sun) && defined(__SVR4)
 /* readdir64 is used to work around Solaris 9 bug 6395699. */
-#define readdir readdir64
-#define dirent dirent64
-#if !defined(HAVE_DIRFD)
+#  define readdir readdir64
+#  define dirent dirent64
+#  if !defined(HAVE_DIRFD)
 /* Some versions of Solaris lack dirfd(). */
-#  define dirfd(dirp) ((dirp)->dd_fd)
-#  define HAVE_DIRFD
-#endif
+#    define dirfd(dirp) ((dirp)->dd_fd)
+#    define HAVE_DIRFD
+#  endif
 #endif
 
 #if defined(__FreeBSD__) || (defined(__APPLE__) && defined(__MACH__))
-#define FD_DIR "/dev/fd"
+#  define FD_DIR "/dev/fd"
 #else
-#define FD_DIR "/proc/self/fd"
+#  define FD_DIR "/proc/self/fd"
 #endif
 
 #define POSIX_CALL(call)   do { if ((call) == -1) goto error; } while (0)
@@ -291,9 +291,9 @@ _close_open_fds_safe(int start_fd, PyObject* py_fds_to_keep)
                                 sizeof(buffer))) > 0) {
             struct linux_dirent64 *entry;
             int offset;
-#ifdef _Py_MEMORY_SANITIZER
+#  ifdef _Py_MEMORY_SANITIZER
             __msan_unpoison(buffer, bytes);
-#endif
+#  endif
             for (offset = 0; offset < bytes; offset += entry->d_reclen) {
                 int fd;
                 entry = (struct linux_dirent64 *)(buffer + offset);
@@ -309,7 +309,7 @@ _close_open_fds_safe(int start_fd, PyObject* py_fds_to_keep)
     }
 }
 
-#define _close_open_fds _close_open_fds_safe
+#  define _close_open_fds _close_open_fds_safe
 
 #else  /* NOT (defined(__linux__) && defined(HAVE_SYS_SYSCALL_H)) */
 
@@ -331,7 +331,7 @@ static void
 _close_open_fds_maybe_unsafe(long start_fd, PyObject* py_fds_to_keep)
 {
     DIR *proc_fd_dir;
-#ifndef HAVE_DIRFD
+#  ifndef HAVE_DIRFD
     while (_is_fd_in_sorted_fd_sequence(start_fd, py_fds_to_keep)) {
         ++start_fd;
     }
@@ -341,24 +341,24 @@ _close_open_fds_maybe_unsafe(long start_fd, PyObject* py_fds_to_keep)
      * available basis. */
     close(start_fd);
     ++start_fd;
-#endif
+#  endif
 
-#if defined(__FreeBSD__)
+#  if defined(__FreeBSD__)
     if (!_is_fdescfs_mounted_on_dev_fd())
         proc_fd_dir = NULL;
     else
-#endif
+#  endif
         proc_fd_dir = opendir(FD_DIR);
     if (!proc_fd_dir) {
         /* No way to get a list of open fds. */
         _close_fds_by_brute_force(start_fd, py_fds_to_keep);
     } else {
         struct dirent *dir_entry;
-#ifdef HAVE_DIRFD
+#  ifdef HAVE_DIRFD
         int fd_used_by_opendir = dirfd(proc_fd_dir);
-#else
+#  else
         int fd_used_by_opendir = start_fd - 1;
-#endif
+#  endif
         errno = 0;
         while ((dir_entry = readdir(proc_fd_dir))) {
             int fd;
@@ -378,7 +378,7 @@ _close_open_fds_maybe_unsafe(long start_fd, PyObject* py_fds_to_keep)
     }
 }
 
-#define _close_open_fds _close_open_fds_maybe_unsafe
+#  define _close_open_fds _close_open_fds_maybe_unsafe
 
 #endif  /* else NOT (defined(__linux__) && defined(HAVE_SYS_SYSCALL_H)) */
 

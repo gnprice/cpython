@@ -54,11 +54,11 @@ _Py_acosh(double x)
     }
     if (x < 1.) {                       /* x < 1;  return a signaling NaN */
         errno = EDOM;
-#ifdef Py_NAN
+#  ifdef Py_NAN
         return Py_NAN;
-#else
+#  else
         return (x-x)/(x-x);
-#endif
+#  endif
     }
     else if (x >= two_pow_p28) {        /* x > 2**28 */
         if (Py_IS_INFINITY(x)) {
@@ -153,11 +153,11 @@ _Py_atanh(double x)
     absx = fabs(x);
     if (absx >= 1.) {                   /* |x| >= 1 */
         errno = EDOM;
-#ifdef Py_NAN
+#  ifdef Py_NAN
         return Py_NAN;
-#else
+#  else
         return x / zero;
-#endif
+#  endif
     }
     if (absx < two_pow_m28) {           /* |x| < 2**-28 */
         return x;

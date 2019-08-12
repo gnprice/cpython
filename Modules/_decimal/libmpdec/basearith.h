@@ -27,12 +27,12 @@
 
 
 #ifndef BASEARITH_H
-#define BASEARITH_H
+#  define BASEARITH_H
 
 
-#include "mpdecimal.h"
-#include <stdio.h>
-#include "typearith.h"
+#  include "mpdecimal.h"
+#  include <stdio.h>
+#  include "typearith.h"
 
 
 /* Internal header file: all symbols have local scope in the DSO */
@@ -70,7 +70,7 @@ mpd_uint_t _mpd_baseshiftr(mpd_uint_t *dest, mpd_uint_t *src, mpd_size_t slen,
 
 
 
-#ifdef CONFIG_64
+#  ifdef CONFIG_64
 extern const mpd_uint_t mprime_rdx;
 
 /*
@@ -138,13 +138,13 @@ _mpd_div_words_r(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo)
     *q = (h - t);
     *r = l + (MPD_RADIX & h);
 }
-#else
+#  else
 static inline void
 _mpd_div_words_r(mpd_uint_t *q, mpd_uint_t *r, mpd_uint_t hi, mpd_uint_t lo)
 {
     _mpd_div_words(q, r, hi, lo, MPD_RADIX);
 }
-#endif
+#  endif
 
 
 /* Multiply two single base MPD_RADIX words, store result in array w[2]. */

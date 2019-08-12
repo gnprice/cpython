@@ -7,13 +7,13 @@
 #include <frameobject.h>
 #include <signal.h>
 #if defined(HAVE_PTHREAD_SIGMASK) && !defined(HAVE_BROKEN_PTHREAD_SIGMASK)
-#include <pthread.h>
+#  include <pthread.h>
 #endif
 #ifdef MS_WINDOWS
-#include <windows.h>
+#  include <windows.h>
 #endif
 #ifdef HAVE_SYS_RESOURCE_H
-#include <sys/resource.h>
+#  include <sys/resource.h>
 #endif
 
 /* Allocate at maximum 100 MiB of the stack to raise the stack overflow */
@@ -25,7 +25,7 @@
    /* register() is useless on Windows, because only SIGSEGV, SIGABRT and
       SIGILL can be handled by the process, and these signals can only be used
       with enable(), not using register() */
-#define FAULTHANDLER_USER
+#  define FAULTHANDLER_USER
 #endif
 
 #define PUTS(fd, str) _Py_write_noraise(fd, str, strlen(str))
@@ -93,17 +93,17 @@ typedef struct {
 static user_signal_t *user_signals;
 
 /* the following macros come from Python: Modules/signalmodule.c */
-#ifndef NSIG
-#  if defined(_NSIG)
-#    define NSIG _NSIG            /* For BSD/SysV */
-#  elif defined(_SIGMAX)
-#    define NSIG (_SIGMAX + 1)    /* For QNX */
-#  elif defined(SIGMAX)
-#    define NSIG (SIGMAX + 1)     /* For djgpp */
-#  else
-#    define NSIG 64               /* Use a reasonable default value */
+#  ifndef NSIG
+#    if defined(_NSIG)
+#      define NSIG _NSIG            /* For BSD/SysV */
+#    elif defined(_SIGMAX)
+#      define NSIG (_SIGMAX + 1)    /* For QNX */
+#    elif defined(SIGMAX)
+#      define NSIG (SIGMAX + 1)     /* For djgpp */
+#    else
+#      define NSIG 64               /* Use a reasonable default value */
+#    endif
 #  endif
-#endif
 
 static void faulthandler_user(int signum);
 #endif /* FAULTHANDLER_USER */
@@ -452,13 +452,13 @@ faulthandler_enable(void)
         /* Do not prevent the signal from being received from within
            its own signal handler */
         action.sa_flags = SA_NODEFER;
-#ifdef HAVE_SIGALTSTACK
+#  ifdef HAVE_SIGALTSTACK
         if (stack.ss_sp != NULL) {
             /* Call the signal handler on an alternate signal stack
                provided by sigaltstack() */
             action.sa_flags |= SA_ONSTACK;
         }
-#endif
+#  endif
         err = sigaction(handler->signum, &action, &handler->previous);
 #else
         handler->previous = signal(handler->signum,
@@ -558,13 +558,13 @@ faulthandler_thread(void *unused)
     PyLockStatus st;
     const char* errmsg;
     int ok;
-#if defined(HAVE_PTHREAD_SIGMASK) && !defined(HAVE_BROKEN_PTHREAD_SIGMASK)
+#  if defined(HAVE_PTHREAD_SIGMASK) && !defined(HAVE_BROKEN_PTHREAD_SIGMASK)
     sigset_t set;
 
     /* we don't want to receive any signal */
     sigfillset(&set);
     pthread_sigmask(SIG_SETMASK, &set, NULL);
-#endif
+#  endif
 
     do {
         st = PyThread_acquire_lock_timed(thread.cancel_event,
@@ -609,7 +609,7 @@ cancel_dump_traceback_later(void)
     }
 }
 
-#define SEC_TO_US (1000 * 1000)
+#  define SEC_TO_US (1000 * 1000)
 
 static char*
 format_timeout(_PyTime_t us)
@@ -732,7 +732,7 @@ faulthandler_cancel_dump_traceback_later_py(PyObject *self,
 static int
 faulthandler_register(int signum, int chain, _Py_sighandler_t *p_previous)
 {
-#ifdef HAVE_SIGACTION
+#  ifdef HAVE_SIGACTION
     struct sigaction action;
     action.sa_handler = faulthandler_user;
     sigemptyset(&action.sa_mask);
@@ -745,21 +745,21 @@ faulthandler_register(int signum, int chain, _Py_sighandler_t *p_previous)
            own signal handler */
         action.sa_flags = SA_NODEFER;
     }
-#  ifdef HAVE_SIGALTSTACK
+#    ifdef HAVE_SIGALTSTACK
     if (stack.ss_sp != NULL) {
         /* Call the signal handler on an alternate signal stack
            provided by sigaltstack() */
         action.sa_flags |= SA_ONSTACK;
     }
-#  endif
+#    endif
     return sigaction(signum, &action, p_previous);
-#else
+#  else
     _Py_sighandler_t previous;
     previous = signal(signum, faulthandler_user);
     if (p_previous != NULL)
         *p_previous = previous;
     return (previous == SIG_ERR);
-#endif
+#  endif
 }
 
 /* Handler of user signals (e.g. SIGUSR1).
@@ -781,7 +781,7 @@ faulthandler_user(int signum)
 
     faulthandler_dump_traceback(user->fd, user->all_threads, user->interp);
 
-#ifdef HAVE_SIGACTION
+#  ifdef HAVE_SIGACTION
     if (user->chain) {
         (void)sigaction(signum, &user->previous, NULL);
         errno = save_errno;
@@ -793,13 +793,13 @@ faulthandler_user(int signum)
         (void)faulthandler_register(signum, user->chain, NULL);
         errno = save_errno;
     }
-#else
+#  else
     if (user->chain) {
         errno = save_errno;
         /* call the previous signal handler */
         user->previous(signum);
     }
-#endif
+#  endif
 }
 
 static int
@@ -887,11 +887,11 @@ faulthandler_unregister(user_signal_t *user, int signum)
     if (!user->enabled)
         return 0;
     user->enabled = 0;
-#ifdef HAVE_SIGACTION
+#  ifdef HAVE_SIGACTION
     (void)sigaction(signum, &user->previous, NULL);
-#else
+#  else
     (void)signal(signum, user->previous);
-#endif
+#  endif
     Py_CLEAR(user->file);
     user->fd = -1;
     return 1;
@@ -1095,14 +1095,14 @@ faulthandler_fatal_error_py(PyObject *self, PyObject *args)
 }
 
 #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
-#define FAULTHANDLER_STACK_OVERFLOW
+#  define FAULTHANDLER_STACK_OVERFLOW
 
-#ifdef __INTEL_COMPILER
+#  ifdef __INTEL_COMPILER
    /* Issue #23654: Turn off ICC's tail call optimization for the
     * stack_overflow generator. ICC turns the recursive tail call into
     * a loop. */
-#  pragma intel optimization_level 0
-#endif
+#    pragma intel optimization_level 0
+#  endif
 static
 uintptr_t
 stack_overflow(uintptr_t min_sp, uintptr_t max_sp, size_t *depth)

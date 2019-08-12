@@ -19,24 +19,24 @@ This software comes with no warranty. Use at your own risk.
 #include <ctype.h>
 
 #ifdef HAVE_ERRNO_H
-#include <errno.h>
+#  include <errno.h>
 #endif
 
 #ifdef HAVE_LANGINFO_H
-#include <langinfo.h>
+#  include <langinfo.h>
 #endif
 
 #ifdef HAVE_LIBINTL_H
-#include <libintl.h>
+#  include <libintl.h>
 #endif
 
 #ifdef HAVE_WCHAR_H
-#include <wchar.h>
+#  include <wchar.h>
 #endif
 
 #if defined(MS_WINDOWS)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
 #endif
 
 PyDoc_STRVAR(locale__doc__, "Support for POSIX locales.");
@@ -423,7 +423,7 @@ PyLocale_getdefaultlocale(PyObject* self, PyObject *Py_UNUSED(ignored))
 #endif
 
 #ifdef HAVE_LANGINFO_H
-#define LANGINFO(X) {#X, X}
+#  define LANGINFO(X) {#X, X}
 static struct langinfo_constant{
     char* name;
     int value;
@@ -472,7 +472,7 @@ static struct langinfo_constant{
     LANGINFO(ABMON_11),
     LANGINFO(ABMON_12),
 
-#ifdef RADIXCHAR
+#  ifdef RADIXCHAR
     /* The following are not available with glibc 2.0 */
     LANGINFO(RADIXCHAR),
     LANGINFO(THOUSEP),
@@ -484,7 +484,7 @@ static struct langinfo_constant{
     LANGINFO(NOSTR),
     */
     LANGINFO(CRNCYSTR),
-#endif
+#  endif
 
     LANGINFO(D_T_FMT),
     LANGINFO(D_FMT),
@@ -497,37 +497,37 @@ static struct langinfo_constant{
        OpenBSD doesn't have CODESET but has T_FMT_AMPM, and doesn't have
        a few of the others.
        Solution: ifdef-test them all. */
-#ifdef CODESET
+#  ifdef CODESET
     LANGINFO(CODESET),
-#endif
-#ifdef T_FMT_AMPM
+#  endif
+#  ifdef T_FMT_AMPM
     LANGINFO(T_FMT_AMPM),
-#endif
-#ifdef ERA
+#  endif
+#  ifdef ERA
     LANGINFO(ERA),
-#endif
-#ifdef ERA_D_FMT
+#  endif
+#  ifdef ERA_D_FMT
     LANGINFO(ERA_D_FMT),
-#endif
-#ifdef ERA_D_T_FMT
+#  endif
+#  ifdef ERA_D_T_FMT
     LANGINFO(ERA_D_T_FMT),
-#endif
-#ifdef ERA_T_FMT
+#  endif
+#  ifdef ERA_T_FMT
     LANGINFO(ERA_T_FMT),
-#endif
-#ifdef ALT_DIGITS
+#  endif
+#  ifdef ALT_DIGITS
     LANGINFO(ALT_DIGITS),
-#endif
-#ifdef YESEXPR
+#  endif
+#  ifdef YESEXPR
     LANGINFO(YESEXPR),
-#endif
-#ifdef NOEXPR
+#  endif
+#  ifdef NOEXPR
     LANGINFO(NOEXPR),
-#endif
-#ifdef _DATE_FMT
+#  endif
+#  ifdef _DATE_FMT
     /* This is not available in all glibc versions that have CODESET. */
     LANGINFO(_DATE_FMT),
-#endif
+#  endif
     {0, 0}
 };
 
@@ -651,7 +651,7 @@ PyIntl_bindtextdomain(PyObject* self,PyObject*args)
     return result;
 }
 
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+#  ifdef HAVE_BIND_TEXTDOMAIN_CODESET
 PyDoc_STRVAR(bind_textdomain_codeset__doc__,
 "bind_textdomain_codeset(domain, codeset) -> string\n"
 "Bind the C library's domain to codeset.");
@@ -668,7 +668,7 @@ PyIntl_bind_textdomain_codeset(PyObject* self,PyObject*args)
     }
     Py_RETURN_NONE;
 }
-#endif
+#  endif
 
 #endif
 
@@ -702,10 +702,10 @@ static struct PyMethodDef PyLocale_Methods[] = {
    textdomain__doc__},
   {"bindtextdomain",(PyCFunction)PyIntl_bindtextdomain,METH_VARARGS,
    bindtextdomain__doc__},
-#ifdef HAVE_BIND_TEXTDOMAIN_CODESET
+#  ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   {"bind_textdomain_codeset",(PyCFunction)PyIntl_bind_textdomain_codeset,
    METH_VARARGS, bind_textdomain_codeset__doc__},
-#endif
+#  endif
 #endif
   {NULL, NULL}
 };

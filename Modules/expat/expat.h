@@ -31,51 +31,51 @@
 */
 
 #ifndef Expat_INCLUDED
-#define Expat_INCLUDED 1
+#  define Expat_INCLUDED 1
 
-#ifdef __VMS
+#  ifdef __VMS
 /*      0        1         2         3      0        1         2         3
         1234567890123456789012345678901     1234567890123456789012345678901 */
-#  define XML_SetProcessingInstructionHandler XML_SetProcessingInstrHandler
-#  define XML_SetUnparsedEntityDeclHandler    XML_SetUnparsedEntDeclHandler
-#  define XML_SetStartNamespaceDeclHandler    XML_SetStartNamespcDeclHandler
-#  define XML_SetExternalEntityRefHandlerArg  XML_SetExternalEntRefHandlerArg
-#endif
+#    define XML_SetProcessingInstructionHandler XML_SetProcessingInstrHandler
+#    define XML_SetUnparsedEntityDeclHandler    XML_SetUnparsedEntDeclHandler
+#    define XML_SetStartNamespaceDeclHandler    XML_SetStartNamespcDeclHandler
+#    define XML_SetExternalEntityRefHandlerArg  XML_SetExternalEntRefHandlerArg
+#  endif
 
-#include <stdlib.h>
-#include "expat_external.h"
+#  include <stdlib.h>
+#  include "expat_external.h"
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 extern "C" {
-#endif
+#  endif
 
 struct XML_ParserStruct;
 typedef struct XML_ParserStruct *XML_Parser;
 
 typedef unsigned char XML_Bool;
-#define XML_TRUE   ((XML_Bool) 1)
-#define XML_FALSE  ((XML_Bool) 0)
+#  define XML_TRUE   ((XML_Bool) 1)
+#  define XML_FALSE  ((XML_Bool) 0)
 
 /* The XML_Status enum gives the possible return values for several
    API functions.  The preprocessor #defines are included so this
    stanza can be added to code that still needs to support older
    versions of Expat 1.95.x:
 
-   #ifndef XML_STATUS_OK
-   #define XML_STATUS_OK    1
-   #define XML_STATUS_ERROR 0
-   #endif
+#  ifndef XML_STATUS_OK
+#    define XML_STATUS_OK    1
+#    define XML_STATUS_ERROR 0
+#  endif
 
    Otherwise, the #define hackery is quite ugly and would have been
    dropped.
 */
 enum XML_Status {
   XML_STATUS_ERROR = 0,
-#define XML_STATUS_ERROR XML_STATUS_ERROR
+#  define XML_STATUS_ERROR XML_STATUS_ERROR
   XML_STATUS_OK = 1,
-#define XML_STATUS_OK XML_STATUS_OK
+#  define XML_STATUS_OK XML_STATUS_OK
   XML_STATUS_SUSPENDED = 2
-#define XML_STATUS_SUSPENDED XML_STATUS_SUSPENDED
+#  define XML_STATUS_SUSPENDED XML_STATUS_SUSPENDED
 };
 
 enum XML_Error {
@@ -700,7 +700,7 @@ XMLPARSEAPI(void)
 XML_SetUserData(XML_Parser parser, void *userData);
 
 /* Returns the last value set by XML_SetUserData or NULL. */
-#define XML_GetUserData(parser) (*(void **)(parser))
+#  define XML_GetUserData(parser) (*(void **)(parser))
 
 /* This is equivalent to supplying an encoding argument to
    XML_ParserCreate. On success XML_SetEncoding returns non-zero,
@@ -773,7 +773,7 @@ XML_GetSpecifiedAttributeCount(XML_Parser parser);
 XMLPARSEAPI(int)
 XML_GetIdAttributeIndex(XML_Parser parser);
 
-#ifdef XML_ATTR_INFO
+#  ifdef XML_ATTR_INFO
 /* Source file byte offsets for the start and end of attribute names and values.
    The value indices are exclusive of surrounding quotes; thus in a UTF-8 source
    file an attribute value of "blah" will yield:
@@ -794,7 +794,7 @@ typedef struct {
 */
 XMLPARSEAPI(const XML_AttrInfo *)
 XML_GetAttributeInfo(XML_Parser parser);
-#endif
+#  endif
 
 /* Parses some input. Returns XML_STATUS_ERROR if a fatal error is
    detected.  The last call to XML_Parse must have isFinal true; len
@@ -1000,9 +1000,9 @@ XML_GetInputContext(XML_Parser parser,
                     int *size);
 
 /* For backwards compatibility with previous versions. */
-#define XML_GetErrorLineNumber   XML_GetCurrentLineNumber
-#define XML_GetErrorColumnNumber XML_GetCurrentColumnNumber
-#define XML_GetErrorByteIndex    XML_GetCurrentByteIndex
+#  define XML_GetErrorLineNumber   XML_GetCurrentLineNumber
+#  define XML_GetErrorColumnNumber XML_GetCurrentColumnNumber
+#  define XML_GetErrorByteIndex    XML_GetCurrentByteIndex
 
 /* Frees the content model passed to the element declaration handler */
 XMLPARSEAPI(void)
@@ -1074,12 +1074,12 @@ XML_GetFeatureList(void);
 /* Expat follows the semantic versioning convention.
    See http://semver.org.
 */
-#define XML_MAJOR_VERSION 2
-#define XML_MINOR_VERSION 2
-#define XML_MICRO_VERSION 7
+#  define XML_MAJOR_VERSION 2
+#  define XML_MINOR_VERSION 2
+#  define XML_MICRO_VERSION 7
 
-#ifdef __cplusplus
+#  ifdef __cplusplus
 }
-#endif
+#  endif
 
 #endif /* not Expat_INCLUDED */

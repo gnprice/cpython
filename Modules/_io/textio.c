@@ -2325,21 +2325,21 @@ typedef struct {
    significant byte of the cookie, which means that in big-endian mode we
    must copy the fields in reverse order. */
 
-#define OFF_START_POS      (sizeof(char) + 3 * sizeof(int))
-#define OFF_DEC_FLAGS      (sizeof(char) + 2 * sizeof(int))
-#define OFF_BYTES_TO_FEED  (sizeof(char) + sizeof(int))
-#define OFF_CHARS_TO_SKIP  (sizeof(char))
-#define OFF_NEED_EOF       0
+#  define OFF_START_POS      (sizeof(char) + 3 * sizeof(int))
+#  define OFF_DEC_FLAGS      (sizeof(char) + 2 * sizeof(int))
+#  define OFF_BYTES_TO_FEED  (sizeof(char) + sizeof(int))
+#  define OFF_CHARS_TO_SKIP  (sizeof(char))
+#  define OFF_NEED_EOF       0
 
 #else
 /* Little-endian mode: the least significant byte of start_pos will
    naturally end up the least significant byte of the cookie. */
 
-#define OFF_START_POS      0
-#define OFF_DEC_FLAGS      (sizeof(Py_off_t))
-#define OFF_BYTES_TO_FEED  (sizeof(Py_off_t) + sizeof(int))
-#define OFF_CHARS_TO_SKIP  (sizeof(Py_off_t) + 2 * sizeof(int))
-#define OFF_NEED_EOF       (sizeof(Py_off_t) + 3 * sizeof(int))
+#  define OFF_START_POS      0
+#  define OFF_DEC_FLAGS      (sizeof(Py_off_t))
+#  define OFF_BYTES_TO_FEED  (sizeof(Py_off_t) + sizeof(int))
+#  define OFF_CHARS_TO_SKIP  (sizeof(Py_off_t) + 2 * sizeof(int))
+#  define OFF_NEED_EOF       (sizeof(Py_off_t) + 3 * sizeof(int))
 
 #endif
 

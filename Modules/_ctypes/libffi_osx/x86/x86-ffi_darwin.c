@@ -27,10 +27,10 @@
    OTHER DEALINGS IN THE SOFTWARE.
    ----------------------------------------------------------------------- */
 
-#include <ffi.h>
-#include <ffi_common.h>
+#  include <ffi.h>
+#  include <ffi_common.h>
 
-#include <stdlib.h>
+#  include <stdlib.h>
 
 /* ffi_prep_args is called by the assembly routine once stack space
  has been allocated for the function's arguments */
@@ -120,13 +120,13 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
     switch (cif->rtype->type)
     {
         case FFI_TYPE_VOID:
-#ifdef X86
+#  ifdef X86
         case FFI_TYPE_STRUCT:
         case FFI_TYPE_UINT8:
         case FFI_TYPE_UINT16:
         case FFI_TYPE_SINT8:
         case FFI_TYPE_SINT16:
-#endif
+#  endif
             
         case FFI_TYPE_SINT64:
         case FFI_TYPE_FLOAT:
@@ -139,7 +139,7 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
             cif->flags = FFI_TYPE_SINT64;
             break;
             
-#ifndef X86
+#  ifndef X86
         case FFI_TYPE_STRUCT:
             if (cif->rtype->size == 1)
             {
@@ -162,16 +162,16 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
                 cif->flags = FFI_TYPE_STRUCT;
             }
             break;
-#endif
+#  endif
             
         default:
             cif->flags = FFI_TYPE_INT;
             break;
     }
     
-#ifdef X86_DARWIN
+#  ifdef X86_DARWIN
     cif->bytes = (cif->bytes + 15) & ~0xF;
-#endif
+#  endif
     
     return FFI_OK;
 }
@@ -179,11 +179,11 @@ ffi_status ffi_prep_cif_machdep(ffi_cif *cif)
 extern void ffi_call_SYSV(void (*)(char *, extended_cif *), extended_cif *,
                           unsigned, unsigned, unsigned *, void (*fn)());
 
-#ifdef X86_WIN32
+#  ifdef X86_WIN32
 extern void ffi_call_STDCALL(void (*)(char *, extended_cif *), extended_cif *,
                              unsigned, unsigned, unsigned *, void (*fn)());
 
-#endif /* X86_WIN32 */
+#  endif /* X86_WIN32 */
 
 void ffi_call(ffi_cif *cif, void (*fn)(), void *rvalue, void **avalue)
 {
@@ -210,12 +210,12 @@ void ffi_call(ffi_cif *cif, void (*fn)(), void *rvalue, void **avalue)
             ffi_call_SYSV(ffi_prep_args, &ecif, cif->bytes, cif->flags, ecif.rvalue,
                           fn);
             break;
-#ifdef X86_WIN32
+#  ifdef X86_WIN32
         case FFI_STDCALL:
             ffi_call_STDCALL(ffi_prep_args, &ecif, cif->bytes, cif->flags,
                              ecif.rvalue, fn);
             break;
-#endif /* X86_WIN32 */
+#  endif /* X86_WIN32 */
         default:
             FFI_ASSERT(0);
             break;
@@ -304,7 +304,7 @@ ffi_prep_incoming_args_SYSV(char *stack, void **rvalue, void **avalue,
 
 /* How to make a trampoline.  Derived from gcc/config/i386/i386.c. */
 
-#define FFI_INIT_TRAMPOLINE(TRAMP,FUN,CTX) \
+#  define FFI_INIT_TRAMPOLINE(TRAMP,FUN,CTX) \
 ({ unsigned char *__tramp = (unsigned char*)(TRAMP); \
 unsigned int  __fun = (unsigned int)(FUN); \
 unsigned int  __ctx = (unsigned int)(CTX); \
@@ -339,7 +339,7 @@ ffi_prep_closure (ffi_closure* closure,
 
 /* ------- Native raw API support -------------------------------- */
 
-#if !FFI_NO_RAW_API
+#  if !FFI_NO_RAW_API
 
 ffi_status
 ffi_prep_raw_closure_loc (ffi_raw_closure* closure,
@@ -389,11 +389,11 @@ extern void
 ffi_call_SYSV(void (*)(char *, extended_cif *), extended_cif *, unsigned, 
               unsigned, unsigned *, void (*fn)());
 
-#  ifdef X86_WIN32
+#    ifdef X86_WIN32
 extern void
 ffi_call_STDCALL(void (*)(char *, extended_cif *), extended_cif *, unsigned,
                  unsigned, unsigned *, void (*fn)());
-#  endif /* X86_WIN32 */
+#    endif /* X86_WIN32 */
 
 void
 ffi_raw_call(ffi_cif *cif, void (*fn)(), void *rvalue, ffi_raw *fake_avalue)
@@ -422,17 +422,17 @@ ffi_raw_call(ffi_cif *cif, void (*fn)(), void *rvalue, ffi_raw *fake_avalue)
             ffi_call_SYSV(ffi_prep_args_raw, &ecif, cif->bytes, cif->flags,
                           ecif.rvalue, fn);
             break;
-#  ifdef X86_WIN32
+#    ifdef X86_WIN32
         case FFI_STDCALL:
             ffi_call_STDCALL(ffi_prep_args_raw, &ecif, cif->bytes, cif->flags,
                              ecif.rvalue, fn);
             break;
-#  endif /* X86_WIN32 */
+#    endif /* X86_WIN32 */
         default:
             FFI_ASSERT(0);
             break;
     }
 }
 
-#endif
+#  endif
 #endif	// __i386__

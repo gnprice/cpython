@@ -12,38 +12,38 @@
 
 #ifdef MS_WINDOWS
 
-#include "structmember.h"
-#ifdef HAVE_SYS_TYPES_H
-#  include <sys/types.h>
-#endif
-#ifdef HAVE_SYS_STAT_H
-#  include <sys/stat.h>
-#endif
-#include <stddef.h> /* For offsetof */
+#  include "structmember.h"
+#  ifdef HAVE_SYS_TYPES_H
+#    include <sys/types.h>
+#  endif
+#  ifdef HAVE_SYS_STAT_H
+#    include <sys/stat.h>
+#  endif
+#  include <stddef.h> /* For offsetof */
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <fcntl.h>
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
+#  include <fcntl.h>
 
-#include "_iomodule.h"
+#  include "_iomodule.h"
 
 /* BUFSIZ determines how many characters can be typed at the console
    before it starts blocking. */
-#if BUFSIZ < (16*1024)
-#  define SMALLCHUNK (2*1024)
-#elif (BUFSIZ >= (2 << 25))
-#  error "unreasonable BUFSIZ > 64 MiB defined"
-#else
-#  define SMALLCHUNK BUFSIZ
-#endif
+#  if BUFSIZ < (16*1024)
+#    define SMALLCHUNK (2*1024)
+#  elif (BUFSIZ >= (2 << 25))
+#    error "unreasonable BUFSIZ > 64 MiB defined"
+#  else
+#    define SMALLCHUNK BUFSIZ
+#  endif
 
 /* BUFMAX determines how many bytes can be read in one go. */
-#define BUFMAX (32*1024*1024)
+#  define BUFMAX (32*1024*1024)
 
 /* SMALLBUF determines how many utf-8 characters will be
    buffered within the stream, in order to support reads
    of less than one character */
-#define SMALLBUF 4
+#  define SMALLBUF 4
 
 char _get_console_type(HANDLE handle) {
     DWORD mode, peek_count;
@@ -1063,7 +1063,7 @@ _io__WindowsConsoleIO_isatty_impl(winconsoleio *self)
     Py_RETURN_TRUE;
 }
 
-#include "clinic/winconsoleio.c.h"
+#  include "clinic/winconsoleio.c.h"
 
 static PyMethodDef winconsoleio_methods[] = {
     _IO__WINDOWSCONSOLEIO_READ_METHODDEF

@@ -22,11 +22,11 @@
  */
 
 #ifndef PYSQLITE_MODULE_H
-#define PYSQLITE_MODULE_H
-#define PY_SSIZE_T_CLEAN
-#include "Python.h"
+#  define PYSQLITE_MODULE_H
+#  define PY_SSIZE_T_CLEAN
+#  include "Python.h"
 
-#define PYSQLITE_VERSION "2.6.0"
+#  define PYSQLITE_VERSION "2.6.0"
 
 extern PyObject* pysqlite_Error;
 extern PyObject* pysqlite_Warning;
@@ -48,6 +48,6 @@ extern PyObject* _pysqlite_converters;
 extern int _pysqlite_enable_callback_tracebacks;
 extern int pysqlite_BaseTypeAdapted;
 
-#define PARSE_DECLTYPES 1
-#define PARSE_COLNAMES 2
+#  define PARSE_DECLTYPES 1
+#  define PARSE_COLNAMES 2
 #endif

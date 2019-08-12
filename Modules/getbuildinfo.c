@@ -1,34 +1,34 @@
 #include "Python.h"
 
 #ifndef DONT_HAVE_STDIO_H
-#include <stdio.h>
+#  include <stdio.h>
 #endif
 
 #ifndef DATE
-#ifdef __DATE__
-#  define DATE __DATE__
-#else
-#  define DATE "xx/xx/xx"
-#endif
+#  ifdef __DATE__
+#    define DATE __DATE__
+#  else
+#    define DATE "xx/xx/xx"
+#  endif
 #endif
 
 #ifndef TIME
-#ifdef __TIME__
-#  define TIME __TIME__
-#else
-#  define TIME "xx:xx:xx"
-#endif
+#  ifdef __TIME__
+#    define TIME __TIME__
+#  else
+#    define TIME "xx:xx:xx"
+#  endif
 #endif
 
 /* XXX Only unix build process has been tested */
 #ifndef GITVERSION
-#define GITVERSION ""
+#  define GITVERSION ""
 #endif
 #ifndef GITTAG
-#define GITTAG ""
+#  define GITTAG ""
 #endif
 #ifndef GITBRANCH
-#define GITBRANCH ""
+#  define GITBRANCH ""
 #endif
 
 const char *

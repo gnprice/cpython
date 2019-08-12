@@ -4,7 +4,7 @@
 /* Dummy message type for handling CCS like a normal handshake message
  * not defined in OpenSSL 1.0.2
  */
-#define SSL3_MT_CHANGE_CIPHER_SPEC              0x0101
+#  define SSL3_MT_CHANGE_CIPHER_SPEC              0x0101
 #endif
 
 static void

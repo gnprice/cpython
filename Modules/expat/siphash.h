@@ -89,18 +89,18 @@
  * ==========================================================================
  */
 #ifndef SIPHASH_H
-#define SIPHASH_H
+#  define SIPHASH_H
 
-#include <stddef.h> /* size_t */
+#  include <stddef.h> /* size_t */
 
-#if defined(_WIN32) && defined(_MSC_VER) && (_MSC_VER < 1600)
+#  if defined(_WIN32) && defined(_MSC_VER) && (_MSC_VER < 1600)
   /* For vs2003/7.1 up to vs2008/9.0; _MSC_VER 1600 is vs2010/10.0 */
   typedef unsigned __int8   uint8_t;
   typedef unsigned __int32 uint32_t;
   typedef unsigned __int64 uint64_t;
-#else
- #include <stdint.h> /* uint64_t uint32_t uint8_t */
-#endif
+#  else
+#    include <stdint.h> /* uint64_t uint32_t uint8_t */
+#  endif
 
 
 /*
@@ -108,20 +108,20 @@
  * if this code is included and compiled as C++; related GCC warning is:
  * warning: use of C++11 long long integer constant [-Wlong-long]
  */
-#define _SIP_ULL(high, low)  (((uint64_t)high << 32) | low)
+#  define _SIP_ULL(high, low)  (((uint64_t)high << 32) | low)
 
 
-#define SIP_ROTL(x, b) (uint64_t)(((x) << (b)) | ( (x) >> (64 - (b))))
+#  define SIP_ROTL(x, b) (uint64_t)(((x) << (b)) | ( (x) >> (64 - (b))))
 
-#define SIP_U32TO8_LE(p, v) \
+#  define SIP_U32TO8_LE(p, v) \
 	(p)[0] = (uint8_t)((v) >>  0); (p)[1] = (uint8_t)((v) >>  8); \
 	(p)[2] = (uint8_t)((v) >> 16); (p)[3] = (uint8_t)((v) >> 24);
 
-#define SIP_U64TO8_LE(p, v) \
+#  define SIP_U64TO8_LE(p, v) \
 	SIP_U32TO8_LE((p) + 0, (uint32_t)((v) >>  0)); \
 	SIP_U32TO8_LE((p) + 4, (uint32_t)((v) >> 32));
 
-#define SIP_U8TO64_LE(p) \
+#  define SIP_U8TO64_LE(p) \
 	(((uint64_t)((p)[0]) <<  0) | \
 	 ((uint64_t)((p)[1]) <<  8) | \
 	 ((uint64_t)((p)[2]) << 16) | \
@@ -132,7 +132,7 @@
 	 ((uint64_t)((p)[7]) << 56))
 
 
-#define SIPHASH_INITIALIZER { 0, 0, 0, 0, { 0 }, 0, 0 }
+#  define SIPHASH_INITIALIZER { 0, 0, 0, 0, { 0 }, 0, 0 }
 
 struct siphash {
 	uint64_t v0, v1, v2, v3;
@@ -142,13 +142,13 @@ struct siphash {
 }; /* struct siphash */
 
 
-#define SIP_KEYLEN 16
+#  define SIP_KEYLEN 16
 
 struct sipkey {
 	uint64_t k[2];
 }; /* struct sipkey */
 
-#define sip_keyof(k) sip_tokey(&(struct sipkey){ { 0 } }, (k))
+#  define sip_keyof(k) sip_tokey(&(struct sipkey){ { 0 } }, (k))
 
 static struct sipkey *sip_tokey(struct sipkey *key, const void *src) {
 	key->k[0] = SIP_U8TO64_LE((const unsigned char *)src);
@@ -157,16 +157,16 @@ static struct sipkey *sip_tokey(struct sipkey *key, const void *src) {
 } /* sip_tokey() */
 
 
-#ifdef SIPHASH_TOBIN
+#  ifdef SIPHASH_TOBIN
 
-#  define sip_binof(v) sip_tobin((unsigned char[8]){ 0 }, (v))
+#    define sip_binof(v) sip_tobin((unsigned char[8]){ 0 }, (v))
 
 static void *sip_tobin(void *dst, uint64_t u64) {
 	SIP_U64TO8_LE((unsigned char *)dst, u64);
 	return dst;
 } /* sip_tobin() */
 
-#endif  /* SIPHASH_TOBIN */
+#  endif  /* SIPHASH_TOBIN */
 
 
 static void sip_round(struct siphash *H, const int rounds) {
@@ -208,7 +208,7 @@ static struct siphash *sip24_init(struct siphash *H,
 } /* sip24_init() */
 
 
-#define sip_endof(a) (&(a)[sizeof (a) / sizeof *(a)])
+#  define sip_endof(a) (&(a)[sizeof (a) / sizeof *(a)])
 
 static struct siphash *sip24_update(struct siphash *H, const void *src,
 		size_t len) {
@@ -370,9 +370,9 @@ static int sip24_valid(void) {
 } /* sip24_valid() */
 
 
-#ifdef SIPHASH_MAIN
+#  ifdef SIPHASH_MAIN
 
-#  include <stdio.h>
+#    include <stdio.h>
 
 int main(void) {
 	const int ok = sip24_valid();
@@ -385,7 +385,7 @@ int main(void) {
 	return !ok;
 } /* main() */
 
-#endif /* SIPHASH_MAIN */
+#  endif /* SIPHASH_MAIN */
 
 
 #endif /* SIPHASH_H */

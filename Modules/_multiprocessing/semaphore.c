@@ -30,14 +30,14 @@ typedef struct {
  * Windows definitions
  */
 
-#define SEM_FAILED NULL
+#  define SEM_FAILED NULL
 
-#define SEM_CLEAR_ERROR() SetLastError(0)
-#define SEM_GET_LAST_ERROR() GetLastError()
-#define SEM_CREATE(name, val, max) CreateSemaphore(NULL, val, max, NULL)
-#define SEM_CLOSE(sem) (CloseHandle(sem) ? 0 : -1)
-#define SEM_GETVALUE(sem, pval) _GetSemaphoreValue(sem, pval)
-#define SEM_UNLINK(name) 0
+#  define SEM_CLEAR_ERROR() SetLastError(0)
+#  define SEM_GET_LAST_ERROR() GetLastError()
+#  define SEM_CREATE(name, val, max) CreateSemaphore(NULL, val, max, NULL)
+#  define SEM_CLOSE(sem) (CloseHandle(sem) ? 0 : -1)
+#  define SEM_GETVALUE(sem, pval) _GetSemaphoreValue(sem, pval)
+#  define SEM_UNLINK(name) 0
 
 static int
 _GetSemaphoreValue(HANDLE handle, long *value)
@@ -183,26 +183,26 @@ semlock_release(SemLockObject *self, PyObject *args)
  * Unix definitions
  */
 
-#define SEM_CLEAR_ERROR()
-#define SEM_GET_LAST_ERROR() 0
-#define SEM_CREATE(name, val, max) sem_open(name, O_CREAT | O_EXCL, 0600, val)
-#define SEM_CLOSE(sem) sem_close(sem)
-#define SEM_GETVALUE(sem, pval) sem_getvalue(sem, pval)
-#define SEM_UNLINK(name) sem_unlink(name)
+#  define SEM_CLEAR_ERROR()
+#  define SEM_GET_LAST_ERROR() 0
+#  define SEM_CREATE(name, val, max) sem_open(name, O_CREAT | O_EXCL, 0600, val)
+#  define SEM_CLOSE(sem) sem_close(sem)
+#  define SEM_GETVALUE(sem, pval) sem_getvalue(sem, pval)
+#  define SEM_UNLINK(name) sem_unlink(name)
 
 /* OS X 10.4 defines SEM_FAILED as -1 instead of (sem_t *)-1;  this gives
    compiler warnings, and (potentially) undefined behaviour. */
-#ifdef __APPLE__
-#  undef SEM_FAILED
-#  define SEM_FAILED ((sem_t *)-1)
-#endif
+#  ifdef __APPLE__
+#    undef SEM_FAILED
+#    define SEM_FAILED ((sem_t *)-1)
+#  endif
 
-#ifndef HAVE_SEM_UNLINK
-#  define sem_unlink(name) 0
-#endif
+#  ifndef HAVE_SEM_UNLINK
+#    define sem_unlink(name) 0
+#  endif
 
-#ifndef HAVE_SEM_TIMEDWAIT
-#  define sem_timedwait(sem,deadline) sem_timedwait_save(sem,deadline,_save)
+#  ifndef HAVE_SEM_TIMEDWAIT
+#    define sem_timedwait(sem,deadline) sem_timedwait_save(sem,deadline,_save)
 
 static int
 sem_timedwait_save(sem_t *sem, struct timespec *deadline, PyThreadState *_save)
@@ -262,7 +262,7 @@ sem_timedwait_save(sem_t *sem, struct timespec *deadline, PyThreadState *_save)
     }
 }
 
-#endif /* !HAVE_SEM_TIMEDWAIT */
+#  endif /* !HAVE_SEM_TIMEDWAIT */
 
 static PyObject *
 semlock_acquire(SemLockObject *self, PyObject *args, PyObject *kwds)
@@ -360,7 +360,7 @@ semlock_release(SemLockObject *self, PyObject *args)
         }
         assert(self->count == 1);
     } else {
-#ifdef HAVE_BROKEN_SEM_GETVALUE
+#  ifdef HAVE_BROKEN_SEM_GETVALUE
         /* We will only check properly the maxvalue == 1 case */
         if (self->maxvalue == 1) {
             /* make sure that already locked */
@@ -382,7 +382,7 @@ semlock_release(SemLockObject *self, PyObject *args)
                 return NULL;
             }
         }
-#else
+#  else
         int sval;
 
         /* This check is not an absolute guarantee that the semaphore
@@ -394,7 +394,7 @@ semlock_release(SemLockObject *self, PyObject *args)
                             "released too many times");
             return NULL;
         }
-#endif
+#  endif
     }
 
     if (sem_post(self->handle) < 0)

@@ -1,7 +1,7 @@
 #ifndef Py_HASHTABLE_H
-#define Py_HASHTABLE_H
+#  define Py_HASHTABLE_H
 /* The whole API is private */
-#ifndef Py_LIMITED_API
+#  ifndef Py_LIMITED_API
 
 /* Single linked list */
 
@@ -13,9 +13,9 @@ typedef struct {
     _Py_slist_item_t *head;
 } _Py_slist_t;
 
-#  define _Py_SLIST_ITEM_NEXT(ITEM) (((_Py_slist_item_t *)ITEM)->next)
+#    define _Py_SLIST_ITEM_NEXT(ITEM) (((_Py_slist_item_t *)ITEM)->next)
 
-#  define _Py_SLIST_HEAD(SLIST) (((_Py_slist_t *)SLIST)->head)
+#    define _Py_SLIST_HEAD(SLIST) (((_Py_slist_t *)SLIST)->head)
 
 
 /* _Py_hashtable: table entry */
@@ -29,37 +29,37 @@ typedef struct {
     /* key (key_size bytes) and then data (data_size bytes) follows */
 } _Py_hashtable_entry_t;
 
-#  define _Py_HASHTABLE_ENTRY_PKEY(ENTRY) \
+#    define _Py_HASHTABLE_ENTRY_PKEY(ENTRY) \
         ((const void *)((char *)(ENTRY) \
                         + sizeof(_Py_hashtable_entry_t)))
 
-#  define _Py_HASHTABLE_ENTRY_PDATA(TABLE, ENTRY) \
+#    define _Py_HASHTABLE_ENTRY_PDATA(TABLE, ENTRY) \
         ((const void *)((char *)(ENTRY) \
                         + sizeof(_Py_hashtable_entry_t) \
                         + (TABLE)->key_size))
 
 /* Get a key value from pkey: use memcpy() rather than a pointer dereference
    to avoid memory alignment issues. */
-#  define _Py_HASHTABLE_READ_KEY(TABLE, PKEY, DST_KEY) \
+#    define _Py_HASHTABLE_READ_KEY(TABLE, PKEY, DST_KEY) \
     do { \
         assert(sizeof(DST_KEY) == (TABLE)->key_size); \
         memcpy(&(DST_KEY), (PKEY), sizeof(DST_KEY)); \
     } while (0)
 
-#  define _Py_HASHTABLE_ENTRY_READ_KEY(TABLE, ENTRY, KEY) \
+#    define _Py_HASHTABLE_ENTRY_READ_KEY(TABLE, ENTRY, KEY) \
     do { \
         assert(sizeof(KEY) == (TABLE)->key_size); \
         memcpy(&(KEY), _Py_HASHTABLE_ENTRY_PKEY(ENTRY), sizeof(KEY)); \
     } while (0)
 
-#  define _Py_HASHTABLE_ENTRY_READ_DATA(TABLE, ENTRY, DATA) \
+#    define _Py_HASHTABLE_ENTRY_READ_DATA(TABLE, ENTRY, DATA) \
     do { \
         assert(sizeof(DATA) == (TABLE)->data_size); \
         memcpy(&(DATA), _Py_HASHTABLE_ENTRY_PDATA(TABLE, (ENTRY)), \
                   sizeof(DATA)); \
     } while (0)
 
-#  define _Py_HASHTABLE_ENTRY_WRITE_DATA(TABLE, ENTRY, DATA) \
+#    define _Py_HASHTABLE_ENTRY_WRITE_DATA(TABLE, ENTRY, DATA) \
     do { \
         assert(sizeof(DATA) == (TABLE)->data_size); \
         memcpy((void *)_Py_HASHTABLE_ENTRY_PDATA((TABLE), (ENTRY)), \
@@ -159,10 +159,10 @@ PyAPI_FUNC(int) _Py_hashtable_set(
     size_t data_size,
     const void *data);
 
-#  define _Py_HASHTABLE_SET(TABLE, KEY, DATA) \
+#    define _Py_HASHTABLE_SET(TABLE, KEY, DATA) \
     _Py_hashtable_set(TABLE, sizeof(KEY), &(KEY), sizeof(DATA), &(DATA))
 
-#  define _Py_HASHTABLE_SET_NODATA(TABLE, KEY) \
+#    define _Py_HASHTABLE_SET_NODATA(TABLE, KEY) \
     _Py_hashtable_set(TABLE, sizeof(KEY), &(KEY), 0, NULL)
 
 
@@ -176,7 +176,7 @@ PyAPI_FUNC(_Py_hashtable_entry_t*) _Py_hashtable_get_entry(
     size_t key_size,
     const void *pkey);
 
-#  define _Py_HASHTABLE_GET_ENTRY(TABLE, KEY) \
+#    define _Py_HASHTABLE_GET_ENTRY(TABLE, KEY) \
     _Py_hashtable_get_entry(TABLE, sizeof(KEY), &(KEY))
 
 
@@ -191,7 +191,7 @@ PyAPI_FUNC(int) _Py_hashtable_get(
     size_t data_size,
     void *data);
 
-#  define _Py_HASHTABLE_GET(TABLE, KEY, DATA) \
+#    define _Py_HASHTABLE_GET(TABLE, KEY, DATA) \
     _Py_hashtable_get(TABLE, sizeof(KEY), &(KEY), sizeof(DATA), &(DATA))
 
 
@@ -203,9 +203,9 @@ PyAPI_FUNC(int) _Py_hashtable_pop(
     size_t data_size,
     void *data);
 
-#  define _Py_HASHTABLE_POP(TABLE, KEY, DATA) \
+#    define _Py_HASHTABLE_POP(TABLE, KEY, DATA) \
     _Py_hashtable_pop(TABLE, sizeof(KEY), &(KEY), sizeof(DATA), &(DATA))
 
 
-#endif   /* Py_LIMITED_API */
+#  endif   /* Py_LIMITED_API */
 #endif

@@ -30,13 +30,13 @@
 
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
 /* OpenSSL < 1.1.0 */
-#define EVP_MD_CTX_new EVP_MD_CTX_create
-#define EVP_MD_CTX_free EVP_MD_CTX_destroy
-#define HAS_FAST_PKCS5_PBKDF2_HMAC 0
-#include <openssl/hmac.h>
+#  define EVP_MD_CTX_new EVP_MD_CTX_create
+#  define EVP_MD_CTX_free EVP_MD_CTX_destroy
+#  define HAS_FAST_PKCS5_PBKDF2_HMAC 0
+#  include <openssl/hmac.h>
 #else
 /* OpenSSL >= 1.1.0 */
-#define HAS_FAST_PKCS5_PBKDF2_HMAC 1
+#  define HAS_FAST_PKCS5_PBKDF2_HMAC 1
 #endif
 
 
@@ -484,9 +484,9 @@ EVP_new_impl(PyObject *module, PyObject *name_obj, PyObject *data_obj)
 #if (OPENSSL_VERSION_NUMBER >= 0x10000000 && !defined(OPENSSL_NO_HMAC) \
      && !defined(OPENSSL_NO_SHA))
 
-#define PY_PBKDF2_HMAC 1
+#  define PY_PBKDF2_HMAC 1
 
-#if !HAS_FAST_PKCS5_PBKDF2_HMAC
+#  if !HAS_FAST_PKCS5_PBKDF2_HMAC
 /* Improved implementation of PKCS5_PBKDF2_HMAC()
  *
  * PKCS5_PBKDF2_HMAC_fast() hashes the password exactly one time instead of
@@ -568,7 +568,7 @@ PKCS5_PBKDF2_HMAC_fast(const char *pass, int passlen,
     HMAC_CTX_cleanup(&hctx_tpl);
     return 1;
 }
-#endif
+#  endif
 
 
 
@@ -652,17 +652,17 @@ pbkdf2_hmac_impl(PyObject *module, const char *hash_name,
     key = PyBytes_AS_STRING(key_obj);
 
     Py_BEGIN_ALLOW_THREADS
-#if HAS_FAST_PKCS5_PBKDF2_HMAC
+#  if HAS_FAST_PKCS5_PBKDF2_HMAC
     retval = PKCS5_PBKDF2_HMAC((char*)password->buf, (int)password->len,
                                (unsigned char *)salt->buf, (int)salt->len,
                                iterations, digest, dklen,
                                (unsigned char *)key);
-#else
+#  else
     retval = PKCS5_PBKDF2_HMAC_fast((char*)password->buf, (int)password->len,
                                     (unsigned char *)salt->buf, (int)salt->len,
                                     iterations, digest, dklen,
                                     (unsigned char *)key);
-#endif
+#  endif
     Py_END_ALLOW_THREADS
 
     if (!retval) {
@@ -678,7 +678,7 @@ pbkdf2_hmac_impl(PyObject *module, const char *hash_name,
 #endif
 
 #if OPENSSL_VERSION_NUMBER > 0x10100000L && !defined(OPENSSL_NO_SCRYPT) && !defined(LIBRESSL_VERSION_NUMBER)
-#define PY_SCRYPT 1
+#  define PY_SCRYPT 1
 
 /* XXX: Parameters salt, n, r and p should be required keyword-only parameters.
    They are optional in the Argument Clinic declaration only due to a

@@ -12,7 +12,7 @@
 #include "gdbm.h"
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#include "gdbmerrno.h"
+#  include "gdbmerrno.h"
 extern const char * gdbm_strerror(gdbm_error);
 #endif
 

@@ -30,7 +30,7 @@
 #include "row.h"
 
 #if SQLITE_VERSION_NUMBER >= 3003003
-#define HAVE_SHARED_CACHE
+#  define HAVE_SHARED_CACHE
 #endif
 
 /* static objects at module-level */
