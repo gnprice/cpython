@@ -4586,17 +4586,15 @@ utime_to_time_t(const utime_t *ut, time_t *timet)
     return timet;
 }
 
-#if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
-
 static int
 utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 {
-#  ifdef HAVE_UTIMENSAT
+#ifdef HAVE_UTIMENSAT
     int flags = follow_symlinks ? 0 : AT_SYMLINK_NOFOLLOW;
     struct timespec ts[2];
     struct timespec *time = utime_to_timespec(ut, ts);
     return utimensat(dir_fd, path, time, flags);
-#  elif defined(HAVE_FUTIMESAT)
+#elif defined(HAVE_FUTIMESAT)
     struct timeval tv[2];
     struct timeval *time = utime_to_timeval(ut, tv);
     /*
@@ -4606,9 +4604,13 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
      */
     assert(follow_symlinks);
     return futimesat(dir_fd, path, time);
-#  endif
+#else
+    assert(0);
+    return -1;
+#endif
 }
 
+#if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
 #  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_converter
 #else
 #  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_unavailable
@@ -4872,11 +4874,9 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
         result = utime_nofollow_symlinks(&utime, path->narrow);
     else
 
-#  if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
     if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
     else
-#  endif
 
 #  if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
     if (path->fd != -1)
