@@ -4639,10 +4639,6 @@ utime_fd(utime_t *ut, int fd)
 #  define PATH_UTIME_HAVE_FD 0
 #endif
 
-#if defined(HAVE_UTIMENSAT) || defined(HAVE_LUTIMES)
-#  define UTIME_HAVE_NOFOLLOW_SYMLINKS
-#endif
-
 static int
 utime_nofollow_symlinks(utime_t *ut, const char *path)
 {
@@ -4657,6 +4653,16 @@ utime_nofollow_symlinks(utime_t *ut, const char *path)
 #else
     assert(0);
     return -1;
+#endif
+}
+
+static inline int
+check_utime_nofollow_symlinks()
+{
+#if defined(HAVE_UTIMENSAT) || defined(HAVE_LUTIMES)
+    return 0;
+#else
+    return follow_symlinks_specified("utime", 0);
 #endif
 }
 
@@ -4851,10 +4857,13 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
     CloseHandle(hFile);
 #else /* MS_WINDOWS */
 
-#if !defined(UTIME_HAVE_NOFOLLOW_SYMLINKS)
-    if (follow_symlinks_specified("utime", follow_symlinks))
-        return NULL;
-#endif
+    if (!follow_symlinks) {
+        // This check path is a little broader than the corresponding
+        // path doing the work below.  Only changes which error, though,
+        // not whether there's an error.
+        if (check_utime_nofollow_symlinks() < 0)
+            return NULL;
+    }
 
     if (path_and_dir_fd_invalid("utime", path, dir_fd) ||
         dir_fd_and_fd_invalid("utime", dir_fd, path->fd) ||
