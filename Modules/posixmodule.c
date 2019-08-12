@@ -4610,6 +4610,27 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 #endif
 }
 
+static inline int
+check_utime_dir_fd(int dir_fd, int follow_symlinks)
+{
+    if (!follow_symlinks)
+        assert(dir_fd != DEFAULT_DIR_FD);
+#ifdef HAVE_UTIMENSAT
+    return 0;
+#elif defined(HAVE_FUTIMESAT)
+    if (!follow_symlinks) {
+        PyErr_SetString(PyExc_ValueError,
+                     "utime: cannot use dir_fd and follow_symlinks "
+                     "together on this platform");
+        return -1;
+    }
+    return 0;
+#else
+    assert(0);
+    return -1;
+#endif
+}
+
 #if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
 #  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_converter
 #else
@@ -4857,11 +4878,11 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
     CloseHandle(hFile);
 #else /* MS_WINDOWS */
 
-    if (!follow_symlinks) {
-        // This check path is a little broader than the corresponding
-        // path doing the work below.  Only changes which error, though,
-        // not whether there's an error.
+    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD)) {
         if (check_utime_nofollow_symlinks() < 0)
+            return NULL;
+    } else if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks)) {
+        if (check_utime_dir_fd(dir_fd, follow_symlinks) < 0)
             return NULL;
     }
 
@@ -4869,15 +4890,6 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
         dir_fd_and_fd_invalid("utime", dir_fd, path->fd) ||
         fd_and_follow_symlinks_invalid("utime", path->fd, follow_symlinks))
         return NULL;
-
-#if !defined(HAVE_UTIMENSAT)
-    if ((dir_fd != DEFAULT_DIR_FD) && (!follow_symlinks)) {
-        PyErr_SetString(PyExc_ValueError,
-                     "utime: cannot use dir_fd and follow_symlinks "
-                     "together on this platform");
-        return NULL;
-    }
-#endif
 
     Py_BEGIN_ALLOW_THREADS
 
