@@ -4872,19 +4872,15 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
 
     Py_BEGIN_ALLOW_THREADS
 
-    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD))
+    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD)) {
         result = utime_nofollow_symlinks(&utime, path->narrow);
-    else
-
-    if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks))
+    } else if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks)) {
         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
-    else
-
-    if (path->fd != -1)
+    } else if (path->fd != -1) {
         result = utime_fd(&utime, path->fd);
-    else
-
-    result = utime_default(&utime, path->narrow);
+    } else {
+        result = utime_default(&utime, path->narrow);
+    }
 
     Py_END_ALLOW_THREADS
 
