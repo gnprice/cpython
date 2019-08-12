@@ -4878,18 +4878,24 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
     CloseHandle(hFile);
 #else /* MS_WINDOWS */
 
-    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD)) {
-        if (check_utime_nofollow_symlinks() < 0)
-            return NULL;
-    } else if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks)) {
-        if (check_utime_dir_fd(dir_fd, follow_symlinks) < 0)
-            return NULL;
-    }
-
     if (path_and_dir_fd_invalid("utime", path, dir_fd) ||
         dir_fd_and_fd_invalid("utime", dir_fd, path->fd) ||
         fd_and_follow_symlinks_invalid("utime", path->fd, follow_symlinks))
         return NULL;
+
+    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD)) {
+        assert(path->narrow);
+        if (check_utime_nofollow_symlinks() < 0)
+            return NULL;
+    } else if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks)) {
+        assert(path->narrow);
+        if (check_utime_dir_fd(dir_fd, follow_symlinks) < 0)
+            return NULL;
+    } else if (path->fd != -1) {
+        // Already ensured availability, via PATH_UTIME_HAVE_FD.
+    } else {
+        // Always available.
+    }
 
     Py_BEGIN_ALLOW_THREADS
 
