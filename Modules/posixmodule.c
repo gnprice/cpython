@@ -4552,23 +4552,23 @@ utime_to_timespec(const utime_t *ut, struct timespec *ts)
     return ts;
 }
 
+/* tv must point to an array of length 2 */
+static inline struct timeval *
+utime_to_timeval(const utime_t *ut, struct timeval *tv)
+{
+    if (ut->now)
+        return NULL;
+    tv[0].tv_sec = ut->atime_s;
+    tv[0].tv_usec = ut->atime_ns / 1000;
+    tv[1].tv_sec = ut->mtime_s;
+    tv[1].tv_usec = ut->mtime_ns / 1000;
+    return tv;
+}
+
 /*
  * these macros assume that "ut" is a pointer to a utime_t
  * they also intentionally leak the declaration of a pointer named "time"
  */
-
-#define UTIME_TO_TIMEVAL \
-    struct timeval tv[2]; \
-    struct timeval *time; \
-    if (ut->now) \
-        time = NULL; \
-    else { \
-        tv[0].tv_sec = ut->atime_s; \
-        tv[0].tv_usec = ut->atime_ns / 1000; \
-        tv[1].tv_sec = ut->mtime_s; \
-        tv[1].tv_usec = ut->mtime_ns / 1000; \
-        time = tv; \
-    } \
 
 #define UTIME_TO_UTIMBUF \
     struct utimbuf u; \
@@ -4604,7 +4604,8 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
     struct timespec *time = utime_to_timespec(ut, ts);
     return utimensat(dir_fd, path, time, flags);
 #  elif defined(HAVE_FUTIMESAT)
-    UTIME_TO_TIMEVAL;
+    struct timeval tv[2];
+    struct timeval *time = utime_to_timeval(ut, tv);
     /*
      * follow_symlinks will never be false here;
      * we only allow !follow_symlinks and dir_fd together
@@ -4630,7 +4631,8 @@ utime_fd(utime_t *ut, int fd)
     struct timespec *time = utime_to_timespec(ut, ts);
     return futimens(fd, time);
 #  else
-    UTIME_TO_TIMEVAL;
+    struct timeval tv[2];
+    struct timeval *time = utime_to_timeval(ut, tv);
     return futimes(fd, time);
 #  endif
 }
@@ -4654,7 +4656,8 @@ utime_nofollow_symlinks(utime_t *ut, const char *path)
     struct timespec *time = utime_to_timespec(ut, ts);
     return utimensat(DEFAULT_DIR_FD, path, time, AT_SYMLINK_NOFOLLOW);
 #  else
-    UTIME_TO_TIMEVAL;
+    struct timeval tv[2];
+    struct timeval *time = utime_to_timeval(ut, tv);
     return lutimes(path, time);
 #  endif
 }
@@ -4671,7 +4674,8 @@ utime_default(utime_t *ut, const char *path)
     struct timespec *time = utime_to_timespec(ut, ts);
     return utimensat(DEFAULT_DIR_FD, path, time, 0);
 #  elif defined(HAVE_UTIMES)
-    UTIME_TO_TIMEVAL;
+    struct timeval tv[2];
+    struct timeval *time = utime_to_timeval(ut, tv);
     return utimes(path, time);
 #  elif defined(HAVE_UTIME_H)
     UTIME_TO_UTIMBUF;
