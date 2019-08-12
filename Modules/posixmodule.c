@@ -4575,22 +4575,16 @@ utime_to_utimbuf(const utime_t *ut, struct utimbuf *u)
     return u;
 }
 
-/*
- * these macros assume that "ut" is a pointer to a utime_t
- * they also intentionally leak the declaration of a pointer named "time"
- */
-
-#define UTIME_TO_TIME_T \
-    time_t timet[2]; \
-    time_t *time; \
-    if (ut->now) \
-        time = NULL; \
-    else { \
-        timet[0] = ut->atime_s; \
-        timet[1] = ut->mtime_s; \
-        time = timet; \
-    } \
-
+/* timet must point to an array of length 2 */
+static inline time_t *
+utime_to_time_t(const utime_t *ut, time_t *timet)
+{
+    if (ut->now)
+        return NULL;
+    timet[0] = ut->atime_s;
+    timet[1] = ut->mtime_s;
+    return timet;
+}
 
 #if defined(HAVE_FUTIMESAT) || defined(HAVE_UTIMENSAT)
 
@@ -4681,7 +4675,8 @@ utime_default(utime_t *ut, const char *path)
     struct utimbuf *time = utime_to_utimbuf(ut, &u);
     return utime(path, time);
 #  else
-    UTIME_TO_TIME_T;
+    time_t timet[2];
+    time_t *time = utime_to_time_t(ut, &timet);
     return utime(path, time);
 #  endif
 }
