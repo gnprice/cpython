@@ -4616,22 +4616,24 @@ utime_dir_fd(utime_t *ut, int dir_fd, const char *path, int follow_symlinks)
 #  define FUTIMENSAT_DIR_FD_CONVERTER dir_fd_unavailable
 #endif
 
-#if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
-
 static int
 utime_fd(utime_t *ut, int fd)
 {
-#  ifdef HAVE_FUTIMENS
+#ifdef HAVE_FUTIMENS
     struct timespec ts[2];
     struct timespec *time = utime_to_timespec(ut, ts);
     return futimens(fd, time);
-#  else
+#elif HAVE_FUTIMES
     struct timeval tv[2];
     struct timeval *time = utime_to_timeval(ut, tv);
     return futimes(fd, time);
-#  endif
+#else
+    assert(0);
+    return -1;
+#endif
 }
 
+#if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
 #  define PATH_UTIME_HAVE_FD 1
 #else
 #  define PATH_UTIME_HAVE_FD 0
@@ -4878,11 +4880,9 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
     else
 
-#  if defined(HAVE_FUTIMES) || defined(HAVE_FUTIMENS)
     if (path->fd != -1)
         result = utime_fd(&utime, path->fd);
     else
-#  endif
 
     result = utime_default(&utime, path->narrow);
 
