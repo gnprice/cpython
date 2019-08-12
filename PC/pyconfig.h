@@ -111,7 +111,7 @@ WIN32 is still required for the locale module.
    *and* on Win64. For the same reasons, in Python, MS_WIN32 is
    defined on Win32 *and* Win64. Win32 only code must therefore be
    guarded as follows:
-        #if defined(MS_WIN32) && !defined(MS_WIN64)
+//      #if defined(MS_WIN32) && !defined(MS_WIN64)
 */
 #    ifdef _WIN64
 #      define MS_WIN64
