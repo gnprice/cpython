@@ -4565,21 +4565,20 @@ utime_to_timeval(const utime_t *ut, struct timeval *tv)
     return tv;
 }
 
+static inline struct utimbuf *
+utime_to_utimbuf(const utime_t *ut, struct utimbuf *u)
+{
+    if (ut->now)
+        return NULL;
+    u->actime = ut->atime_s;
+    u->modtime = ut->mtime_s;
+    return u;
+}
+
 /*
  * these macros assume that "ut" is a pointer to a utime_t
  * they also intentionally leak the declaration of a pointer named "time"
  */
-
-#define UTIME_TO_UTIMBUF \
-    struct utimbuf u; \
-    struct utimbuf *time; \
-    if (ut->now) \
-        time = NULL; \
-    else { \
-        u.actime = ut->atime_s; \
-        u.modtime = ut->mtime_s; \
-        time = &u; \
-    }
 
 #define UTIME_TO_TIME_T \
     time_t timet[2]; \
@@ -4678,7 +4677,8 @@ utime_default(utime_t *ut, const char *path)
     struct timeval *time = utime_to_timeval(ut, tv);
     return utimes(path, time);
 #  elif defined(HAVE_UTIME_H)
-    UTIME_TO_UTIMBUF;
+    struct utimbuf u;
+    struct utimbuf *time = utime_to_utimbuf(ut, &u);
     return utime(path, time);
 #  else
     UTIME_TO_TIME_T;
