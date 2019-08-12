@@ -5841,7 +5841,6 @@ PyLong_GetInfo(void)
 int
 _PyLong_Init(void)
 {
-#if NSMALLNEGINTS + NSMALLPOSINTS > 0
     int ival, size;
     PyLongObject *v = small_ints;
 
@@ -5869,7 +5868,7 @@ _PyLong_Init(void)
         Py_SIZE(v) = size;
         v->ob_digit[0] = (digit)abs(ival);
     }
-#endif
+
     _PyLong_Zero = PyLong_FromLong(0);
     if (_PyLong_Zero == NULL)
         return 0;
@@ -5895,12 +5894,11 @@ PyLong_Fini(void)
        reinitializations will fail. */
     Py_CLEAR(_PyLong_One);
     Py_CLEAR(_PyLong_Zero);
-#if NSMALLNEGINTS + NSMALLPOSINTS > 0
+
     int i;
     PyLongObject *v = small_ints;
     for (i = 0; i < NSMALLNEGINTS + NSMALLPOSINTS; i++, v++) {
         _Py_DEC_REFTOTAL;
         _Py_ForgetReference((PyObject*)v);
     }
-#endif
 }
