@@ -4883,13 +4883,13 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
     CloseHandle(hFile);
 #else /* MS_WINDOWS */
 
-    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD)) {
-        assert(path->narrow);
-        if (check_utime_nofollow_symlinks() < 0)
-            return NULL;
-    } else if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks)) {
+    if (dir_fd != DEFAULT_DIR_FD) {
         assert(path->narrow);
         if (check_utime_dir_fd(dir_fd, follow_symlinks) < 0)
+            return NULL;
+    } else if (!follow_symlinks) {
+        assert(path->narrow);
+        if (check_utime_nofollow_symlinks() < 0)
             return NULL;
     } else if (path->fd != -1) {
         // Already ensured availability, via PATH_UTIME_HAVE_FD.
@@ -4899,10 +4899,10 @@ os_utime_impl(PyObject *module, path_t *path, PyObject *times, PyObject *ns,
 
     Py_BEGIN_ALLOW_THREADS
 
-    if ((!follow_symlinks) && (dir_fd == DEFAULT_DIR_FD)) {
-        result = utime_nofollow_symlinks(&utime, path->narrow);
-    } else if ((dir_fd != DEFAULT_DIR_FD) || (!follow_symlinks)) {
+    if (dir_fd != DEFAULT_DIR_FD) {
         result = utime_dir_fd(&utime, dir_fd, path->narrow, follow_symlinks);
+    } else if (!follow_symlinks) {
+        result = utime_nofollow_symlinks(&utime, path->narrow);
     } else if (path->fd != -1) {
         result = utime_fd(&utime, path->fd);
     } else {
