@@ -41,9 +41,11 @@ char* alloca();
 #    endif
 #  endif
 
-/*#if defined(FFI_DEBUG) 
+/*
+#if defined(FFI_DEBUG)
 #  include <stdio.h>
-#endif*/
+#endif
+*/
 
 #ifdef FFI_DEBUG
 #  include <stdio.h>
