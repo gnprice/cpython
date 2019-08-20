@@ -206,6 +206,7 @@ class ProcessTestCase(BaseTestCase):
         self.assertIn('stdin', c.exception.args[0])
         self.assertIn('input', c.exception.args[0])
 
+    @support.requires_resource('time')
     def test_check_output_timeout(self):
         # check_output() function with timeout arg
         with self.assertRaises(subprocess.TimeoutExpired) as c:
@@ -763,6 +764,7 @@ class ProcessTestCase(BaseTestCase):
         self.assertEqual(stdout, b"banana")
         self.assertStderrEqual(stderr, b"pineapple")
 
+    @support.requires_resource('time')
     def test_communicate_timeout(self):
         p = subprocess.Popen([sys.executable, "-c",
                               'import sys,os,time;'
@@ -782,6 +784,7 @@ class ProcessTestCase(BaseTestCase):
         self.assertEqual(stdout, "banana")
         self.assertStderrEqual(stderr.encode(), b"pineapple\npear\n")
 
+    @support.requires_resource('time')
     def test_communicate_timeout_large_output(self):
         # Test an expiring timeout while the child is outputting lots of data.
         p = subprocess.Popen([sys.executable, "-c",
@@ -1104,6 +1107,7 @@ class ProcessTestCase(BaseTestCase):
         # Subsequent invocations should just return the returncode
         self.assertEqual(p.wait(), 0)
 
+    @support.requires_resource('time')
     def test_wait_timeout(self):
         p = subprocess.Popen([sys.executable,
                               "-c", "import time; time.sleep(0.3)"])
@@ -1163,6 +1167,7 @@ class ProcessTestCase(BaseTestCase):
         with self.assertWarnsRegex(RuntimeWarning, 'line buffering'):
             self._test_bufsize_equal_one(line, b'', universal_newlines=False)
 
+    @support.requires_resource('cpu')
     def test_leaking_fds_on_error(self):
         # see bug #5179: Popen leaks file descriptors to PIPEs if
         # the child fails to execute; this will eventually exhaust
@@ -1475,6 +1480,7 @@ class RunFuncTestCase(BaseTestCase):
         self.assertIn('stdin', c.exception.args[0])
         self.assertIn('input', c.exception.args[0])
 
+    @support.requires_resource('time')
     def test_check_output_timeout(self):
         with self.assertRaises(subprocess.TimeoutExpired) as c:
             cp = self.run_python((
@@ -2010,14 +2016,17 @@ class POSIXProcessTestCase(BaseTestCase):
         self.assertStderrEqual(stderr, b'')
         self.assertEqual(p.wait(), -signal.SIGTERM)
 
+    @support.requires_resource('time')
     def test_send_signal_dead(self):
         # Sending a signal to a dead process
         self._kill_dead_process('send_signal', signal.SIGINT)
 
+    @support.requires_resource('time')
     def test_kill_dead(self):
         # Killing a dead process
         self._kill_dead_process('kill')
 
+    @support.requires_resource('time')
     def test_terminate_dead(self):
         # Terminating a dead process
         self._kill_dead_process('terminate')
@@ -3122,12 +3131,15 @@ class Win32ProcessTestCase(BaseTestCase):
     def test_terminate(self):
         self._kill_process('terminate')
 
+    @support.requires_resource('time')
     def test_send_signal_dead(self):
         self._kill_dead_process('send_signal', signal.SIGTERM)
 
+    @support.requires_resource('time')
     def test_kill_dead(self):
         self._kill_dead_process('kill')
 
+    @support.requires_resource('time')
     def test_terminate_dead(self):
         self._kill_dead_process('terminate')
 
