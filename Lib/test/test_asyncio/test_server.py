@@ -17,6 +17,7 @@ class BaseStartServer(func_tests.FunctionalTestCaseMixin):
     def new_loop(self):
         raise NotImplementedError
 
+    @support.requires_resource('time')
     def test_start_server_1(self):
         HELLO_MSG = b'1' * 1024 * 5 + b'\n'
 

@@ -552,6 +552,7 @@ class BaseFutureTests:
                           Exception("elephant"), Exception("elephant"))
         self.assertRaises(TypeError, fi.throw, list)
 
+    @support.requires_resource('cpu')
     def test_future_del_collect(self):
         class Evil:
             def __del__(self):

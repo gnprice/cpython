@@ -15,6 +15,7 @@ import asyncio
 from asyncio import log
 from asyncio import protocols
 from asyncio import sslproto
+from test import support
 from test.test_asyncio import utils as test_utils
 from test.test_asyncio import functional as func_tests
 
@@ -214,6 +215,7 @@ class BaseStartTLS(func_tests.FunctionalTestCaseMixin):
             with self.assertRaisesRegex(RuntimeError, 'empty buffer'):
                 protocols._feed_data_to_buffered_proto(proto, b'12345')
 
+    @support.requires_resource('time')
     def test_start_tls_client_reg_proto_1(self):
         HELLO_MSG = b'1' * self.PAYLOAD_SIZE
 
@@ -278,6 +280,7 @@ class BaseStartTLS(func_tests.FunctionalTestCaseMixin):
         client_context = weakref.ref(client_context)
         self.assertIsNone(client_context())
 
+    @support.requires_resource('time')
     def test_create_connection_memory_leak(self):
         HELLO_MSG = b'1' * self.PAYLOAD_SIZE
 
@@ -340,6 +343,7 @@ class BaseStartTLS(func_tests.FunctionalTestCaseMixin):
         client_context = weakref.ref(client_context)
         self.assertIsNone(client_context())
 
+    @support.requires_resource('time')
     def test_start_tls_client_buf_proto_1(self):
         HELLO_MSG = b'1' * self.PAYLOAD_SIZE
 
@@ -431,6 +435,7 @@ class BaseStartTLS(func_tests.FunctionalTestCaseMixin):
                 asyncio.wait_for(client(srv.addr),
                                  timeout=self.TIMEOUT))
 
+    @support.requires_resource('time')
     def test_start_tls_slow_client_cancel(self):
         HELLO_MSG = b'1' * self.PAYLOAD_SIZE
 
@@ -595,6 +600,7 @@ class BaseStartTLS(func_tests.FunctionalTestCaseMixin):
 
         self.loop.run_until_complete(main())
 
+    @support.requires_resource('time')
     def test_handshake_timeout(self):
         # bpo-29970: Check that a connection is aborted if handshake is not
         # completed in timeout period, instead of remaining open indefinitely
@@ -642,6 +648,7 @@ class BaseStartTLS(func_tests.FunctionalTestCaseMixin):
         client_sslctx = weakref.ref(client_sslctx)
         self.assertIsNone(client_sslctx())
 
+    @support.requires_resource('time')
     def test_create_connection_ssl_slow_handshake(self):
         client_sslctx = test_utils.simple_client_sslcontext()
 

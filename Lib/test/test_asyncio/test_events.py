@@ -349,6 +349,7 @@ class EventLoopTestsMixin:
         self.assertEqual(res, 'yo')
         self.assertNotEqual(thread_id, threading.get_ident())
 
+    @support.requires_resource('time')
     def test_run_in_executor_cancel(self):
         called = False
 

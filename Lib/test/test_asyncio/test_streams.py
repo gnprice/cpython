@@ -1551,6 +1551,7 @@ os.close(fd)
         self.assertTrue(fut2.done())
         self.assertTrue(server_stream_aborted)
 
+    @support.requires_resource('time')
     def test_stream_shutdown_hung_task(self):
         fut1 = self.loop.create_future()
         fut2 = self.loop.create_future()
@@ -1597,6 +1598,7 @@ os.close(fd)
         self.assertTrue(fut2.done())
         self.assertTrue(cancelled.done())
 
+    @support.requires_resource('time')
     def test_stream_shutdown_hung_task_prevents_cancellation(self):
         fut1 = self.loop.create_future()
         fut2 = self.loop.create_future()

@@ -229,6 +229,7 @@ class SubprocessMixin:
         proc = self.loop.run_until_complete(create)
         return (proc, large_data)
 
+    @support.requires_resource('time')
     def test_stdin_broken_pipe(self):
         proc, large_data = self.prepare_broken_pipe_test()
 
@@ -552,6 +553,7 @@ class SubprocessMixin:
         # Popen fails
         self._test_popen_error(stdin=subprocess.PIPE)
 
+    @support.requires_resource('time')
     def test_read_stdout_after_process_exit(self):
 
         async def execute():

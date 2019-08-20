@@ -5,6 +5,7 @@ from unittest import mock
 import re
 
 import asyncio
+from test import support
 from test.test_asyncio import utils as test_utils
 
 STR_RGX_REPR = (
@@ -817,6 +818,7 @@ class ConditionTests(test_utils.TestCase):
         with self.assertRaises(ValueError):
             asyncio.Condition(lock, loop=loop)
 
+    @support.requires_resource('time')
     def test_timeout_in_block(self):
         loop = asyncio.new_event_loop()
         self.addCleanup(loop.close)

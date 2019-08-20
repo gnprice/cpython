@@ -97,6 +97,7 @@ class BaseTaskTests:
         self.loop.set_task_factory(self.new_task)
         self.loop.create_future = lambda: self.new_future(self.loop)
 
+    @support.requires_resource('cpu')
     def test_task_del_collect(self):
         class Evil:
             def __del__(self):
@@ -880,6 +881,7 @@ class BaseTaskTests:
 
         loop.run_until_complete(foo())
 
+    @support.requires_resource('time')
     def test_wait_for_self_cancellation(self):
         loop = asyncio.new_event_loop()
         self.addCleanup(loop.close)
@@ -2196,6 +2198,7 @@ class BaseTaskTests:
         self.assertFalse(gather_task.cancelled())
         self.assertEqual(gather_task.result(), [42])
 
+    @support.requires_resource('time')
     def test_cancel_gather_2(self):
         loop = asyncio.new_event_loop()
         self.addCleanup(loop.close)
@@ -2398,6 +2401,7 @@ class BaseTaskTests:
 
         self.assertEqual(cvar.get(), 'nope')
 
+    @support.requires_resource('time')
     def test_context_3(self):
         # Run 100 Tasks in parallel, each modifying cvar.
 
