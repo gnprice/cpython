@@ -106,6 +106,9 @@ resources to test.  Currently only the following are defined:
 
     cpu -       Used for certain CPU-heavy tests.
 
+    time -      It is okay to run tests that take significant wall-clock
+                time, e.g. because they sleep for seconds at a time.
+
     subprocess  Run all tests for the subprocess module.
 
     urlfetch -  It is okay to download files required on testing.

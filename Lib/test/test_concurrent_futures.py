@@ -287,6 +287,7 @@ class ExecutorShutdownTest:
                           self.executor.submit,
                           pow, 2, 5)
 
+    @test.support.requires_resource('time')
     def test_interpreter_shutdown(self):
         # Test the atexit hook for shutdown of worker threads and processes
         rc, out, err = assert_python_ok('-c', """if 1:
@@ -337,6 +338,7 @@ class ExecutorShutdownTest:
         self.assertIn("RuntimeError: cannot schedule new futures", err.decode())
         self.assertEqual(out.strip(), b"runtime-error")
 
+    @test.support.requires_resource('time')
     def test_hang_issue12364(self):
         fs = [self.executor.submit(time.sleep, 0.1) for _ in range(50)]
         self.executor.shutdown()
@@ -453,6 +455,7 @@ create_executor_tests(ProcessPoolShutdownTest,
 
 class WaitTests:
 
+    @test.support.requires_resource('time')
     def test_first_completed(self):
         future1 = self.executor.submit(mul, 21, 2)
         future2 = self.executor.submit(time.sleep, 1.5)
@@ -464,6 +467,7 @@ class WaitTests:
         self.assertEqual(set([future1]), done)
         self.assertEqual(set([CANCELLED_FUTURE, future2]), not_done)
 
+    @test.support.requires_resource('time')
     def test_first_completed_some_already_completed(self):
         future1 = self.executor.submit(time.sleep, 1.5)
 
@@ -476,6 +480,7 @@ class WaitTests:
                 finished)
         self.assertEqual(set([future1]), pending)
 
+    @test.support.requires_resource('time')
     def test_first_exception(self):
         future1 = self.executor.submit(mul, 2, 21)
         future2 = self.executor.submit(sleep_and_raise, 1.5)
@@ -488,6 +493,7 @@ class WaitTests:
         self.assertEqual(set([future1, future2]), finished)
         self.assertEqual(set([future3]), pending)
 
+    @test.support.requires_resource('time')
     def test_first_exception_some_already_complete(self):
         future1 = self.executor.submit(divmod, 21, 0)
         future2 = self.executor.submit(time.sleep, 1.5)
@@ -504,6 +510,7 @@ class WaitTests:
                               future1]), finished)
         self.assertEqual(set([CANCELLED_FUTURE, future2]), pending)
 
+    @test.support.requires_resource('time')
     def test_first_exception_one_already_failed(self):
         future1 = self.executor.submit(time.sleep, 2)
 
@@ -533,6 +540,7 @@ class WaitTests:
                               future2]), finished)
         self.assertEqual(set(), pending)
 
+    @test.support.requires_resource('time')
     def test_timeout(self):
         future1 = self.executor.submit(mul, 6, 7)
         future2 = self.executor.submit(time.sleep, 6)
@@ -594,6 +602,7 @@ class AsCompletedTests:
                  future1, future2]),
                 completed)
 
+    @test.support.requires_resource('time')
     def test_zero_timeout(self):
         future1 = self.executor.submit(time.sleep, 2)
         completed_futures = set()
@@ -613,6 +622,7 @@ class AsCompletedTests:
                               SUCCESSFUL_FUTURE]),
                          completed_futures)
 
+    @test.support.requires_resource('time')
     def test_duplicate_futures(self):
         # Issue 20367. Duplicate futures should not raise exceptions or give
         # duplicate responses.
@@ -691,6 +701,7 @@ class ExecutorTest:
         self.assertEqual(i.__next__(), (0, 1))
         self.assertRaises(ZeroDivisionError, i.__next__)
 
+    @test.support.requires_resource('time')
     def test_map_timeout(self):
         results = []
         try:
@@ -790,6 +801,7 @@ class ProcessPoolExecutorTest(ExecutorTest):
                                     "max_workers must be <= 61"):
             futures.ProcessPoolExecutor(max_workers=62)
 
+    @test.support.requires_resource('time')
     def test_killed_child(self):
         # When a child process is abruptly terminated, the whole pool gets
         # "broken".
