@@ -426,11 +426,13 @@ class _TestProcess(BaseTestCase):
 
         return p.exitcode
 
+    @test.support.requires_resource('time')
     def test_terminate(self):
         exitcode = self._kill_process(multiprocessing.Process.terminate)
         if os.name != 'nt':
             self.assertEqual(exitcode, -signal.SIGTERM)
 
+    @test.support.requires_resource('time')
     def test_kill(self):
         exitcode = self._kill_process(multiprocessing.Process.kill)
         if os.name != 'nt':
@@ -642,6 +644,7 @@ class _TestProcess(BaseTestCase):
         threading.Thread(target=func1).start()
         threading.Thread(target=func2, daemon=True).start()
 
+    @test.support.requires_resource('time')
     def test_wait_for_threads(self):
         # A child process should wait for non-daemonic threads to end
         # before exiting
@@ -745,10 +748,12 @@ class _TestProcess(BaseTestCase):
         self.assertTrue(evt.is_set())
         self.assertIn(proc.exitcode, (0, 255))
 
+    @test.support.requires_resource('time')
     def test_forkserver_sigint(self):
         # Catchable signal
         self.check_forkserver_death(signal.SIGINT)
 
+    @test.support.requires_resource('time')
     def test_forkserver_sigkill(self):
         # Uncatchable signal
         if os.name != 'nt':
@@ -1552,6 +1557,7 @@ class _TestCondition(BaseTestCase):
         if pid is not None:
             os.kill(pid, signal.SIGINT)
 
+    @test.support.requires_resource('time')
     def test_wait_result(self):
         if isinstance(self, ProcessesMixin) and sys.platform != 'win32':
             pid = os.getpid()
@@ -1910,6 +1916,7 @@ class _TestBarrier(BaseTestCase):
         except threading.BrokenBarrierError:
             results.append(True)
 
+    @test.support.requires_resource('time')
     def test_timeout(self):
         """
         Test wait(timeout)
@@ -1929,6 +1936,7 @@ class _TestBarrier(BaseTestCase):
         except threading.BrokenBarrierError:
             results.append(True)
 
+    @test.support.requires_resource('time')
     def test_default_timeout(self):
         """
         Test the barrier's default timeout
@@ -2515,6 +2523,7 @@ class _TestPool(BaseTestCase):
                 p.close()
                 p.join()
 
+    @test.support.requires_resource('time')
     def test_terminate(self):
         result = self.pool.map_async(
             time.sleep, [0.1 for i in range(10000)], chunksize=1
@@ -2600,6 +2609,7 @@ class _TestPool(BaseTestCase):
                 p.apply(self._test_wrapped_exception)
         p.join()
 
+    @test.support.requires_resource('time')
     def test_map_no_failfast(self):
         # Issue #23992: the fail-fast behaviour when an exception is raised
         # during map() would make Pool.join() deadlock, because a worker
@@ -2920,6 +2930,7 @@ class _TestManagerRestart(BaseTestCase):
         queue = manager.get_queue()
         queue.put('hello world')
 
+    @test.support.requires_resource('time')
     def test_rapid_restart(self):
         authkey = os.urandom(32)
         manager = QueueManager(
@@ -3271,6 +3282,7 @@ class _TestListenerClient(BaseTestCase):
             p.join()
             l.close()
 
+    @test.support.requires_resource('time')
     def test_issue14725(self):
         l = self.connection.Listener()
         p = self.Process(target=self._test, args=(l.address,))
@@ -3316,6 +3328,7 @@ class _TestPoll(BaseTestCase):
             conn.send_bytes(s)
         conn.close()
 
+    @test.support.requires_resource('time')
     def test_strings(self):
         strings = (b'hello', b'', b'a', b'b', b'', b'bye', b'', b'lop')
         a, b = self.Pipe()
@@ -3339,6 +3352,7 @@ class _TestPoll(BaseTestCase):
         # read from it.
         r.poll(5)
 
+    @test.support.requires_resource('time')
     def test_boundaries(self):
         r, w = self.Pipe(False)
         p = self.Process(target=self._child_boundaries, args=(r,))
@@ -4091,6 +4105,7 @@ class _TestFinalize(BaseTestCase):
         result = [obj for obj in iter(conn.recv, 'STOP')]
         self.assertEqual(result, ['a', 'b', 'd10', 'd03', 'd02', 'd01', 'e'])
 
+    @test.support.requires_resource('cpu')
     def test_thread_safety(self):
         # bpo-24484: _run_finalizers() should be thread-safe
         def cb():
@@ -4271,6 +4286,7 @@ class _TestPollEintr(BaseTestCase):
         time.sleep(0.1)
         os.kill(pid, signal.SIGUSR1)
 
+    @test.support.requires_resource('time')
     @unittest.skipUnless(hasattr(signal, 'SIGUSR1'), 'requires SIGUSR1')
     def test_poll_eintr(self):
         got_signal = [False]
@@ -4530,12 +4546,15 @@ class TestWait(unittest.TestCase):
         for v in dic.values():
             self.assertEqual(b''.join(v), expected)
 
+    @test.support.requires_resource('time')
     def test_wait_slow(self):
         self.test_wait(True)
 
+    @test.support.requires_resource('time')
     def test_wait_socket_slow(self):
         self.test_wait_socket(True)
 
+    @test.support.requires_resource('time')
     def test_wait_timeout(self):
         from multiprocessing.connection import wait
 
@@ -4564,6 +4583,7 @@ class TestWait(unittest.TestCase):
         sem.release()
         time.sleep(period)
 
+    @test.support.requires_resource('time')
     def test_wait_integer(self):
         from multiprocessing.connection import wait
 
@@ -4680,6 +4700,7 @@ class TestTimeouts(unittest.TestCase):
         conn.send(456)
         conn.close()
 
+    @test.support.requires_resource('time')
     def test_timeout(self):
         old_timeout = socket.getdefaulttimeout()
         try:
@@ -4959,6 +4980,7 @@ class TestStartMethod(unittest.TestCase):
                  "test semantics don't make sense on Windows")
 class TestResourceTracker(unittest.TestCase):
 
+    @test.support.requires_resource('time')
     def test_resource_tracker(self):
         #
         # Check that killing process does not leak named semaphores
@@ -5070,14 +5092,17 @@ class TestResourceTracker(unittest.TestCase):
             else:
                 self.assertEqual(len(all_warn), 0)
 
+    @test.support.requires_resource('time')
     def test_resource_tracker_sigint(self):
         # Catchable signal (ignored by semaphore tracker)
         self.check_resource_tracker_death(signal.SIGINT, False)
 
+    @test.support.requires_resource('time')
     def test_resource_tracker_sigterm(self):
         # Catchable signal (ignored by semaphore tracker)
         self.check_resource_tracker_death(signal.SIGTERM, False)
 
+    @test.support.requires_resource('time')
     def test_resource_tracker_sigkill(self):
         # Uncatchable signal.
         self.check_resource_tracker_death(signal.SIGKILL, True)
