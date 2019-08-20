@@ -235,18 +235,21 @@ class TCPTimeoutTestCase(TimeoutTestCase):
         with support.transient_internet(self.addr_remote[0]):
             self._sock_operation(1, 0.001, 'connect', self.addr_remote)
 
+    @support.requires_resource('time')
     def testRecvTimeout(self):
         # Test recv() timeout
         with support.transient_internet(self.addr_remote[0]):
             self.sock.connect(self.addr_remote)
             self._sock_operation(1, 1.5, 'recv', 1024)
 
+    @support.requires_resource('time')
     def testAcceptTimeout(self):
         # Test accept() timeout
         support.bind_port(self.sock, self.localhost)
         self.sock.listen()
         self._sock_operation(1, 1.5, 'accept')
 
+    @support.requires_resource('time')
     def testSend(self):
         # Test send() timeout
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as serv:
@@ -256,6 +259,7 @@ class TCPTimeoutTestCase(TimeoutTestCase):
             # Send a lot of data in order to bypass buffering in the TCP stack.
             self._sock_operation(100, 1.5, 'send', b"X" * 200000)
 
+    @support.requires_resource('time')
     def testSendto(self):
         # Test sendto() timeout
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as serv:
@@ -266,6 +270,7 @@ class TCPTimeoutTestCase(TimeoutTestCase):
             self._sock_operation(100, 1.5, 'sendto', b"X" * 200000,
                                  serv.getsockname())
 
+    @support.requires_resource('time')
     def testSendall(self):
         # Test sendall() timeout
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as serv:
@@ -285,6 +290,7 @@ class UDPTimeoutTestCase(TimeoutTestCase):
     def tearDown(self):
         self.sock.close()
 
+    @support.requires_resource('time')
     def testRecvfromTimeout(self):
         # Test recvfrom() timeout
         # Prevent "Address already in use" socket exceptions
