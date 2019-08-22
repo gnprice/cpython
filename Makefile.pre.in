@@ -1731,11 +1731,21 @@ C_SOURCES= \
 # TODO find properly
 FIND_ALL_SYMBOLS=/home/greg/n/clang/build.release/bin/find-all-symbols
 RUN_FIND_ALL_SYMBOLS=/home/greg/n/clang/llvm-project/clang-tools-extra/clang-include-fixer/find-all-symbols/tool/run-find-all-symbols.py
+CLANG_TIDY=/home/greg/n/clang/build.release/bin/clang-tidy
+
+# These are just an experimental strawman list.
+CLANG_TIDY_CHECKS=-*,bugprone-*,-bugprone-macro-parentheses,-bugprone-narrowing-conversions,-bugprone-branch-clone,-bugprone-sizeof-expression
 
 find_all_symbols_db.yaml: compile_commands.json $(C_SOURCES)
 	mkdir -p find-all-symbols/
 # TODO ouch, Python 2-only -- that needs fixing :)
 	python2 $(RUN_FIND_ALL_SYMBOLS) -binary $(FIND_ALL_SYMBOLS) -j14 >/dev/null
+
+.PHONY: clang-tidy
+clang-tidy: compile_commands.json $(C_SOURCES)
+# Why 2>/dev/null: --quiet doesn't seem to work, and the
+# `N warnings generated` noise is pretty terrible.
+	$(CLANG_TIDY) -checks=$(CLANG_TIDY_CHECKS) $$(jq '.[].file' -r compile_commands.json) 2>/dev/null
 
 # Create a tags file for vi
 tags::
