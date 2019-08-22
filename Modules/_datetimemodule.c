@@ -2484,11 +2484,9 @@ delta_new(PyTypeObject *type, PyObject *args, PyObject *kw)
     }
     if (leftover_us) {
         /* Round to nearest whole # of us, and add into x. */
-        double whole_us = round(leftover_us);
-        int x_is_odd;
         PyObject *temp;
 
-        whole_us = round(leftover_us);
+        double whole_us = round(leftover_us);
         if (fabs(whole_us - leftover_us) == 0.5) {
             /* We're exactly halfway between two integers.  In order
              * to do round-half-to-even, we must determine whether x
@@ -2500,7 +2498,7 @@ delta_new(PyTypeObject *type, PyObject *args, PyObject *kw)
                 Py_DECREF(x);
                 goto Done;
             }
-            x_is_odd = PyObject_IsTrue(temp);
+            int x_is_odd = PyObject_IsTrue(temp);
             Py_DECREF(temp);
             if (x_is_odd == -1) {
                 Py_DECREF(x);
