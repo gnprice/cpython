@@ -1718,6 +1718,25 @@ autoconf:
 	# Regenerate pyconfig.h.in from configure.ac using autoheader
 	(cd $(srcdir); autoheader -Wall)
 
+# TODO use `clang -MJ` or something instead
+compile_commands.json:
+	$(MAKE) clean
+	bear $(MAKE) -j14
+
+# TODO etc. etc. -- autogenerate this list
+C_SOURCES= \
+	$(srcdir)/Objects/unicodeobject.c \
+	$(srcdir)/Python/ceval.c
+
+# TODO find properly
+FIND_ALL_SYMBOLS=/home/greg/n/clang/build.release/bin/find-all-symbols
+RUN_FIND_ALL_SYMBOLS=/home/greg/n/clang/llvm-project/clang-tools-extra/clang-include-fixer/find-all-symbols/tool/run-find-all-symbols.py
+
+find_all_symbols_db.yaml: compile_commands.json $(C_SOURCES)
+	mkdir -p find-all-symbols/
+# TODO ouch, Python 2-only -- that needs fixing :)
+	python2 $(RUN_FIND_ALL_SYMBOLS) -binary $(FIND_ALL_SYMBOLS) -j14 >/dev/null
+
 # Create a tags file for vi
 tags::
 	ctags -w $(srcdir)/Include/*.h $(srcdir)/Include/cpython/*.h $(srcdir)/Include/internal/*.h
