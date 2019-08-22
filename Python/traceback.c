@@ -896,7 +896,6 @@ _Py_DumpTracebackThreads(int fd, PyInterpreterState *interp,
         return "unable to get the thread head state";
 
     /* Dump the traceback of each thread */
-    tstate = PyInterpreterState_ThreadHead(interp);
     nthreads = 0;
     _Py_BEGIN_SUPPRESS_IPH
     do

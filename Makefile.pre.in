@@ -1732,6 +1732,7 @@ C_SOURCES= \
 FIND_ALL_SYMBOLS=/home/greg/n/clang/build.release/bin/find-all-symbols
 RUN_FIND_ALL_SYMBOLS=/home/greg/n/clang/llvm-project/clang-tools-extra/clang-include-fixer/find-all-symbols/tool/run-find-all-symbols.py
 CLANG_TIDY=/home/greg/n/clang/build.release/bin/clang-tidy
+CLANG_CHECK=/home/greg/n/clang/build.release/bin/clang-check
 
 # These are just an experimental strawman list.
 CLANG_TIDY_CHECKS=-*,bugprone-*,-bugprone-macro-parentheses,-bugprone-narrowing-conversions,-bugprone-branch-clone,-bugprone-sizeof-expression
@@ -1746,6 +1747,10 @@ clang-tidy: compile_commands.json $(C_SOURCES)
 # Why 2>/dev/null: --quiet doesn't seem to work, and the
 # `N warnings generated` noise is pretty terrible.
 	$(CLANG_TIDY) -checks=$(CLANG_TIDY_CHECKS) $$(jq '.[].file' -r compile_commands.json) 2>/dev/null
+
+.PHONY: clang-analyze
+clang-analyze: compile_commands.json $(C_SOURCES)
+	$(CLANG_CHECK) --analyze $$(jq '.[].file' -r compile_commands.json)
 
 # Create a tags file for vi
 tags::
