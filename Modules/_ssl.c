@@ -953,6 +953,10 @@ newPySSLSocket(PySSLContext *sslctx, PySocketSockObject *sock,
     if (sock) {
         SSL_set_fd(self->ssl, Py_SAFE_DOWNCAST(sock->sock_fd, SOCKET_T, int));
     } else {
+        if (inbio == NULL || outbio == NULL) {
+            Py_DECREF(self);
+            return NULL;
+        }
         /* BIOs are reference counted and SSL_set_bio borrows our reference.
          * To prevent a double free in memory_bio_dealloc() we need to take an
          * extra reference here. */
