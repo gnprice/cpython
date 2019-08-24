@@ -65,7 +65,8 @@ Used in:  Py_SAFE_DOWNCAST
 #  ifndef PY_LONG_LONG
 /* PY_LONG_LONG is always `long long` since 3.6.  Kept for compatibility. */
 #    define PY_LONG_LONG long long
-/* If LLONG_MAX is defined in limits.h, use that. */
+/* Similarly PY_LLONG_MIN, PY_LLONG_MAX, PY_ULLONG_MAX unconditionally
+ * refer to the corresponding standard names. */
 #    define PY_LLONG_MIN LLONG_MIN
 #    define PY_LLONG_MAX LLONG_MAX
 #    define PY_ULLONG_MAX ULLONG_MAX
