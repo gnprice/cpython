@@ -1315,7 +1315,7 @@ PyLong_AsLongLong(PyObject *vv)
         break;
     default:
         res = _PyLong_AsByteArray((PyLongObject *)v, (unsigned char *)&bytes,
-                                  SIZEOF_LONG_LONG, PY_LITTLE_ENDIAN, 1);
+                                  sizeof(long long), PY_LITTLE_ENDIAN, 1);
     }
     if (do_decref) {
         Py_DECREF(v);
@@ -1354,7 +1354,7 @@ PyLong_AsUnsignedLongLong(PyObject *vv)
     }
 
     res = _PyLong_AsByteArray((PyLongObject *)vv, (unsigned char *)&bytes,
-                              SIZEOF_LONG_LONG, PY_LITTLE_ENDIAN, 0);
+                              sizeof(long long), PY_LITTLE_ENDIAN, 0);
 
     /* Plan 9 can't handle long long in ? : expressions */
     if (res < 0)
