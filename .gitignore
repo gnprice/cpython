@@ -95,7 +95,6 @@ Tools/unicode/data/
 /config.status
 /config.status.lineno
 /db_home
-/.hg/
 /ipch/
 /libpython*.a
 /libpython*.so*
@@ -111,10 +110,8 @@ Tools/unicode/data/
 /python-gdb.py
 /python.exe-gdb.py
 /reflog.txt
-/.svn/
 /.coverage
 /coverage/
-/externals/
 /htmlcov/
 Tools/msi/obj
 Tools/ssl/amd64
