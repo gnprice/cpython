@@ -1269,7 +1269,7 @@ test_long_long_converter(PyObject *module, PyObject *const *args, Py_ssize_t nar
         goto exit;
     }
     a = PyLong_AsLongLong(args[0]);
-    if (a == (PY_LONG_LONG)-1 && PyErr_Occurred()) {
+    if (a == (long long)-1 && PyErr_Occurred()) {
         goto exit;
     }
 skip_optional:

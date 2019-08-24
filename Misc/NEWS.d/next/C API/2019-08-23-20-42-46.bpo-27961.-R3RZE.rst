@@ -1,0 +1,4 @@
+The ``PY_LONG_LONG`` macro is unconditionally ``long long`` (and
+``HAVE_LONG_LONG`` has been unconditionally defined to 1) since 3.6. For
+compatibility with old extension modules it remains defined, but references
+to it should be replaced with simply ``long long``.
