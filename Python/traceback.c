@@ -631,9 +631,9 @@ void
 _Py_DumpDecimal(int fd, unsigned long value)
 {
     /* maximum number of characters required for output of %lld or %p.
-       We need at most ceil(log10(256)*SIZEOF_LONG_LONG) digits,
+       We need at most ceil(log10(256)*sizeof(value)) digits,
        plus 1 for the null byte.  53/22 is an upper bound for log10(256). */
-    char buffer[1 + (sizeof(unsigned long)*53-1) / 22 + 1];
+    char buffer[1 + (sizeof(value)*53-1) / 22 + 1];
     char *ptr, *end;
 
     end = &buffer[Py_ARRAY_LENGTH(buffer) - 1];

@@ -5210,7 +5210,7 @@ calc_binint(char *bytes, int nbytes)
      * is signed, so on a box with longs bigger than 4 bytes we need
      * to extend a BININT's sign bit to the full width.
      */
-    if (SIZEOF_LONG > 4 && nbytes == 4) {
+    if (sizeof(long) > 4 && nbytes == 4) {
         x |= -(x & (1L << 31));
     }
 

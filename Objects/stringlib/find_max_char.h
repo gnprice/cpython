@@ -21,17 +21,17 @@ STRINGLIB(find_max_char)(const STRINGLIB_CHAR *begin, const STRINGLIB_CHAR *end)
 {
     const unsigned char *p = (const unsigned char *) begin;
     const unsigned char *aligned_end =
-            (const unsigned char *) _Py_ALIGN_DOWN(end, SIZEOF_LONG);
+            (const unsigned char *) _Py_ALIGN_DOWN(end, sizeof(long));
 
     while (p < end) {
-        if (_Py_IS_ALIGNED(p, SIZEOF_LONG)) {
+        if (_Py_IS_ALIGNED(p, sizeof(long))) {
             /* Help register allocation */
             const unsigned char *_p = p;
             while (_p < aligned_end) {
                 unsigned long value = *(unsigned long *) _p;
                 if (value & UCS1_ASCII_CHAR_MASK)
                     return 255;
-                _p += SIZEOF_LONG;
+                _p += sizeof(long);
             }
             p = _p;
             if (p == end)

@@ -2607,9 +2607,9 @@ PyUnicode_AsUCS4Copy(PyObject *string)
 }
 
 /* maximum number of characters required for output of %lld or %p.
-   We need at most ceil(log10(256)*SIZEOF_LONG_LONG) digits,
+   We need at most ceil(log10(256)*sizeof(long long)) digits,
    plus 1 for the sign.  53/22 is an upper bound for log10(256). */
-#define MAX_LONG_LONG_CHARS (2 + (SIZEOF_LONG_LONG*53-1) / 22)
+#define MAX_LONG_LONG_CHARS (2 + (sizeof(long long)*53-1) / 22)
 
 static int
 unicode_fromformat_write_str(_PyUnicodeWriter *writer, PyObject *str,
@@ -4876,7 +4876,7 @@ static Py_ssize_t
 ascii_decode(const char *start, const char *end, Py_UCS1 *dest)
 {
     const char *p = start;
-    const char *aligned_end = (const char *) _Py_ALIGN_DOWN(end, SIZEOF_LONG);
+    const char *aligned_end = (const char *) _Py_ALIGN_DOWN(end, sizeof(long));
 
     /*
      * Issue #17237: m68k is a bit different from most architectures in
@@ -4887,8 +4887,8 @@ ascii_decode(const char *start, const char *end, Py_UCS1 *dest)
      */
 #if !defined(__m68k__)
 #if SIZEOF_LONG <= SIZEOF_VOID_P
-    assert(_Py_IS_ALIGNED(dest, SIZEOF_LONG));
-    if (_Py_IS_ALIGNED(p, SIZEOF_LONG)) {
+    assert(_Py_IS_ALIGNED(dest, sizeof(long)));
+    if (_Py_IS_ALIGNED(p, sizeof(long))) {
         /* Fast path, see in STRINGLIB(utf8_decode) for
            an explanation. */
         /* Help allocation */
@@ -4899,8 +4899,8 @@ ascii_decode(const char *start, const char *end, Py_UCS1 *dest)
             if (value & ASCII_CHAR_MASK)
                 break;
             *((unsigned long *)q) = value;
-            _p += SIZEOF_LONG;
-            q += SIZEOF_LONG;
+            _p += sizeof(long);
+            q += sizeof(long);
         }
         p = _p;
         while (p < end) {
@@ -4915,14 +4915,14 @@ ascii_decode(const char *start, const char *end, Py_UCS1 *dest)
     while (p < end) {
         /* Fast path, see in STRINGLIB(utf8_decode) in stringlib/codecs.h
            for an explanation. */
-        if (_Py_IS_ALIGNED(p, SIZEOF_LONG)) {
+        if (_Py_IS_ALIGNED(p, sizeof(long))) {
             /* Help allocation */
             const char *_p = p;
             while (_p < aligned_end) {
                 unsigned long value = *(unsigned long *) _p;
                 if (value & ASCII_CHAR_MASK)
                     break;
-                _p += SIZEOF_LONG;
+                _p += sizeof(long);
             }
             p = _p;
             if (_p == end)

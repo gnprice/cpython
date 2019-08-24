@@ -336,8 +336,8 @@ _range_error(const formatdef *f, int is_unsigned)
      * bits in the integer being shifted; e.g., on some boxes it doesn't
      * shift at all when they're equal.
      */
-    const size_t ulargest = (size_t)-1 >> ((SIZEOF_SIZE_T - f->size)*8);
-    assert(f->size >= 1 && f->size <= SIZEOF_SIZE_T);
+    assert(f->size >= 1 && f->size <= sizeof(size_t));
+    const size_t ulargest = (size_t)-1 >> ((sizeof(size_t) - f->size)*8);
     if (is_unsigned)
         PyErr_Format(StructError,
             "'%c' format requires 0 <= number <= %zu",
@@ -791,7 +791,7 @@ bu_int(const char *p, const formatdef *f)
         x = (x<<8) | *bytes++;
     } while (--i > 0);
     /* Extend the sign bit. */
-    if (SIZEOF_LONG > f->size)
+    if (sizeof(long) > f->size)
         x |= -(x & (1L << ((8 * f->size) - 1)));
     return PyLong_FromLong(x);
 }
@@ -818,7 +818,7 @@ bu_longlong(const char *p, const formatdef *f)
         x = (x<<8) | *bytes++;
     } while (--i > 0);
     /* Extend the sign bit. */
-    if (SIZEOF_LONG_LONG > f->size)
+    if (sizeof(long long) > f->size)
         x |= -(x & ((long long)1 << ((8 * f->size) - 1)));
     return PyLong_FromLongLong(x);
 }
@@ -868,13 +868,11 @@ bp_int(char *p, PyObject *v, const formatdef *f)
     if (get_long(v, &x) < 0)
         return -1;
     i = f->size;
-    if (i != SIZEOF_LONG) {
+    if (i != sizeof(long)) {
         if ((i == 2) && (x < -32768 || x > 32767))
             RANGE_ERROR(x, f, 0, 0xffffL);
-#if (SIZEOF_LONG != 4)
         else if ((i == 4) && (x < -2147483648L || x > 2147483647L))
             RANGE_ERROR(x, f, 0, 0xffffffffL);
-#endif
     }
     do {
         q[--i] = (unsigned char)(x & 0xffL);
@@ -892,7 +890,7 @@ bp_uint(char *p, PyObject *v, const formatdef *f)
     if (get_ulong(v, &x) < 0)
         return -1;
     i = f->size;
-    if (i != SIZEOF_LONG) {
+    if (i != sizeof(long)) {
         unsigned long maxint = 1;
         maxint <<= (unsigned long)(i * 8);
         if (x >= maxint)
@@ -1012,7 +1010,7 @@ lu_int(const char *p, const formatdef *f)
         x = (x<<8) | bytes[--i];
     } while (i > 0);
     /* Extend the sign bit. */
-    if (SIZEOF_LONG > f->size)
+    if (sizeof(long) > f->size)
         x |= -(x & (1L << ((8 * f->size) - 1)));
     return PyLong_FromLong(x);
 }
@@ -1039,7 +1037,7 @@ lu_longlong(const char *p, const formatdef *f)
         x = (x<<8) | bytes[--i];
     } while (i > 0);
     /* Extend the sign bit. */
-    if (SIZEOF_LONG_LONG > f->size)
+    if (sizeof(long long) > f->size)
         x |= -(x & ((long long)1 << ((8 * f->size) - 1)));
     return PyLong_FromLongLong(x);
 }
@@ -1083,13 +1081,11 @@ lp_int(char *p, PyObject *v, const formatdef *f)
     if (get_long(v, &x) < 0)
         return -1;
     i = f->size;
-    if (i != SIZEOF_LONG) {
+    if (i != sizeof(long)) {
         if ((i == 2) && (x < -32768 || x > 32767))
             RANGE_ERROR(x, f, 0, 0xffffL);
-#if (SIZEOF_LONG != 4)
         else if ((i == 4) && (x < -2147483648L || x > 2147483647L))
             RANGE_ERROR(x, f, 0, 0xffffffffL);
-#endif
     }
     do {
         *q++ = (unsigned char)(x & 0xffL);
@@ -1107,7 +1103,7 @@ lp_uint(char *p, PyObject *v, const formatdef *f)
     if (get_ulong(v, &x) < 0)
         return -1;
     i = f->size;
-    if (i != SIZEOF_LONG) {
+    if (i != sizeof(long)) {
         unsigned long maxint = 1;
         maxint <<= (unsigned long)(i * 8);
         if (x >= maxint)

@@ -114,12 +114,12 @@ _Py_bytes_isascii(const char *cptr, Py_ssize_t len)
 {
     const char *p = cptr;
     const char *end = p + len;
-    const char *aligned_end = (const char *) _Py_ALIGN_DOWN(end, SIZEOF_LONG);
+    const char *aligned_end = (const char *) _Py_ALIGN_DOWN(end, sizeof(long));
 
     while (p < end) {
         /* Fast path, see in STRINGLIB(utf8_decode) in stringlib/codecs.h
            for an explanation. */
-        if (_Py_IS_ALIGNED(p, SIZEOF_LONG)) {
+        if (_Py_IS_ALIGNED(p, sizeof(long))) {
             /* Help allocation */
             const char *_p = p;
             while (_p < aligned_end) {
@@ -127,7 +127,7 @@ _Py_bytes_isascii(const char *cptr, Py_ssize_t len)
                 if (value & ASCII_CHAR_MASK) {
                     Py_RETURN_FALSE;
                 }
-                _p += SIZEOF_LONG;
+                _p += sizeof(long);
             }
             p = _p;
             if (_p == end)

@@ -1091,7 +1091,7 @@ _PyObject_GetDictPtr(PyObject *obj)
 
         dictoffset += (long)size;
         _PyObject_ASSERT(obj, dictoffset > 0);
-        _PyObject_ASSERT(obj, dictoffset % SIZEOF_VOID_P == 0);
+        _PyObject_ASSERT(obj, dictoffset % sizeof(void *) == 0);
     }
     return (PyObject **) ((char *)obj + dictoffset);
 }
@@ -1270,7 +1270,7 @@ _PyObject_GenericGetAttrWithDict(PyObject *obj, PyObject *name,
 
                 dictoffset += (Py_ssize_t)size;
                 _PyObject_ASSERT(obj, dictoffset > 0);
-                _PyObject_ASSERT(obj, dictoffset % SIZEOF_VOID_P == 0);
+                _PyObject_ASSERT(obj, dictoffset % sizeof(void *) == 0);
             }
             dictptr = (PyObject **) ((char *)obj + dictoffset);
             dict = *dictptr;

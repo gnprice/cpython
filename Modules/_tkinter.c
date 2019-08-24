@@ -1126,7 +1126,7 @@ fromWideIntObj(PyObject* tkapp, Tcl_Obj *value)
 {
         Tcl_WideInt wideValue;
         if (Tcl_GetWideIntFromObj(Tkapp_Interp(tkapp), value, &wideValue) == TCL_OK) {
-            if (sizeof(wideValue) <= SIZEOF_LONG_LONG)
+            if (sizeof(wideValue) <= sizeof(long long))
                 return PyLong_FromLongLong(wideValue);
             return _PyLong_FromByteArray((unsigned char *)(void *)&wideValue,
                                          sizeof(wideValue),

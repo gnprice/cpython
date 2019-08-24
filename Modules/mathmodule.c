@@ -1869,10 +1869,10 @@ factorial_partial_product(unsigned long start, unsigned long stop,
      */
 
     num_operands = (stop - start) / 2;
-    /* The "num_operands <= 8 * SIZEOF_LONG" check guards against the
+    /* The "num_operands <= 8 * sizeof(long)" check guards against the
      * unlikely case of an overflow in num_operands * max_bits. */
-    if (num_operands <= 8 * SIZEOF_LONG &&
-        num_operands * max_bits <= 8 * SIZEOF_LONG) {
+    if (num_operands <= 8 * sizeof(long) &&
+        num_operands * max_bits <= 8 * sizeof(long)) {
         unsigned long j, total;
         for (total = start, j = start + 2; j < stop; j += 2)
             total *= j;

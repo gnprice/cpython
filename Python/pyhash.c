@@ -135,7 +135,7 @@ _Py_HashPointer(void *p)
     size_t y = (size_t)p;
     /* bottom 3 or 4 bits are likely to be 0; rotate y by 4 to avoid
        excessive hash collisions for dicts and sets */
-    y = (y >> 4) | (y << (8 * SIZEOF_VOID_P - 4));
+    y = (y >> 4) | (y << (8 * sizeof(void *) - 4));
     x = (Py_hash_t)y;
     if (x == -1)
         x = -2;
@@ -230,7 +230,7 @@ PyHash_GetFuncDef(void)
 #    error SIZEOF_PY_UHASH_T must be 4 or 8
 #  endif /* SIZEOF_PY_UHASH_T */
 #else /* not Windows */
-#  define PY_UHASH_CPY(dst, src) memcpy(dst, src, SIZEOF_PY_UHASH_T)
+#  define PY_UHASH_CPY(dst, src) memcpy(dst, src, sizeof(Py_uhash_t))
 #endif /* _MSC_VER */
 
 
@@ -246,26 +246,26 @@ fnv(const void *src, Py_ssize_t len)
     Py_ssize_t remainder, blocks;
     union {
         Py_uhash_t value;
-        unsigned char bytes[SIZEOF_PY_UHASH_T];
+        unsigned char bytes[sizeof(Py_uhash_t)];
     } block;
 
 #ifdef Py_DEBUG
     assert(_Py_HashSecret_Initialized);
 #endif
-    remainder = len % SIZEOF_PY_UHASH_T;
+    remainder = len % sizeof(Py_uhash_t);
     if (remainder == 0) {
         /* Process at least one block byte by byte to reduce hash collisions
          * for strings with common prefixes. */
-        remainder = SIZEOF_PY_UHASH_T;
+        remainder = sizeof(Py_uhash_t);
     }
-    blocks = (len - remainder) / SIZEOF_PY_UHASH_T;
+    blocks = (len - remainder) / sizeof(Py_uhash_t);
 
     x = (Py_uhash_t) _Py_HashSecret.fnv.prefix;
     x ^= (Py_uhash_t) *p << 7;
     while (blocks--) {
         PY_UHASH_CPY(block.bytes, p);
         x = (_PyHASH_MULTIPLIER * x) ^ block.value;
-        p += SIZEOF_PY_UHASH_T;
+        p += sizeof(Py_uhash_t);
     }
     /* add remainder */
     for (; remainder > 0; remainder--)
