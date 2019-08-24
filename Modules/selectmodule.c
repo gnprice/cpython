@@ -1746,10 +1746,7 @@ static PyTypeObject kqueue_queue_Type;
 #    define INT64_FMT_UNIT   "_"
 #  endif
 
-#  if SIZEOF_LONG_LONG == 4
-#    define T_UINT32         T_ULONGLONG
-#    define UINT32_FMT_UNIT  "K"
-#  elif SIZEOF_LONG == 4
+#  if SIZEOF_LONG == 4
 #    define T_UINT32         T_ULONG
 #    define UINT32_FMT_UNIT  "k"
 #  elif SIZEOF_INT == 4

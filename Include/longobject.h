@@ -44,7 +44,7 @@ PyAPI_FUNC(PyObject *) PyLong_GetInfo(void);
 #    define _Py_PARSE_PID "l"
 #    define PyLong_FromPid PyLong_FromLong
 #    define PyLong_AsPid PyLong_AsLong
-#  elif defined(SIZEOF_LONG_LONG) && SIZEOF_PID_T == SIZEOF_LONG_LONG
+#  elif SIZEOF_PID_T == SIZEOF_LONG_LONG
 #    define _Py_PARSE_PID "L"
 #    define PyLong_FromPid PyLong_FromLongLong
 #    define PyLong_AsPid PyLong_AsLongLong
@@ -58,7 +58,7 @@ PyAPI_FUNC(PyObject *) PyLong_GetInfo(void);
 #  elif SIZEOF_VOID_P == SIZEOF_LONG
 #    define _Py_PARSE_INTPTR "l"
 #    define _Py_PARSE_UINTPTR "k"
-#  elif defined(SIZEOF_LONG_LONG) && SIZEOF_VOID_P == SIZEOF_LONG_LONG
+#  elif SIZEOF_VOID_P == SIZEOF_LONG_LONG
 #    define _Py_PARSE_INTPTR "L"
 #    define _Py_PARSE_UINTPTR "K"
 #  else
