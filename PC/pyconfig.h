@@ -222,10 +222,6 @@ typedef int pid_t;
 #    endif
 
 #    define COMPILER "[gcc]"
-#    define PY_LONG_LONG long long
-#    define PY_LLONG_MIN LLONG_MIN
-#    define PY_LLONG_MAX LLONG_MAX
-#    define PY_ULLONG_MAX ULLONG_MAX
 #  endif /* GNUC */
 
 /* ------------------------------------------------------------------------*/
@@ -245,14 +241,6 @@ typedef int pid_t;
 
 #  ifndef NO_STDIO_H
 #    include <stdio.h>
-#  endif
-
-/* 64 bit ints are usually spelt __int64 unless compiler has overridden */
-#  ifndef PY_LONG_LONG
-#    define PY_LONG_LONG __int64
-#    define PY_LLONG_MAX _I64_MAX
-#    define PY_LLONG_MIN _I64_MIN
-#    define PY_ULLONG_MAX _UI64_MAX
 #  endif
 
 /* For Windows the Python core is in a DLL by default.  Test
