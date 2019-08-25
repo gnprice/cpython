@@ -800,7 +800,7 @@ is_normalized_quickcheck(PyObject *self, PyObject *input,
     /* An older version of the database is requested, quickchecks must be
        disabled. */
     if (self && UCD_Check(self))
-        return NO;
+        return MAYBE;
 
     Py_ssize_t i, len;
     int kind;

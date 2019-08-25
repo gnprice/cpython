@@ -235,12 +235,12 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
         assertConsistent(self.db, s_singleton)  # quickcheck NO
         assertConsistent(self.db, s_singleton_result)  # quickcheck YES
 
-        # FAILS: assertConsistent(self.db.ucd_3_2_0, 'a')
-        # FAILS: assertConsistent(self.db.ucd_3_2_0, s_not)
-        # FAILS: assertConsistent(self.db.ucd_3_2_0, s_neq_d)
-        # FAILS: assertConsistent(self.db.ucd_3_2_0, s_neq_c)
+        assertConsistent(self.db.ucd_3_2_0, 'a')
+        assertConsistent(self.db.ucd_3_2_0, s_not)
+        assertConsistent(self.db.ucd_3_2_0, s_neq_d)
+        assertConsistent(self.db.ucd_3_2_0, s_neq_c)
         assertConsistent(self.db.ucd_3_2_0, s_singleton)
-        # FAILS: assertConsistent(self.db.ucd_3_2_0, s_singleton_result)
+        assertConsistent(self.db.ucd_3_2_0, s_singleton_result)
 
     def test_east_asian_width(self):
         eaw = self.db.east_asian_width
