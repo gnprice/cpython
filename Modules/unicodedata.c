@@ -808,7 +808,7 @@ is_normalized_quickcheck(PyObject *self, PyObject *input,
     unsigned char prev_combining = 0;
 
     /* The two quickcheck bits at this shift have type QuickcheckResult. */
-    int quickcheck_mask_shift = (nfc ? 4 : 0) + (k ? 2 : 0);
+    int quickcheck_shift = (nfc ? 4 : 0) + (k ? 2 : 0);
 
     QuickcheckResult result = YES; /* certainly normalized, unless we find something */
 
@@ -825,14 +825,18 @@ is_normalized_quickcheck(PyObject *self, PyObject *input,
             return NO; /* non-canonical sort order, not normalized */
         prev_combining = combining;
 
-        unsigned char quickcheck = record->normalization_quick_check;
-        switch ((quickcheck >> quickcheck_mask_shift) & 3) {
-        case NO:
-          return NO;
-        case MAYBE:
-          result = MAYBE; /* this string might need normalization */
-          if (yes_only)
-              return result;
+        unsigned char quickcheck_whole = record->normalization_quick_check;
+        unsigned char quickcheck = 3 & (quickcheck_whole >> quickcheck_shift);
+        if (yes_only) {
+            if (quickcheck)
+                return quickcheck;
+        } else {
+            switch (quickcheck) {
+            case NO:
+              return NO;
+            case MAYBE:
+              result = MAYBE; /* this string might need normalization */
+            }
         }
     }
     return result;
