@@ -826,12 +826,11 @@ is_normalized_quickcheck(PyObject *self, PyObject *input,
         prev_combining = combining;
 
         unsigned char quickcheck_whole = record->normalization_quick_check;
-        unsigned char quickcheck = 3 & (quickcheck_whole >> quickcheck_shift);
         if (yes_only) {
-            if (quickcheck)
-                return quickcheck;
+            if (quickcheck_whole & (3 << quickcheck_shift))
+                return MAYBE;
         } else {
-            switch (quickcheck) {
+            switch ((quickcheck_whole >> quickcheck_shift) & 3) {
             case NO:
               return NO;
             case MAYBE:
