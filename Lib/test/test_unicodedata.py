@@ -208,6 +208,32 @@ class UnicodeFunctionsTest(UnicodeDatabaseTest):
         self.assertEqual(self.db.normalize('NFC', u11a7_str_a), u11a7_str_b)
         self.assertEqual(self.db.normalize('NFC', u11c3_str_a), u11c3_str_b)
 
+    def test_is_normalized(self):
+        def assertConsistent(impl, s):
+            for form in ['NFC', 'NFD', 'NFKC', 'NFKD']:
+                self.assertEqual(
+                    impl.is_normalized(form, s),
+                    impl.normalize(form, s) == s)
+
+        # A combining character that NFC quickcheck says MAYBE for.
+        s_not = '\N{COMBINING LONG SOLIDUS OVERLAY}'
+        # A use of that character.
+        s_neq_d = '=' + s_not
+        s_neq_c = '\N{NOT EQUAL TO}'
+        self.assertEqual(s_neq_c, self.db.normalize('NFC', s_neq_d))
+
+        s_singleton = '\uf914'  # 樂; never canonical
+        s_singleton_result = '\u6a02'
+        self.assertTrue(s_singleton_result
+            == self.db.normalize('NFC', s_singleton)
+            == self.db.normalize('NFD', s_singleton))
+
+        assertConsistent(self.db, 'a')
+        assertConsistent(self.db, s_not)  # NFC quickcheck MAYBE, final YES
+        assertConsistent(self.db, s_neq_d)  # NFC quickcheck MAYBE, final NO
+        assertConsistent(self.db, s_neq_c)  # NFC quickcheck YES
+        assertConsistent(self.db, s_singleton)  # quickcheck NO
+        assertConsistent(self.db, s_singleton_result)  # quickcheck YES
 
     def test_east_asian_width(self):
         eaw = self.db.east_asian_width
