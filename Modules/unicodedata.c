@@ -777,9 +777,13 @@ nfc_nfkc(PyObject *self, PyObject *input, int k)
 
 typedef enum {YES, MAYBE, NO} NormalMode;
 
-/* Return YES if the input is certainly normalized, NO or MAYBE if it might not be. */
+/* Run the Unicode normalization "quickcheck" algorithm.
+ *
+ * Return YES or NO if quickcheck determines the input is certainly
+ * normalized or certainly not, and MAYBE if quickcheck is unable to
+ * tell. */
 static NormalMode
-is_normalized(PyObject *self, PyObject *input, int nfc, int k)
+is_normalized_quickcheck(PyObject *self, PyObject *input, int nfc, int k)
 {
     /* This is an implementation of the following algorithm:
        https://www.unicode.org/reports/tr15/#Detecting_Normalization_Forms
@@ -878,7 +882,7 @@ unicodedata_UCD_is_normalized_impl(PyObject *self, PyObject *form,
         return NULL;
     }
 
-    m = is_normalized(self, input, nfc, k);
+    m = is_normalized_quickcheck(self, input, nfc, k);
 
     if (m == MAYBE) {
         cmp = (nfc ? nfc_nfkc : nfd_nfkd)(self, input, k);
@@ -924,28 +928,28 @@ unicodedata_UCD_normalize_impl(PyObject *self, PyObject *form,
     }
 
     if (_PyUnicode_EqualToASCIIId(form, &PyId_NFC)) {
-        if (is_normalized(self, input, 1, 0) == YES) {
+        if (is_normalized_quickcheck(self, input, 1, 0) == YES) {
             Py_INCREF(input);
             return input;
         }
         return nfc_nfkc(self, input, 0);
     }
     if (_PyUnicode_EqualToASCIIId(form, &PyId_NFKC)) {
-        if (is_normalized(self, input, 1, 1) == YES) {
+        if (is_normalized_quickcheck(self, input, 1, 1) == YES) {
             Py_INCREF(input);
             return input;
         }
         return nfc_nfkc(self, input, 1);
     }
     if (_PyUnicode_EqualToASCIIId(form, &PyId_NFD)) {
-        if (is_normalized(self, input, 0, 0) == YES) {
+        if (is_normalized_quickcheck(self, input, 0, 0) == YES) {
             Py_INCREF(input);
             return input;
         }
         return nfd_nfkd(self, input, 0);
     }
     if (_PyUnicode_EqualToASCIIId(form, &PyId_NFKD)) {
-        if (is_normalized(self, input, 0, 1) == YES) {
+        if (is_normalized_quickcheck(self, input, 0, 1) == YES) {
             Py_INCREF(input);
             return input;
         }
