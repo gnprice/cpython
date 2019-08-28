@@ -775,14 +775,16 @@ nfc_nfkc(PyObject *self, PyObject *input, int k)
     return result;
 }
 
-typedef enum {YES, MAYBE, NO} NormalMode;
+// This needs to match the logic in makeunicodedata.py
+// which constructs the quickcheck data.
+typedef enum {YES = 0, MAYBE = 1, NO = 2} QuickcheckResult;
 
 /* Run the Unicode normalization "quickcheck" algorithm.
  *
  * Return YES or NO if quickcheck determines the input is certainly
  * normalized or certainly not, and MAYBE if quickcheck is unable to
  * tell. */
-static NormalMode
+static QuickcheckResult
 is_normalized_quickcheck(PyObject *self, PyObject *input, int nfc, int k)
 {
     /* This is an implementation of the following algorithm:
@@ -800,10 +802,10 @@ is_normalized_quickcheck(PyObject *self, PyObject *input, int nfc, int k)
     void *data;
     unsigned char prev_combining = 0;
 
-    /* The two quickcheck bits at this shift mean 0=Yes, 1=Maybe, 2=No. */
-    int quickcheck_mask_shift = ((nfc ? 4 : 0) + (k ? 2 : 0));
+    /* The two quickcheck bits at this shift have type QuickcheckResult. */
+    int quickcheck_mask_shift = (nfc ? 4 : 0) + (k ? 2 : 0);
 
-    NormalMode result = YES; /* certainly normalized, unless we find something */
+    QuickcheckResult result = YES; /* certainly normalized, unless we find something */
 
     i = 0;
     kind = PyUnicode_KIND(input);
@@ -859,7 +861,7 @@ unicodedata_UCD_is_normalized_impl(PyObject *self, PyObject *form,
     PyObject *result;
     int nfc = 0;
     int k = 0;
-    NormalMode m;
+    QuickcheckResult m;
 
     PyObject *cmp;
     int match = 0;
