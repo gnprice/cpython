@@ -332,23 +332,36 @@ class NormalizationTest(unittest.TestCase):
             self.fail(f"Could not retrieve {TESTDATAURL}")
 
         with testdata:
-            self.run_normalization_tests(testdata)
+            self.run_normalization_tests(testdata, unicodedata)
 
-    def run_normalization_tests(self, testdata):
+    def test_normalization_old(self):
+        "Basic smoketest that ucd_3_2_0.{normalize,is_normalized} work at all."
+        # Two lines from the upstream file that exercise the quickcheck logic
+        # differently -- quickcheck says MAYBE for NFC on U+0338, and NO for
+        # all forms on U+F914.  Then a line in the same format for the no-op case.
+        testdata = """
+        2260;2260;003D 0338;2260;003D 0338; # (≠; ≠; =◌̸; ≠; =◌̸; ) NOT EQUAL TO
+        F914;6A02;6A02;6A02;6A02; # (樂; 樂; 樂; 樂; 樂; ) CJK COMPATIBILITY IDEOGRAPH-F914
+        0041;0041;0041;0041;0041; # (A; A; A; A; A; ) LATIN CAPITAL LETTER A
+        """.splitlines()
+        self.run_normalization_tests(testdata, unicodedata.ucd_3_2_0,
+                                     exhaustive=False)
+
+    def run_normalization_tests(self, testdata, db, *, exhaustive=True):
         part = None
         part1_data = {}
 
         def NFC(str):
-            return unicodedata.normalize("NFC", str)
+            return db.normalize("NFC", str)
 
         def NFKC(str):
-            return unicodedata.normalize("NFKC", str)
+            return db.normalize("NFKC", str)
 
         def NFD(str):
-            return unicodedata.normalize("NFD", str)
+            return db.normalize("NFD", str)
 
         def NFKD(str):
-            return unicodedata.normalize("NFKD", str)
+            return db.normalize("NFKD", str)
 
         for line in testdata:
             if '#' in line:
@@ -373,25 +386,26 @@ class NormalizationTest(unittest.TestCase):
                             NFKD(c3) == NFKD(c4) == NFKD(c5),
                             line)
 
-            self.assertTrue(unicodedata.is_normalized("NFC", c2))
-            self.assertTrue(unicodedata.is_normalized("NFC", c4))
+            self.assertTrue(db.is_normalized("NFC", c2))
+            self.assertTrue(db.is_normalized("NFC", c4))
 
-            self.assertTrue(unicodedata.is_normalized("NFD", c3))
-            self.assertTrue(unicodedata.is_normalized("NFD", c5))
+            self.assertTrue(db.is_normalized("NFD", c3))
+            self.assertTrue(db.is_normalized("NFD", c5))
 
-            self.assertTrue(unicodedata.is_normalized("NFKC", c4))
-            self.assertTrue(unicodedata.is_normalized("NFKD", c5))
+            self.assertTrue(db.is_normalized("NFKC", c4))
+            self.assertTrue(db.is_normalized("NFKD", c5))
 
             # Record part 1 data
             if part == "@Part1":
                 part1_data[c1] = 1
 
-        # Perform tests for all other data
-        for c in range(sys.maxunicode+1):
-            X = chr(c)
-            if X in part1_data:
-                continue
-            self.assertTrue(X == NFC(X) == NFD(X) == NFKC(X) == NFKD(X), c)
+        if exhaustive:
+            # Perform tests for all other data
+            for c in range(sys.maxunicode+1):
+                X = chr(c)
+                if X in part1_data:
+                    continue
+                self.assertTrue(X == NFC(X) == NFD(X) == NFKC(X) == NFKD(X), c)
 
     def test_edge_cases(self):
         self.assertRaises(TypeError, unicodedata.normalize)
