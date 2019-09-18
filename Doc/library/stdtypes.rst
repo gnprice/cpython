@@ -1953,6 +1953,7 @@ expression support in the :mod:`re` module).
 .. index::
    single: universal newlines; str.splitlines method
 
+
 .. method:: str.splitlines([keepends])
 
    Return a list of the lines in the string.  Line terminators are
