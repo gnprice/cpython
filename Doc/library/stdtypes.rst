@@ -1958,12 +1958,17 @@ expression support in the :mod:`re` module).
 
 .. method:: str.splitlines([keepends])
 
-   Return a list of the lines in the string, breaking at line boundaries.  Line
-   breaks are not included in the resulting list unless *keepends* is given and
+   Return a list of the lines in the string.  Line terminators are
+   omitted from the returned lines, unless *keepends* is given and
    true.
 
-   This method splits on the following line boundaries.  In particular, the
-   boundaries are a superset of :term:`universal newlines`.
+   This method breaks lines at exactly the "mandatory break positions"
+   defined `by the Unicode standard`_.  These occur after certain line
+   terminators, plus at the end of the string if it's nonempty and
+   doesn't already end with a line terminator.  The line terminators
+   are a superset of :term:`universal newlines`, and are as follows:
+
+   .. _by the Unicode standard: http://www.unicode.org/reports/tr14/
 
    +-----------------------+-----------------------------+
    | Representation        | Description                 |
@@ -1978,12 +1983,6 @@ expression support in the :mod:`re` module).
    +-----------------------+-----------------------------+
    | ``\f`` or ``\x0c``    | Form Feed                   |
    +-----------------------+-----------------------------+
-   | ``\x1c``              | File Separator              |
-   +-----------------------+-----------------------------+
-   | ``\x1d``              | Group Separator             |
-   +-----------------------+-----------------------------+
-   | ``\x1e``              | Record Separator            |
-   +-----------------------+-----------------------------+
    | ``\x85``              | Next Line (C1 Control Code) |
    +-----------------------+-----------------------------+
    | ``\u2028``            | Line Separator              |
@@ -1993,7 +1992,11 @@ expression support in the :mod:`re` module).
 
    .. versionchanged:: 3.2
 
-      ``\v`` and ``\f`` added to list of line boundaries.
+      ``\v`` and ``\f`` added to list of line terminators.
+
+   .. versionchanged:: 3.9
+
+      ``\x1c``, ``\x1d``, ``\x1e`` removed from list of line terminators.
 
    For example::
 
@@ -2002,9 +2005,9 @@ expression support in the :mod:`re` module).
       >>> 'ab c\n\nde fg\rkl\r\n'.splitlines(keepends=True)
       ['ab c\n', '\n', 'de fg\r', 'kl\r\n']
 
-   Unlike :meth:`~str.split` when a delimiter string *sep* is given, this
-   method returns an empty list for the empty string, and a terminal line
-   break does not result in an extra line::
+   Unlike :meth:`~str.split` when a delimiter string *sep* is given,
+   this method returns an empty list for the empty string, and a final
+   line terminator does not result in an extra line::
 
       >>> "".splitlines()
       []
