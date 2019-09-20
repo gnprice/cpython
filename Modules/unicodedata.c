@@ -1364,6 +1364,24 @@ unicodedata_UCD_lookup_impl(PyObject *self, const char *name,
     return PyUnicode_FromOrdinal(code);
 }
 
+static PyObject *
+unicodedata_build_propval_aliases()
+{
+    PyObject *result = PyDict_New();
+    if (!result)
+        return NULL;
+
+    const char *current_prop = NULL;
+    PyObject *current_dict = NULL;
+    const char *(*record)[3] = _PyUnicode_PropertyValueAliases;
+    while ((*record)[0]) {
+        PyDict_SetItemString(result, (*record)[0], Py_None);
+        record++;
+    }
+
+    return result;
+}
+
 /* XXX Add doc strings. */
 
 static PyMethodDef unicodedata_functions[] = {
@@ -1464,6 +1482,12 @@ PyInit_unicodedata(void)
     PyModule_AddStringConstant(m, "unidata_version", UNIDATA_VERSION);
     Py_INCREF(&UCD_Type);
     PyModule_AddObject(m, "UCD", (PyObject*)&UCD_Type);
+
+    PyObject *propval_aliases = unicodedata_build_propval_aliases();
+    if (!propval_aliases)
+        return NULL;
+    PyModule_AddObject(m, "property_value_aliases", propval_aliases);
+    // TODO add to ucd_3_2_0 too
 
     /* Previous versions */
     v = new_previous_version("3.2.0", get_change_3_2_0, normalization_3_2_0);
