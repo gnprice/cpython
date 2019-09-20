@@ -52,6 +52,7 @@ UNIHAN = "Unihan%s.zip"
 DERIVED_CORE_PROPERTIES = "DerivedCoreProperties%s.txt"
 DERIVEDNORMALIZATION_PROPS = "DerivedNormalizationProps%s.txt"
 LINE_BREAK = "LineBreak%s.txt"
+PROPERTY_VALUE_ALIASES = "PropertyValueAliases%s.txt"
 NAME_ALIASES = "NameAliases%s.txt"
 NAMED_SEQUENCES = "NamedSequences%s.txt"
 SPECIAL_CASING = "SpecialCasing%s.txt"
@@ -310,6 +311,18 @@ def makeunicodedata(unicode, trace):
         for name in EASTASIANWIDTH_NAMES:
             fprint("    \"%s\"," % name)
         fprint("    NULL")
+        fprint("};\n")
+
+        fprint("const char *_PyUnicode_PropertyValueAliases[][3] = {")
+        for prop_shortname, prop_ourname in [
+                ('bc', 'bidirectional'),
+                ('gc', 'category'),
+                ('ea', 'east_asian_width')]:
+            aliases_dict = unicode.property_value_aliases[prop_shortname]
+            for value_shortname, aliases in aliases_dict.items():
+                fprint('    {"%s", "%s", "%s"},'
+                       % (prop_ourname, value_shortname, aliases[0]));
+        fprint("    {NULL, NULL, NULL}")
         fprint("};")
 
         fprint("static const char *decomp_prefix[] = {")
@@ -1086,6 +1099,10 @@ class UnicodeData:
                 # Some properties (e.g. Default_Ignorable_Code_Point)
                 # apply to unassigned code points; ignore them
                 table[char].binary_properties.add(p)
+
+        self.property_value_aliases = {}
+        for prop, value, *aliases in UcdFile(PROPERTY_VALUE_ALIASES, version):
+            self.property_value_aliases.setdefault(prop, {})[value] = aliases
 
         for char_range, value in UcdFile(LINE_BREAK, version):
             if value not in MANDATORY_LINE_BREAKS:
