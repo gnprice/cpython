@@ -77,6 +77,8 @@ _getrecord_ex(Py_UCS4 code)
 typedef struct previous_version {
     PyObject_HEAD
     const char *name;
+    const PyObject *property_value_aliases;
+    const PyObject *property_value_by_alias;
     const change_record* (*getrecord)(Py_UCS4);
     Py_UCS4 (*normalization)(Py_UCS4);
 } PreviousDBVersion;
@@ -87,6 +89,8 @@ typedef struct previous_version {
 
 static PyMemberDef DB_members[] = {
         {"unidata_version", T_STRING, offsetof(PreviousDBVersion, name), READONLY},
+        {"property_value_aliases", T_OBJECT, offsetof(PreviousDBVersion, property_value_aliases), READONLY},
+        {"property_value_by_alias", T_OBJECT, offsetof(PreviousDBVersion, property_value_by_alias), READONLY},
         {NULL}
 };
 
@@ -96,7 +100,9 @@ static PyTypeObject UCD_Type;
 
 static PyObject*
 new_previous_version(const char*name, const change_record* (*getrecord)(Py_UCS4),
-                     Py_UCS4 (*normalization)(Py_UCS4))
+                     Py_UCS4 (*normalization)(Py_UCS4),
+                     const PyObject *property_value_aliases,
+                     const PyObject *property_value_by_alias)
 {
         PreviousDBVersion *self;
         self = PyObject_New(PreviousDBVersion, &UCD_Type);
@@ -105,6 +111,8 @@ new_previous_version(const char*name, const change_record* (*getrecord)(Py_UCS4)
         self->name = name;
         self->getrecord = getrecord;
         self->normalization = normalization;
+        self->property_value_aliases = property_value_aliases;
+        self->property_value_by_alias = property_value_by_alias;
         return (PyObject*)self;
 }
 
@@ -1549,10 +1557,10 @@ PyInit_unicodedata(void)
     if (!propval_by_alias)
         return NULL;
     PyModule_AddObject(m, "property_value_by_alias", propval_by_alias);
-    // TODO add to ucd_3_2_0 too
 
     /* Previous versions */
-    v = new_previous_version("3.2.0", get_change_3_2_0, normalization_3_2_0);
+    v = new_previous_version("3.2.0", get_change_3_2_0, normalization_3_2_0,
+                             propval_aliases, propval_by_alias);
     if (v != NULL)
         PyModule_AddObject(m, "ucd_3_2_0", v);
 
