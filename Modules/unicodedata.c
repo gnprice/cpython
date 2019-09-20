@@ -1371,42 +1371,36 @@ unicodedata_build_propval_aliases()
     if (!result)
         goto err;
 
+    const char *current_prop = NULL, *current_value = NULL;
     const _PyUnicode_PropertyValueAlias *record = _PyUnicode_PropertyValueAliases;
-    while (record->prop_ourname) {
-        const char *current_prop = record->prop_ourname;
-        PyObject *current_dict = PyDict_New();
-        if (!current_dict)
-            goto err;
-        PyDict_SetItemString(result, current_prop, current_dict);
-        Py_DECREF(current_dict);
-
-        while (1) {
-            const char *current_value = record->value_shortname;
-            PyObject *current_list = PyList_New(0);
-            if (!current_list)
+    for (; record->prop_ourname; record++) {
+        if (!current_prop || 0 != strcmp(current_prop, record->prop_ourname)) {
+            current_prop = record->prop_ourname;
+            current_value = NULL;
+            PyObject *d = PyDict_New();
+            if (!d)
                 goto err;
-            PyDict_SetItemString(current_dict, current_value, current_list);
-            Py_DECREF(current_list);
-
-            while (1) {
-                PyObject *alias = PyUnicode_FromString(record->value_alias);
-                if (!alias)
-                    goto err;
-                PyList_Append(current_list, alias);
-                Py_DECREF(alias);
-
-                record++;
-                if (!record->prop_ourname)
-                    goto done;
-                if (0 != strcmp(current_prop, record->prop_ourname))
-                    goto prop_done;
-                if (0 != strcmp(current_value, record->value_shortname))
-                    break;
-            }
+            PyDict_SetItemString(result, current_prop, d);
+            Py_DECREF(d);
         }
-      prop_done: ;
+        PyObject *current_dict = PyDict_GetItemString(result, current_prop);
+
+        if (!current_value || 0 != strcmp(current_value, record->value_shortname)) {
+            current_value = record->value_shortname;
+            PyObject *l = PyList_New(0);
+            if (!l)
+                goto err;
+            PyDict_SetItemString(current_dict, current_value, l);
+            Py_DECREF(l);
+        }
+        PyObject *current_list = PyDict_GetItemString(current_dict, current_value);
+
+        PyObject *alias = PyUnicode_FromString(record->value_alias);
+        if (!alias)
+            goto err;
+        PyList_Append(current_list, alias);
+        Py_DECREF(alias);
     }
-  done:
     return result;
 
   err:
