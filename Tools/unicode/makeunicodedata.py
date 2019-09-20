@@ -311,9 +311,17 @@ def makeunicodedata(unicode, trace):
         for name in EASTASIANWIDTH_NAMES:
             fprint("    \"%s\"," % name)
         fprint("    NULL")
-        fprint("};\n")
+        fprint("};")
 
-        fprint("const char *_PyUnicode_PropertyValueAliases[][3] = {")
+        fprint(dedent("""
+            typedef struct {
+                char *prop_ourname;
+                char *value_shortname;
+                char *value_alias;  // we only keep the first alias
+            } _PyUnicode_PropertyValueAlias;
+            """))
+
+        fprint("const _PyUnicode_PropertyValueAlias _PyUnicode_PropertyValueAliases[] = {")
         for prop_shortname, prop_ourname in [
                 ('bc', 'bidirectional'),
                 ('gc', 'category'),

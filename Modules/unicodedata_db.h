@@ -677,7 +677,14 @@ const char *_PyUnicode_EastAsianWidthNames[] = {
     "N",
     NULL
 };
-const char *_PyUnicode_PropertyValueAliases[][3] = {
+
+typedef struct {
+    char *prop_ourname;
+    char *value_shortname;
+    char *value_alias;  // we only keep the first alias
+} _PyUnicode_PropertyValueAlias;
+
+const _PyUnicode_PropertyValueAlias _PyUnicode_PropertyValueAliases[] = {
     {"bidirectional", "AL", "Arabic_Letter"},
     {"bidirectional", "AN", "Arabic_Number"},
     {"bidirectional", "B", "Paragraph_Separator"},
