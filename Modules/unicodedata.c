@@ -1375,7 +1375,22 @@ unicodedata_build_propval_aliases()
     PyObject *current_dict = NULL;
     _PyUnicode_PropertyValueAlias *record = _PyUnicode_PropertyValueAliases;
     while (record->prop_ourname) {
-        PyDict_SetItemString(result, record->prop_ourname, Py_None);
+        if (!current_prop || 0 != strcmp(current_prop, record->prop_ourname)) {
+            current_prop = record->prop_ourname;
+            current_dict = PyDict_New();
+            if (!current_dict) {
+                Py_DECREF(result);
+                return NULL;
+            }
+            PyDict_SetItemString(result, record->prop_ourname, current_dict);
+        }
+
+        PyObject *alias = PyUnicode_FromString(record->value_alias);
+        if (!alias) {
+            Py_DECREF(result);
+            return NULL;
+        }
+        PyDict_SetItemString(current_dict, record->value_shortname, alias);
         record++;
     }
 
