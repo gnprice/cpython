@@ -1369,32 +1369,33 @@ unicodedata_build_propval_aliases()
 {
     PyObject *result = PyDict_New();
     if (!result)
-        return NULL;
+        goto err;
 
-    const char *current_prop = NULL;
-    PyObject *current_dict = NULL;
-    _PyUnicode_PropertyValueAlias *record = _PyUnicode_PropertyValueAliases;
+    const _PyUnicode_PropertyValueAlias *record = _PyUnicode_PropertyValueAliases;
     while (record->prop_ourname) {
-        if (!current_prop || 0 != strcmp(current_prop, record->prop_ourname)) {
-            current_prop = record->prop_ourname;
-            current_dict = PyDict_New();
-            if (!current_dict) {
-                Py_DECREF(result);
-                return NULL;
-            }
-            PyDict_SetItemString(result, record->prop_ourname, current_dict);
-        }
+        const char *current_prop = record->prop_ourname;
+        PyObject *current_dict = PyDict_New();
+        if (!current_dict)
+            goto err;
+        PyDict_SetItemString(result, current_prop, current_dict);
+        Py_DECREF(current_dict);
 
-        PyObject *alias = PyUnicode_FromString(record->value_alias);
-        if (!alias) {
-            Py_DECREF(result);
-            return NULL;
-        }
-        PyDict_SetItemString(current_dict, record->value_shortname, alias);
-        record++;
+        do {
+            PyObject *alias = PyUnicode_FromString(record->value_alias);
+            if (!alias)
+                goto err;
+            PyDict_SetItemString(current_dict, record->value_shortname, alias);
+            Py_DECREF(alias);
+
+            record++;
+        } while (record->prop_ourname
+                 && !strcmp(current_prop, record->prop_ourname));
     }
-
     return result;
+
+  err:
+    Py_XDECREF(result);
+    return NULL;
 }
 
 /* XXX Add doc strings. */
