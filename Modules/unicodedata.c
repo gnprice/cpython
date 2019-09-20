@@ -1380,17 +1380,33 @@ unicodedata_build_propval_aliases()
         PyDict_SetItemString(result, current_prop, current_dict);
         Py_DECREF(current_dict);
 
-        do {
-            PyObject *alias = PyUnicode_FromString(record->value_alias);
-            if (!alias)
+        while (1) {
+            const char *current_value = record->value_shortname;
+            PyObject *current_list = PyList_New(0);
+            if (!current_list)
                 goto err;
-            PyDict_SetItemString(current_dict, record->value_shortname, alias);
-            Py_DECREF(alias);
+            PyDict_SetItemString(current_dict, current_value, current_list);
+            Py_DECREF(current_list);
 
-            record++;
-        } while (record->prop_ourname
-                 && !strcmp(current_prop, record->prop_ourname));
+            while (1) {
+                PyObject *alias = PyUnicode_FromString(record->value_alias);
+                if (!alias)
+                    goto err;
+                PyList_Append(current_list, alias);
+                Py_DECREF(alias);
+
+                record++;
+                if (!record->prop_ourname)
+                    goto done;
+                if (0 != strcmp(current_prop, record->prop_ourname))
+                    goto prop_done;
+                if (0 != strcmp(current_value, record->value_shortname))
+                    break;
+            }
+        }
+      prop_done: ;
     }
+  done:
     return result;
 
   err:

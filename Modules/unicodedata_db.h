@@ -681,7 +681,7 @@ const char *_PyUnicode_EastAsianWidthNames[] = {
 typedef struct {
     char *prop_ourname;
     char *value_shortname;
-    char *value_alias;  // we only keep the first alias
+    char *value_alias;
 } _PyUnicode_PropertyValueAlias;
 
 const _PyUnicode_PropertyValueAlias _PyUnicode_PropertyValueAliases[] = {
@@ -710,6 +710,7 @@ const _PyUnicode_PropertyValueAlias _PyUnicode_PropertyValueAliases[] = {
     {"bidirectional", "WS", "White_Space"},
     {"category", "C", "Other"},
     {"category", "Cc", "Control"},
+    {"category", "Cc", "cntrl"},
     {"category", "Cf", "Format"},
     {"category", "Cn", "Unassigned"},
     {"category", "Co", "Private_Use"},
@@ -722,14 +723,17 @@ const _PyUnicode_PropertyValueAlias _PyUnicode_PropertyValueAliases[] = {
     {"category", "Lt", "Titlecase_Letter"},
     {"category", "Lu", "Uppercase_Letter"},
     {"category", "M", "Mark"},
+    {"category", "M", "Combining_Mark"},
     {"category", "Mc", "Spacing_Mark"},
     {"category", "Me", "Enclosing_Mark"},
     {"category", "Mn", "Nonspacing_Mark"},
     {"category", "N", "Number"},
     {"category", "Nd", "Decimal_Number"},
+    {"category", "Nd", "digit"},
     {"category", "Nl", "Letter_Number"},
     {"category", "No", "Other_Number"},
     {"category", "P", "Punctuation"},
+    {"category", "P", "punct"},
     {"category", "Pc", "Connector_Punctuation"},
     {"category", "Pd", "Dash_Punctuation"},
     {"category", "Pe", "Close_Punctuation"},

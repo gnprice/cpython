@@ -317,7 +317,7 @@ def makeunicodedata(unicode, trace):
             typedef struct {
                 char *prop_ourname;
                 char *value_shortname;
-                char *value_alias;  // we only keep the first alias
+                char *value_alias;
             } _PyUnicode_PropertyValueAlias;
             """))
 
@@ -328,8 +328,9 @@ def makeunicodedata(unicode, trace):
                 ('ea', 'east_asian_width')]:
             aliases_dict = unicode.property_value_aliases[prop_shortname]
             for value_shortname, aliases in aliases_dict.items():
-                fprint('    {"%s", "%s", "%s"},'
-                       % (prop_ourname, value_shortname, aliases[0]));
+                for alias in aliases:
+                    fprint('    {"%s", "%s", "%s"},'
+                           % (prop_ourname, value_shortname, alias));
         fprint("    {NULL, NULL, NULL}")
         fprint("};")
 
