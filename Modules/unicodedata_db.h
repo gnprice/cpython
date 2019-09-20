@@ -758,6 +758,7 @@ const _PyUnicode_PropertyValueAlias _PyUnicode_PropertyValueAliases[] = {
     {"east_asian_width", "W", "Wide"},
     {NULL, NULL, NULL}
 };
+
 static const char *decomp_prefix[] = {
     "",
     "<noBreak>",

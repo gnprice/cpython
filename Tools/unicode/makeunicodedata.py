@@ -332,7 +332,7 @@ def makeunicodedata(unicode, trace):
                     fprint('    {"%s", "%s", "%s"},'
                            % (prop_ourname, value_shortname, alias));
         fprint("    {NULL, NULL, NULL}")
-        fprint("};")
+        fprint("};\n")
 
         fprint("static const char *decomp_prefix[] = {")
         for name in decomp_prefix:
